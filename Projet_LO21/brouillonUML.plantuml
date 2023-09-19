@@ -1,0 +1,95 @@
+@startuml
+class espace_de_jeux{
+
+}
+
+class carte_joaillerie{
+    bonus : enum;
+    nb_bonus : int;
+    pts_prestige : int;
+    pts_couronnes : int;
+    cout : array;
+}
+
+class carte_royale {
+    pts_prestige : int;
+}
+
+abstract carte {
+}
+
+
+class Capacite {
+    type : enum;
+}
+
+class jeton {
+    bonus : enum;
+}
+
+class main{
+
+}
+
+class pioche{
+
+}
+
+class privilege{
+
+}
+
+class plateau{
+
+}
+
+
+' Tas de niveau sur la table
+abstract tas {
+}
+
+class niv1 {
+}
+
+class niv2 {
+}
+
+class niv3 {
+}
+
+
+
+carte <|-- carte_joaillerie
+carte <|-- carte_royale
+
+carte_joaillerie *- Capacite
+carte_royale *--- Capacite
+
+tas *-- carte_joaillerie
+tas - espace_de_jeux
+tas <|-- niv1
+tas <|-- niv2
+tas <|-- niv3
+
+
+carte --- espace_de_jeux
+espace_de_jeux *- plateau
+main --- espace_de_jeux
+
+(carte, espace_de_jeux).. pioche
+
+main *-- carte_joaillerie
+main *--- privilege
+main *-- jeton
+
+plateau *- jeton
+
+
+
+
+
+
+
+
+
+@enduml
