@@ -3,3 +3,4 @@ Degug
 *.xcodeproj
 *.vcxproj
 *.sln
+*.vscode
