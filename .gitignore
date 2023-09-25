@@ -4,3 +4,4 @@ Degug
 *.vcxproj
 *.sln
 *.vscode
+*.DS_Store
