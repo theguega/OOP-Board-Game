@@ -1,0 +1,102 @@
+@startuml
+
+/'
+    Diagramme de classe du jeu Splendor Duel
+    Pour programmation objet C++
+'/
+
+class Joueur{
+    + nom : string
+    + score : int
+    + jetons : Jetons
+    + cartes : Carte
+    + privilege : Privilege
+}
+
+class I_A {
+    + jouer() : Joueur
+}
+
+class Physique {
+    + jouer() : Joueur
+}
+
+class Partie {
+    + joueur1 : Joueur
+    + joueur2 : Joueur
+    + espaceJeux : EspaceJeux
+    + tour : int
+    + fin : bool
+}
+
+class EspaceJeux {
+    + sac : Sac
+    + pioche : Pioche
+    + plateau : Plateau
+}
+
+class Sac{
+    + remplirPlateau() : Plateau
+}
+
+class Pioche {
+    + acheterCarte() : Carte
+}
+
+class Carte{
+    + cout : Jetons
+    + bonus : Jetons
+    + capacite : enum
+    + nbCouronnes : int
+    + nbPtsPrivilege : int
+}
+
+class Privilege {
+    + nbPrivilege : int
+}
+
+class Jetons {
+    + nbRouge : int
+    + nbBleu : int
+    + nbVert : int
+    + nbBlanc : int
+    + nbNoir : int
+    + nbOr : int
+    + nbPerle : int
+}
+
+class Plateau {
+    + cartes : Carte
+    + jetons : Jetons
+    + privilege : Privilege
+}
+
+class Jeu {
+    + lancer() : Partie
+    + conditionsVictoire() : bool
+}
+
+Physique *- Joueur
+I_A *- Joueur
+
+Joueur o-- Jetons
+Joueur o-- Carte
+Joueur o-- Privilege
+
+Partie *-- EspaceJeux
+
+EspaceJeux o-- Sac
+EspaceJeux o-- Pioche
+EspaceJeux *-- Plateau
+
+Sac o-- Jetons
+Pioche o-- Jetons
+Plateau o-- Jetons
+Plateau o-- Privilege
+
+Sac <- Plateau
+
+Jeu <- Partie
+
+
+@enduml
