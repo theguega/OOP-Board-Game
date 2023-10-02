@@ -12,23 +12,24 @@ class Joueur{
     - cartes : Carte
     - privilege : Privilege
 
-    acheterCarte() : Carte
+    + getNbCouronnes() : int
+    + getNbPrestige() : int
+    + getPtsBonus() : int
 }
 
 class I_A {
-    + jouer() : Joueur
 }
 
 class Physique {
-    + jouer() : Joueur
 }
 
 class Partie {
-    + joueur1 : Joueur
-    + joueur2 : Joueur
-    + espaceJeux : EspaceJeux
-    + tour : int
-    + fin : bool
+    - joueur1 : Joueur
+    - joueur2 : Joueur
+    - espaceJeux : EspaceJeux
+    - tour : int
+
+    - finPartie() : bool
 }
 
 class EspaceJeux {
@@ -42,39 +43,36 @@ class Sac{
 }
 
 class Pyramide {
-    + acheterCarte() : Carte
+    + reserverCarte()
+    + acheterCarte()
 }
 
 class Carte{
-    + cout : Jetons
-    + bonus : Jetons
-    + capacite : enum
-    + nbCouronnes : int
-    + nbPtsPrivilege : int
+    - cout : Jetons
+    - bonus : Jetons
+    - capacite : enum
+    - nbCouronnes : int
+    - nbPtsPrivilege : int
 }
 
 class Pioche {
-    + pile_cartes : Carte
+    - pile_cartes : Carte
 }
 
 class Privilege {
-    + nbPrivilege : int
+    + utiliserPrivilege()
 }
 
 class Jetons {
-    + nbRouge : int
-    + nbBleu : int
-    + nbVert : int
-    + nbBlanc : int
-    + nbNoir : int
-    + nbOr : int
-    + nbPerle : int
+    couleur : enum
 }
 
 class Plateau {
-    + cartes : Carte
-    + jetons : Jetons
-    + privilege : Privilege
+    - matriceJetons : Jetons
+    - privilege : Privilege
+
+    + remplirPlateau()
+    + recupererJeton()
 }
 
 class Jeu {
