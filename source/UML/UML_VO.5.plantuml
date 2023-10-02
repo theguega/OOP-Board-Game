@@ -11,6 +11,8 @@ class Joueur{
     + jetons : Jetons
     + cartes : Carte
     + privilege : Privilege
+
+    acheterCarte() : Carte
 }
 
 class I_A {
@@ -31,7 +33,7 @@ class Partie {
 
 class EspaceJeux {
     + sac : Sac
-    + pioche : Pioche
+    + pyramide : Pyramide
     + plateau : Plateau
 }
 
@@ -39,7 +41,7 @@ class Sac{
     + remplirPlateau() : Plateau
 }
 
-class Pioche {
+class Pyramide {
     + acheterCarte() : Carte
 }
 
@@ -49,6 +51,10 @@ class Carte{
     + capacite : enum
     + nbCouronnes : int
     + nbPtsPrivilege : int
+}
+
+class Pioche {
+    + pile_cartes : Carte
 }
 
 class Privilege {
@@ -85,12 +91,13 @@ Joueur o-- Privilege
 
 Partie *-- EspaceJeux
 
+Pioche o-- Carte
+
 EspaceJeux o-- Sac
-EspaceJeux o-- Pioche
+EspaceJeux o-- Pyramide
 EspaceJeux *-- Plateau
 
 Sac o-- Jetons
-Pioche o-- Jetons
 Plateau o-- Jetons
 Plateau o-- Privilege
 
