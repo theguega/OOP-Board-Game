@@ -1,10 +1,4 @@
-//
-//  main.cpp
-//  Projet_LO21
-//
-//  Created by Theo GUEGAN on 11/09/2023.
-//
-
+#include "splendor.hpp"
 #include <iostream>
 
 int main(int argc, const char * argv[]) {
