@@ -9,6 +9,7 @@ enum class CouleurJeton { RUBIS, SAPHIR, ÉMERAUDE, ONYX, DIAMANT, OR, PERLE };
 
 // Déclaration de la classe Jetons
 class Jetons {
+    //Theo
 public:
     CouleurJeton couleur;
 
@@ -18,12 +19,14 @@ public:
 
 // Déclaration de la classe Privilege
 class Privilege {
+    //Theo
 public:
     void utiliserPrivilege();
 };
 
 // Déclaration de la classe Carte
 class Carte {
+    //Samuel B
 private:
     // Définition de la structure Jetons pour le coût et le bonus
     struct Jetons {
@@ -57,6 +60,7 @@ public:
 
 // Déclaration de la classe Plateau
 class Plateau {
+    //Theo
 private:
     std::vector<std::vector<Jetons>> matriceJetons;
 
@@ -70,6 +74,7 @@ public:
 
 // Déclaration de la classe Joueur
 class Joueur {
+    //Samuel M
 private:
     std::string nom;
     int score;
@@ -93,6 +98,7 @@ public:
 
 // Déclaration de la classe Partie
 class Partie {
+    //Robert
 private:
     Joueur joueur1;
     Joueur joueur2;
@@ -119,7 +125,6 @@ class Physique {
 };
 
 class JeuDeCarte {
-
 };
 
 class LotJetons {
