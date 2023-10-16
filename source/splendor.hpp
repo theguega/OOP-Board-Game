@@ -47,12 +47,14 @@ public:
 
 // Déclaration de la classe Sac
 class Sac {
+    //Apres
 public:
     Plateau remplirPlateau();
 };
 
 // Déclaration de la classe Pyramide
 class Pyramide {
+    //Apres
 public:
     void reserverCarte();
     void acheterCarte();
@@ -111,24 +113,26 @@ public:
 
 // Déclaration de la classe Jeu
 class Jeu {
+    //plus tard
 public:
     Partie lancer();
     bool conditionsVictoire();
 };
 
 class I_A {
-
+    //plus tard
 };
 
 class Physique {
-
+    //plus tard
 };
 
 class JeuDeCarte {
+    //Samuel B
 };
 
 class LotJetons {
-
+    //Theo
 };
 
 #endif // SPLENDOR_H
