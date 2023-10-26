@@ -13,7 +13,7 @@ public:
     string getInfo() const { return info; }
 };
 
-enum class Couleur {blanc, bleu, vert, noir, rouge, perle, indt}; // ajout de "indeterminé" car certaines carte sont une couleur de Bonus variable
+enum class Couleur {blanc, bleu, vert, noir, rouge, perle, indt}; // ajout de "indeterminé" car certaines carte ont une couleur de Bonus variable
 
 enum class TypeCarte { Niv1, Niv2, Niv3, Royale };
 
@@ -45,7 +45,7 @@ private:
     unsigned int nbBonus;
 public:
     Bonus(Couleur c = 6, int n = 0) : couleur(c), nbBonus(n) {}
-    setCouleur(Couleur c) : couleur(c);
+    setCouleur(Couleur c) : couleur(c) {};
     Couleur getCouleur() const { return couleur; }
     unsigned int getNbBonus() const { return nbBonus; }
 };

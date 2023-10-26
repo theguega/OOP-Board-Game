@@ -1,0 +1,132 @@
+@startuml
+
+/'
+    Diagramme de classe du jeu Splendor Duel
+    Pour programmation objet C++
+'/
+
+class Joueur{
+    - nom : string
+    - score : int
+    - jetons : Jetons
+    - cartes : Carte
+    - privilege : Privilege
+
+    acheterCarte() : Carte
+}
+
+class I_A {
+    + jouer() : Joueur
+}
+
+class Physique {
+    + jouer() : Joueur
+}
+
+class Partie {
+    + joueur1 : Joueur
+    + joueur2 : Joueur
+    + espaceJeux : EspaceJeux
+    + tour : int
+    + fin : bool
+}
+
+class EspaceJeux {
+    + sac : Sac
+    + pyramide : Pyramide
+    + plateau : Plateau
+}
+
+class Sac{
+    + remplirPlateau() : Plateau
+}
+
+class Pyramide {
+    + acheterCarte() : Carte
+}
+
+class Carte{
+    + type : TypeCarte (enum)
+    + prix : Prix
+    + bonus : Bonus
+    + capacite : Capacite (enum)
+    + nbCouronnes : int
+    + nbPtsPrivilege : int
+}
+
+class Bonus{
+    + couleur : enum
+    + nbBonus : int
+}
+
+class Prix{
+    + blanc : int
+    + bleu : int
+    + vert : int
+    + noir : int
+    + rouge : int
+    + perle : int
+}
+
+class Pioche {
+    + pile_cartes : Carte
+}
+
+class Privilege {
+    + nbPrivilege : int
+}
+
+class Jetons {
+    + nbRouge : int
+    + nbBleu : int
+    + nbVert : int
+    + nbBlanc : int
+    + nbNoir : int
+    + nbOr : int
+    + nbPerle : int
+}
+
+class Plateau {
+    + cartes : Carte
+    + jetons : Jetons
+    + privilege : Privilege
+}
+
+class Jeu {
+    + lancer() : Partie
+    + conditionsVictoire() : bool
+}
+
+class JeuDeCarte {
+}
+
+class LotJetons {
+}
+
+Physique *--- Joueur
+I_A *--- Joueur
+
+Carte *--- JeuDeCarte
+Carte o-- Pyramide
+Carte o-- Pioche
+Carte o--- Joueur
+Carte -- Bonus
+Carte -- Prix
+
+Jetons *--- LotJetons
+Jetons o-- Sac
+Jetons o--- Joueur
+Jetons o-- Plateau
+
+Plateau o-- Privilege
+Joueur o- Privilege
+
+Partie *- EspaceJeux
+Partie *- Joueur
+
+EspaceJeux *-- Sac
+EspaceJeux *-- Pyramide
+EspaceJeux *-- Plateau
+
+Jeu <-- Partie
+@enduml

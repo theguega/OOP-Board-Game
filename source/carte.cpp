@@ -3,7 +3,7 @@
 #include <vector>
 #include "carte.h"
 
-ostream& operator<<(ostream& f, const Prix& p) {
+ostream& operator<<(ostream& f, const Prix& p) const{
 	f << "Blanc : " << blanc << "\n";
     f << "Bleu : " << bleu << "\n";
     f << "Vert : " << vert << "\n";
@@ -13,3 +13,5 @@ ostream& operator<<(ostream& f, const Prix& p) {
 
     return f;
 }
+
+
