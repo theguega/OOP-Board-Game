@@ -14,7 +14,7 @@ class Joueur{
 
     acheterCarte() : Carte
 }
-a
+
 class I_A {
     + jouer() : Joueur
 }
