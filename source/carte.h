@@ -2,6 +2,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <array>
 using namespace std;
 
 
@@ -63,6 +64,22 @@ public:
     Carte(TypeCarte t, Prix& p, Capacite c, Bonus& b, unsigned int nbC, unsigned int nbP) : type(t), prix(p), capacite(c), bonus(b), nbCouronnes(nbC), nbPtsPrivilege(nbP) {}
     ~Carte() = default;
 };
+
+
+// Ici est-ce que le jeu de cartes c'est l'ensemble des 3 paquets (+nobles) ou bien chaque paquet est un jeu ??
+class JeuCarte {
+private:
+    // TypeCarte type;
+    array<const Carte*, n1> cartes_nv1;
+    array<const Carte*, n2> cartes_nv2;
+    array<const Carte*, n3> cartes_nv3;
+    array<const Carte*, 4> cartes_nobles;
+public:
+    JeuCarte();
+    ~JeuCarte();
+    // à poursuivre
+};
+
 
 // Ajout de enum Type carte
 // Ajout de enum Couleur
