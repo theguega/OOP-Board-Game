@@ -92,12 +92,16 @@ class Plateau {
     + privilege : Privilege
 }
 
-class Jeu {
+class JeuCarte {
     + lancer() : Partie
     + conditionsVictoire() : bool
 }
 
 class JeuDeCarte {
+    + cartes_nv1 : array
+    + cartes_nv2 : array
+    + cartes_nv3 : array
+    + cartes_nobles : array
 }
 
 class LotJetons {
