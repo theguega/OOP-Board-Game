@@ -63,6 +63,12 @@ private:
 public:
     Carte(TypeCarte t, Prix& p, Capacite c, Bonus& b, unsigned int nbC, unsigned int nbP) : type(t), prix(p), capacite(c), bonus(b), nbCouronnes(nbC), nbPtsPrivilege(nbP) {}
     ~Carte() = default;
+    TypeCarte getType() const { return type; }
+    Prix getPrix() const { return prix; }
+    Capacite getCapacite() const { return capacite; }
+    Bonus getBonus() const { return bonus; }
+    unsigned int getNbCouronnes() const { return nbCouronnes; }
+    unsigned int getNbPtsPrivilege() const { return nbPtsPrivilege; }
 };
 
 
