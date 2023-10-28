@@ -14,8 +14,13 @@ ostream& operator<<(ostream& f, const Prix& p) const{
     return f;
 }
 
+ostream& operator<<(ostream& f, const Bonus& b) const{
+    f << b.getNbBonus() << " " << b.getCouleur();
+    return f;
+}
+
 JeuCarte::JeuCarte(){
-    // TODO
+    // TODO avec lecture de fichier XML
 }
 
 JeuCarte::~JeuCarte(){
@@ -56,3 +61,14 @@ const Carte& JeuCarte::getCarteNoble(size_t i) const{
         throw CarteException("Il n'y a que 4 cartes");
     return *cartes_nobles[i];
 }
+
+Carte::Carte(TypeCarte t, Prix& p, Capacite c, Bonus& b, unsigned int nbC, unsigned int nbP) : type(t), prix(p), capacite(c), bonus(b), nbCouronnes(nbC), nbPtsPrivilege(nbP) {
+    if(t==TypeCarte::Noble)
+        throw CarteException("Veuillez utiliser le constructeur approprié")
+}
+
+Carte::Carte(TypeCarte t, Capacite c, unsigned int nbP) : type(t), prix(0, 0, 0, 0, 0, 0), capacite(c), bonus(), nbCouronnes(0), nbPtsPrivilege(nbP) {
+    if (t != TypeCarte::Noble)
+        throw CarteException("Veuillez utiliser le constructeur approprié")
+}
+

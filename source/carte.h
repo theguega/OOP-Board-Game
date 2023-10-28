@@ -16,7 +16,7 @@ public:
 
 enum class CouleurCarte {blanc, bleu, vert, noir, rouge, perle, indt}; // ajout de "indeterminé" car certaines carte ont une couleur de Bonus variable
 
-enum class TypeCarte { Niv1, Niv2, Niv3, Royale };
+enum class TypeCarte { Niv1, Niv2, Niv3, Noble };
 
 enum class Capacite { NewTurn, TakePrivilege, TakeJetonFromBonus, TakeJetonToAdv, AssociationBonus };
 
@@ -45,10 +45,12 @@ public:
     CouleurCarte getCouleur() const { return couleur; }
     unsigned int getNbBonus() const { return nbBonus; }
 };
+ostream& operator<<(ostream& f, const Bonus& b) const;
 
 
 class Carte {
 private:
+    // eventuel ajout d'un champ ID, peut être util pour les cartes nobles par exemple, savoir qui est qui
     TypeCarte type;
     Prix prix;
     Capacite capacite; 
@@ -56,7 +58,8 @@ private:
     unsigned int nbCouronnes;
     unsigned int nbPtsPrivilege;
 public:
-    Carte(TypeCarte t, Prix& p, Capacite c, Bonus& b, unsigned int nbC, unsigned int nbP) : type(t), prix(p), capacite(c), bonus(b), nbCouronnes(nbC), nbPtsPrivilege(nbP) {}
+    Carte(TypeCarte t, Prix& p, Capacite c, Bonus& b, unsigned int nbC, unsigned int nbP); // constructeur classique
+    Carte(TypeCarte t, Capacite c, unsigned int nbP); // constructeur carte noble
     ~Carte() = default;
     TypeCarte getType() const { return type; }
     Prix getPrix() const { return prix; }
@@ -67,11 +70,9 @@ public:
 };
 
 
-// Ici est-ce que le jeu de cartes c'est l'ensemble des 3 paquets (+nobles) ou bien chaque paquet est un jeu ??
 class JeuCarte {
 private:
     // TypeCarte type;
-
     array<const Carte*, n1> cartes_nv1;
     array<const Carte*, n2> cartes_nv2;
     array<const Carte*, n3> cartes_nv3;
@@ -89,7 +90,6 @@ public:
     const Carte& getCarteNoble(size_t i) const;
     JeuCarte(const JeuCarte& j) = delete;
     JeuCarte& operator=(const JeuCarte& j) = delete
-    // à poursuivre
 };
 
 
@@ -98,4 +98,8 @@ public:
 // Ajout de enum Capacite
 // Ajout de classe Bonus
 // Ajout de classe Prix
+
+//Je pense qu'il faudrait faire à peu près comme le TD 4 : 
+// classe pioche --> pour nous il y aura 3 instances de pioches (3 niveaux)
+// classe Plateau --> classe Pyramide pour nous (là où il y a les cartes, le mot plateau est reservé pour les jetons)
 
