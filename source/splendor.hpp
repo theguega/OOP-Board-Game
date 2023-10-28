@@ -45,12 +45,7 @@ public:
         : cout(cout), bonus(bonus), nbCouronnes(nbCouronnes), nbPtsPrivilege(nbPtsPrivilege) {}
 };
 
-// Déclaration de la classe Sac
-class Sac {
-    //Apres
-public:
-    Plateau remplirPlateau();
-};
+
 
 // Déclaration de la classe Pyramide
 class Pyramide {
@@ -74,8 +69,15 @@ public:
     Jetons recupererJeton();
 };
 
+// Déclaration de la classe Sac
+class Sac {
+    //Apres
+public:
+    Plateau remplirPlateau();
+};
+
 // Déclaration de la classe Joueur
-class Joueur {
+/*class Joueur {
     //Samuel M
 private:
     std::string nom;
@@ -89,6 +91,7 @@ public:
     int getNbPrestige();
     int getPtsBonus();
 };
+ */
 
 // Déclaration de la classe EspaceJeux
 class EspaceJeux {
@@ -102,8 +105,8 @@ public:
 class Partie {
     //Robert
 private:
-    Joueur joueur1;
-    Joueur joueur2;
+    //Joueur joueur1;
+    //Joueur joueur2;
     EspaceJeux espaceJeux;
     int tour;
 
