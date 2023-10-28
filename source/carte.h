@@ -92,6 +92,21 @@ public:
     JeuCarte& operator=(const JeuCarte& j) = delete
 };
 
+class Pioche{
+private:
+    TypeCarte type_carte;
+    vector<Carte*> cartes;
+    size_t nb_cartes = 0;
+public:
+    explicit Pioche(const JeuCarte& j); //Pour eviter que Jeu soit converti en autre chose (genre Pioche)
+    ~Pioche();
+    bool estVide() const { return nb_cartes == 0; }
+    size_t getNbCartes() const { return nb_cartes; }
+    const Carte& piocher();
+    Pioche(const Pioche& p) = delete;
+    Pioche& operator=(const Pioche& p) = delete;
+
+};
 
 // Ajout de enum Type carte
 // Ajout de enum Couleur
