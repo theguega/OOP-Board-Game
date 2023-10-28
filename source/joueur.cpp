@@ -6,33 +6,59 @@
 #include <iostream>
 #include <string>
 
+std::string toStringType(type t) {
+    switch (t) {
+        case type::IA: return "IA";
+        case type::HUMAIN: return "HUMAIN";
+    }
+    return "ERROR";
+}
+
+type toType(std::string s) {
+    if (s == "IA") return type::IA;
+    return type::HUMAIN;
+}
+
 // Constructeur
-Joueur::Joueur(std::string nom, std::string prenom, bool typeDeJoueur):
+Joueur::Joueur(std::string nom, std::string prenom, type typeDeJoueur):
                nom(nom), prenom(prenom), typeDeJoueur(typeDeJoueur), score(0), nbCartes(0),
                 nbJetons(0), nbPrivileges(0) {
 
 }
 
+// Destructeur
+Joueur::~Joueur() {
+    for (int i = 0; i < nbCartes; i++) {
+        delete cartes[i];
+    }
+    for (int i = 0; i < nbJetons; i++) {
+        delete jetons[i];
+    }
+    for (int i = 0; i < nbPrivileges; i++) {
+        delete privileges[i];
+    }
+}
+
 // Affichages
 
-void Joueur::afficherJoueur() {
+void Joueur::afficherJoueur() const {
     std::cout << "Nom : " << nom << std::endl;
     std::cout << "Prenom : " << prenom << std::endl;
-    std::cout << "Type de joueur : " << typeDeJoueur << std::endl;
+    std::cout << "Type de joueur : " << toStringType(typeDeJoueur) << std::endl;
     std::cout << "Score : " << score << std::endl;
     std::cout << "Nombre de cartes : " << nbCartes << std::endl;
     std::cout << "Nombre de jetons : " << nbJetons << std::endl;
     std::cout << "Nombre de privilèges : " << nbPrivileges << std::endl;
 }
 
-void Joueur::afficherCartes() {
+void Joueur::afficherCartes() const {
     for (int i = 0; i < nbCartes; i++) {
         std::cout << "Carte " << i << " : " << std::endl;
         //cartes[i]->afficherCarte();
     }
 }
 
-void Joueur::afficherJetons() {
+void Joueur::afficherJetons() const {
     for (int i = 0; i < nbJetons; i++) {
         std::cout << "Jeton " << i << " : " << std::endl;
         //jetons[i]->afficherJeton();
