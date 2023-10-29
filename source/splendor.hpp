@@ -105,8 +105,8 @@ public:
 class Partie {
     //Robert
 private:
-    //Joueur joueur1;
-    //Joueur joueur2;
+    Joueur joueur1;
+    Joueur joueur2;
     EspaceJeux espaceJeux;
     int tour;
 
