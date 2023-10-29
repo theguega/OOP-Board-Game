@@ -15,16 +15,31 @@ Les privilèges, à deux endroits : sur le plateau ou dans la main d'un joueur.
 La classe joueur implémenter dans le fichier joueur agira comme controleur pour les jetons et les privilèges.
 */
 
-enum class CouleurJeton { RUBIS, SAPHIR, ÉMERAUDE, ONYX, DIAMANT, OR, PERLE };
+//Gestion des exceptions liées aux jetons
+class JetonException
+{
+public:
+    JetonException(const std::string& i) :info(i) {}
+    std::string getInfo() const { return info; }
+private:
+    std::string info;
+};
 
+//Enum pour les couleurs : initialiser, to string, affichage.
+enum class CouleurJeton { RUBIS, SAPHIR, ÉMERAUDE, ONYX, DIAMANT, OR, PERLE };
+std::string toString(CouleurJeton c);
+std::ostream& operator<<(std::ostream& f, CouleurJeton c);
+extern std::initializer_list<CouleurJeton> CouleursJeton;
+
+//Classe Jetons
 class Jetons {
     private :
         CouleurJeton couleur;
     public :
-        Jetons(CouleurJeton couleur) : couleur(couleur) {};
+        Jetons(CouleurJeton c) : couleur(c) {}
         CouleurJeton getCouleur() const { return couleur; }
 };
 
-std::ostream& operator<<(std::ostream& os, const Jetons& jeton);
+std::ostream& operator<< (std::ostream& f, const Jetons& jeton);
 
 #endif
