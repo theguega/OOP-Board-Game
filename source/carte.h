@@ -68,7 +68,7 @@ public:
     unsigned int getNbCouronnes() const { return nbCouronnes; }
     unsigned int getNbPtsPrivilege() const { return nbPtsPrivilege; }
 };
-
+ostream& operator<<(ostream& f, const Carte& c) const;
 
 class JeuCarte {
 private:
@@ -98,7 +98,7 @@ private:
     vector<Carte*> cartes;
     size_t nb_cartes = 0;
 public:
-    explicit Pioche(const JeuCarte& j); //Pour eviter que Jeu soit converti en autre chose (genre Pioche)
+    explicit Pioche(const JeuCarte& j, TypeCarte t); //Pour eviter que Jeu soit converti en autre chose (genre Pioche)
     ~Pioche();
     bool estVide() const { return nb_cartes == 0; }
     size_t getNbCartes() const { return nb_cartes; }

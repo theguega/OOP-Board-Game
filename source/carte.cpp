@@ -19,6 +19,10 @@ ostream& operator<<(ostream& f, const Bonus& b) const{
     return f;
 }
 
+ostream& operator<<(ostream& f, const Carte& c) const{
+    // TODO: insérer une instruction return ici
+}
+
 JeuCarte::JeuCarte(){
     // TODO avec lecture de fichier XML
 }
@@ -72,10 +76,32 @@ Carte::Carte(TypeCarte t, Capacite c, unsigned int nbP) : type(t), prix(0, 0, 0,
         throw CarteException("Veuillez utiliser le constructeur approprié")
 }
 
-Pioche::Pioche(const JeuCarte& j){
-    // TODO
+Pioche::Pioche(const JeuCarte& j, TypeCarte t) : type_carte(t){
+    if (t == TypeCarte::Niv1) {
+        cartes(new const Carte * [j.getNbCartes_nv1()]);
+        nb_cartes(j.getNbCartes_nv1());
+        for (size_t i = 0; i < nb_cartes; i++)
+            cartes[i] = &j.getCarteNiv1(i);
+    }
+    if (t == TypeCarte::Niv2) {
+        cartes(new const Carte * [j.getNbCartes_nv2()]);
+        nb_cartes(j.getNbCartes_nv2());
+        for (size_t i = 0; i < nb_cartes; i++)
+            cartes[i] = &j.getCarteNiv2(i);
+    }
+    if (t == TypeCarte::Niv3) {
+        cartes(new const Carte * [j.getNbCartes_nv3()]);
+        nb_cartes(j.getNbCartes_nv3());
+        for (size_t i = 0; i < nb_cartes; i++)
+            cartes[i] = &j.getCarteNiv3(i);
+    }
+    // est-ce qu'on fait une pioche pour les cartes nobles, je suis pas sûr
 }
 
 Pioche::~Pioche(){
-    // TODO
+    delete[] cartes;
+}
+
+const Carte& Pioche::piocher(){
+    // TODO: insérer une instruction return ici
 }
