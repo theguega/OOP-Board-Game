@@ -1,3 +1,5 @@
+@startuml jetons
+
 enum CouleurJeton { 
     RUBIS
     SAPHIR
@@ -65,3 +67,5 @@ Privilege "3" --* LotPrivilege
 
 Jeton "0..25" -o "0..1" Plateau
 Privilege "0..3" -o "0..1" Plateau
+
+@enduml
