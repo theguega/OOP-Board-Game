@@ -3,24 +3,47 @@
 #include <vector>
 #include "carte.h"
 
-ostream& operator<<(ostream& f, const Prix& p) const{
-	f << "Blanc : " << blanc << "\n";
-    f << "Bleu : " << bleu << "\n";
-    f << "Vert : " << vert << "\n";
-    f << "Noir : " << noir << "\n";
-    f << "Rouge : " << rouge << "\n";
-    f << "Perle : " << perle << "\n";
+string toString(CouleurCarte c){
+    switch (c){
+    case CouleurCarte::blanc : return "blanc";
+    case CouleurCarte::bleu: return "bleu";
+    case CouleurCarte::vert: return "vert";
+    case CouleurCarte::noir: return "noir";
+    case CouleurCarte::rouge: return "rouge";
+    case CouleurCarte::perle: return "perle";
+    case CouleurCarte::indt: return "indt";
+    default: throw CarteException("Couleur inconnue");
+    }
+}
+ostream& operator<<(ostream& f, CouleurCarte c){ f << toString(c); return f; }
+
+
+string toString(TypeCarte t){
+    switch (t) {
+    case TypeCarte::Niv1: return "Niv1";
+    case TypeCarte::Niv2: return "Niv2";
+    case TypeCarte::Niv3: return "Niv3";
+    case TypeCarte::Noble: return "Noble";
+    default: throw CarteException("Type inconnue");
+    }
+}
+ostream& operator<<(ostream& f, TypeCarte t) { f << toString(t); return f; }
+
+
+ostream& operator<<(ostream& f, const Prix& p){
+	f << "Blanc : " << p.getBlanc() << "\n";
+    f << "Bleu : " << p.getBleu() << "\n";
+    f << "Vert : " << p.getVert() << "\n";
+    f << "Noir : " << p.getNoir() << "\n";
+    f << "Rouge : " << p.getRouge() << "\n";
+    f << "Perle : " << p.getPerle() << "\n";
 
     return f;
 }
 
-ostream& operator<<(ostream& f, const Bonus& b) const{
+ostream& operator<<(ostream& f, const Bonus& b){
     f << b.getNbBonus() << " " << b.getCouleur();
     return f;
-}
-
-ostream& operator<<(ostream& f, const Carte& c) const{
-    // TODO: insérer une instruction return ici
 }
 
 JeuCarte::JeuCarte(){
@@ -78,20 +101,20 @@ Carte::Carte(TypeCarte t, Capacite c, unsigned int nbP) : type(t), prix(0, 0, 0,
 
 Pioche::Pioche(const JeuCarte& j, TypeCarte t) : type_carte(t){
     if (t == TypeCarte::Niv1) {
-        cartes(new const Carte * [j.getNbCartes_nv1()]);
-        nb_cartes(j.getNbCartes_nv1());
+        cartes = new const Carte * [j.getNbCartes_nv1()];
+        nb_cartes = j.getNbCartes_nv1();
         for (size_t i = 0; i < nb_cartes; i++)
             cartes[i] = &j.getCarteNiv1(i);
     }
     if (t == TypeCarte::Niv2) {
-        cartes(new const Carte * [j.getNbCartes_nv2()]);
-        nb_cartes(j.getNbCartes_nv2());
+        cartes = new const Carte * [j.getNbCartes_nv2()];
+        nb_cartes = j.getNbCartes_nv2();
         for (size_t i = 0; i < nb_cartes; i++)
             cartes[i] = &j.getCarteNiv2(i);
     }
     if (t == TypeCarte::Niv3) {
-        cartes(new const Carte * [j.getNbCartes_nv3()]);
-        nb_cartes(j.getNbCartes_nv3());
+        cartes = new const Carte * [j.getNbCartes_nv3()];
+        nb_cartes = j.getNbCartes_nv3();
         for (size_t i = 0; i < nb_cartes; i++)
             cartes[i] = &j.getCarteNiv3(i);
     }
