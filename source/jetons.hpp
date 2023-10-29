@@ -89,11 +89,33 @@ class Sac {
         size_t getNbJetons() const { return jetons.size(); }
         void ajouterJeton(const Jeton* j);
         const Jeton& piocherJeton();
-        ~Sac();
+        ~Sac()=default;
 
         //pas de duplication et d'affection du sac
         Sac(const Sac&) = delete;
         Sac& operator=(const Sac&) = delete;
+};
+
+class Plateau {
+    //Le plateau est une matrice de jetons
+    private :
+        std::array<std::array<const Jeton*, 5>, 5> jetons;
+        std::vector<const Privilege*> privileges;
+        //ordre de positionnement des jetons sur le plateau
+        std::array<std::tuple<size_t, size_t>, 25> liste_pos = {
+            std::make_tuple(2,2), std::make_tuple(1,2), std::make_tuple(1,3), std::make_tuple(2,3), std::make_tuple(3,3), std::make_tuple(3,2), std::make_tuple(3,1), std::make_tuple(2,1), std::make_tuple(1,1), std::make_tuple(0,1), std::make_tuple(0,2), std::make_tuple(0,3), std::make_tuple(0,4), std::make_tuple(1,4), std::make_tuple(2,4), std::make_tuple(3,4), std::make_tuple(4,4), std::make_tuple(4,3), std::make_tuple(4,2), std::make_tuple(4,1), std::make_tuple(4,0), std::make_tuple(3,0), std::make_tuple(2,0), std::make_tuple(1,0), std::make_tuple(0,0)
+            };
+    public :
+        const Jeton& recupererJeton(size_t i, size_t j); //pas const car on modifie le plateau (nullptr pour la case recuperee)
+        const Privilege& recupererPrivilege(); //de même, pas const
+        void positionerJeton(const Jeton* jeton);
+        void poserPrivilege(const Privilege* privilege);
+        Plateau(const LotPrivilege& lot);
+        ~Plateau() = default;
+
+        //pas de copie ni d'affectation
+        Plateau(const Plateau&) = delete;
+        Plateau& operator=(const Plateau&) = delete;
 };
 
 #endif

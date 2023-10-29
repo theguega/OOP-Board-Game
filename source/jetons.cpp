@@ -115,7 +115,7 @@ Sac::Sac(const LotDeJetons& lot) {
 
 void Sac::ajouterJeton(const Jeton* j) {
     jetons.push_back(j);
-};
+}
 
 const Jeton& Sac::piocherJeton() {
     if (estVide())
@@ -132,13 +132,70 @@ const Jeton& Sac::piocherJeton() {
     jetons.erase(jetons.begin() + i);
 
     return *j;
-};
+}
 
-Sac::~Sac()
+
+
+//------------------------------------------------- Classe Plateau
+
+Plateau::Plateau(const LotPrivilege& lot) {
+    //initialisation du plateau vide
+    for (size_t i = 0; i < 5; i++)
+    {
+        for (size_t j = 0; j < 5; j++)
+        {
+            jetons[i][j] = nullptr;
+        }
+    }
+
+    //initialisation des privilèges
+    for (size_t i = 0; i < lot.getNbPrivileges(); i++)
+    {
+        privileges.push_back(&lot.getPrivilege(i));
+    }
+}
+
+const Jeton& Plateau::recupererJeton(size_t i, size_t j)
 {
-    jetons.clear();
-};
+    if (i >= 5 || j >= 5)
+        throw JetonException("Indice de jeton incorrect");
+    if (jetons[i][j] == nullptr)
+        throw JetonException("Pas de jeton à cet emplacement");
+    
+    const Jeton* jeton = jetons[i][j];
+    jetons[i][j] = nullptr;
+    return *jeton;
+}
 
+const Privilege& Plateau::recupererPrivilege() {
+    if (privileges.empty())
+        throw JetonException("Pas de privilège à récupérer");
+    
+    //on recup le dernier privilège
+    const Privilege* privilege = privileges.back();
+    privileges.pop_back();
+    return *privilege;
+}
 
+void Plateau::poserPrivilege(const Privilege* privilege) {
+    privileges.push_back(privilege);
+}
 
+void Plateau::positionerJeton(const Jeton* jeton) {
+    //on cherche la première case vide
+    int pos=0;
+    int i = std::get<0>(liste_pos[pos]);
+    int j = std::get<1>(liste_pos[pos]);
+    while (jetons[i][j] != nullptr && pos<liste_pos.size()-1) {
+        pos++;
+        i = std::get<0>(liste_pos[pos]);
+        j = std::get<1>(liste_pos[pos]);
+    };
 
+    //si on est arrivés au bout de la liste et que aucune case n'est vide
+    if (jetons[i][j] != nullptr) {
+        throw JetonException("Le plateau est déjà plein");
+    } else {
+        jetons[i][j] = jeton;
+    }
+}

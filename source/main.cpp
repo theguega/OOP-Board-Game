@@ -7,12 +7,19 @@ int main(int argc, const char * argv[]) {
         //Création du lot
         LotDeJetons lot;
         //Création du sac
-        Sac sac = Sac(lot);
-        //Tirage de 2 jetons
-        std::cout << sac.piocherJeton() << "\n";
-        std::cout << sac.piocherJeton() << "\n";
-        std::cout << sac.piocherJeton() << "\n";
-        std::cout << sac.piocherJeton() << "\n";
+        Sac sac(lot);
+        
+        //Creation du plateau
+        LotPrivilege lotPrivilege;
+
+        //test (fonctionnel) de remplissage de plateau (se fera par le joueur dans le jeu)
+        Plateau plateau(lotPrivilege);
+        for (int i=0; i<25; i++) {
+            plateau.positionerJeton(&sac.piocherJeton());
+        }
+        
+        std::cout<<"hi";
+        
     }
     catch (JetonException& e)
     {
