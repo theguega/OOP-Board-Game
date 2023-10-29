@@ -68,7 +68,6 @@ public:
     unsigned int getNbCouronnes() const { return nbCouronnes; }
     unsigned int getNbPtsPrivilege() const { return nbPtsPrivilege; }
 };
-ostream& operator<<(ostream& f, const Carte& c) const;
 
 class JeuCarte {
 private:
