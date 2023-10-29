@@ -1,11 +1,9 @@
-#include "splendor.hpp"
 #include <iostream>
+#include "jetons.hpp"
 
 int main(int argc, const char * argv[]) {
-    // insert code here...
-    std::cout << "Hello, World!\n";
-    std::cout << "Hi there\n";
-    std::cout << "Hello, World!\n";
-    std::cout << "Hello, World!\n";
+    Jetons jeton1(CouleurJeton::RUBIS);
+    Jetons jeton2(CouleurJeton::SAPHIR);
+    std::cout<<jeton1<<std::endl;
     return 0;
 }
