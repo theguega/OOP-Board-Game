@@ -1,60 +1,3 @@
-@startuml
-
-/'
-    Diagramme de classe du jeu Splendor Duel
-    Pour programmation objet C++
-'/
-
-class Joueur{
-    - nom : string
-    - score : int
-    - jetons : Jetons
-    - cartes : Carte
-    - privilege : Privilege
-
-    + getNbCouronnes() : int
-    + getNbPrestige() : int
-    + getPtsBonus() : int
-}
-
-class I_A {
-}
-
-class Physique {
-}
-
-class Partie {
-    - joueur1 : Joueur
-    - joueur2 : Joueur
-    - espaceJeux : EspaceJeux
-    - tour : int
-
-    - finPartie() : bool
-}
-
-class EspaceJeux {
-    + sac : Sac
-    + pyramide : Pyramide
-    + plateau : Plateau
-}
-
-class Pyramide {
-    + reserverCarte()
-    + acheterCarte()
-}
-
-class Carte{
-    - cout : Jetons
-    - bonus : Jetons
-    - capacite : enum
-    - nbCouronnes : int
-    - nbPtsPrivilege : int
-}
-
-class Pioche {
-    - pile_cartes : Carte
-}
-
 enum CouleurJeton { 
     RUBIS
     SAPHIR
@@ -115,23 +58,6 @@ class Plateau {
     + Plateau(const LotPrivilege& lot)
 }
 
-
-class Jeu {
-    + lancer() : Partie
-    + conditionsVictoire() : bool
-}
-
-class JeuDeCarte {
-}
-
-Physique *--- Joueur
-I_A *--- Joueur
-
-Carte *--- JeuDeCarte
-Carte o-- Pyramide
-Carte o-- Pioche
-Carte o--- Joueur
-
 Jeton "25" --* LotDeJetons
 Jeton "0..25" -o "0..1" Sac
 
@@ -139,15 +65,3 @@ Privilege "3" --* LotPrivilege
 
 Jeton "0..25" -o "0..1" Plateau
 Privilege "0..3" -o "0..1" Plateau
-
-Joueur o- Privilege
-
-Partie *- EspaceJeux
-Partie *- Joueur
-
-EspaceJeux *-- Sac
-EspaceJeux *-- Pyramide
-EspaceJeux *-- Plateau
-
-Jeu <-- Partie
-@enduml
