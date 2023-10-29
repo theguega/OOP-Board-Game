@@ -32,14 +32,68 @@ std::ostream& operator<<(std::ostream& f, CouleurJeton c);
 extern std::initializer_list<CouleurJeton> CouleursJeton;
 
 //Classe Jetons
-class Jetons {
+class Jeton {
     private :
         CouleurJeton couleur;
     public :
-        Jetons(CouleurJeton c) : couleur(c) {}
+        Jeton(CouleurJeton c) : couleur(c) {}
         CouleurJeton getCouleur() const { return couleur; }
 };
+std::ostream& operator<< (std::ostream& f, const Jeton& jeton);
 
-std::ostream& operator<< (std::ostream& f, const Jetons& jeton);
+class LotDeJetons {
+    private :
+        std::array<Jeton*, 25> jetons;
+    public:
+        size_t getNbJetons() const { return jetons.size(); }
+        const Jeton& getJetons(size_t i) const;
+        LotDeJetons();
+        ~LotDeJetons();
+
+        //pas de copie ni d'affectation 
+        LotDeJetons(const LotDeJetons&) = delete;
+        LotDeJetons& operator=(const LotDeJetons&) = delete;
+};
+
+class Privilege {
+    //pas d'attribut : les 3 privilèges sont identiques
+    public :
+        //pas de recopie ni d'affectation
+        Privilege() = default;
+        Privilege(const Privilege&) = delete;
+        Privilege& operator=(const Privilege&) = delete;
+};
+
+class LotPrivilege {
+    private :
+        std::array<Privilege*, 3> privileges;
+    public :
+        size_t getNbPrivileges() const { return privileges.size(); }
+        const Privilege& getPrivilege(size_t i) const;
+        LotPrivilege();
+        ~LotPrivilege();
+
+        //pas de copie ni d'affectation
+        LotPrivilege(const LotPrivilege&) = delete;
+        LotPrivilege& operator=(const LotPrivilege&) = delete;
+};
+
+class Sac {
+    //Le sac de jetons contient tous les jetons qui ne sont ni dans la main des joueurs ni sur le plateau
+    //Au debut de la partie, le plateau est pleins, le sac est donc vide au même titre que la main des joueurs
+    private :
+        std::vector<const Jeton*> jetons;
+    public :
+        explicit Sac(const LotDeJetons& lot);
+        bool estVide() const { return jetons.empty(); }
+        size_t getNbJetons() const { return jetons.size(); }
+        void ajouterJeton(const Jeton* j);
+        const Jeton& piocherJeton();
+        ~Sac();
+
+        //pas de duplication et d'affection du sac
+        Sac(const Sac&) = delete;
+        Sac& operator=(const Sac&) = delete;
+};
 
 #endif
