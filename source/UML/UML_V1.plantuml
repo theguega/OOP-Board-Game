@@ -56,7 +56,15 @@ class Pioche {
 }
 
 class JetonException {
+  - info : string
   + getInfo(): std::string
+  + JetonException(i: std::string&)
+}
+
+class PrivilegeException {
+  - info : string
+  + getInfo(): std::string
+  + PrivilegeException(i: std::string&)
 }
 
 enum CouleurJeton {
@@ -72,6 +80,7 @@ enum CouleurJeton {
 class Jeton {
   - couleur: CouleurJeton
   + getCouleur(): CouleurJeton
+  + Jeton(c: CouleurJeton)
 }
 
 class LotDeJetons {
@@ -86,6 +95,11 @@ class LotDeJetons {
   - max_emeraude: size_t
   + getNbJetons(): size_t
   + getJetons(i: size_t): const Jeton&
+  + LotDeJetons()
+  + ~LotDeJetons()
+
+  + LotDeJetons(const LotDeJetons&) = delete
+  + operator=(const LotDeJetons&) : LotDeJetons& = delete
 }
 
 class Privilege {
@@ -96,26 +110,41 @@ class LotPrivileges {
   - max_privileges: size_t
   + getNbPrivileges(): size_t
   + getPrivilege(i: size_t): const Privilege&
+  + LotPrivileges()
+  + ~LotPrivileges()
+
+  + LotPrivileges(const LotPrivileges&) = delete
+  + operator=(const LotPrivileges&) : LotPrivileges& = delete
 }
 
 class Sac {
   - jetons: std::vector<const Jeton*>
+  - max_jetons: size_t
+  + Sac(lot : const LotDeJetons&) : explicit
   + estVide(): bool
   + getNbJetons(): size_t
   + ajouterJeton(j: const Jeton&): void
   + piocherJeton(): const Jeton&
+
+  + Sac(const Sac&) = delete
+  + operator=(const Sac&) : Sac& = delete
 }
 
 class Plateau {
   - jetons: std::array<std::array<const Jeton*, 5>, 5>
   - privileges: std::vector<const Privilege*>
   - liste_pos: std::array<std::tuple<size_t, size_t>, 25>
+  - max_privileges : size_t
   + recupererJeton(i: size_t, j: size_t): const Jeton&
   + recupererPrivilege(): const Privilege&
   + positionerJeton(jeton: const Jeton&): void
   + poserPrivilege(privilege: const Privilege&): void
   + remplirPlateau(sac: Sac&): void
   + estVide(): bool
+  + Plateau (sac: Sac&, lot: LotPrivileges&)
+
+  + Plateau(const Plateau&) = delete
+  + operator=(const Plateau&) : Plateau& = delete
 }
 
 
