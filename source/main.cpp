@@ -5,21 +5,26 @@ int main(int argc, const char * argv[]) {
     try
     {
         //Création du lot
-        LotDeJetons lot;
+        LotDeJetons lotJetons;
         //Création du sac
-        Sac sac(lot);
-        
+        Sac sac(lotJetons);
         //Creation du plateau
-        LotPrivilege lotPrivilege;
+        LotPrivileges lotPrivileges;
+        Plateau plateau(sac, lotPrivileges);
 
-        //test (fonctionnel) de remplissage de plateau (se fera par le joueur dans le jeu)
-        Plateau plateau(lotPrivilege);
-        for (int i=0; i<25; i++) {
-            plateau.positionerJeton(&sac.piocherJeton());
-        }
+        //Recuperation de deux jetons sur le plateau et remise dans le sac
+        const Jeton& jeton1 = plateau.recupererJeton(0,0);
+        std::cout << jeton1 << "\n";
+        sac.ajouterJeton(jeton1);
         
-        std::cout<<"hi";
-        
+        const Jeton& jeton2 = plateau.recupererJeton(2,2);
+        std::cout << jeton2 << "\n";
+        sac.ajouterJeton(jeton2);
+
+        //Remise d'un jeton du sac sur le plateau
+        plateau.positionerJeton(sac.piocherJeton());
+
+        std::cout<<"Voilaaaa, on est content"<<std::endl;
     }
     catch (JetonException& e)
     {
