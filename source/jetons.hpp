@@ -25,6 +25,16 @@ private:
     std::string info;
 };
 
+//Gestion des exceptions liées aux privilèges
+class PrivilegeException
+{
+public:
+    PrivilegeException(const std::string& i) :info(i) {}
+    std::string getInfo() const { return info; }
+private:
+    std::string info;
+};
+
 //Enum pour les couleurs : initialiser, to string, affichage.
 enum class CouleurJeton { RUBIS, SAPHIR, ÉMERAUDE, ONYX, DIAMANT, OR, PERLE };
 std::string toString(CouleurJeton c);

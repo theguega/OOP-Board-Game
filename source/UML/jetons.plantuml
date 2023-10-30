@@ -1,6 +1,12 @@
 @startuml jetons
 
 class JetonException {
+  - info : string
+  + getInfo(): std::string
+}
+
+class PrivilegeException {
+  - info : string
   + getInfo(): std::string
 }
 

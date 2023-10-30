@@ -78,7 +78,7 @@ std::ostream& operator<< (std::ostream& f, const Privilege& privilege) {
 
 const Privilege& LotPrivileges::getPrivilege(size_t i) const {
     if (i >= privileges.size())
-        throw JetonException("Indice de privilège incorrect");
+        throw PrivilegeException("Indice de privilège incorrect");
     return *privileges[i];
 }
 
@@ -154,7 +154,7 @@ const Jeton& Plateau::recupererJeton(const size_t i, const size_t j) {
 
 const Privilege& Plateau::recupererPrivilege() {
     if (privileges.empty())
-        throw JetonException("Pas de privilège à récupérer");
+        throw PrivilegeException("Pas de privilège à récupérer");
     
     //on recup le dernier privilège
     const Privilege& privilege = *privileges.back();
@@ -164,7 +164,7 @@ const Privilege& Plateau::recupererPrivilege() {
 
 void Plateau::poserPrivilege(const Privilege& privilege) {
     if (privileges.size() >= max_privileges)
-        throw JetonException("Le plateau est déjà plein");
+        throw PrivilegeException("Le plateau est déjà plein");
     privileges.push_back(&privilege);
 }
 
