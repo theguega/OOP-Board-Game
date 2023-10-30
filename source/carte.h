@@ -1,4 +1,4 @@
-#pragmaonce
+#pragma once
 #include <iostream>
 #include <string>
 #include <vector>
@@ -15,8 +15,12 @@ public:
 };
 
 enum class CouleurCarte {blanc, bleu, vert, noir, rouge, perle, indt}; // ajout de "indeterminé" car certaines carte ont une couleur de Bonus variable
+string toString(CouleurCarte c);
+ostream& operator<<(ostream& f, CouleurCarte c);
 
 enum class TypeCarte { Niv1, Niv2, Niv3, Noble };
+string toString(TypeCarte t);
+ostream& operator<<(ostream& f, TypeCarte t);
 
 enum class Capacite { NewTurn, TakePrivilege, TakeJetonFromBonus, TakeJetonToAdv, AssociationBonus };
 
@@ -32,7 +36,7 @@ public:
     unsigned int getRouge() const { return rouge; }
     unsigned int getPerle() const { return perle; }
 };
-ostream& operator<<(ostream& f, const Prix& p) const;
+ostream& operator<<(ostream& f, const Prix& p);
 
 
 class Bonus {
@@ -40,12 +44,12 @@ private:
     CouleurCarte couleur;
     unsigned int nbBonus;
 public:
-    Bonus(CouleurCarte c = 6, int n = 0) : couleur(c), nbBonus(n) {}
-    setCouleur(Couleur c) : couleur(c) {};
+    Bonus(CouleurCarte c = CouleurCarte::indt, int n = 0) : couleur(c), nbBonus(n) {}
+    void setCouleur(CouleurCarte c) { couleur = c; };
     CouleurCarte getCouleur() const { return couleur; }
     unsigned int getNbBonus() const { return nbBonus; }
 };
-ostream& operator<<(ostream& f, const Bonus& b) const;
+ostream& operator<<(ostream& f, const Bonus& b);
 
 
 class Carte {
@@ -69,7 +73,6 @@ public:
     unsigned int getNbPtsPrivilege() const { return nbPtsPrivilege; }
 };
 
-
 class JeuCarte {
 private:
     // TypeCarte type;
@@ -89,16 +92,16 @@ public:
     const Carte& getCarteNiv3(size_t i) const;
     const Carte& getCarteNoble(size_t i) const;
     JeuCarte(const JeuCarte& j) = delete;
-    JeuCarte& operator=(const JeuCarte& j) = delete
+    JeuCarte& operator=(const JeuCarte& j) = delete;
 };
 
 class Pioche{
 private:
     TypeCarte type_carte;
-    vector<Carte*> cartes;
+    const Carte** cartes = nullptr;;
     size_t nb_cartes = 0;
 public:
-    explicit Pioche(const JeuCarte& j); //Pour eviter que Jeu soit converti en autre chose (genre Pioche)
+    explicit Pioche(const JeuCarte& j, TypeCarte t); //Pour eviter que Jeu soit converti en autre chose (genre Pioche)
     ~Pioche();
     bool estVide() const { return nb_cartes == 0; }
     size_t getNbCartes() const { return nb_cartes; }

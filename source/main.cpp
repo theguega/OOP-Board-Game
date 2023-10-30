@@ -1,3 +1,12 @@
+//
+//  main.cpp
+//  Projet_LO21
+//
+//  Created by Theo GUEGAN on 11/09/2023.
+//
+
+#include <iostream>
+#include "carte.h"
 #include <string>
 #include <vector>
 #include "joueur.hpp"

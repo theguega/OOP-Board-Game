@@ -46,30 +46,53 @@ class Pyramide {
 }
 
 class Carte{
-    + type : TypeCarte (enum)
-    + prix : Prix
-    + bonus : Bonus
-    + capacite : Capacite (enum)
-    + nbCouronnes : int
-    + nbPtsPrivilege : int
+    - type : enum
+    - prix : Prix
+    - bonus : Bonus
+    - capacite : enum
+    - nbCouronnes : int
+    - nbPtsPrivilege : int
+    + Carte()
+    + ~Carte()
+    + getType()
+    + getPrix() 
+    + getCapacite()
+    + getBonus()
+    + getNbCouronnes() 
+    + getNbPtsPrivilege()
 }
 
 class Bonus{
-    + couleur : enum
-    + nbBonus : int
+    - couleur : enum
+    - nbBonus : int
+    + Bonus()
+    + setCouleur()
+    + getCouleur()
+    + getNbBonus()
 }
 
 class Prix{
-    + blanc : int
-    + bleu : int
-    + vert : int
-    + noir : int
-    + rouge : int
-    + perle : int
+    - blanc : int
+    - bleu : int
+    - vert : int
+    - noir : int
+    - rouge : int
+    - perle : int
+    + Prix()
+    + getBlanc()
+    + getBleu()
+    + get...()
 }
 
 class Pioche {
-    + pile_cartes : Carte
+    - type_cartes : enum
+    - cartes : vector<Carte*>
+    - nb_cartes : int
+    + Pioche()
+    + ~Pioche()
+    + estVide()
+    + getNbCartes()
+    + piocher()
 }
 
 class Privilege {
@@ -92,16 +115,26 @@ class Plateau {
     + privilege : Privilege
 }
 
-class JeuCarte {
+class JeuC {
     + lancer() : Partie
     + conditionsVictoire() : bool
 }
 
-class JeuDeCarte {
-    + cartes_nv1 : array
-    + cartes_nv2 : array
-    + cartes_nv3 : array
-    + cartes_nobles : array
+class JeuCarte {
+    - cartes_nv1 : array
+    - cartes_nv2 : array
+    - cartes_nv3 : array
+    - cartes_nobles : array
+    + JeuCarte()
+    + ~JeuCarte()
+    + getNbCartes_nv1()
+    + getNbCartes_nv2()
+    + getNbCartes_nv3()
+    + getNbCartes_nobles()
+    + getCarteNiv1()
+    + getCarteNiv2()
+    + getCarteNiv3()
+    + getCarteNoble()
 }
 
 class LotJetons {
@@ -110,7 +143,7 @@ class LotJetons {
 Physique *--- Joueur
 I_A *--- Joueur
 
-Carte *--- JeuDeCarte
+Carte *--- JeuCarte
 Carte o-- Pyramide
 Carte o-- Pioche
 Carte o--- Joueur
