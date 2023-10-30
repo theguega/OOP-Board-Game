@@ -138,7 +138,7 @@ Plateau::Plateau(Sac& sac, const LotPrivileges& lotp) {
     remplirPlateau(sac);
 }
 
-const Jeton& Plateau::recupererJeton(size_t i, size_t j) {
+const Jeton& Plateau::recupererJeton(const size_t i, const size_t j) {
     if (i >= 5 || j >= 5)
         throw JetonException("Indice de jeton incorrect");
     if (jetons[i][j] == nullptr)
@@ -189,4 +189,12 @@ void Plateau::remplirPlateau(Sac& sac) {
     while(!sac.estVide()) {
         positionerJeton(sac.piocherJeton());
     }
+}
+
+bool Plateau::estVide() const {
+    for (size_t i = 0; i < 5; i++)
+        for (size_t j = 0; j < 5; j++)
+            if (jetons[i][j] != nullptr)
+                return false;
+    return true;
 }

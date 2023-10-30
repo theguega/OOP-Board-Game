@@ -55,64 +55,67 @@ class Pioche {
     - pile_cartes : Carte
 }
 
-enum CouleurJeton { 
-    RUBIS
-    SAPHIR
-    ÉMERAUDE
-    ONYX
-    DIAMANT
-    OR
-    PERLE
+class JetonException {
+  + getInfo(): std::string
+}
+
+enum CouleurJeton {
+  RUBIS
+  SAPHIR
+  ÉMÉRAUDE
+  ONYX
+  DIAMANT
+  OR
+  PERLE
 }
 
 class Jeton {
-    - couleur : CouleurJeton
-    + Jeton(CouleurJeton c) : Jeton
-    + getCouleur() const : CouleurJeton
+  - couleur: CouleurJeton
+  + getCouleur(): CouleurJeton
 }
 
 class LotDeJetons {
-    - jetons : array<Jeton*, 25>
-
-    + getNbJetons() : size_t
-    + getJetons(size_t i) : Jeton&
-    + LotDeJetons()
-    + ~LotDeJetons()
+  - jetons: std::vector<const Jeton*>
+  - max_jetons: size_t
+  - max_or: size_t
+  - max_perle: size_t
+  - max_rubis: size_t
+  - max_onyx: size_t
+  - max_saphir: size_t
+  - max_dimant: size_t
+  - max_emeraude: size_t
+  + getNbJetons(): size_t
+  + getJetons(i: size_t): const Jeton&
 }
 
 class Privilege {
-    + Privilege() = default
 }
 
-class LotPrivilege {
-    - privileges : array<Privilege*, 3>
-
-    + getNbPrivileges() : size_t
-    + getPrivileges(size_t i) : Privilege&
-    + LotPrivilege()
-    + ~LotPrivilege()
+class LotPrivileges {
+  - privileges: std::vector<const Privilege*>
+  - max_privileges: size_t
+  + getNbPrivileges(): size_t
+  + getPrivilege(i: size_t): const Privilege&
 }
 
-class Sac{
-    - jetons : vector<Jetons*>
-
-    + explicit Sac(const LotJetons& lot)
-    + bool estVide() 
-    + getNbJetons() : size_t
-    + ajoutJetons(const Jetons* j) : void
-    + piocherJetons() : Jetons&
+class Sac {
+  - jetons: std::vector<const Jeton*>
+  + estVide(): bool
+  + getNbJetons(): size_t
+  + ajouterJeton(j: const Jeton&): void
+  + piocherJeton(): const Jeton&
 }
 
 class Plateau {
-    - jetons : array<array<const Jeton*, 5>, 5>
-    - privileges : vector<const Privilege*>
-    - liste_pos : array<tuple<size_t, size_t>, 25>
-
-    + recupererJeton(size_t i, size_t j) : const Jeton&
-    + recupererPrivilege() : const Privilege&
-    + positionerJeton(const Jeton* jeton)
-    + poserPrivilege(const Privilege* privilege)
-    + Plateau(const LotPrivilege& lot)
+  - jetons: std::array<std::array<const Jeton*, 5>, 5>
+  - privileges: std::vector<const Privilege*>
+  - liste_pos: std::array<std::tuple<size_t, size_t>, 25>
+  + recupererJeton(i: size_t, j: size_t): const Jeton&
+  + recupererPrivilege(): const Privilege&
+  + positionerJeton(jeton: const Jeton&): void
+  + poserPrivilege(privilege: const Privilege&): void
+  + remplirPlateau(sac: Sac&): void
+  + estVide(): bool
 }
 
 
@@ -135,7 +138,7 @@ Carte o--- Joueur
 Jeton "25" --* LotDeJetons
 Jeton "0..25" -o "0..1" Sac
 
-Privilege "3" --* LotPrivilege
+Privilege "3" --* LotPrivileges
 
 Jeton "0..25" -o "0..1" Plateau
 Privilege "0..3" -o "0..1" Plateau

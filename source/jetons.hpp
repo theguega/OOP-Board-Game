@@ -34,7 +34,7 @@ extern std::initializer_list<CouleurJeton> CouleursJeton;
 //Classe Jetons
 class Jeton {
     private :
-        CouleurJeton couleur;
+        const CouleurJeton couleur;
     public :
         Jeton(CouleurJeton c) : couleur(c) {}
         CouleurJeton getCouleur() const { return couleur; }
@@ -43,18 +43,18 @@ std::ostream& operator<< (std::ostream& f, const Jeton& jeton);
 
 class LotDeJetons {
     private :
-        std::vector<Jeton*> jetons;
+        std::vector<const Jeton*> jetons;
         //max jetons
-        size_t max_jetons = 25;
+        const size_t max_jetons = 25;
         //max de chaque jetons
-        size_t max_or = 3;
-        size_t max_perle = 2;
+        const size_t max_or = 3;
+        const size_t max_perle = 2;
 
-        size_t max_rubis = 4;
-        size_t max_onyx = 4;
-        size_t max_saphir = 4;
-        size_t max_dimant = 4;
-        size_t max_emeraude = 4;
+        const size_t max_rubis = 4;
+        const size_t max_onyx = 4;
+        const size_t max_saphir = 4;
+        const size_t max_dimant = 4;
+        const size_t max_emeraude = 4;
     public:
         size_t getNbJetons() const { return jetons.size(); }
         const Jeton& getJetons(size_t i) const;
@@ -73,8 +73,8 @@ std::ostream& operator<< (std::ostream& f, const Privilege& privilege);
 
 class LotPrivileges {
     private :
-        std::vector<Privilege*> privileges;
-        size_t max_privileges = 3;
+        std::vector<const Privilege*> privileges;
+        const size_t max_privileges = 3;
     public :
         size_t getNbPrivileges() const { return privileges.size(); }
         const Privilege& getPrivilege(size_t i) const;
@@ -115,11 +115,12 @@ class Plateau {
             std::make_tuple(2,2), std::make_tuple(1,2), std::make_tuple(1,3), std::make_tuple(2,3), std::make_tuple(3,3), std::make_tuple(3,2), std::make_tuple(3,1), std::make_tuple(2,1), std::make_tuple(1,1), std::make_tuple(0,1), std::make_tuple(0,2), std::make_tuple(0,3), std::make_tuple(0,4), std::make_tuple(1,4), std::make_tuple(2,4), std::make_tuple(3,4), std::make_tuple(4,4), std::make_tuple(4,3), std::make_tuple(4,2), std::make_tuple(4,1), std::make_tuple(4,0), std::make_tuple(3,0), std::make_tuple(2,0), std::make_tuple(1,0), std::make_tuple(0,0)
             };
     public :
-        const Jeton& recupererJeton(size_t i, size_t j); //pas const car on modifie le plateau (nullptr pour la case recuperee)
-        const Privilege& recupererPrivilege(); //de même, pas const
+        const Jeton& recupererJeton(const size_t i, const size_t j);
+        const Privilege& recupererPrivilege();
         void positionerJeton(const Jeton& jeton);
         void poserPrivilege(const Privilege& privilege);
         void remplirPlateau(Sac& sac);
+        bool estVide() const;
         Plateau(Sac& sac, const LotPrivileges& lotp);
 
         //pas de duplication du plateau
