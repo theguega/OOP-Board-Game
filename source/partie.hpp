@@ -40,15 +40,17 @@ class Partie {
         int getTour() const { return tour; }
         int getjoueurCourant() const { return joueurCourant; }
         
-        bool finPartie() const { //test condition de victoire } //exemple 
-
-    //
-        int changerJoueurCourant();
-
-        Partie& operator++ () { tour ++ ; }; 
-
-
-
+        bool finPartie();
+        void changerJoueurCourant();
+        void tour_suivant(){tour++;}
+        //erreur jsp pk 
+        Partie(const Partie&) = delete;
+        Partie& operator=(const Partie&) = delete;
+        
 
 
-        };
+        }; 
+        
+   
+
+#endif 

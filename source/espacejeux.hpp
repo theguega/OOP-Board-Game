@@ -23,6 +23,11 @@ class Pyramide {
 
         void reserverCarte(int i, int j); 
         void acheterCarte( int i, int j); 
+
+        Pyramide(const Pyramide&) = delete;
+        Pyramide& operator=(const Pyramide&) = delete;
+
+
 };
 
 class EspaceJeux {
@@ -46,6 +51,9 @@ class EspaceJeux {
     public:
         EspaceJeux();
         ~EspaceJeux();
+
+        EspaceJeux(const EspaceJeux&) = delete;
+        EspaceJeux& operator=(const EspaceJeux&) = delete;
 };
  
 

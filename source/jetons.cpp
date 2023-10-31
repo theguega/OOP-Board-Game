@@ -78,7 +78,7 @@ std::ostream& operator<< (std::ostream& f, const Privilege& privilege) {
 
 const Privilege& LotPrivileges::getPrivilege(size_t i) const {
     if (i >= privileges.size())
-        throw PrivilegeException("Indice de privilège incorrect");
+        throw JetonException("Indice de privilège incorrect");
     return *privileges[i];
 }
 
@@ -94,14 +94,12 @@ LotPrivileges::~LotPrivileges() {
 
 //------------------------------------------------- Classe Sac
 
-Sac::Sac(const LotDeJetons& lot) : max_jetons(lot.getNbJetons()) {
+Sac::Sac(const LotDeJetons& lot) {
     for (size_t i = 0; i < lot.getNbJetons(); i++)
         jetons.push_back(&lot.getJetons(i));
 }
 
 void Sac::ajouterJeton(const Jeton& j) {
-    if (jetons.size() >= max_jetons)
-        throw JetonException("Le sac est déjà plein");
     jetons.push_back(&j);
 }
 
@@ -126,7 +124,7 @@ const Jeton& Sac::piocherJeton() {
 
 //------------------------------------------------- Classe Plateau
 
-Plateau::Plateau(Sac& sac, const LotPrivileges& lotp) : max_privileges(lotp.getNbPrivileges()) {
+Plateau::Plateau(Sac& sac, const LotPrivileges& lotp) {
     //initialisation des privilèges
     for (size_t i = 0; i < lotp.getNbPrivileges(); i++)
         poserPrivilege(lotp.getPrivilege(i));
@@ -154,7 +152,7 @@ const Jeton& Plateau::recupererJeton(const size_t i, const size_t j) {
 
 const Privilege& Plateau::recupererPrivilege() {
     if (privileges.empty())
-        throw PrivilegeException("Pas de privilège à récupérer");
+        throw JetonException("Pas de privilège à récupérer");
     
     //on recup le dernier privilège
     const Privilege& privilege = *privileges.back();
@@ -163,8 +161,6 @@ const Privilege& Plateau::recupererPrivilege() {
 }
 
 void Plateau::poserPrivilege(const Privilege& privilege) {
-    if (privileges.size() >= max_privileges)
-        throw PrivilegeException("Le plateau est déjà plein");
     privileges.push_back(&privilege);
 }
 

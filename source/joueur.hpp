@@ -1,28 +1,15 @@
+//
+// Created by samma on 28/10/2023.
+//
+
 #ifndef PROJET_LO21_JOUEUR_HPP
 #define PROJET_LO21_JOUEUR_HPP
 
-#include "splendor.hpp"
-#include "jetons.hpp"
-#include "strategy.hpp"
 #include <iostream>
 #include <string>
 #include <array>
 #include <vector>
-
-
-
-
-// Rajouter classe exception
-class JoueurException
-{
-public:
-    JoueurException(const std::string& i) :info(i) {}
-    std::string getInfo() const { return info; }
-private:
-    std::string info;
-};
-
-
+#include "splendor.hpp"
 
 enum class type { IA, HUMAIN };
 
@@ -32,20 +19,17 @@ type toType(std::string s);
 
 class Joueur {
 private:
-    // Rajouter un tab static avec les deux joueurs
+    // Rajouter un tab static avec les deux joueurs / rob:  why en vrai ??
     const std::string nom;
     const std::string prenom;
     const type typeDeJoueur;
-    int ptsPrestige;
-    int nbCouronnes;
-    // voir troisième condition de victoire
+    int score;
     std::vector<Carte*> cartes;
-    size_t nbCartes;
-    std::vector<Jeton*> jetons;
-    size_t nbJetons;
+    int nbCartes;
+    std::vector<Jetons*> jetons;
+    int nbJetons;
     std::vector<Privilege*> privileges;
-    size_t nbPrivileges;
-    Strategy* strategy;
+    int nbPrivileges;
 public:
     // Constructeur done
     Joueur(std::string nom, std::string prenom, type typeDeJoueur);
@@ -57,8 +41,7 @@ public:
     std::string getNom() const { return nom; };
     std::string getPrenom() const { return prenom; };
     type getTypeDeJoueur() const { return typeDeJoueur; };
-    int getptsPrestige() const { return ptsPrestige; };
-    int getnbCouronnes() const { return nbCouronnes; };
+    int getScore() const { return score; };
     //Carte **getCartes();
     int getNbCartes() const { return nbCartes; }
     //Jetons **getJetons();
@@ -67,17 +50,16 @@ public:
     int getNbPrivileges() const { return nbPrivileges; }
 
     // Setters
-    void updatePtsPrestige(int pts) { ptsPrestige += pts; };
-    void updateNbCouronnes(int couronnes) { nbCouronnes += couronnes; };
+    void updateScore(int s) { score += s; };
 
     void addCarte(Carte *carte);
-    void addJeton(Jeton *jeton);
+    void addJeton(Jetons *jeton);
     void addPrivilege(Privilege *privilege);
 
     // Supprimer un element du vecteur --> attention il faudra voir le lien avec les autres classes DONE
     // Si on supprime un privilège il doit revenir sur le plateau
     void supCarte(Carte *carte);
-    void supJeton(Jeton *jeton);
+    void supJeton(Jetons *jeton);
     void supPrivilege(); // a voir si on retire pas juste le premier privilege
 
     // Affichage Done
@@ -88,7 +70,6 @@ public:
 
     // surchages
 };
-
 
 
 #endif //PROJET_LO21_JOUEUR_HPP

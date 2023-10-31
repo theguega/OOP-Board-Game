@@ -22,12 +22,8 @@ public:
         : cout(cout), bonus(bonus), nbCouronnes(nbCouronnes), nbPtsPrivilege(nbPtsPrivilege) {}
 };
 
-<<<<<<< HEAD
-=======
 
->>>>>>> d1944fb9083618b8f1c5cca2c2036d42fa4e9e32
 
-/*
 // Déclaration de la classe Pyramide
 class Pyramide {
     //Apres
@@ -35,30 +31,6 @@ public:
     void reserverCarte();
     void acheterCarte();
 };
-<<<<<<< HEAD
-*/
-// Déclaration de la classe Plateau
-class Plateau {
-    //Theo
-private:
-    std::vector<std::vector<Jetons>> matriceJetons;
-
-public:
-    Privilege privilege;
-
-    Plateau();
-    void remplirPlateau();
-    Jetons recupererJeton();
-};
-
-// Déclaration de la classe Sac
-class Sac {
-    //Apres
-public:
-    Plateau remplirPlateau();
-};
-=======
->>>>>>> d1944fb9083618b8f1c5cca2c2036d42fa4e9e32
 
 // Déclaration de la classe Joueur
 /*class Joueur {
@@ -85,7 +57,6 @@ public:
     //Plateau plateau;
 };
 
-/*
 // Déclaration de la classe Partie
 class Partie {
     //Robert
@@ -98,7 +69,6 @@ private:
 public:
     bool finPartie();
 };
-*/
 
 // Déclaration de la classe Jeu
 class Jeu {
