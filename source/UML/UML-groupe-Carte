@@ -1,5 +1,11 @@
 @startuml
 
+enum CouleurCarte
+
+enum TypeCarte
+
+enum Capacite
+
 class Carte{
     - type : enum
     - prix : Prix
@@ -80,5 +86,8 @@ Carte o-- Pyramide
 Carte o-- Pioche
 Carte -- Bonus
 Carte -- Prix
+Carte -- CouleurCarte
+Carte -- TypeCarte
+Carte -- Capacite
 
 @enduml
