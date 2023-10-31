@@ -3,11 +3,12 @@
 
 #include "splendor.hpp"
 #include "jetons.hpp"
-#include "strategy.hpp"
 #include <iostream>
 #include <string>
 #include <array>
 #include <vector>
+#include <unordered_map>
+#include "strategy.hpp"
 
 
 
@@ -36,22 +37,26 @@ private:
     const std::string nom;
     const std::string prenom;
     const type typeDeJoueur;
+
+    // Conditions de victoires
     int ptsPrestige;
     int nbCouronnes;
-    // voir troisième condition de victoire
-    std::vector<Carte*> cartes;
+
+    std::unordered_map</*CouleurCarte*/ CouleurJeton, std::vector<Carte*>> cartes;
     size_t nbCartes;
-    std::vector<Jeton*> jetons;
+    std::unordered_map<CouleurJeton, std::vector<Jeton*>> jetons;
     size_t nbJetons;
     std::vector<Privilege*> privileges;
     size_t nbPrivileges;
-    Strategy* strategy;
+    //Strategy* strategy;
 public:
     // Constructeur done
     Joueur(std::string nom, std::string prenom, type typeDeJoueur);
 
     // Destructeur
     ~Joueur();
+
+
 
     // Getters Done
     std::string getNom() const { return nom; };
@@ -65,6 +70,8 @@ public:
     int getNbJetons() const { return nbJetons; }
     //Privilege **getPrivileges();
     int getNbPrivileges() const { return nbPrivileges; }
+
+    bool nbPtsPrestigeParCouleurSupDix() const;
 
     // Setters
     void updatePtsPrestige(int pts) { ptsPrestige += pts; };
