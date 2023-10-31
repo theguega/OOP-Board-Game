@@ -98,7 +98,7 @@ public:
 class Pioche{
 private:
     TypeCarte type_carte;
-    const Carte** cartes = nullptr;;
+    vector<const Carte*> cartes;
     size_t nb_cartes = 0;
 public:
     explicit Pioche(const JeuCarte& j, TypeCarte t); //Pour eviter que Jeu soit converti en autre chose (genre Pioche)
