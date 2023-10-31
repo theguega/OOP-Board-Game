@@ -48,7 +48,7 @@ private:
     size_t nbJetons;
     std::vector<Privilege*> privileges;
     size_t nbPrivileges;
-    //Strategy* strategy;
+    Strategy* strategy;
 public:
     // Constructeur done
     Joueur(std::string nom, std::string prenom, type typeDeJoueur);
@@ -65,11 +65,11 @@ public:
     int getptsPrestige() const { return ptsPrestige; };
     int getnbCouronnes() const { return nbCouronnes; };
     //Carte **getCartes();
-    int getNbCartes() const { return nbCartes; }
+    size_t getNbCartes() const { return nbCartes; }
     //Jetons **getJetons();
-    int getNbJetons() const { return nbJetons; }
+    size_t getNbJetons() const { return nbJetons; }
     //Privilege **getPrivileges();
-    int getNbPrivileges() const { return nbPrivileges; }
+    size_t getNbPrivileges() const { return nbPrivileges; }
 
     bool nbPtsPrestigeParCouleurSupDix() const;
 
