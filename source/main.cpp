@@ -6,15 +6,16 @@
 #include "jetons.hpp"
 #include "joueur.hpp"
 
-int main(int argc, const char* argv[]) {
+
+int main(int argc, const char * argv[]) {
 
     //Jetons
     /*
     try
     {
-        //Cr�ation du lot
+        //CrÃ©ation du lot
         LotDeJetons lotJetons;
-        //Cr�ation du sac
+        //CrÃ©ation du sac
         Sac sac(lotJetons);
         //Creation du plateau
         LotPrivileges lotPrivileges;
@@ -24,7 +25,7 @@ int main(int argc, const char* argv[]) {
         const Jeton& jeton1 = plateau.recupererJeton(0,0);
         std::cout << jeton1 << "\n";
         sac.ajouterJeton(jeton1);
-
+        
         const Jeton& jeton2 = plateau.recupererJeton(2,2);
         std::cout << jeton2 << "\n";
         sac.ajouterJeton(jeton2);
@@ -39,7 +40,7 @@ int main(int argc, const char* argv[]) {
         std::cout << e.getInfo() << "\n";
     }
     */
-
+    
 
 
     //Joueurs
@@ -61,6 +62,7 @@ int main(int argc, const char* argv[]) {
 
     joueur1.afficherJoueur();
     */
+
 
     return 0;
 }
