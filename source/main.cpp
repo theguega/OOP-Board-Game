@@ -1,7 +1,9 @@
 #include <iostream>
-#include "jetons.hpp"
 #include <string>
+#include <array>
 #include <vector>
+
+#include "jetons.hpp"
 #include "joueur.hpp"
 
 int main(int argc, const char * argv[]) {
