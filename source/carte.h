@@ -61,10 +61,13 @@ private:
     Bonus bonus;
     unsigned int nbCouronnes;
     unsigned int nbPtsPrivilege;
+    bool reserve = false;
 public:
     Carte(TypeCarte t, Prix& p, Capacite c, Bonus& b, unsigned int nbC, unsigned int nbP); // constructeur classique
     Carte(TypeCarte t, Capacite c, unsigned int nbP); // constructeur carte noble
     ~Carte() = default;
+    void reserver() { reserve = true; }
+    bool isReserve() const { return reserve; }
     TypeCarte getType() const { return type; }
     Prix getPrix() const { return prix; }
     Capacite getCapacite() const { return capacite; }

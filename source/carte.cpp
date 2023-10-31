@@ -100,6 +100,7 @@ Carte::Carte(TypeCarte t, Capacite c, unsigned int nbP) : type(t), prix(0, 0, 0,
         throw CarteException("Veuillez utiliser le constructeur approprié");
 }
 
+
 Pioche::Pioche(const JeuCarte& j, TypeCarte t) : type_carte(t){
     if (t == TypeCarte::Niv1) {
         nb_cartes = j.getNbCartes_nv1();

@@ -7,8 +7,12 @@ class Carte{
     - capacite : enum
     - nbCouronnes : int
     - nbPtsPrivilege : int
+    - reserve : bool
     + Carte()
     + ~Carte()
+    + isReserve()
+    + getReserve()
+    + reserver()
     + getType()
     + getPrix() 
     + getCapacite()
