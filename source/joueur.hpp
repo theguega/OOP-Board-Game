@@ -1,15 +1,13 @@
-//
-// Created by samma on 28/10/2023.
-//
-
 #ifndef PROJET_LO21_JOUEUR_HPP
 #define PROJET_LO21_JOUEUR_HPP
+
+#include "splendor.hpp"
+#include "jetons.hpp"
 
 #include <iostream>
 #include <string>
 #include <array>
 #include <vector>
-#include "splendor.hpp"
 
 enum class type { IA, HUMAIN };
 
@@ -26,7 +24,7 @@ private:
     int score;
     std::vector<Carte*> cartes;
     int nbCartes;
-    std::vector<Jetons*> jetons;
+    std::vector<Jeton*> jetons;
     int nbJetons;
     std::vector<Privilege*> privileges;
     int nbPrivileges;
@@ -53,13 +51,13 @@ public:
     void updateScore(int s) { score += s; };
 
     void addCarte(Carte *carte);
-    void addJeton(Jetons *jeton);
+    void addJeton(Jeton *jeton);
     void addPrivilege(Privilege *privilege);
 
     // Supprimer un element du vecteur --> attention il faudra voir le lien avec les autres classes DONE
     // Si on supprime un privilège il doit revenir sur le plateau
     void supCarte(Carte *carte);
-    void supJeton(Jetons *jeton);
+    void supJeton(Jeton *jeton);
     void supPrivilege(); // a voir si on retire pas juste le premier privilege
 
     // Affichage Done

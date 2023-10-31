@@ -1,36 +1,13 @@
 #ifndef SPLENDOR_H
 #define SPLENDOR_H
 
-#include <string>
-#include <vector>
-
-// Définition de l'énumération pour la couleur des jetons
-enum class CouleurJeton { RUBIS, SAPHIR, ÉMERAUDE, ONYX, DIAMANT, OR, PERLE };
-
-// Déclaration de la classe Jetons
-class Jetons {
-    //Theo
-public:
-    CouleurJeton couleur;
-
-    // Constructeur de Jetons
-    Jetons(CouleurJeton couleur) : couleur(couleur) {}
-};
-
-// Déclaration de la classe Privilege
-class Privilege {
-    //Theo
-public:
-    void utiliserPrivilege();
-};
-
 // Déclaration de la classe Carte
 class Carte {
     //Samuel B
 private:
     // Définition de la structure Jetons pour le coût et le bonus
     struct Jetons {
-        CouleurJeton couleur;
+        //CouleurJeton couleur;
         int quantite;
     };
 
@@ -55,27 +32,6 @@ public:
     void acheterCarte();
 };
 
-// Déclaration de la classe Plateau
-class Plateau {
-    //Theo
-private:
-    std::vector<std::vector<Jetons>> matriceJetons;
-
-public:
-    Privilege privilege;
-
-    Plateau();
-    void remplirPlateau();
-    Jetons recupererJeton();
-};
-
-// Déclaration de la classe Sac
-class Sac {
-    //Apres
-public:
-    Plateau remplirPlateau();
-};
-
 // Déclaration de la classe Joueur
 /*class Joueur {
     //Samuel M
@@ -96,9 +52,9 @@ public:
 // Déclaration de la classe EspaceJeux
 class EspaceJeux {
 public:
-    Sac sac;
+    //Sac sac;
     Pyramide pyramide;
-    Plateau plateau;
+    //Plateau plateau;
 };
 
 // Déclaration de la classe Partie
@@ -132,10 +88,6 @@ class Physique {
 
 class JeuDeCarte {
     //Samuel B
-};
-
-class LotJetons {
-    //Theo
 };
 
 #endif // SPLENDOR_H

@@ -5,6 +5,9 @@
 #include "joueur.hpp"
 
 int main(int argc, const char * argv[]) {
+
+    //Jetons
+    /*
     try
     {
         //Création du lot
@@ -33,7 +36,12 @@ int main(int argc, const char * argv[]) {
     {
         std::cout << e.getInfo() << "\n";
     }
+    */
     
+
+
+    //Joueurs
+    /*
     std::cout << "Bonjour !\nVeuillez creer les joueurs : \n";
     std::string nom, prenom;
     std::string typedejoueur;
@@ -50,7 +58,7 @@ int main(int argc, const char * argv[]) {
     std::cout << "\n\n";
 
     joueur1.afficherJoueur();
-
+    */
 
     return 0;
 }
