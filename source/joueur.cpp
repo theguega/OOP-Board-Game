@@ -1,17 +1,11 @@
-//
-// Created by samma on 28/10/2023.
-//
-
 #include "joueur.hpp"
-#include <iostream>
-#include <string>
 
 std::string toStringType(type t) {
     switch (t) {
         case type::IA: return "IA";
         case type::HUMAIN: return "HUMAIN";
     }
-    return "ERROR";
+    throw JoueurException("Type inconnu");
 }
 
 type toType(std::string s) {
@@ -72,7 +66,7 @@ void Joueur::addCarte(Carte *carte) {
     nbCartes++;
 }
 
-void Joueur::addJeton(Jetons *jeton) {
+void Joueur::addJeton(Jeton *jeton) {
     jetons.push_back(jeton);
     nbJetons++;
 }
@@ -94,7 +88,7 @@ void::Joueur::supCarte(Carte *carte) {
     }
 }
 
-void::Joueur::supJeton(Jetons *jeton) {
+void::Joueur::supJeton(Jeton *jeton) {
     for (int i = 0; i < nbJetons; i++) {
         if (jetons[i] == jeton) {
             jetons.erase(jetons.begin() + i);

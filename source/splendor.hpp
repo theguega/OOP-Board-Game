@@ -1,36 +1,13 @@
 #ifndef SPLENDOR_H
 #define SPLENDOR_H
 
-#include <string>
-#include <vector>
-
-// Définition de l'énumération pour la couleur des jetons
-enum class CouleurJeton { RUBIS, SAPHIR, ÉMERAUDE, ONYX, DIAMANT, OR, PERLE };
-
-// Déclaration de la classe Jetons
-class Jetons {
-    //Theo
-public:
-    CouleurJeton couleur;
-
-    // Constructeur de Jetons
-    Jetons(CouleurJeton couleur) : couleur(couleur) {}
-};
-
-// Déclaration de la classe Privilege
-class Privilege {
-    //Theo
-public:
-    void utiliserPrivilege();
-};
-
 // Déclaration de la classe Carte
 class Carte {
     //Samuel B
 private:
     // Définition de la structure Jetons pour le coût et le bonus
     struct Jetons {
-        CouleurJeton couleur;
+        //CouleurJeton couleur;
         int quantite;
     };
 
@@ -45,6 +22,10 @@ public:
         : cout(cout), bonus(bonus), nbCouronnes(nbCouronnes), nbPtsPrivilege(nbPtsPrivilege) {}
 };
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> d1944fb9083618b8f1c5cca2c2036d42fa4e9e32
 
 /*
 // Déclaration de la classe Pyramide
@@ -54,6 +35,7 @@ public:
     void reserverCarte();
     void acheterCarte();
 };
+<<<<<<< HEAD
 */
 // Déclaration de la classe Plateau
 class Plateau {
@@ -75,6 +57,8 @@ class Sac {
 public:
     Plateau remplirPlateau();
 };
+=======
+>>>>>>> d1944fb9083618b8f1c5cca2c2036d42fa4e9e32
 
 // Déclaration de la classe Joueur
 /*class Joueur {
@@ -96,9 +80,9 @@ public:
 // Déclaration de la classe EspaceJeux
 class EspaceJeux {
 public:
-    Sac sac;
+    //Sac sac;
     Pyramide pyramide;
-    Plateau plateau;
+    //Plateau plateau;
 };
 
 /*
@@ -106,8 +90,8 @@ public:
 class Partie {
     //Robert
 private:
-    Joueur joueur1;
-    Joueur joueur2;
+    //Joueur joueur1;
+    //Joueur joueur2;
     EspaceJeux espaceJeux;
     int tour;
 
@@ -134,10 +118,6 @@ class Physique {
 
 class JeuDeCarte {
     //Samuel B
-};
-
-class LotJetons {
-    //Theo
 };
 
 #endif // SPLENDOR_H
