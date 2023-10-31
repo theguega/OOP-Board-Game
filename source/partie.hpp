@@ -13,65 +13,42 @@
 #include "joueur.hpp"
 #include "jetons.hpp"
 #include "carte.h"
-//le code 
+#include "espacejeux.hpp"
+
 
 //La classe partie qui initialise les joueurs, le tour et l'espace de jeux 
 class Partie {  
     
-    EspaceJeux espaceJeux;
-   
-    std::vector<Joueur*> joueurs;
-    
+    EspaceJeux* espaceJeux = new EspaceJeux(); ;
+    Joueur* joueurs[2];
     int tour;
-
-    Joueur joueurCourant;
+    int joueurCourant;
     
-    bool finPartie;
-
     public:
-    // constructeurs JvsIA, JvsJ, IAvsIA
-        //on push deux ia dans le vecteur de joueurs
-        Partie() { tour = 0; finPartie = false; }
+
+        /*Partie( vector<Joueur*> joueurs );  // utile ?? constructeur a partir d'un vecteur de joueurs */
         
-        Partie( Joueur* joueur1);
+        Partie( std::string nomJoueur1, std::string prenomJoueur1);
         
-        Partie( Joueur* joueur1, Joueur* joueur2);
+        Partie( std::string nomJoueur1, std::string prenomJoueur1, std::string nomJoueur2, std::string prenomJoueur2);
 
     // destructeur
         ~Partie();
-
+    
     // getters
-        EspaceJeux getEspaceJeux() const { return espaceJeux; }
-        
-        std::vector<Joueur*> getJoueurs() const { return joueurs; }
         
         int getTour() const { return tour; }
-
-        Joueur getJoueurCourant() const { return joueurCourant; }
-
-        bool getFinPartie() const { return finPartie; }
-
-    // setters
-        void setEspaceJeux(EspaceJeux e) { espaceJeux = e; }
+        int getjoueurCourant() const { return joueurCourant; }
         
-        void setJoueurs(std::vector<Joueur*> j) { joueurs = j; }
+        bool finPartie() const { //test condition de victoire } //exemple 
 
-        void setTour(int t) { tour = t; }
-        
-        void setJoueurCourant(Joueur j) { joueurCourant = j; }
+    //
+        int changerJoueurCourant();
 
-        void setFinPartie(bool f) { finPartie = f; }    
-
-    // methodes
-        
-    
-
-#endif //PARTIE_H
+        Partie& operator++ () { tour ++ ; }; 
 
 
 
 
 
-
-
-
+        };

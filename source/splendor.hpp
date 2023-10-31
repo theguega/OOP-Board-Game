@@ -46,7 +46,7 @@ public:
 };
 
 
-
+/*
 // Déclaration de la classe Pyramide
 class Pyramide {
     //Apres
@@ -54,7 +54,7 @@ public:
     void reserverCarte();
     void acheterCarte();
 };
-
+*/
 // Déclaration de la classe Plateau
 class Plateau {
     //Theo
@@ -101,6 +101,7 @@ public:
     Plateau plateau;
 };
 
+/*
 // Déclaration de la classe Partie
 class Partie {
     //Robert
@@ -113,6 +114,7 @@ private:
 public:
     bool finPartie();
 };
+*/
 
 // Déclaration de la classe Jeu
 class Jeu {

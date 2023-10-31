@@ -14,7 +14,7 @@ public:
     string getInfo() const { return info; }
 };
 
-enum class CouleurCarte {blanc, bleu, vert, noir, rouge, perle, indt}; // ajout de "indeterminé" car certaines carte ont une couleur de Bonus variable
+enum class CouleurCarte {blanc, bleu, vert, noir, rouge, perle, indt}; // ajout de "indeterminï¿½" car certaines carte ont une couleur de Bonus variable
 string toString(CouleurCarte c);
 ostream& operator<<(ostream& f, CouleurCarte c);
 
@@ -24,7 +24,7 @@ ostream& operator<<(ostream& f, TypeCarte t);
 
 enum class Capacite { NewTurn, TakePrivilege, TakeJetonFromBonus, TakeJetonToAdv, AssociationBonus };
 
-class Prix { // on l'encapsule dans la classe carte ? ou bien il y'a d'autres éléments qui ont un cout ?
+class Prix { // on l'encapsule dans la classe carte ? ou bien il y'a d'autres ï¿½lï¿½ments qui ont un cout ?
 private:
     unsigned int blanc, bleu, vert, noir, rouge, perle;
 public:
@@ -54,7 +54,7 @@ ostream& operator<<(ostream& f, const Bonus& b);
 
 class Carte {
 private:
-    // eventuel ajout d'un champ ID, peut être util pour les cartes nobles par exemple, savoir qui est qui
+    // eventuel ajout d'un champ ID, peut ï¿½tre util pour les cartes nobles par exemple, savoir qui est qui
     TypeCarte type;
     Prix prix;
     Capacite capacite; 
@@ -76,7 +76,7 @@ public:
 class JeuCarte {
 private:
     // TypeCarte type;
-    array<const Carte*, n1> cartes_nv1;
+    array<const Carte*, n1> cartes_nv1; 
     array<const Carte*, n2> cartes_nv2;
     array<const Carte*, n3> cartes_nv3;
     array<const Carte*, 4> cartes_nobles;
@@ -117,7 +117,7 @@ public:
 // Ajout de classe Bonus
 // Ajout de classe Prix
 
-//Je pense qu'il faudrait faire à peu près comme le TD 4 : 
+//Je pense qu'il faudrait faire ï¿½ peu prï¿½s comme le TD 4 : 
 // classe pioche --> pour nous il y aura 3 instances de pioches (3 niveaux)
-// classe Plateau --> classe Pyramide pour nous (là où il y a les cartes, le mot plateau est reservé pour les jetons)
+// classe Plateau --> classe Pyramide pour nous (lï¿½ oï¿½ il y a les cartes, le mot plateau est reservï¿½ pour les jetons)
 
