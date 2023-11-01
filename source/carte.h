@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <array>
+#include <map>;
 using namespace std;
 
 
@@ -14,10 +15,21 @@ public:
     string getInfo() const { return info; }
 };
 
+
 enum class CouleurCarte {blanc, bleu, vert, noir, rouge, perle, indt}; // ajout de "indeterminé" car certaines carte ont une couleur de Bonus variable
 string toString(CouleurCarte c);
 ostream& operator<<(ostream& f, CouleurCarte c);
 extern std::initializer_list<CouleurCarte> CouleursCarte;
+std::map<std::string, CouleurCarte> stringToCouleurCarteMap = {
+        {"blanc", CouleurCarte::blanc},
+        {"bleu", CouleurCarte::bleu},
+        {"vert", CouleurCarte::vert},
+        {"noir", CouleurCarte::noir},
+        {"rouge", CouleurCarte::rouge},
+        {"perle", CouleurCarte::perle},
+        {"indt", CouleurCarte::indt}
+};
+CouleurCarte StringToCouleurCarte(const std::string& couleurStr);
 
 
 enum class TypeCarte { Niv1, Niv2, Niv3, Noble };
@@ -27,8 +39,17 @@ extern std::initializer_list<TypeCarte> TypesCarte;
 
 
 enum class Capacite { NewTurn, TakePrivilege, TakeJetonFromBonus, TakeJetonToAdv, AssociationBonus, None };
+std::map<std::string, Capacite> stringToCapaciteMap = {
+        {"NewTurn", Capacite::NewTurn},
+        {"TakePrivilege", Capacite::TakePrivilege},
+        {"TakeJetonFromBonus", Capacite::TakeJetonFromBonus},
+        {"TakeJetonToAdv", Capacite::TakeJetonToAdv},
+        {"AssociationBonus", Capacite::AssociationBonus},
+        {"None", Capacite::None}
+};
 string toString(Capacite c);
 ostream& operator<<(ostream& f, Capacite c);
+Capacite StringToCapacite(const std::string& capaciteStr);
 
 
 class Prix { // on l'encapsule dans la classe carte ? ou bien il y'a d'autres éléments qui ont un cout ?
