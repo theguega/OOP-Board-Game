@@ -1,5 +1,12 @@
 #include "jetons.hpp"
 #include <random>
+/*
+   __         _ 
+   \ \   ___ | |_   ___   _ __   ___ 
+    \ \ / _ \| __| / _ \ | '_ \ / __|
+ /\_/ /|  __/| |_ | (_) || | | |\__ \
+ \___/  \___| \__| \___/ |_| |_||___/
+*/
 
 //------------------------------------------------- Gestion de la couleur des jetons
 std::initializer_list<CouleurJeton> CouleursJeton = { 
