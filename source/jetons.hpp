@@ -5,6 +5,7 @@
 #include <string>
 #include <array>
 #include <vector>
+#include <tuple>
 
 //Gestion des jetons et des privileges pour splendor duel
 

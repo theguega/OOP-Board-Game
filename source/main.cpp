@@ -10,7 +10,6 @@
 int main(int argc, const char * argv[]) {
 
     //Jetons
-    /*
     try
     {
         //CrÃ©ation du lot
@@ -39,7 +38,6 @@ int main(int argc, const char * argv[]) {
     {
         std::cout << e.getInfo() << "\n";
     }
-    */
     
 
 
