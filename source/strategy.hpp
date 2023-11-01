@@ -8,7 +8,7 @@
 #include "splendor.hpp"
 #include "jetons.hpp"
 #include <iostream>
-#include <string>A
+#include <string>
 #include <array>
 #include <vector>
 
