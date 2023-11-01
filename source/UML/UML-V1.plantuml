@@ -1,0 +1,186 @@
+@startuml splendor
+
+/'
+    Diagramme de classe du jeu Splendor Duel
+    Pour programmation objet C++
+'/
+
+class Joueur{
+    - nom : string
+    - prenom : string
+    - score : int
+    - jetons : Jetons
+    - cartes : Carte
+    - privilege : Privilege
+
+    + getNbCouronnes() : int
+    + getNbPrestige() : int
+    + getPtsBonus() : int
+}
+
+class I_A {
+}
+
+class Physique {
+}
+
+class Partie {
+    - joueur1 : Joueur
+    - joueur2 : Joueur
+    - espaceJeux : EspaceJeux
+    - tour : int
+
+    - finPartie() : bool
+}
+
+class EspaceJeux {
+    + sac : Sac
+    + pyramide : Pyramide
+    + plateau : Plateau
+}
+
+class Pyramide {
+    + reserverCarte()
+    + acheterCarte()
+}
+
+class Carte{
+    - cout : Jetons
+    - bonus : Jetons
+    - capacite : enum
+    - nbCouronnes : int
+    - nbPtsPrivilege : int
+}
+
+class Pioche {
+    - pile_cartes : Carte
+}
+
+class JetonException {
+  - info : string
+  + getInfo(): std::string
+  + JetonException(i: std::string&)
+}
+
+class PrivilegeException {
+  - info : string
+  + getInfo(): std::string
+  + PrivilegeException(i: std::string&)
+}
+
+enum CouleurJeton {
+  RUBIS
+  SAPHIR
+  ÉMÉRAUDE
+  ONYX
+  DIAMANT
+  OR
+  PERLE
+}
+
+class Jeton {
+  - couleur: CouleurJeton
+  + getCouleur(): CouleurJeton
+  + Jeton(c: CouleurJeton)
+}
+
+class LotDeJetons {
+  - jetons: std::vector<const Jeton*>
+  - max_jetons: size_t
+  - max_or: size_t
+  - max_perle: size_t
+  - max_rubis: size_t
+  - max_onyx: size_t
+  - max_saphir: size_t
+  - max_dimant: size_t
+  - max_emeraude: size_t
+  + getNbJetons(): size_t
+  + getJetons(i: size_t): const Jeton&
+  + LotDeJetons()
+  + ~LotDeJetons()
+
+  + LotDeJetons(const LotDeJetons&) = delete
+  + operator=(const LotDeJetons&) : LotDeJetons& = delete
+}
+
+class Privilege {
+}
+
+class LotPrivileges {
+  - privileges: std::vector<const Privilege*>
+  - max_privileges: size_t
+  + getNbPrivileges(): size_t
+  + getPrivilege(i: size_t): const Privilege&
+  + LotPrivileges()
+  + ~LotPrivileges()
+
+  + LotPrivileges(const LotPrivileges&) = delete
+  + operator=(const LotPrivileges&) : LotPrivileges& = delete
+}
+
+class Sac {
+  - jetons: std::vector<const Jeton*>
+  - max_jetons: size_t
+  + Sac(lot : const LotDeJetons&) : explicit
+  + estVide(): bool
+  + getNbJetons(): size_t
+  + ajouterJeton(j: const Jeton&): void
+  + piocherJeton(): const Jeton&
+
+  + Sac(const Sac&) = delete
+  + operator=(const Sac&) : Sac& = delete
+}
+
+class Plateau {
+  - jetons: std::array<std::array<const Jeton*, 5>, 5>
+  - privileges: std::vector<const Privilege*>
+  - liste_pos: std::array<std::tuple<size_t, size_t>, 25>
+  - max_privileges : size_t
+  + recupererJeton(i: size_t, j: size_t): const Jeton&
+  + recupererPrivilege(): const Privilege&
+  + positionerJeton(jeton: const Jeton&): void
+  + poserPrivilege(privilege: const Privilege&): void
+  + remplirPlateau(sac: Sac&): void
+  + estVide(): bool
+  + Plateau (sac: Sac&, lot: LotPrivileges&)
+
+  + Plateau(const Plateau&) = delete
+  + operator=(const Plateau&) : Plateau& = delete
+}
+
+
+class Jeu {
+    + lancer() : Partie
+    + conditionsVictoire() : bool
+}
+
+class JeuDeCarte {
+}
+
+Physique *--- Joueur
+I_A *--- Joueur
+
+Carte *--- JeuDeCarte
+Carte o-- Pyramide
+Carte o-- Pioche
+Carte o--- Joueur
+
+Jeton "25" --* LotDeJetons
+Jeton "0..25" -o "0..1" Sac
+
+Privilege "3" --* LotPrivileges
+
+Jeton "0..25" -o "0..1" Plateau
+Privilege "0..3" -o "0..1" Plateau
+
+Joueur o- Privilege
+
+Partie *- EspaceJeux
+Partie *- Joueur
+
+EspaceJeux *-- Sac
+EspaceJeux *-- Pyramide
+EspaceJeux *-- Plateau
+
+Jeu <-- Partie
+@enduml

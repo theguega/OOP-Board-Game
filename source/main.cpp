@@ -6,15 +6,16 @@
 #include "jetons.hpp"
 #include "joueur.hpp"
 
+
 int main(int argc, const char * argv[]) {
 
     //Jetons
     /*
     try
     {
-        //Création du lot
+        //CrÃ©ation du lot
         LotDeJetons lotJetons;
-        //Création du sac
+        //CrÃ©ation du sac
         Sac sac(lotJetons);
         //Creation du plateau
         LotPrivileges lotPrivileges;
@@ -61,6 +62,7 @@ int main(int argc, const char * argv[]) {
 
     joueur1.afficherJoueur();
     */
+
 
     return 0;
 }

@@ -7,6 +7,23 @@
 #include <string>
 #include <array>
 #include <vector>
+#include <unordered_map>
+#include "strategy.hpp"
+
+
+
+
+// Rajouter classe exception
+class JoueurException
+{
+public:
+    JoueurException(const std::string& i) :info(i) {}
+    std::string getInfo() const { return info; }
+private:
+    std::string info;
+};
+
+
 
 enum class type { IA, HUMAIN };
 
@@ -20,13 +37,18 @@ private:
     const std::string nom;
     const std::string prenom;
     const type typeDeJoueur;
-    int score;
-    std::vector<Carte*> cartes;
-    int nbCartes;
-    std::vector<Jeton*> jetons;
-    int nbJetons;
+
+    // Conditions de victoires
+    int ptsPrestige;
+    int nbCouronnes;
+
+    std::unordered_map</*CouleurCarte*/ CouleurJeton, std::vector<Carte*>> cartes;
+    size_t nbCartes;
+    std::unordered_map<CouleurJeton, std::vector<Jeton*>> jetons;
+    size_t nbJetons;
     std::vector<Privilege*> privileges;
-    int nbPrivileges;
+    size_t nbPrivileges;
+    Strategy* strategy;
 public:
     // Constructeur done
     Joueur(std::string nom, std::string prenom, type typeDeJoueur);
@@ -34,20 +56,26 @@ public:
     // Destructeur
     ~Joueur();
 
+
+
     // Getters Done
     std::string getNom() const { return nom; };
     std::string getPrenom() const { return prenom; };
     type getTypeDeJoueur() const { return typeDeJoueur; };
-    int getScore() const { return score; };
+    int getptsPrestige() const { return ptsPrestige; };
+    int getnbCouronnes() const { return nbCouronnes; };
     //Carte **getCartes();
-    int getNbCartes() const { return nbCartes; }
+    size_t getNbCartes() const { return nbCartes; }
     //Jetons **getJetons();
-    int getNbJetons() const { return nbJetons; }
+    size_t getNbJetons() const { return nbJetons; }
     //Privilege **getPrivileges();
-    int getNbPrivileges() const { return nbPrivileges; }
+    size_t getNbPrivileges() const { return nbPrivileges; }
+
+    bool nbPtsPrestigeParCouleurSupDix() const;
 
     // Setters
-    void updateScore(int s) { score += s; };
+    void updatePtsPrestige(int pts) { ptsPrestige += pts; };
+    void updateNbCouronnes(int couronnes) { nbCouronnes += couronnes; };
 
     void addCarte(Carte *carte);
     void addJeton(Jeton *jeton);
@@ -67,6 +95,7 @@ public:
 
     // surchages
 };
+
 
 
 #endif //PROJET_LO21_JOUEUR_HPP
