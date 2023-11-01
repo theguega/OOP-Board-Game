@@ -19,12 +19,17 @@ string toString(CouleurCarte c);
 ostream& operator<<(ostream& f, CouleurCarte c);
 extern std::initializer_list<CouleurCarte> CouleursCarte;
 
+
 enum class TypeCarte { Niv1, Niv2, Niv3, Noble };
 string toString(TypeCarte t);
 ostream& operator<<(ostream& f, TypeCarte t);
 extern std::initializer_list<TypeCarte> TypesCarte;
 
-enum class Capacite { NewTurn, TakePrivilege, TakeJetonFromBonus, TakeJetonToAdv, AssociationBonus };
+
+enum class Capacite { NewTurn, TakePrivilege, TakeJetonFromBonus, TakeJetonToAdv, AssociationBonus, None };
+string toString(Capacite c);
+ostream& operator<<(ostream& f, Capacite c);
+
 
 class Prix { // on l'encapsule dans la classe carte ? ou bien il y'a d'autres éléments qui ont un cout ?
 private:
@@ -77,6 +82,7 @@ public:
     unsigned int getNbCouronnes() const { return nbCouronnes; }
     unsigned int getNbPtsPrivilege() const { return nbPtsPrivilege; }
 };
+ostream& operator<<(ostream& f, const Carte& c);
 
 class JeuCarte {
 private:

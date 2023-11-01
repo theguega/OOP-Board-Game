@@ -6,14 +6,14 @@
 
 string toString(CouleurCarte c){
     switch (c){
-    case CouleurCarte::blanc : return "blanc";
-    case CouleurCarte::bleu: return "bleu";
-    case CouleurCarte::vert: return "vert";
-    case CouleurCarte::noir: return "noir";
-    case CouleurCarte::rouge: return "rouge";
-    case CouleurCarte::perle: return "perle";
-    case CouleurCarte::indt: return "indt";
-    default: throw CarteException("Couleur inconnue");
+        case CouleurCarte::blanc : return "blanc";
+        case CouleurCarte::bleu: return "bleu";
+        case CouleurCarte::vert: return "vert";
+        case CouleurCarte::noir: return "noir";
+        case CouleurCarte::rouge: return "rouge";
+        case CouleurCarte::perle: return "perle";
+        case CouleurCarte::indt: return "indt";
+        default: throw CarteException("Couleur inconnue");
     }
 }
 ostream& operator<<(ostream& f, CouleurCarte c){ f << toString(c); return f; }
@@ -22,30 +22,64 @@ std::initializer_list<CouleurCarte> CouleursCarte = { CouleurCarte::blanc, Coule
 
 string toString(TypeCarte t){
     switch (t) {
-    case TypeCarte::Niv1: return "Niv1";
-    case TypeCarte::Niv2: return "Niv2";
-    case TypeCarte::Niv3: return "Niv3";
-    case TypeCarte::Noble: return "Noble";
-    default: throw CarteException("Type inconnue");
+        case TypeCarte::Niv1: return "Niv1";
+        case TypeCarte::Niv2: return "Niv2";
+        case TypeCarte::Niv3: return "Niv3";
+        case TypeCarte::Noble: return "Noble";
+        default: throw CarteException("Type inconnue");
     }
 }
 ostream& operator<<(ostream& f, TypeCarte t) { f << toString(t); return f; }
 
+string toString(Capacite c){
+    switch (c) {
+        case Capacite::NewTurn: return "NewTurn";
+        case Capacite::TakePrivilege: return "TakePrivilege";
+        case Capacite::TakeJetonFromBonus: return "TakeJetonFromBonus";
+        case Capacite::TakeJetonToAdv: return "TakeJetonToAdv";
+        case Capacite::AssociationBonus: return "AssociationBonus";
+        case Capacite::None: return "None";
+        default: throw CarteException("Capacite inconnue");
+    }
+}
+
+ostream& operator<<(ostream& f, Capacite c) { f << toString(c); return f; }
+
 std::initializer_list<TypeCarte> TypesCarte = { TypeCarte::Niv1, TypeCarte::Niv2, TypeCarte::Niv3, TypeCarte::Noble };
 
 ostream& operator<<(ostream& f, const Prix& p){
-	f << "Blanc : " << p.getBlanc() << "\n";
-    f << "Bleu : " << p.getBleu() << "\n";
-    f << "Vert : " << p.getVert() << "\n";
-    f << "Noir : " << p.getNoir() << "\n";
-    f << "Rouge : " << p.getRouge() << "\n";
-    f << "Perle : " << p.getPerle() << "\n";
-
+	f << "Blanc : " << p.getBlanc() << "    " << "Bleu : " << p.getBleu() << "\n";
+    f << "Vert : " << p.getVert() << "    " << "Noir : " << p.getNoir() << "\n";
+    f << "Rouge : " << p.getRouge() << "    " << "Perle : " << p.getPerle() << "\n";
     return f;
 }
 
 ostream& operator<<(ostream& f, const Bonus& b){
     f << b.getNbBonus() << " " << b.getCouleur();
+    return f;
+}
+
+
+Carte::Carte(TypeCarte t, Prix& p, Capacite c, Bonus& b, unsigned int nbC, unsigned int nbP) : type(t), prix(p), capacite(c), bonus(b), nbCouronnes(nbC), nbPtsPrivilege(nbP) {
+    if (t == TypeCarte::Noble)
+        throw CarteException("Veuillez utiliser le constructeur approprié");
+}
+
+Carte::Carte(TypeCarte t, Capacite c, unsigned int nbP) : type(t), prix(0, 0, 0, 0, 0, 0), capacite(c), bonus(), nbCouronnes(0), nbPtsPrivilege(nbP) {
+    if (t != TypeCarte::Noble)
+        throw CarteException("Veuillez utiliser le constructeur approprié");
+}
+
+ostream& operator<<(ostream& f, const Carte& c){
+    f << "-------------------------------------\n";
+    f << c.getType() << "        " << "Bonus : " << c.getBonus() << "\n";
+    f << "-------------------------------------\n";
+    f << "Capacite : " << c.getCapacite() << "\n";
+    f << "-------------------------------------\n";
+    f << "Prix :\n" << c.getPrix() << "\n";
+    f << "-------------------------------------\n";
+    f << "Privileges : " << c.getNbPtsPrivilege() << "        " << "Couronnes : " << c.getNbCouronnes() << "\n";
+    f << "-------------------------------------\n";
     return f;
 }
 
@@ -90,16 +124,6 @@ const Carte& JeuCarte::getCarteNoble(size_t i) const{
     if (i >= 4)
         throw CarteException("Il n'y a que 4 cartes");
     return *cartes_nobles[i];
-}
-
-Carte::Carte(TypeCarte t, Prix& p, Capacite c, Bonus& b, unsigned int nbC, unsigned int nbP) : type(t), prix(p), capacite(c), bonus(b), nbCouronnes(nbC), nbPtsPrivilege(nbP) {
-    if (t == TypeCarte::Noble)
-        throw CarteException("Veuillez utiliser le constructeur approprié");
-}
-
-Carte::Carte(TypeCarte t, Capacite c, unsigned int nbP) : type(t), prix(0, 0, 0, 0, 0, 0), capacite(c), bonus(), nbCouronnes(0), nbPtsPrivilege(nbP) {
-    if (t != TypeCarte::Noble)
-        throw CarteException("Veuillez utiliser le constructeur approprié");
 }
 
 
