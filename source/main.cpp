@@ -4,7 +4,6 @@
 #include <vector>
 
 #include "jetons.hpp"
-#include "joueur.hpp"
 
 
 int main(int argc, const char * argv[]) {
@@ -12,9 +11,9 @@ int main(int argc, const char * argv[]) {
     //Jetons
     try
     {
-        //CrÃ©ation du lot
+        //Création du lot
         LotDeJetons lotJetons;
-        //CrÃ©ation du sac
+        //Création du sac
         Sac sac(lotJetons);
         //Creation du plateau
         LotPrivileges lotPrivileges;
