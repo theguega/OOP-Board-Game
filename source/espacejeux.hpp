@@ -8,6 +8,32 @@
 #include "joueur.hpp"
 #include "jetons.hpp"
 #include "carte.h"
+/*
+
+Une solution pour reserver des cartes ? ou peut etre un vecteur de carte reservee dans joueur ?
+
+class CarteReservee {
+    Joueur& mon_joueur; 
+    std::vector<const Carte&> cartes_reservees;
+    public:
+
+        CarteReservee(Joueur& j): mon_joueur(j) {};
+        ~CarteReservee() = default;
+
+        void ajouterCarte(const Carte& c);
+        void acheterCarte(const Carte& c);
+        void supprimerCarte(const Carte& c);
+
+        bool estVide() const;
+
+        int getNbCartes() const;
+        std::vector<const Carte&> getCartes() const;
+
+        CarteReservee(const CarteReservee&) = delete;
+        CarteReservee& operator=(const CarteReservee&) = delete;
+}; 
+
+*/
 
 class Pyramide {
 
@@ -19,10 +45,8 @@ class Pyramide {
 
         void estVide() const;
 
-        void remplirPyramide(Pioche &pNv1, Pioche &pNv2,Pioche &pNv3,Pioche &pNoble);
-        
-        void remplircasePyramide(int i, int j);
-        void remplircasePyramide(TypeCarte t, int i);
+        void remplirPyramide(Pioche &pNv1, Pioche &pNv2,Pioche &pNv3,Pioche &pNoble); // parcour de toute la pyramide pour remplir les cases vides   
+        void remplircasePyramide(int i, int j, Pioche &pNv1, Pioche &pNv2, Pioche &pNv3, Pioche &pNoble); // remplir une case de la pyramide
         
         void reserverCarte(int i, int j); 
         void acheterCarte(int i, int j); 
