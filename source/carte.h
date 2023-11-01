@@ -17,10 +17,12 @@ public:
 enum class CouleurCarte {blanc, bleu, vert, noir, rouge, perle, indt}; // ajout de "indeterminé" car certaines carte ont une couleur de Bonus variable
 string toString(CouleurCarte c);
 ostream& operator<<(ostream& f, CouleurCarte c);
+extern std::initializer_list<CouleurCarte> CouleursCarte;
 
 enum class TypeCarte { Niv1, Niv2, Niv3, Noble };
 string toString(TypeCarte t);
 ostream& operator<<(ostream& f, TypeCarte t);
+extern std::initializer_list<TypeCarte> TypesCarte;
 
 enum class Capacite { NewTurn, TakePrivilege, TakeJetonFromBonus, TakeJetonToAdv, AssociationBonus };
 

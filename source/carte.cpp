@@ -18,6 +18,7 @@ string toString(CouleurCarte c){
 }
 ostream& operator<<(ostream& f, CouleurCarte c){ f << toString(c); return f; }
 
+std::initializer_list<CouleurCarte> CouleursCarte = { CouleurCarte::blanc, CouleurCarte::bleu, CouleurCarte::vert, CouleurCarte::noir, CouleurCarte::rouge, CouleurCarte::perle, CouleurCarte::indt };
 
 string toString(TypeCarte t){
     switch (t) {
@@ -30,6 +31,7 @@ string toString(TypeCarte t){
 }
 ostream& operator<<(ostream& f, TypeCarte t) { f << toString(t); return f; }
 
+std::initializer_list<TypeCarte> TypesCarte = { TypeCarte::Niv1, TypeCarte::Niv2, TypeCarte::Niv3, TypeCarte::Noble };
 
 ostream& operator<<(ostream& f, const Prix& p){
 	f << "Blanc : " << p.getBlanc() << "\n";
