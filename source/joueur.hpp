@@ -5,11 +5,28 @@
 #ifndef PROJET_LO21_JOUEUR_HPP
 #define PROJET_LO21_JOUEUR_HPP
 
+#include "splendor.hpp"
+#include "jetons.hpp"
+#include "strategy.hpp"
 #include <iostream>
 #include <string>
 #include <array>
 #include <vector>
-#include "splendor.hpp"
+
+
+
+
+// Rajouter classe exception
+class JoueurException
+{
+public:
+    JoueurException(const std::string& i) :info(i) {}
+    std::string getInfo() const { return info; }
+private:
+    std::string info;
+};
+
+
 
 enum class type { IA, HUMAIN };
 
@@ -23,11 +40,13 @@ private:
     const std::string nom;
     const std::string prenom;
     const type typeDeJoueur;
-    int score;
+    int ptsPrestige;
+    int nbCouronnes;
+    // voir troisième condition de victoire
     std::vector<Carte*> cartes;
-    int nbCartes;
-    std::vector<Jetons*> jetons;
-    int nbJetons;
+    size_t nbCartes;
+    std::vector<Jeton*> jetons;
+    size_t nbJetons;
     std::vector<Privilege*> privileges;
     int nbPrivileges;
 public:
@@ -37,17 +56,21 @@ public:
     // Destructeur
     ~Joueur();
 
+
+
     // Getters Done
     std::string getNom() const { return nom; };
     std::string getPrenom() const { return prenom; };
     type getTypeDeJoueur() const { return typeDeJoueur; };
     int getScore() const { return score; };
     //Carte **getCartes();
-    int getNbCartes() const { return nbCartes; }
+    size_t getNbCartes() const { return nbCartes; }
     //Jetons **getJetons();
-    int getNbJetons() const { return nbJetons; }
+    size_t getNbJetons() const { return nbJetons; }
     //Privilege **getPrivileges();
-    int getNbPrivileges() const { return nbPrivileges; }
+    size_t getNbPrivileges() const { return nbPrivileges; }
+
+    bool nbPtsPrestigeParCouleurSupDix() const;
 
     // Setters
     void updateScore(int s) { score += s; };

@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <random>
 #include "carte.h"
 
 string toString(CouleurCarte c){
@@ -91,7 +92,7 @@ const Carte& JeuCarte::getCarteNoble(size_t i) const{
 
 Carte::Carte(TypeCarte t, Prix& p, Capacite c, Bonus& b, unsigned int nbC, unsigned int nbP) : type(t), prix(p), capacite(c), bonus(b), nbCouronnes(nbC), nbPtsPrivilege(nbP) {
     if(t==TypeCarte::Noble)
-        throw CarteException("Veuillez utiliser le constructeur appropri�");
+        throw CarteException("Veuillez utiliser le constructeur appropri�")
 }
 
 Carte::Carte(TypeCarte t, Capacite c, unsigned int nbP) : type(t), prix(0, 0, 0, 0, 0, 0), capacite(c), bonus(), nbCouronnes(0), nbPtsPrivilege(nbP) {
@@ -101,30 +102,39 @@ Carte::Carte(TypeCarte t, Capacite c, unsigned int nbP) : type(t), prix(0, 0, 0,
 
 Pioche::Pioche(const JeuCarte& j, TypeCarte t) : type_carte(t){
     if (t == TypeCarte::Niv1) {
-        cartes = new const Carte * [j.getNbCartes_nv1()];
         nb_cartes = j.getNbCartes_nv1();
         for (size_t i = 0; i < nb_cartes; i++)
-            cartes[i] = &j.getCarteNiv1(i);
+            cartes.push_back(&j.getCarteNiv1(i));
     }
     if (t == TypeCarte::Niv2) {
-        cartes = new const Carte * [j.getNbCartes_nv2()];
         nb_cartes = j.getNbCartes_nv2();
         for (size_t i = 0; i < nb_cartes; i++)
-            cartes[i] = &j.getCarteNiv2(i);
+            cartes.push_back(&j.getCarteNiv2(i));
     }
     if (t == TypeCarte::Niv3) {
-        cartes = new const Carte * [j.getNbCartes_nv3()];
         nb_cartes = j.getNbCartes_nv3();
         for (size_t i = 0; i < nb_cartes; i++)
-            cartes[i] = &j.getCarteNiv3(i);
+            cartes.push_back(&j.getCarteNiv3(i));
     }
     // est-ce qu'on fait une pioche pour les cartes nobles, je suis pas s�r
 }
 
 Pioche::~Pioche(){
-    delete[] cartes;
+    for (size_t i = 0; i < nb_cartes; i++)
+        delete cartes[i];
 }
 
 const Carte& Pioche::piocher(){
-    // TODO: ins�rer une instruction return ici
+    if (nb_cartes == 0)
+        throw CarteException("Plus de cartes dans cette pioche");
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> distrib(0, nb_cartes-1);
+    size_t x = distrib(gen);
+    const Carte* c = cartes[x];
+    for (size_t i = x + 1; i < nb_cartes; i++)
+        cartes[i - 1] = cartes[i]; //Dplace toutes les cartes  droite vers la gauche.
+    nb_cartes--;
+    return *c;
+
 }

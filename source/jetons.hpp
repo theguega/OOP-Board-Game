@@ -5,6 +5,7 @@
 #include <string>
 #include <array>
 #include <vector>
+#include <tuple>
 
 //Gestion des jetons et des privileges pour splendor duel
 
@@ -109,16 +110,11 @@ class Sac {
 
 class Plateau {
     //Le plateau est une matrice de jetons
-    private :
-        //la taille de la matrice est fixe pour le moment
-        //une augmentation de sa taille nécéssiterai la modification de l'ordre de positionnement des jetons 
+    private : 
         std::array<std::array<const Jeton*, 5>, 5> jetons;
         std::vector<const Privilege*> privileges;
         const size_t max_privileges;
-        //ordre de positionnement des jetons sur le plateau
-        std::array<std::tuple<size_t, size_t>, 25> liste_pos = {
-            std::make_tuple(2,2), std::make_tuple(1,2), std::make_tuple(1,3), std::make_tuple(2,3), std::make_tuple(3,3), std::make_tuple(3,2), std::make_tuple(3,1), std::make_tuple(2,1), std::make_tuple(1,1), std::make_tuple(0,1), std::make_tuple(0,2), std::make_tuple(0,3), std::make_tuple(0,4), std::make_tuple(1,4), std::make_tuple(2,4), std::make_tuple(3,4), std::make_tuple(4,4), std::make_tuple(4,3), std::make_tuple(4,2), std::make_tuple(4,1), std::make_tuple(4,0), std::make_tuple(3,0), std::make_tuple(2,0), std::make_tuple(1,0), std::make_tuple(0,0)
-            };
+        const size_t max_jetons;
     public :
         const Jeton& recupererJeton(const size_t i, const size_t j);
         const Privilege& recupererPrivilege();

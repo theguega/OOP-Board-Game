@@ -9,7 +9,6 @@
 int main(int argc, const char * argv[]) {
 
     //Jetons
-    /*
     try
     {
         //Création du lot
@@ -38,7 +37,6 @@ int main(int argc, const char * argv[]) {
     {
         std::cout << e.getInfo() << "\n";
     }
-    */
     
 
 
@@ -61,6 +59,7 @@ int main(int argc, const char * argv[]) {
 
     joueur1.afficherJoueur();
     */
+
 
     return 0;
 }
