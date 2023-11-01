@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<Nobles>
+	<Carte id='01'>
+		<TYPE>Noble</TYPE>
+		<PRIX></PRIX>
+		<CAPACITE>TakeJetonToAdv</CAPACITE>
+		<BONUS></BONUS>
+		<NBCOURONNES></NBCOURONNES>
+		<NBPTSPRIVILEGE>2</NBPTSPRIVILEGE>
+	</Carte>
+
+	<Carte id='02'>
+		<TYPE>Noble</TYPE>
+		<PRIX></PRIX>
+		<CAPACITE>TakePrivilege</CAPACITE>
+		<BONUS></BONUS>
+		<NBCOURONNES></NBCOURONNES>
+		<NBPTSPRIVILEGE>2</NBPTSPRIVILEGE>
+	</Carte>
+
+	<Carte id='03'>
+		<TYPE>Noble</TYPE>
+		<PRIX></PRIX>
+		<CAPACITE>NewTurn</CAPACITE>
+		<BONUS></BONUS>
+		<NBCOURONNES></NBCOURONNES>
+		<NBPTSPRIVILEGE>2</NBPTSPRIVILEGE>
+	</Carte>
+
+	<Carte id='04'>
+		<TYPE>Noble</TYPE>
+		<PRIX></PRIX>
+		<CAPACITE>None</CAPACITE>
+		<BONUS></BONUS>
+		<NBCOURONNES></NBCOURONNES>
+		<NBPTSPRIVILEGE>3</NBPTSPRIVILEGE>
+	</Carte>
+</Nobles>
