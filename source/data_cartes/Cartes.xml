@@ -1,7 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 
 <Cartes>
-	<!-- exemple -->
+	<!-- ###############   Cartes de Niveau 1 ############### -->
+	
 	<Carte id='01'>
 		<TYPE> Niv1 </TYPE>
 		<PRIX> 0,1,1,0,1,0 </PRIX>
@@ -19,5 +20,10 @@
 		<NBCOURONNES> 0 </NBCOURONNES>
 		<NBPTSPRIVILEGE> 0 </NBPTSPRIVILEGE>
 	</Carte>
-	<!-- à poursuivre -->
+	
+	<!-- ###############   Cartes de Niveau 2 ############### -->
+
+	<!-- ###############   Cartes de Niveau 3 ############### -->
+
+	<!-- ### Cartes Nobles dans un autre fichier #### -->
 </Cartes>
