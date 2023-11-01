@@ -38,17 +38,26 @@ void Pyramide::remplirPyramide(Pioche &pNv1, Pioche &pNv2, Pioche &pNv3, Pioche 
             if (array_cartes[i][j] == nullptr) {
                 switch (i) {
                     case 0:
-                        ma_carte = &pNv3.piocher(); // piocher/tirer des cartes de niveau 3
-                        break;
+                        if (not(pNv3.estVide())) {
+                            ma_carte = &pNv3.piocher(); // piocher/tirer des cartes de niveau 3
+                            break;
+                        }
+                       
                     case 1:
-                        ma_carte = &pNv2.piocher(); // piocher des cartes de niveau 2
-                        break;
+                        if (not(pNv2.estVide())) {
+                            ma_carte = &pNv2.piocher(); // piocher des cartes de niveau 2
+                            break;
+                        }
                     case 2:
-                        ma_carte = &pNv1.piocher(); // piocher des cartes de niveau 1
-                        break;
+                        if (not(pNv1.estVide())) {
+                            ma_carte = &pNv1.piocher(); // piocher des cartes de niveau 1
+                            break;
+                        }
                     case 3:
-                        ma_carte = &pNoble.piocher(); // piocher des cartes nobles
-                        break;
+                        if (not(pNoble.estVide())) {
+                            ma_carte = &pNoble.piocher(); // piocher des cartes nobles
+                            break;
+                        }
                     default:
                         break;
                 }
@@ -56,5 +65,38 @@ void Pyramide::remplirPyramide(Pioche &pNv1, Pioche &pNv2, Pioche &pNv3, Pioche 
                 array_cartes[i][j] = ma_carte;
             }
         }
+    }
+}
+
+void Pyramide::remplircasePyramide(int i, int j, Pioche &pNv1, Pioche &pNv2, Pioche &pNv3, Pioche &pNoble) {
+    const Carte* ma_carte = nullptr;
+    if (array_cartes[i][j] == nullptr) {
+        switch (i) {
+            case 0:
+                if (not(pNv3.estVide())) {
+                    ma_carte = &pNv3.piocher(); // piocher/tirer des cartes de niveau 3
+                    break;
+                }
+               
+            case 1:
+                if (not(pNv2.estVide())) {
+                    ma_carte = &pNv2.piocher(); // piocher des cartes de niveau 2
+                    break;
+                }
+            case 2:
+                if (not(pNv1.estVide())) {
+                    ma_carte = &pNv1.piocher(); // piocher des cartes de niveau 1
+                    break;
+                }
+            case 3:
+                if (not(pNoble.estVide())) {
+                    ma_carte = &pNoble.piocher(); // piocher des cartes nobles
+                    break;
+                }
+            default:
+                break;
+        }
+        
+        array_cartes[i][j] = ma_carte;
     }
 }
