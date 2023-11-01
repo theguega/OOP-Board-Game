@@ -39,11 +39,7 @@ const Jeton& LotDeJetons::getJetons(size_t i) const {
     return *jetons[i];
 }
 
-LotDeJetons::LotDeJetons() { 
-    if (max_jetons != max_or + max_perle + max_dimant + max_onyx + max_rubis + max_saphir + max_emeraude) {
-        throw JetonException("Attention le nombre de jetons ne correponds pas au nombre de jetons de chaque type");
-    }
-
+LotDeJetons::LotDeJetons() : max_jetons(max_or + max_perle + max_dimant + max_onyx + max_rubis + max_saphir + max_emeraude){ 
     //création de tous les jetons
     for (int i = 0; i < max_or; i++)
         jetons.push_back(new Jeton(CouleurJeton::OR));

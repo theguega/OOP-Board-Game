@@ -26,7 +26,6 @@ public:
     virtual Carte acheterCarteJoaillerie(const EspaceJeux& espaceJeux) = 0;
 };
 
-/*
 class StrategyHumain : public Strategy {
 public:
     Privilege utiliserPrivilege(const EspaceJeux& espaceJeux) override {
@@ -40,7 +39,6 @@ public:
         // Logique de choix pour l'IA
     }
 };
-*/
 
 
 #endif //PROJET_LO21_STRATEGY_HPP

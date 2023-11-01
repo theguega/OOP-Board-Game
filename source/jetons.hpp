@@ -49,7 +49,7 @@ class LotDeJetons {
     private :
         std::vector<const Jeton*> jetons;
         //max jetons
-        const size_t max_jetons = 25;
+        const size_t max_jetons;
         //max de chaque jetons
         const size_t max_or = 3;
         const size_t max_perle = 2;
