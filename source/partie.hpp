@@ -18,24 +18,29 @@
 
 //La classe partie qui initialise les joueurs, le tour et l'espace de jeux 
 class Partie {  
+
+    static Partie* instance;
     
     EspaceJeux* espaceJeux = new EspaceJeux(); ;
     Joueur* joueurs[2];
+    
     int tour;
     int joueurCourant;
     
-    public:
+    /*Partie( vector<Joueur*> joueurs );  // utile ?? constructeur a partir d'un vecteur de joueurs */
 
-        /*Partie( vector<Joueur*> joueurs );  // utile ?? constructeur a partir d'un vecteur de joueurs */
-        
-        Partie( std::string nomJoueur1, std::string prenomJoueur1);
-        
-        Partie( std::string nomJoueur1, std::string prenomJoueur1, std::string nomJoueur2, std::string prenomJoueur2);
+    Partie();
 
-    // destructeur
-        ~Partie();
+    Partie( std::string nomJoueur1, std::string prenomJoueur1);
+        
+    Partie( std::string nomJoueur1, std::string prenomJoueur1, std::string nomJoueur2, std::string prenomJoueur2);
+
+    ~Partie();
+
+    Partie(const Partie&) = delete;
+    Partie& operator=(const Partie&) = delete;
     
-    // getters
+    public: 
         
         int getTour() const { return tour; }
         int getjoueurCourant() const { return joueurCourant; }
@@ -43,11 +48,13 @@ class Partie {
         bool finPartie();
         void changerJoueurCourant();
         void tour_suivant(){tour++;}
-        //erreur jsp pk 
-        Partie(const Partie&) = delete;
-        Partie& operator=(const Partie&) = delete;
-        
 
+        static Partie& getInstance();
+        static Partie& getInstance(std::string nomJoueur1, std::string prenomJoueur1);
+        static Partie& getInstance(std::string nomJoueur1, std::string prenomJoueur1, std::string nomJoueur2, std::string prenomJoueur2);
+
+        static void libererInstance();
+   
 
         }; 
         

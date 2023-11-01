@@ -1,34 +1,17 @@
 #include "espacejeux.hpp"
 
-Pyramide::Pyramide( Pioche &pNv1, Pioche &pNv2,Pioche &pNv3,Pioche &pNoble) {
+Pyramide::Pyramide( Pioche& pNv1, Pioche& pNv2,Pioche& pNv3,Pioche& pNoble) {
        
         // redimesionnement des tableaux
-        cartes[0].resize(2); // Tableau de 2 Cartes niv3
-        cartes[1].resize(3); // Tableau de 3 Cartes niv2
-        cartes[2].resize(4); // Tableau de 4 Cartes niv1
-        cartes[3].resize(4); // Tableau de 4 Cartes (les rares)
+        array_cartes[0].resize(2); // Tableau de 2 Cartes niv3
+        array_cartes[1].resize(3); // Tableau de 3 Cartes niv2
+        array_cartes[2].resize(4); // Tableau de 4 Cartes niv1
+        array_cartes[3].resize(4); // Tableau de 4 Cartes (les nobles)
 
         for (int i = 0; i < 4; i++) {
-            for (int j = 0; j < cartes[i].size(); j++) {
-                switch (i)
-                {
-                case 0:
-                    cartes[i][j] = pNv1.piocher(); // piocher/tirer des carte de niveau 3
-                    break;
-                case 1:
-                    cartes[i][j] = pNv2.piocher(); // piocher cartes de niveau 2
-                    break;
-                case 2:
-                    cartes[i][j] = pNv3.piocher(); // Piocher des cartes niveau 1
-                    break;
-                case 3:
-                    cartes[i][j] = pNoble.piocher(); // piocher cartes nobles
-                    break;
-                
-                default:
-                    break;
-                }
-                
+            for (int j = 0; j < array_cartes[i].size(); j++) {
+                array_cartes[i][j] =  nullptr;
+                this->remplirPyramide(pNv1,pNv2,pNv3,pNoble);
             }
         }
 
@@ -36,42 +19,42 @@ Pyramide::Pyramide( Pioche &pNv1, Pioche &pNv2,Pioche &pNv3,Pioche &pNoble) {
 
 Pyramide::~Pyramide() {
     for (int i = 0; i < 4; i++) {
-        for (int j = 0; j < cartes[i].size(); j++) {
-            if (cartes[i][j] != nullptr) {
-                delete cartes[i][j];
+        for (int j = 0; j < array_cartes[i].size(); j++) {
+            if (array_cartes[i][j] != nullptr) {
+                delete array_cartes[i][j];
             }
         }
     }
 };
 
-void Pyramide::remplirPyramide(Pioche &pNv1, Pioche &pNv2,Pioche &pNv3,Pioche &pNoble){
+ // Obtenir une référence temporaire
+
+
+void Pyramide::remplirPyramide(Pioche &pNv1, Pioche &pNv2, Pioche &pNv3, Pioche &pNoble) {
+    const Carte* ma_carte = nullptr;
 
     for (int i = 0; i < 4; i++) {
-        for (int j = 0; j < cartes[i].size(); j++) {
-            if (cartes[i][j] == nullptr) {
-                switch (i)
-                    {
+        for (int j = 0; j < array_cartes[i].size(); j++) {
+            if (array_cartes[i][j] == nullptr) {
+                switch (i) {
                     case 0:
-                        cartes[i][j] = pNv1.piocher(); // piocher/tirer des carte de niveau 3
+                        ma_carte = &pNv3.piocher(); // piocher/tirer des cartes de niveau 3
                         break;
                     case 1:
-                        cartes[i][j] = pNv2.piocher(); // piocher cartes de niveau 2
+                        ma_carte = &pNv2.piocher(); // piocher des cartes de niveau 2
                         break;
                     case 2:
-                        cartes[i][j] = pNv3.piocher(); // Piocher des cartes niveau 1
+                        ma_carte = &pNv1.piocher(); // piocher des cartes de niveau 1
                         break;
                     case 3:
-                        cartes[i][j] = pNoble.piocher(); // piocher cartes nobles
+                        ma_carte = &pNoble.piocher(); // piocher des cartes nobles
                         break;
-                    
                     default:
                         break;
-                    }
-                    
                 }
-        
+                
+                array_cartes[i][j] = ma_carte;
+            }
         }
     }
-} 
-
-
+}

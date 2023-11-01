@@ -5,6 +5,13 @@
 #include "carte.h"
 #include "espacejeux.hpp"
 
+Partie::Partie() {
+    // création et affectation de nouveaux joueurs 
+    joueurs[0] = new Joueur("Alain", "telligence", type::IA);
+    joueurs[1] = new Joueur("AL", "Gorythme", type::IA);
+    tour = 0;
+    joueurCourant = 0;
+}
 
 Partie::Partie(std::string nomJoueur1, std::string prenomJoueur1) {
     // création et affectation de nouveaux joueurs 
@@ -41,3 +48,31 @@ void Partie::changerJoueurCourant() {
             break;
     }
 }
+
+Partie& Partie::getInstance() {
+    if (instance == nullptr) {
+        instance = new Partie();
+    }
+    return *instance;
+}
+
+Partie& Partie::getInstance(std::string nomJoueur1, std::string prenomJoueur1) {
+    if (instance == nullptr) {
+        instance = new Partie(nomJoueur1, prenomJoueur1);
+    }
+    return *instance;
+}
+Partie& Partie::getInstance(std::string nomJoueur1, std::string prenomJoueur1, std::string nomJoueur2, std::string prenomJoueur2) {
+    if (instance == nullptr) {
+        instance = new Partie(nomJoueur1, prenomJoueur1, nomJoueur2, prenomJoueur2);
+    }
+    return *instance;
+}
+
+void Partie::libererInstance() {
+    if (instance != nullptr) {
+        delete instance;
+        instance = nullptr;
+    }
+}   
+

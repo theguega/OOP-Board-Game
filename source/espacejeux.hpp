@@ -10,9 +10,9 @@
 #include "carte.h"
 
 class Pyramide {
-    private:
-        std::vector<const Carte &> cartes[4];
 
+    private:    
+        std::vector<const Carte*> array_cartes[4];
     public:
         Pyramide( Pioche &pNv1, Pioche &pNv2,Pioche &pNv3,Pioche &pNoble); // constructeur
         ~Pyramide(); 
@@ -20,9 +20,12 @@ class Pyramide {
         void estVide() const;
 
         void remplirPyramide(Pioche &pNv1, Pioche &pNv2,Pioche &pNv3,Pioche &pNoble);
-
+        
+        void remplircasePyramide(int i, int j);
+        void remplircasePyramide(TypeCarte t, int i);
+        
         void reserverCarte(int i, int j); 
-        void acheterCarte( int i, int j); 
+        void acheterCarte(int i, int j); 
 
         Pyramide(const Pyramide&) = delete;
         Pyramide& operator=(const Pyramide&) = delete;
