@@ -43,7 +43,7 @@ class Pyramide {
         Pyramide( Pioche &pNv1, Pioche &pNv2,Pioche &pNv3,Pioche &pNoble); // constructeur
         ~Pyramide(); 
 
-        void estVide() const;
+        bool estVide() const;
 
         void remplirPyramide(Pioche &pNv1, Pioche &pNv2,Pioche &pNv3,Pioche &pNoble); // parcour de toute la pyramide pour remplir les cases vides   
         void remplircasePyramide(int i, int j, Pioche &pNv1, Pioche &pNv2, Pioche &pNv3, Pioche &pNoble); // remplir une case de la pyramide

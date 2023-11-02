@@ -100,3 +100,30 @@ void Pyramide::remplircasePyramide(int i, int j, Pioche &pNv1, Pioche &pNv2, Pio
         array_cartes[i][j] = ma_carte;
     }
 }
+
+bool Pyramide::estVide() const {
+    for (int i = 0; i < 4; i++) {
+        for (int j = 0; j < array_cartes[i].size(); j++) {
+            if (array_cartes[i][j] != nullptr) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+void Pyramide::reserverCarte(int i, int j, Joueur& joueur /*a voir en fct de comment marche startegy*/ , Pioche &pNv1, Pioche &pNv2, Pioche &pNv3, Pioche &pNoble) {
+    if (array_cartes[i][j] != nullptr) {
+        //actions en focntion du fonctionnement de strategy
+        array_cartes[i][j] = nullptr;
+        this -> remplircasePyramide(i,j, pNv1, pNv2, pNv3, pNoble);
+    }
+}
+
+void Pyramide::acheterCarte(int i, int j, Joueur& joueur, Pioche &pNv1, Pioche &pNv2, Pioche &pNv3, Pioche &pNoble) {
+    if (array_cartes[i][j] != nullptr) {
+        //actions en focntion du fonctionnement de strategy
+        array_cartes[i][j] = nullptr;
+        this -> remplircasePyramide(i,j, pNv1, pNv2, pNv3, pNoble);
+    }
+}
