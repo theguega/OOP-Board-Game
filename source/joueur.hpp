@@ -1,3 +1,7 @@
+//
+// Created by samma on 28/10/2023.
+//
+
 #ifndef PROJET_LO21_JOUEUR_HPP
 #define PROJET_LO21_JOUEUR_HPP
 
@@ -37,8 +41,6 @@ private:
     const std::string nom;
     const std::string prenom;
     const type typeDeJoueur;
-
-    // Conditions de victoires
     int ptsPrestige;
     int nbCouronnes;
 
@@ -100,7 +102,6 @@ public:
 
 
 };
-
 
 
 #endif //PROJET_LO21_JOUEUR_HPP

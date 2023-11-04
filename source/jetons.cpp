@@ -1,5 +1,12 @@
 #include "jetons.hpp"
 #include <random>
+/*
+   __         _ 
+   \ \   ___ | |_   ___   _ __   ___ 
+    \ \ / _ \| __| / _ \ | '_ \ / __|
+ /\_/ /|  __/| |_ | (_) || | | |\__ \
+ \___/  \___| \__| \___/ |_| |_||___/
+*/
 
 //------------------------------------------------- Gestion de la couleur des jetons
 std::initializer_list<CouleurJeton> CouleursJeton = { 
@@ -40,10 +47,6 @@ const Jeton& LotDeJetons::getJetons(size_t i) const {
 }
 
 LotDeJetons::LotDeJetons() { 
-    if (max_jetons != max_or + max_perle + max_dimant + max_onyx + max_rubis + max_saphir + max_emeraude) {
-        throw JetonException("Attention le nombre de jetons ne correponds pas au nombre de jetons de chaque type");
-    }
-
     //création de tous les jetons
     for (int i = 0; i < max_or; i++)
         jetons.push_back(new Jeton(CouleurJeton::OR));
@@ -78,7 +81,7 @@ std::ostream& operator<< (std::ostream& f, const Privilege& privilege) {
 
 const Privilege& LotPrivileges::getPrivilege(size_t i) const {
     if (i >= privileges.size())
-        throw PrivilegeException("Indice de privilège incorrect");
+        throw JetonException("Indice de privilège incorrect");
     return *privileges[i];
 }
 
@@ -94,14 +97,12 @@ LotPrivileges::~LotPrivileges() {
 
 //------------------------------------------------- Classe Sac
 
-Sac::Sac(const LotDeJetons& lot) : max_jetons(lot.getNbJetons()) {
+Sac::Sac(const LotDeJetons& lot) {
     for (size_t i = 0; i < lot.getNbJetons(); i++)
         jetons.push_back(&lot.getJetons(i));
 }
 
 void Sac::ajouterJeton(const Jeton& j) {
-    if (jetons.size() >= max_jetons)
-        throw JetonException("Le sac est déjà plein");
     jetons.push_back(&j);
 }
 
@@ -132,8 +133,8 @@ Plateau::Plateau(Sac& sac, const LotPrivileges& lotp) : max_privileges(lotp.getN
         poserPrivilege(lotp.getPrivilege(i));
 
     //initialisation du plateau vide
-    for (size_t i = 0; i < 5; i++)
-        for (size_t j = 0; j < 5; j++)
+    for (size_t i = 0; i < jetons.size(); i++)
+        for (size_t j = 0; j < jetons.size(); j++)
             jetons[i][j] = nullptr;
 
     //remplissage du plateau
@@ -154,7 +155,7 @@ const Jeton& Plateau::recupererJeton(const size_t i, const size_t j) {
 
 const Privilege& Plateau::recupererPrivilege() {
     if (privileges.empty())
-        throw PrivilegeException("Pas de privilège à récupérer");
+        throw JetonException("Pas de privilège à récupérer");
     
     //on recup le dernier privilège
     const Privilege& privilege = *privileges.back();
@@ -163,27 +164,60 @@ const Privilege& Plateau::recupererPrivilege() {
 }
 
 void Plateau::poserPrivilege(const Privilege& privilege) {
-    if (privileges.size() >= max_privileges)
-        throw PrivilegeException("Le plateau est déjà plein");
     privileges.push_back(&privilege);
 }
 
 void Plateau::positionerJeton(const Jeton& jeton) {
-    //on cherche la première case vide
-    int pos=0;
-    size_t i = std::get<0>(liste_pos[pos]);
-    size_t j = std::get<1>(liste_pos[pos]);
-    while (jetons[i][j] != nullptr && pos<liste_pos.size()-1) {
-        pos++;
-        i = std::get<0>(liste_pos[pos]);
-        j = std::get<1>(liste_pos[pos]);
-    };
+    size_t centre = jetons.size() / 2;
+    size_t i = centre, j = centre;
+    size_t h = 1, d = 1, b = 2, g = 2;
+    size_t direction = 0, avancement = 0;
+    while (jetons[i][j] != nullptr && i <= jetons.size()-1 && j <= jetons.size()-1) {
+        switch (direction) {
+            case 0:  // Vers le haut
+                i--;
+                avancement++;
+                if (avancement == h){
+                    avancement = 0;
+                    direction = 1;
+                    h += 2;
+                }
+                break;
+            case 1:  // Vers la droite
+                j++;
+                avancement++;
+                if (avancement == d){
+                    avancement = 0;
+                    direction = 2;
+                    d += 2;
+                }
+                break;
+            case 2:  // Vers le bas
+                i++;
+                avancement++;
+                if (avancement == b){
+                    avancement = 0;
+                    direction = 3;
+                    b += 2;
+                }
+                break;
+            case 3:  // Vers la gauche
+                j--;
+                avancement++;
+                if (avancement == g){
+                    avancement = 0;
+                    direction = 0;
+                    g += 2;
+                }
+                break;
+        }
+    }
 
-    //si on est arrivés au bout de la liste et que aucune case n'est vide
-    if (jetons[i][j] != nullptr) {
-        throw JetonException("Le plateau est déjà plein");
-    } else {
+    //si on est arrivés au bout de la liste et que aucune case n'etait vide
+    if (i <= jetons.size()-1 && j <= jetons.size()-1) {
         jetons[i][j] = &jeton;
+    } else {
+        throw JetonException("Le plateau est déjà plein");
     }
 }
 
