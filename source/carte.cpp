@@ -7,6 +7,10 @@
 #include "data_cartes/Cartes.xml"
 #include "data_cartes/Nobles.xml"
 #include "pugixml/pugixml.hpp"
+using namespace std;
+
+std::initializer_list<CouleurCarte> CouleursCarte = { CouleurCarte::blanc, CouleurCarte::bleu, CouleurCarte::vert, CouleurCarte::noir, CouleurCarte::rouge, CouleurCarte::perle, CouleurCarte::indt };
+std::initializer_list<TypeCarte> TypesCarte = { TypeCarte::Niv1, TypeCarte::Niv2, TypeCarte::Niv3, TypeCarte::Noble };
 
 string toString(CouleurCarte c){
     switch (c){
@@ -22,8 +26,6 @@ string toString(CouleurCarte c){
 }
 ostream& operator<<(ostream& f, CouleurCarte c){ f << toString(c); return f; }
 
-std::initializer_list<CouleurCarte> CouleursCarte = { CouleurCarte::blanc, CouleurCarte::bleu, CouleurCarte::vert, CouleurCarte::noir, CouleurCarte::rouge, CouleurCarte::perle, CouleurCarte::indt };
-
 CouleurCarte StringToCouleurCarte(const std::string& couleurStr){
     auto tmp = stringToCouleurCarteMap.find(couleurStr);
     if (tmp != stringToCouleurCarteMap.end()) {
@@ -34,8 +36,6 @@ CouleurCarte StringToCouleurCarte(const std::string& couleurStr){
     }
 }
 
-
-std::initializer_list<TypeCarte> TypesCarte = { TypeCarte::Niv1, TypeCarte::Niv2, TypeCarte::Niv3, TypeCarte::Noble };
 
 string toString(TypeCarte t){
     switch (t) {
@@ -60,7 +60,6 @@ string toString(Capacite c){
         default: throw CarteException("Capacite inconnue");
     }
 }
-
 ostream& operator<<(ostream& f, Capacite c) { f << toString(c); return f; }
 
 Capacite StringToCapacite(const std::string& capaciteStr){
@@ -75,8 +74,8 @@ Capacite StringToCapacite(const std::string& capaciteStr){
 
 
 ostream& operator<<(ostream& f, const Prix& p){
-	f << "Blanc : " << p.getBlanc() << "    " << "Bleu : " << p.getBleu() << "\n";
-    f << "Vert : " << p.getVert() << "    " << "Noir : " << p.getNoir() << "\n";
+	f << "Blanc : " << p.getBlanc() << "    " << "Bleu :  " << p.getBleu() << "\n";
+    f << "Vert :  " << p.getVert() << "    " << "Noir :  " << p.getNoir() << "\n";
     f << "Rouge : " << p.getRouge() << "    " << "Perle : " << p.getPerle() << "\n";
     return f;
 }
@@ -127,15 +126,15 @@ JeuCarte::JeuCarte(){
         pugi::xml_node liste_cartes = doc_cartes.child("Cartes");
         int i = 0;
         for (pugi::xml_node carte = liste_cartes.child("Carte"); carte; carte = carte.next_sibling("Carte")) {
-            std::string type = carte.child_value("TYPE");
+            string type = carte.child_value("TYPE");
             unsigned int p_blanc = std::stoi(carte.child_value("PRIX_BLANC"));
             unsigned int p_bleu = std::stoi(carte.child_value("PRIX_BLEU"));
             unsigned int p_vert = std::stoi(carte.child_value("PRIX_VERT"));
             unsigned int p_noir = std::stoi(carte.child_value("PRIX_NOIR"));
             unsigned int p_rouge = std::stoi(carte.child_value("PRIX_ROUGE"));
             unsigned int p_perle = std::stoi(carte.child_value("PRIX_PERLE"));
-            std::string capacite = carte.child_value("CAPACITE");
-            std::string couleur_bonus = carte.child_value("COULEUR_BONUS");
+            string capacite = carte.child_value("CAPACITE");
+            string couleur_bonus = carte.child_value("COULEUR_BONUS");
             unsigned int bonus = std::stoi(carte.child_value("NB_BONUS"));
             unsigned int nb_couronnes = std::stoi(carte.child_value("NB_COURONNES"));
             unsigned int nb_pts_privileges = std::stoi(carte.child_value("NB_PTS_PRIVILEGE"));
@@ -146,7 +145,7 @@ JeuCarte::JeuCarte(){
             else if (i >= n1 && i < n2) {
                 cartes_nv2[i-n1] = new Carte(TypeCarte::Niv2, Prix(p_blanc, p_bleu, p_vert, p_noir, p_rouge, p_perle), StringToCapacite(capacite), Bonus(StringToCouleurCarte(couleur_bonus), bonus), nb_couronnes, nb_pts_privileges);
             }
-            else if (i >= n3) {
+            else if (i >= n2) {
                 cartes_nv3[i-n2] = new Carte(TypeCarte::Niv3, Prix(p_blanc, p_bleu, p_vert, p_noir, p_rouge, p_perle), StringToCapacite(capacite), Bonus(StringToCouleurCarte(couleur_bonus), bonus), nb_couronnes, nb_pts_privileges);
             }
             i++;
@@ -160,8 +159,8 @@ JeuCarte::JeuCarte(){
         pugi::xml_node liste_nobles = doc_cartes.child("Nobles");
         int j = 0;
         for (pugi::xml_node carte = liste_nobles.child("Noble"); carte; carte = carte.next_sibling("Noble")) {
-            std::string type = carte.child_value("TYPE");
-            std::string capacite = carte.child_value("CAPACITE");
+            string type = carte.child_value("TYPE");
+            string capacite = carte.child_value("CAPACITE");
             unsigned int nb_pts_privileges = std::stoi(carte.child_value("NB_PTS_PRIVILEGE"));
 
             cartes_nobles[j] = new Carte(TypeCarte::Noble, StringToCapacite(capacite), nb_pts_privileges);
@@ -176,9 +175,9 @@ JeuCarte::JeuCarte(){
 
 
 JeuCarte::~JeuCarte(){
-    for (size_t i = 0; i < getNbCartes_nv1(); ++i){
-			delete cartes_nv1[i];
-		}
+    for (size_t i = 0; i < getNbCartes_nv1(); ++i) {
+		delete cartes_nv1[i];
+	}
     for (size_t i = 0; i < getNbCartes_nv2(); ++i) {
         delete cartes_nv2[i];
     }

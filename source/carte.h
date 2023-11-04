@@ -29,7 +29,7 @@ std::map<std::string, CouleurCarte> stringToCouleurCarteMap = {
         {"perle", CouleurCarte::perle},
         {"indt", CouleurCarte::indt}
 };
-CouleurCarte StringToCouleurCarte(const std::string& couleurStr);
+CouleurCarte StringToCouleurCarte(const string& couleurStr);
 
 
 enum class TypeCarte { Niv1, Niv2, Niv3, Noble };
@@ -49,10 +49,10 @@ std::map<std::string, Capacite> stringToCapaciteMap = {
 };
 string toString(Capacite c);
 ostream& operator<<(ostream& f, Capacite c);
-Capacite StringToCapacite(const std::string& capaciteStr);
+Capacite StringToCapacite(const string& capaciteStr);
 
 
-class Prix { // on l'encapsule dans la classe carte ? ou bien il y'a d'autres éléments qui ont un cout ?
+class Prix {
 private:
     unsigned int blanc, bleu, vert, noir, rouge, perle;
 public:
@@ -107,7 +107,8 @@ ostream& operator<<(ostream& f, const Carte& c);
 
 class JeuCarte {
 private:
-    // TypeCarte type;
+    // appliquer le design pattern singleton plus tard
+    // eventuellement membre static pour chaque nombre de carte n1, n2, n3
     array<const Carte*, n1> cartes_nv1;
     array<const Carte*, n2> cartes_nv2;
     array<const Carte*, n3> cartes_nv3;
@@ -133,7 +134,7 @@ private:
     vector<const Carte*> cartes;
     size_t nb_cartes = 0;
 public:
-    explicit Pioche(const JeuCarte& j, TypeCarte t); //Pour eviter que Jeu soit converti en autre chose (genre Pioche)
+    explicit Pioche(const JeuCarte& j, TypeCarte t); // j'ai pris ca depuis le td masi a t on besoin du explicit ?
     ~Pioche();
     bool estVide() const { return nb_cartes == 0; }
     size_t getNbCartes() const { return nb_cartes; }
@@ -143,11 +144,6 @@ public:
 
 };
 
-// Ajout de enum Type carte
-// Ajout de enum Couleur
-// Ajout de enum Capacite
-// Ajout de classe Bonus
-// Ajout de classe Prix
 
 //Je pense qu'il faudrait faire à peu près comme le TD 4 : 
 // classe pioche --> pour nous il y aura 3 instances de pioches (3 niveaux)
