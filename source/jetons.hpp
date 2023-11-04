@@ -121,6 +121,8 @@ class Plateau {
             std::make_tuple(2,2), std::make_tuple(1,2), std::make_tuple(1,3), std::make_tuple(2,3), std::make_tuple(3,3), std::make_tuple(3,2), std::make_tuple(3,1), std::make_tuple(2,1), std::make_tuple(1,1), std::make_tuple(0,1), std::make_tuple(0,2), std::make_tuple(0,3), std::make_tuple(0,4), std::make_tuple(1,4), std::make_tuple(2,4), std::make_tuple(3,4), std::make_tuple(4,4), std::make_tuple(4,3), std::make_tuple(4,2), std::make_tuple(4,1), std::make_tuple(4,0), std::make_tuple(3,0), std::make_tuple(2,0), std::make_tuple(1,0), std::make_tuple(0,0)
             };
     public :
+
+        //const Jeton& recupererJeton(const size_t i, const size_t j);
         const Jeton& recupererJeton(const size_t i, const size_t j);
         const Privilege& recupererPrivilege();
         void positionerJeton(const Jeton& jeton);

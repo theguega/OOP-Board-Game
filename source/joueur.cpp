@@ -79,13 +79,13 @@ void Joueur::addCarte(Carte *carte) {
     //nbCouronnes += carte->getNbCouronnes();
 }
 
-void Joueur::addJeton(Jeton *jeton) {
-    jetons[jeton->getCouleur()].push_back(jeton);
+void Joueur::addJeton(const Jeton& jeton) {
+    jetons[jeton.getCouleur()].push_back(&jeton);
     nbJetons++;
 }
 
-void Joueur::addPrivilege(Privilege *privilege) {
-    privileges.push_back(privilege);
+void Joueur::addPrivilege(const Privilege &privilege) {
+    privileges.push_back(&privilege);
     nbPrivileges++;
 }
 
@@ -113,9 +113,11 @@ void::Joueur::supJeton(Jeton *jeton) {
     }
 }
 
-void::Joueur::supPrivilege() {
+const Privilege&::Joueur::supPrivilege() {
+    const Privilege& sup = *privileges[0];
     privileges.erase(privileges.begin());
     nbPrivileges--;
+    return  sup;
 }
 
 bool::Joueur::nbPtsPrestigeParCouleurSupDix() const {
@@ -130,4 +132,18 @@ bool::Joueur::nbPtsPrestigeParCouleurSupDix() const {
         }
     }
     return false;
+}
+
+void Joueur::utiliserPrivilège(Plateau& plateau){
+    if (nbPrivileges == 0) {
+        throw JoueurException("Le joueur n'a pas de privilège");
+    }
+    /*if (plateau.getNbJtons()==0){
+        throw JoueurException("Le plateau n'a pas de jetons");
+    }*/
+    const Privilege& privilege = supPrivilege();
+    plateau.poserPrivilege(privilege);
+    const Jeton& jetonSelec = strategy->choisirJeton(plateau);
+    addJeton(jetonSelec);
+
 }

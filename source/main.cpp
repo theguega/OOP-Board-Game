@@ -10,6 +10,7 @@
 int main(int argc, const char * argv[]) {
 
     //Jetons
+
     try
     {
         //CrÃ©ation du lot
@@ -33,33 +34,44 @@ int main(int argc, const char * argv[]) {
         plateau.positionerJeton(sac.piocherJeton());
 
         std::cout<<"Voilaaaa, on est content"<<std::endl;
+
+        std::cout << "Bonjour !\nVeuillez creer les joueurs : \n";
+        std::string nom, prenom;
+        std::string typedejoueur;
+        type typeDeJoueur;
+
+        std::cout << "Nom du joueur 1 : ";
+        std::cin >> nom;
+        std::cout << "Prenom du joueur 1 : ";
+        std::cin >> prenom;
+        std::cout << "Type de joueur (IA ou HUMAIN) : ";
+        std::cin >> typedejoueur;
+        typeDeJoueur = toType(typedejoueur);
+        Joueur joueur1(nom, prenom, typeDeJoueur);
+        std::cout << "\n\n";
+
+        joueur1.afficherJoueur();
+
+        joueur1.addPrivilege(plateau.recupererPrivilege());
+        //joueur1.afficherPrivileges();
+        joueur1.afficherJoueur();
+
+
     }
     catch (JetonException& e)
     {
         std::cout << e.getInfo() << "\n";
     }
+
     
 
 
+
+
     //Joueurs
-    /*
-    std::cout << "Bonjour !\nVeuillez creer les joueurs : \n";
-    std::string nom, prenom;
-    std::string typedejoueur;
-    type typeDeJoueur;
 
-    std::cout << "Nom du joueur 1 : ";
-    std::cin >> nom;
-    std::cout << "Prenom du joueur 1 : ";
-    std::cin >> prenom;
-    std::cout << "Type de joueur (IA ou HUMAIN) : ";
-    std::cin >> typedejoueur;
-    typeDeJoueur = toType(typedejoueur);
-    Joueur joueur1(nom, prenom, typeDeJoueur);
-    std::cout << "\n\n";
 
-    joueur1.afficherJoueur();
-    */
+
 
 
     return 0;
