@@ -89,13 +89,13 @@ ostream& operator<<(ostream& f, const Bonus& b){
 
 Carte::Carte(TypeCarte t, Prix& p, Capacite c, Bonus& b, unsigned int nbC, unsigned int nbP) : type(t), prix(p), capacite(c), bonus(b), nbCouronnes(nbC), nbPtsPrivilege(nbP) {
     if (t == TypeCarte::Noble)
-        throw CarteException("Veuillez utiliser le constructeur approprié");
+        throw CarteException("Veuillez utiliser le constructeur appropriï¿½");
 }
 
 
 Carte::Carte(TypeCarte t, Capacite c, unsigned int nbP) : type(t), prix(0, 0, 0, 0, 0, 0), capacite(c), bonus(), nbCouronnes(0), nbPtsPrivilege(nbP) {
     if (t != TypeCarte::Noble)
-        throw CarteException("Veuillez utiliser le constructeur approprié");
+        throw CarteException("Veuillez utiliser le constructeur appropriï¿½");
 }
 
 
@@ -234,7 +234,7 @@ Pioche::Pioche(const JeuCarte& j, TypeCarte t) : type_carte(t){
         for (size_t i = 0; i < nb_cartes; i++)
             cartes.push_back(&j.getCarteNiv3(i));
     }
-    // est-ce qu'on fait une pioche pour les cartes nobles, je suis pas sûr
+    // est-ce qu'on fait une pioche pour les cartes nobles, je suis pas sï¿½r
 }
 
 

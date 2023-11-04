@@ -16,7 +16,8 @@ public:
 };
 
 
-enum class CouleurCarte {blanc, bleu, vert, noir, rouge, perle, indt}; // ajout de "indeterminé" car certaines carte ont une couleur de Bonus variable
+enum class CouleurCarte {blanc, bleu, vert, noir, rouge, perle, indt}; // ajout de "indeterminï¿½" car certaines carte ont une couleur de Bonus variable
+
 string toString(CouleurCarte c);
 ostream& operator<<(ostream& f, CouleurCarte c);
 extern std::initializer_list<CouleurCarte> CouleursCarte;
@@ -52,7 +53,8 @@ ostream& operator<<(ostream& f, Capacite c);
 Capacite StringToCapacite(const string& capaciteStr);
 
 
-class Prix {
+
+class Prix { // on l'encapsule dans la classe carte ? ou bien il y'a d'autres ï¿½lï¿½ments qui ont un cout ?
 private:
     unsigned int blanc, bleu, vert, noir, rouge, perle;
 public:
@@ -82,7 +84,7 @@ ostream& operator<<(ostream& f, const Bonus& b);
 
 class Carte {
 private:
-    // eventuel ajout d'un champ ID, peut être util pour les cartes nobles par exemple, savoir qui est qui
+    // eventuel ajout d'un champ ID, peut ï¿½tre util pour les cartes nobles par exemple, savoir qui est qui
     TypeCarte type;
     Prix prix;
     Capacite capacite; 
@@ -109,7 +111,7 @@ class JeuCarte {
 private:
     // appliquer le design pattern singleton plus tard
     // eventuellement membre static pour chaque nombre de carte n1, n2, n3
-    array<const Carte*, n1> cartes_nv1;
+    array<const Carte*, n1> cartes_nv1; 
     array<const Carte*, n2> cartes_nv2;
     array<const Carte*, n3> cartes_nv3;
     array<const Carte*, 4> cartes_nobles;
@@ -134,7 +136,7 @@ private:
     vector<const Carte*> cartes;
     size_t nb_cartes = 0;
 public:
-    explicit Pioche(const JeuCarte& j, TypeCarte t); // j'ai pris ca depuis le td masi a t on besoin du explicit ?
+    explicit Pioche(const JeuCarte& j, TypeCarte t); // j'ai pris ca depuis le td mais a t on besoin du explicit ?
     ~Pioche();
     bool estVide() const { return nb_cartes == 0; }
     size_t getNbCartes() const { return nb_cartes; }
@@ -145,7 +147,7 @@ public:
 };
 
 
-//Je pense qu'il faudrait faire à peu près comme le TD 4 : 
+//Je pense qu'il faudrait faire ï¿½ peu prï¿½s comme le TD 4 : 
 // classe pioche --> pour nous il y aura 3 instances de pioches (3 niveaux)
-// classe Plateau --> classe Pyramide pour nous (là où il y a les cartes, le mot plateau est reservé pour les jetons)
+// classe Plateau --> classe Pyramide pour nous (lï¿½ oï¿½ il y a les cartes, le mot plateau est reservï¿½ pour les jetons)
 

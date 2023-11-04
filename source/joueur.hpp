@@ -1,3 +1,7 @@
+//
+// Created by samma on 28/10/2023.
+//
+
 #ifndef PROJET_LO21_JOUEUR_HPP
 #define PROJET_LO21_JOUEUR_HPP
 
@@ -37,16 +41,14 @@ private:
     const std::string nom;
     const std::string prenom;
     const type typeDeJoueur;
-
-    // Conditions de victoires
     int ptsPrestige;
     int nbCouronnes;
 
     std::unordered_map</*CouleurCarte*/ CouleurJeton, std::vector<Carte*>> cartes;
     size_t nbCartes;
-    std::unordered_map<CouleurJeton, std::vector<Jeton*>> jetons;
+    std::unordered_map<CouleurJeton, std::vector<const Jeton*>> jetons;
     size_t nbJetons;
-    std::vector<Privilege*> privileges;
+    std::vector<const Privilege*> privileges;
     size_t nbPrivileges;
     Strategy* strategy;
 public:
@@ -78,24 +80,28 @@ public:
     void updateNbCouronnes(int couronnes) { nbCouronnes += couronnes; };
 
     void addCarte(Carte *carte);
-    void addJeton(Jeton *jeton);
-    void addPrivilege(Privilege *privilege);
+    void addJeton(const Jeton &jeton);
+    void addPrivilege(const Privilege &privilege);
 
     // Supprimer un element du vecteur --> attention il faudra voir le lien avec les autres classes DONE
     // Si on supprime un privilège il doit revenir sur le plateau
     void supCarte(Carte *carte);
     void supJeton(Jeton *jeton);
-    void supPrivilege(); // a voir si on retire pas juste le premier privilege
+    const Privilege& supPrivilege(); // a voir si on retire pas juste le premier privilege
 
     // Affichage Done
     void afficherJoueur() const;
     void afficherCartes() const;
     void afficherJetons() const;
+    void afficherPrivileges() const{
+        std::cout << "Nombre de privilèges : " << &privileges << std::endl;
+    }
 
 
-    // surchages
+    void utiliserPrivilège(Plateau& plateau);
+
+
 };
-
 
 
 #endif //PROJET_LO21_JOUEUR_HPP

@@ -1,0 +1,76 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+class Joueur {
+    - nom : string
+    - prenom string
+    - typeDeJoueur : enum type
+    - ptsPrestige : int
+    - nbCouronnes : int
+    - cartes : unordered_map
+    - nbCartes : size_t
+    - jetons : unordered_map
+    - nbJetons : size_t
+    - privileges : vector
+    - nbPrivileges : size_t
+    - strategy : *Strategy
+
+    +Joueur(std::string nom, std::string prenom, type typeDeJoueur)
+    +~Joueur()
+
+    +getNom() : string
+    +getPrenom() : string
+    +getTypeDeJoueur() : enum type
+    +getptsPrestige() : int
+    +getnbCouronnes() : int
+    +getNbCartes() : size_t
+    +getNbJetons() : size_t
+    +getNbPrivileges() size_t
+
+    +nbPtsPrestigeParCouleurSupDix() : bool
+    +updatePtsPrestige(int pts)
+    +updateNbCouronnes(int couronnes)
+    +addCarte(Carte *carte)
+    +addJeton(const Jeton &jeton)
+    +addPrivilege(const Privilege &privilege)
+
+    +supCarte(Carte *carte) : const Carte&
+    +supJeton(Jeton *jeton) : const Jeton&
+    +supPrivilege() : const Privilege&
+
+    +afficherJoueur()
+    +afficherCartes()
+    +afficherJetons()
+    +afficherPrivileges()
+    +utiliserPrivilège(Plateau& plateau)
+}
+abstract Strategy {
+    +const Jeton& choisirJeton(Plateau& plateau) : const Jeton&
+    +utiliserPrivilege(const EspaceJeux& espaceJeux) : const Privilege&
+    +remplirPlateau(const EspaceJeux& espaceJeux) : const Privilege&
+
+    +piocherJeton(const EspaceJeux& espaceJeux) : const Jeton&
+    +orReserverCarte(const EspaceJeux& espaceJeux) : const Carte&
+    +acheterCarteJoaillerie(const EspaceJeux& espaceJeux) : const Carte&
+
+}
+
+class StrategyHumain
+class StrategyIA
+
+Joueur *- Strategy
+
+
+StrategyHumain --|> Strategy
+StrategyIA --|> Strategy
+
+
+
+
+enum Type {
+IA
+HUMAIN
+}
+
+
+@enduml
