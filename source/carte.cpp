@@ -4,9 +4,7 @@
 #include <random>
 #include <map>
 #include "carte.h"
-#include "data_cartes/Cartes.xml"
-#include "data_cartes/Nobles.xml"
-#include "pugixml/pugixml.hpp"
+#include "sqlite/sqlite3.h"
 using namespace std;
 
 std::initializer_list<CouleurCarte> CouleursCarte = { CouleurCarte::blanc, CouleurCarte::bleu, CouleurCarte::vert, CouleurCarte::noir, CouleurCarte::rouge, CouleurCarte::perle, CouleurCarte::indt };
@@ -112,6 +110,7 @@ ostream& operator<<(ostream& f, const Carte& c){
     return f;
 }
 
+// Il faut tout modifier pour traiter le constructeur avec du sqlite
 
 JeuCarte::JeuCarte(){
     pugi::xml_document doc_cartes;
