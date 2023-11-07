@@ -62,9 +62,6 @@ LotDeJetons::LotDeJetons() {
         jetons.push_back(new Jeton(CouleurJeton::SAPHIR));
     for (int i = 0; i < max_emeraude; i++)
         jetons.push_back(new Jeton(CouleurJeton::ÉMERAUDE));
-
-    if (jetons.size() != max_jetons)
-        throw JetonException("Attention le nombre de jetons ne correponds pas au nombre de jetons de chaque type");
 }
 
 LotDeJetons::~LotDeJetons() {
@@ -127,7 +124,7 @@ const Jeton& Sac::piocherJeton() {
 
 //------------------------------------------------- Classe Plateau
 
-Plateau::Plateau(Sac& sac, const LotPrivileges& lotp) : max_privileges(lotp.getNbPrivileges()) {
+Plateau::Plateau(Sac& sac, const LotPrivileges& lotp) {
     //initialisation des privilèges
     for (size_t i = 0; i < lotp.getNbPrivileges(); i++)
         poserPrivilege(lotp.getPrivilege(i));

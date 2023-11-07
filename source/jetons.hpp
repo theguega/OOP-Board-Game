@@ -48,8 +48,6 @@ std::ostream& operator<< (std::ostream& f, const Jeton& jeton);
 class LotDeJetons {
     private :
         std::vector<const Jeton*> jetons;
-        //max jetons
-        const size_t max_jetons = 25;
         //max de chaque jetons
         const size_t max_or = 3;
         const size_t max_perle = 2;
@@ -95,7 +93,6 @@ class Sac {
     //Au debut de la partie, le plateau est pleins, le sac est donc vide au même titre que la main des joueurs
     private :
         std::vector<const Jeton*> jetons;
-        const size_t max_jetons;
     public :
         explicit Sac(const LotDeJetons& lot);
         bool estVide() const { return jetons.empty(); }
@@ -113,8 +110,6 @@ class Plateau {
     private : 
         std::array<std::array<const Jeton*, 5>, 5> jetons;
         std::vector<const Privilege*> privileges;
-        const size_t max_privileges;
-        const size_t max_jetons;
     public :
 
         //const Jeton& recupererJeton(const size_t i, const size_t j);
