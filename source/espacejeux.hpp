@@ -40,6 +40,9 @@ class Pyramide {
     private:    
         std::vector<const Carte*> array_cartes[4];
     public:
+
+        // peut etre mettre les pioches en attributs pour ne pas avoir a les passer en parametre a chaque fois    
+
         Pyramide( Pioche &pNv1, Pioche &pNv2,Pioche &pNv3,Pioche &pNoble); // constructeur
         ~Pyramide(); 
 
@@ -48,8 +51,8 @@ class Pyramide {
         void remplirPyramide(Pioche &pNv1, Pioche &pNv2,Pioche &pNv3,Pioche &pNoble); // parcour de toute la pyramide pour remplir les cases vides   
         void remplircasePyramide(int i, int j, Pioche &pNv1, Pioche &pNv2, Pioche &pNv3, Pioche &pNoble); // remplir une case de la pyramide
         
-        void reserverCarte(int i, int j); 
-        void acheterCarte(int i, int j); 
+        void reserverCarte(int i, int j, Joueur& joueur, Pioche &pNv1, Pioche &pNv2, Pioche &pNv3, Pioche &pNoble); 
+        void acheterCarte(int i, int j, Joueur& joueur, Pioche &pNv1, Pioche &pNv2, Pioche &pNv3, Pioche &pNoble); 
 
         Pyramide(const Pyramide&) = delete;
         Pyramide& operator=(const Pyramide&) = delete;

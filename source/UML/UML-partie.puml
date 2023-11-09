@@ -1,4 +1,5 @@
 @startuml
+
 class Partie {
   - static instance: Partie*
   - espaceJeux: EspaceJeux*
@@ -21,4 +22,9 @@ class Partie {
   - Partie(const Partie&): delete
   - operator=(const Partie&): delete
 }
+
+
+Partie *--- Joueur
+Partie *-- EspaceJeux
+
 @enduml
