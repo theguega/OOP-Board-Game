@@ -2,14 +2,14 @@
 
 class JetonException {
   - info : string
-  + getInfo(): std::string
-  + JetonException(i: std::string&)
+  + getInfo(): string
+  + JetonException(i: string&)
 }
 
 class PrivilegeException {
   - info : string
-  + getInfo(): std::string
-  + PrivilegeException(i: std::string&)
+  + getInfo(): string
+  + PrivilegeException(i: string&)
 }
 
 enum CouleurJeton {
@@ -29,7 +29,7 @@ class Jeton {
 }
 
 class LotDeJetons {
-  - jetons: std::vector<const Jeton*>
+  - jetons: vector<const Jeton*>
   - max_jetons: size_t
   - max_or: size_t
   - max_perle: size_t
@@ -51,7 +51,7 @@ class Privilege {
 }
 
 class LotPrivileges {
-  - privileges: std::vector<const Privilege*>
+  - privileges: vector<const Privilege*>
   - max_privileges: size_t
   + getNbPrivileges(): size_t
   + getPrivilege(i: size_t): const Privilege&
@@ -63,7 +63,7 @@ class LotPrivileges {
 }
 
 class Sac {
-  - jetons: std::vector<const Jeton*>
+  - jetons: vector<const Jeton*>
   - max_jetons: size_t
   + Sac(lot : const LotDeJetons&) : explicit
   + estVide(): bool
@@ -76,9 +76,9 @@ class Sac {
 }
 
 class Plateau {
-  - jetons: std::array<std::array<const Jeton*, 5>, 5>
-  - privileges: std::vector<const Privilege*>
-  - liste_pos: std::array<std::tuple<size_t, size_t>, 25>
+  - jetons: array<array<const Jeton*, 5>, 5>
+  - privileges: vector<const Privilege*>
+  - liste_pos: array<tuple<size_t, size_t>, 25>
   - max_privileges : size_t
   + recupererJeton(i: size_t, j: size_t): const Jeton&
   + recupererPrivilege(): const Privilege&

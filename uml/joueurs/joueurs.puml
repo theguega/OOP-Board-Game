@@ -1,5 +1,5 @@
-@startuml
-'https://plantuml.com/class-diagram
+@startuml joueurs
+'    https://plantuml.com/class-diagram
 
 class Joueur {
     - nom : string
