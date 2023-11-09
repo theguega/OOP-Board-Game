@@ -1,0 +1,24 @@
+@startuml
+class Partie {
+  - static instance: Partie*
+  - espaceJeux: EspaceJeux*
+  - joueurs: Joueur*[2]
+  - tour: int
+  - joueurCourant: int
+  + getTour(): int
+  + getJoueurCourant(): int
+  + finPartie(): bool
+  + changerJoueurCourant(): void
+  + tourSuivant(): void
+  + getInstance(): Partie&
+  + getInstance(nom: string, prenom: string): Partie&
+  + getInstance(nom1: string, prenom1: string, nom2: string, prenom2: string): Partie&
+  + libererInstance(): void
+  - Partie()
+  - Partie(nom: string, prenom: string): Partie
+  - Partie(nom1: string, prenom1: string, nom2: string, prenom2: string): Partie
+  - ~Partie(): void
+  - Partie(const Partie&): delete
+  - operator=(const Partie&): delete
+}
+@enduml
