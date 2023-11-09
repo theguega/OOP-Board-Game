@@ -1,4 +1,6 @@
-@startuml
+@startuml splendor2
+
+'    https://plantuml.com/class-diagram
 
 /'
     Diagramme de classe du jeu Splendor Duel

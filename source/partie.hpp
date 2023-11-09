@@ -35,7 +35,7 @@ class Partie {
         
     Partie( std::string nomJoueur1, std::string prenomJoueur1, std::string nomJoueur2, std::string prenomJoueur2);
 
-    ~Partie();
+    ~Partie() {delete joueurs[0]; delete joueurs[1]; delete espaceJeux;};
 
     Partie(const Partie&) = delete;
     Partie& operator=(const Partie&) = delete;
@@ -43,7 +43,7 @@ class Partie {
     public: 
         
         int getTour() const { return tour; }
-        int getjoueurCourant() const { return joueurCourant; }
+        Joueur* getjoueurCourant() const { return joueurs[joueurCourant]; }
         
         bool finPartie();
         void changerJoueurCourant();
