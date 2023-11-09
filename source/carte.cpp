@@ -113,63 +113,51 @@ ostream& operator<<(ostream& f, const Carte& c){
 // Il faut tout modifier pour traiter le constructeur avec du sqlite
 
 JeuCarte::JeuCarte(){
-    pugi::xml_document doc_cartes;
-    pugi::xml_document doc_nobles;
+    sqlite3* db;
+    sqlite3_stmt* stmt;
 
-    unsigned int n1 = this->getNbCartes_nv1();
-    unsigned int n2 = this->getNbCartes_nv2();
-    unsigned int n3 = this->getNbCartes_nv3();
-    unsigned int n4 = this->getNbCartes_nobles();
+    int rc = sqlite3_open("cartes.sql", &db);
+    if (rc != SQLITE_OK) {
+        std::cerr << "Impossible d'ouvrir la base de données: " << sqlite3_errmsg(db) << std::endl;
+        return;
+    }
+    rc = sqlite3_prepare_v2(db, "SELECT * FROM Cartes", -1, &stmt, nullptr);
+    if (rc != SQLITE_OK) {
+        std::cerr << "Erreur de préparation de la requête : " << sqlite3_errmsg(db) << std::endl;
+        sqlite3_close(db);
+        return;
+    }
+    int i = 0;
+    int j = 0;
+    int k = 0;
 
-    if (doc_cartes.load_file("Cartes.xml")) {
-        pugi::xml_node liste_cartes = doc_cartes.child("Cartes");
-        int i = 0;
-        for (pugi::xml_node carte = liste_cartes.child("Carte"); carte; carte = carte.next_sibling("Carte")) {
-            string type = carte.child_value("TYPE");
-            unsigned int p_blanc = std::stoi(carte.child_value("PRIX_BLANC"));
-            unsigned int p_bleu = std::stoi(carte.child_value("PRIX_BLEU"));
-            unsigned int p_vert = std::stoi(carte.child_value("PRIX_VERT"));
-            unsigned int p_noir = std::stoi(carte.child_value("PRIX_NOIR"));
-            unsigned int p_rouge = std::stoi(carte.child_value("PRIX_ROUGE"));
-            unsigned int p_perle = std::stoi(carte.child_value("PRIX_PERLE"));
-            string capacite = carte.child_value("CAPACITE");
-            string couleur_bonus = carte.child_value("COULEUR_BONUS");
-            unsigned int bonus = std::stoi(carte.child_value("NB_BONUS"));
-            unsigned int nb_couronnes = std::stoi(carte.child_value("NB_COURONNES"));
-            unsigned int nb_pts_privileges = std::stoi(carte.child_value("NB_PTS_PRIVILEGE"));
+    while (sqlite3_step(stmt) == SQLITE_ROW) {
+        const char* type = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 0));
+        unsigned int p_blanc = sqlite3_column_int(stmt, 1);
+        unsigned int p_bleu = sqlite3_column_int(stmt, 2);
+        unsigned int p_vert = sqlite3_column_int(stmt, 3);
+        unsigned int p_noir = sqlite3_column_int(stmt, 4);
+        unsigned int p_rouge = sqlite3_column_int(stmt, 5);
+        unsigned int p_perle = sqlite3_column_int(stmt, 6);
+        const char* capacite = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 7));
+        const char* couleur_bonus = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 8));
+        unsigned int bonus = sqlite3_column_int(stmt, 9);
+        unsigned int nb_couronnes = sqlite3_column_int(stmt, 10);
+        unsigned int nb_pts_privileges = sqlite3_column_int(stmt, 11);
 
-            if (i < n1) {
-                cartes_nv1[i] = new Carte(TypeCarte::Niv1, Prix(p_blanc, p_bleu, p_vert, p_noir, p_rouge, p_perle), StringToCapacite(capacite), Bonus(StringToCouleurCarte(couleur_bonus), bonus), nb_couronnes, nb_pts_privileges);
-            }
-            else if (i >= n1 && i < n2) {
-                cartes_nv2[i-n1] = new Carte(TypeCarte::Niv2, Prix(p_blanc, p_bleu, p_vert, p_noir, p_rouge, p_perle), StringToCapacite(capacite), Bonus(StringToCouleurCarte(couleur_bonus), bonus), nb_couronnes, nb_pts_privileges);
-            }
-            else if (i >= n2) {
-                cartes_nv3[i-n2] = new Carte(TypeCarte::Niv3, Prix(p_blanc, p_bleu, p_vert, p_noir, p_rouge, p_perle), StringToCapacite(capacite), Bonus(StringToCouleurCarte(couleur_bonus), bonus), nb_couronnes, nb_pts_privileges);
-            }
+        if (type == "Niv1") {
+            cartes_nv1[i] = new Carte(TypeCarte::Niv1, Prix(p_blanc, p_bleu, p_vert, p_noir, p_rouge, p_perle), StringToCapacite(capacite), Bonus(StringToCouleurCarte(couleur_bonus), bonus), nb_couronnes, nb_pts_privileges);
             i++;
         }
-    }
-    else {
-        throw CarteException("erreur dans la lecture du xml");
-    }
-
-    if (doc_cartes.load_file("Nobles.xml")) {
-        pugi::xml_node liste_nobles = doc_cartes.child("Nobles");
-        int j = 0;
-        for (pugi::xml_node carte = liste_nobles.child("Noble"); carte; carte = carte.next_sibling("Noble")) {
-            string type = carte.child_value("TYPE");
-            string capacite = carte.child_value("CAPACITE");
-            unsigned int nb_pts_privileges = std::stoi(carte.child_value("NB_PTS_PRIVILEGE"));
-
-            cartes_nobles[j] = new Carte(TypeCarte::Noble, StringToCapacite(capacite), nb_pts_privileges);
+        else if (type == "Niv2") {
+            cartes_nv2[j] = new Carte(TypeCarte::Niv2, Prix(p_blanc, p_bleu, p_vert, p_noir, p_rouge, p_perle), StringToCapacite(capacite), Bonus(StringToCouleurCarte(couleur_bonus), bonus), nb_couronnes, nb_pts_privileges);
             j++;
         }
+        else if (type == "Niv3") {
+            cartes_nv3[k] = new Carte(TypeCarte::Niv3, Prix(p_blanc, p_bleu, p_vert, p_noir, p_rouge, p_perle), StringToCapacite(capacite), Bonus(StringToCouleurCarte(couleur_bonus), bonus), nb_couronnes, nb_pts_privileges);
+            k++;
+        }
     }
-    else {
-        throw CarteException("erreur dans la lecture du xml");
-    }
-
 }
 
 
