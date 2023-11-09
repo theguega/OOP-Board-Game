@@ -1,5 +1,8 @@
 @startuml splendor
 
+'    https://plantuml.com/class-diagram
+
+
 /'
     Diagramme de classe du jeu Splendor Duel
     Pour programmation objet C++
