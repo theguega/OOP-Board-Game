@@ -19,4 +19,7 @@ add_executable(source
         partie.hpp
         strategy.cpp
         strategy.hpp
-        \Users\Beziat\Downloads\sqlite-amalgamation-3440000\sqlite-amalgamation-3440000\sqlite3.h)
+        sqlite/shell.c
+        sqlite/sqlite3.c
+        sqlite/sqlite3.h
+        sqlite/sqlite3ext.h)

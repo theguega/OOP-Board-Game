@@ -85,13 +85,13 @@ ostream& operator<<(ostream& f, const Bonus& b){
 }
 
 
-Carte::Carte(TypeCarte t, Prix& p, Capacite c, Bonus& b, unsigned int nbC, unsigned int nbP) : type(t), prix(p), capacite(c), bonus(b), nbCouronnes(nbC), nbPtsPrivilege(nbP) {
+Carte::Carte(TypeCarte t, Prix& p, Capacite c1, Capacite c2, Bonus& b, unsigned int nbC, unsigned int nbP) : type(t), prix(p), capacite1(c1), capacite2(c2), bonus(b), nbCouronnes(nbC), nbPtsPrivilege(nbP) {
     if (t == TypeCarte::Noble)
         throw CarteException("Veuillez utiliser le constructeur appropri�");
 }
 
 
-Carte::Carte(TypeCarte t, Capacite c, unsigned int nbP) : type(t), prix(0, 0, 0, 0, 0, 0), capacite(c), bonus(), nbCouronnes(0), nbPtsPrivilege(nbP) {
+Carte::Carte(TypeCarte t, Capacite c, unsigned int nbP) : type(t), prix(0, 0, 0, 0, 0, 0), capacite1(c), bonus(), nbCouronnes(0), nbPtsPrivilege(nbP) {
     if (t != TypeCarte::Noble)
         throw CarteException("Veuillez utiliser le constructeur appropri�");
 }
@@ -101,7 +101,7 @@ ostream& operator<<(ostream& f, const Carte& c){
     f << "-------------------------------------\n";
     f << c.getType() << "        " << "Bonus : " << c.getBonus() << "\n";
     f << "-------------------------------------\n";
-    f << "Capacite : " << c.getCapacite() << "\n";
+    f << "Capacite : " << c.getCapacites() << "\n";
     f << "-------------------------------------\n";
     f << "Prix :\n" << c.getPrix() << "\n";
     f << "-------------------------------------\n";
