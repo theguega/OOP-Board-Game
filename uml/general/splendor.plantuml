@@ -1,0 +1,192 @@
+@startuml splendor
+'    https://plantuml.com/class-diagram
+
+
+' Jetons
+
+class JetonException {
+  - info : string
+}
+
+class PrivilegeException {
+  - info : string
+}
+
+enum CouleurJeton {
+  RUBIS
+  SAPHIR
+  ÉMÉRAUDE
+  ONYX
+  DIAMANT
+  OR
+  PERLE
+}
+
+class Jeton {
+  - couleur: CouleurJeton
+}
+
+class LotDeJetons {
+  - jetons: vector<const Jeton*>
+  - max_jetons: size_t
+  - max_or: size_t
+  - max_perle: size_t
+  - max_rubis: size_t
+  - max_onyx: size_t
+  - max_saphir: size_t
+  - max_dimant: size_t
+  - max_emeraude: size_t
+}
+
+class Privilege {
+}
+
+class LotPrivileges {
+  - privileges: vector<const Privilege*>
+  - max_privileges: size_t
+}
+
+class Sac {
+  - jetons: vector<const Jeton*>
+  - max_jetons: size_t
+}
+
+class Plateau {
+  - jetons: array<array<const Jeton*, 5>, 5>
+  - privileges: vector<const Privilege*>
+  - liste_pos: array<tuple<size_t, size_t>, 25>
+  - max_privileges : size_t
+}
+
+Jeton "25" --* LotDeJetons
+Jeton "0..25" -o "0..1" Sac
+
+Privilege "3" --* LotPrivileges
+
+Jeton "0..25" -o "0..1" Plateau
+Privilege "0..3" -o "0..1" Plateau
+
+' Cartes
+
+enum CouleurCarte
+
+enum TypeCarte
+
+enum Capacite
+
+class Carte{
+    - type : enum
+    - prix : Prix
+    - bonus : Bonus
+    - capacite : enum
+    - nbCouronnes : int
+    - nbPtsPrivilege : int
+    - reserve : bool
+}
+
+class Bonus{
+    - couleur : enum
+    - nbBonus : int
+}
+
+class Prix{
+    - blanc : int
+    - bleu : int
+    - vert : int
+    - noir : int
+    - rouge : int
+    - perle : int
+}
+
+class Pioche {
+    - type_cartes : enum
+    - cartes : vector<Carte*>
+    - nb_cartes : int
+}
+
+class JeuCarte {
+    - cartes_nv1 : array
+    - cartes_nv2 : array
+    - cartes_nv3 : array
+    - cartes_nobles : array
+}
+
+class Pyramide {
+}
+
+Carte *--- JeuCarte
+Carte o-- Pyramide
+Carte o-- Pioche
+Carte -- Bonus
+Carte -- Prix
+Carte -- CouleurCarte
+Carte -- TypeCarte
+Carte -- Capacite
+
+' Joueur
+
+class Joueur {
+    - nom : string
+    - prenom string
+    - typeDeJoueur : enum type
+    - ptsPrestige : int
+    - nbCouronnes : int
+    - cartes : unordered_map
+    - nbCartes : size_t
+    - jetons : unordered_map
+    - nbJetons : size_t
+    - privileges : vector
+    - nbPrivileges : size_t
+    - strategy : *Strategy
+}
+
+abstract Strategy {
+}
+
+class StrategyHumain
+class StrategyIA
+
+Joueur *- Strategy
+
+
+StrategyHumain --|> Strategy
+StrategyIA --|> Strategy
+
+enum Type {
+IA
+HUMAIN
+}
+
+' Partie
+
+class Partie {
+  - static instance: Partie*
+  - espaceJeux: EspaceJeux*
+  - joueurs: Joueur*[2]
+  - tour: int
+  - joueurCourant: int
+}
+
+' Others 
+
+class EspaceJeux {
+    + sac : Sac
+    + pyramide : Pyramide
+    + plateau : Plateau
+}
+
+class Jeu {
+    + lancer() : Partie
+    + conditionsVictoire() : bool
+}
+
+Partie *- EspaceJeux
+Partie *- Joueur
+
+EspaceJeux *-- Sac
+EspaceJeux *-- Pyramide
+EspaceJeux *-- Plateau
+
+Jeu <-- Partie
+
+@enduml

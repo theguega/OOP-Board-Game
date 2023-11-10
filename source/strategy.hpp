@@ -5,7 +5,6 @@
 #ifndef PROJET_LO21_STRATEGY_HPP
 #define PROJET_LO21_STRATEGY_HPP
 
-#include "splendor.hpp"
 #include "jetons.hpp"
 #include <iostream>
 #include <string>

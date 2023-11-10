@@ -41,10 +41,19 @@ std::ostream& operator<< (std::ostream& f, const Jeton& jeton) {
 
 //------------------------------------------------- Classe LotDeJetons
 
+//recuperation d'un jeton à partir de son indice
 const Jeton& LotDeJetons::getJetons(size_t i) const {   
     if (i >= jetons.size())
         throw JetonException("Indice de jeton incorrect");
     return *jetons[i];
+}
+
+//recuperation d'un jeton à partir de sa couleur (non accessible par l'utilisateur)
+const Jeton& LotDeJetons::getJeton(CouleurJeton c) const {
+    for (size_t i = 0; i < jetons.size(); i++)
+        if (jetons[i]->getCouleur() == c)
+            return *jetons[i];
+    throw JetonException("Couleur de jeton incorrecte");
 }
 
 LotDeJetons::LotDeJetons() { 
@@ -137,6 +146,14 @@ Plateau::Plateau(Sac& sac, const LotPrivileges& lotp) {
 
     //remplissage du plateau
     remplirPlateau(sac);
+}
+
+Plateau::Plateau() {
+    //initialisation du plateau vide
+    for (size_t i = 0; i < jetons.size(); i++)
+        for (size_t j = 0; j < jetons.size(); j++)
+            jetons[i][j] = nullptr;
+    //pas de privilege à initialiser (par défaut par le vecteur)
 }
 
 const Jeton& Plateau::recupererJeton(const size_t i, const size_t j) {
