@@ -3,7 +3,7 @@ project(source)
 
 set(CMAKE_CXX_STANDARD 14)
 
-include_directories(.)
+include_directories(. [sqlite])
 
 add_executable(source
         carte.cpp
@@ -19,7 +19,4 @@ add_executable(source
         partie.hpp
         strategy.cpp
         strategy.hpp
-        sqlite/shell.c
-        sqlite/sqlite3.c
-        sqlite/sqlite3.h
-        sqlite/sqlite3ext.h)
+        \Users\Beziat\Downloads\sqlite-amalgamation-3440000\sqlite-amalgamation-3440000\sqlite3.h)

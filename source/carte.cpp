@@ -182,22 +182,22 @@ JeuCarte::~JeuCarte(){
 
 
 const Carte& JeuCarte::getCarteNiv1(size_t i) const{
-    if (i >= 10)
-        throw CarteException("Il n'y a que n1 cartes");
+    if (i >= 30)
+        throw CarteException("Il n'y a que 30 cartes de niveau 1");
     return *cartes_nv1[i];
 }
 
 
 const Carte& JeuCarte::getCarteNiv2(size_t i) const{
-    if (i >= 10)
-        throw CarteException("Il n'y a que n2 cartes");
+    if (i >= 24)
+        throw CarteException("Il n'y a que 24 cartes de niveau 2");
     return *cartes_nv2[i];
 }
 
 
 const Carte& JeuCarte::getCarteNiv3(size_t i) const{
-    if (i >= 10)
-        throw CarteException("Il n'y a que n3 cartes");
+    if (i >= 13)
+        throw CarteException("Il n'y a que 13 cartes de niveau 3");
     return *cartes_nv3[i];
 }
 
