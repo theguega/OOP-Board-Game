@@ -70,11 +70,11 @@ INSERT INTO carte (type_carte, prix_blanc, prix_bleu, prix_vert, prix_rouge, pri
 
 --Cartes Niveau 2
 
-INSERT INTO carte (type_carte, prix_blanc, prix_bleu, prix_vert, prix_rouge, prix_noir, prix_perle, capacite1, capacite2, couleur_bonus, nb_bonus, nb_couronnes, nb_pts_privilege) VALUES ('Niv2', 0, 0, 0, 5, 2, 0, 'None', 'vert', 2, 0, 1);
-INSERT INTO carte (type_carte, prix_blanc, prix_bleu, prix_vert, prix_rouge, prix_noir, prix_perle, capacite1, capacite2, couleur_bonus, nb_bonus, nb_couronnes, nb_pts_privilege) VALUES ('Niv2', 0, 2, 4, 0, 0, 1, 'TakePrivilege', 'vert', 1, 0, 2);
-INSERT INTO carte (type_carte, prix_blanc, prix_bleu, prix_vert, prix_rouge, prix_noir, prix_perle, capacite1, capacite2, couleur_bonus, nb_bonus, nb_couronnes, nb_pts_privilege) VALUES ('Niv2', 3, 0, 0, 4, 0, 0, 'TakeJetonToAdv', 'vert', 1, 0, 1);
-INSERT INTO carte (type_carte, prix_blanc, prix_bleu, prix_vert, prix_rouge, prix_noir, prix_perle, capacite1, capacite2, couleur_bonus, nb_bonus, nb_couronnes, nb_pts_privilege) VALUES ('Niv2', 2, 2, 0, 0, 2, 1, 'None', 'vert', 1, 1, 2);
-INSERT INTO carte (type_carte, prix_blanc, prix_bleu, prix_vert, prix_rouge, prix_noir, prix_perle, capacite1, capacite2, couleur_bonus, nb_bonus, nb_couronnes, nb_pts_privilege) VALUES ('Niv2', 0, 0, 0, 2, 4, 1, 'TakePrivilege', 'noir', 1, 0, 2);
+INSERT INTO carte (type_carte, prix_blanc, prix_bleu, prix_vert, prix_rouge, prix_noir, prix_perle, capacite1, capacite2, couleur_bonus, nb_bonus, nb_couronnes, nb_pts_privilege) VALUES ('Niv2', 0, 0, 0, 5, 2, 0, 'None', 'None', 'vert', 2, 0, 1);
+INSERT INTO carte (type_carte, prix_blanc, prix_bleu, prix_vert, prix_rouge, prix_noir, prix_perle, capacite1, capacite2, couleur_bonus, nb_bonus, nb_couronnes, nb_pts_privilege) VALUES ('Niv2', 0, 2, 4, 0, 0, 1, 'TakePrivilege', 'None', 'vert', 1, 0, 2);
+INSERT INTO carte (type_carte, prix_blanc, prix_bleu, prix_vert, prix_rouge, prix_noir, prix_perle, capacite1, capacite2, couleur_bonus, nb_bonus, nb_couronnes, nb_pts_privilege) VALUES ('Niv2', 3, 0, 0, 4, 0, 0, 'TakeJetonToAdv', 'None', 'vert', 1, 0, 1);
+INSERT INTO carte (type_carte, prix_blanc, prix_bleu, prix_vert, prix_rouge, prix_noir, prix_perle, capacite1, capacite2, couleur_bonus, nb_bonus, nb_couronnes, nb_pts_privilege) VALUES ('Niv2', 2, 2, 0, 0, 2, 1, 'None', 'None', 'vert', 1, 1, 2);
+INSERT INTO carte (type_carte, prix_blanc, prix_bleu, prix_vert, prix_rouge, prix_noir, prix_perle, capacite1, capacite2, couleur_bonus, nb_bonus, nb_couronnes, nb_pts_privilege) VALUES ('Niv2', 0, 0, 0, 2, 4, 1, 'TakePrivilege', 'None', 'noir', 1, 0, 2);
 INSERT INTO carte (type_carte, prix_blanc, prix_bleu, prix_vert, prix_rouge, prix_noir, prix_perle, capacite1, capacite2, couleur_bonus, nb_bonus, nb_couronnes, nb_pts_privilege) VALUES ('Niv2', 0, 2, 2, 2, 0, 1, 'None', 'None','noir', 1, 1, 2);
 INSERT INTO carte (type_carte, prix_blanc, prix_bleu, prix_vert, prix_rouge, prix_noir, prix_perle, capacite1, capacite2, couleur_bonus, nb_bonus, nb_couronnes, nb_pts_privilege) VALUES ('Niv2', 4, 0, 3, 0, 0, 0, 'TakeJetonToAdv', 'None','noir', 1, 0, 1);
 INSERT INTO carte (type_carte, prix_blanc, prix_bleu, prix_vert, prix_rouge, prix_noir, prix_perle, capacite1, capacite2, couleur_bonus, nb_bonus, nb_couronnes, nb_pts_privilege) VALUES ('Niv2', 5, 2, 0, 0, 0, 0, 'None', 'None','noir', 2, 0, 1);
