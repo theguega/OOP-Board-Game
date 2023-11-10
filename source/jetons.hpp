@@ -109,22 +109,28 @@ class Sac {
     //Au debut de la partie, le plateau est pleins, le sac est donc vide au même titre que la main des joueurs
     private :
         std::vector<const Jeton*> jetons;
-    public :
+
+        //Constructeur non accessible par l'utilisateur : singleton
         //Constructeur à partir d'un lot de jetons (dans le cas d'une nouvelle partie -> sac plein)
         explicit Sac(const LotDeJetons& lot); //explicit pour éviter les conversions implicites
-
         //Constructeur sans argument pour initialiser un sac vide (dans le cas d'une partie en cours)
         //par défaut : initialisation du vecteur vide
         Sac() = default;
 
+        //pas de duplication de sac
+        Sac(const Sac&) = delete;
+        Sac& operator=(const Sac&) = delete;
+    public :
         bool estVide() const { return jetons.empty(); }
         size_t getNbJetons() const { return jetons.size(); }
         void ajouterJeton(const Jeton& j);
         const Jeton& piocherJeton();
 
-        //pas de duplication de sac
-        Sac(const Sac&) = delete;
-        Sac& operator=(const Sac&) = delete;
+        //Singleton
+        //Avec tous les jetons (debut de partie)
+        static Sac& getSac(const LotDeJetons& lot);
+        //Sans jetons (restitution de partie)
+        static Sac& getSac();
 };
 
 class Plateau {

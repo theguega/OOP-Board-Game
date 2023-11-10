@@ -142,6 +142,17 @@ const Jeton& Sac::piocherJeton() {
     return j;
 }
 
+//Singleton
+//Avec jetons
+Sac& Sac::getSac(const LotDeJetons& lot) {
+    static Sac instance(lot);
+    return instance;
+}
+//Sans jetons
+Sac& Sac::getSac() {
+    static Sac instance;
+    return instance;
+}
 
 
 //------------------------------------------------- Classe Plateau

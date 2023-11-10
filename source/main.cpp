@@ -15,7 +15,7 @@ int main(int argc, const char * argv[]) {
         //Création du lot
         const LotDeJetons& lotJetons = LotDeJetons::getLotDeJetons();
         //Création du sac
-        Sac sac(lotJetons);
+        Sac& sac = Sac::getSac(lotJetons);
         //Creation du plateau
         const LotPrivileges& lotPrivileges = LotPrivileges::getLotPrivileges();
         Plateau plateau(sac, lotPrivileges);
