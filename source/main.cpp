@@ -10,6 +10,7 @@
 int main(int argc, const char * argv[]) {
 
     Partie& partie = Partie::getInstance();
+    std::cout<<"Test";
     
     return 0;
 }

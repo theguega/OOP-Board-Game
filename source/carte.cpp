@@ -4,9 +4,9 @@
 #include <random>
 #include <map>
 #include "carte.h"
-#include "data_cartes/Cartes.xml"
-#include "data_cartes/Nobles.xml"
-#include "pugixml/pugixml.hpp"
+#include "../old/data_cartes/Cartes.xml"
+#include "../old/data_cartes/Nobles.xml"
+#include "../old/pugixml/pugixml.hpp"
 using namespace std;
 
 std::initializer_list<CouleurCarte> CouleursCarte = { CouleurCarte::blanc, CouleurCarte::bleu, CouleurCarte::vert, CouleurCarte::noir, CouleurCarte::rouge, CouleurCarte::perle, CouleurCarte::indt };
@@ -191,21 +191,21 @@ JeuCarte::~JeuCarte(){
 
 
 const Carte& JeuCarte::getCarteNiv1(size_t i) const{
-    if (i >= n1)
+    if (i >= 10)
         throw CarteException("Il n'y a que n1 cartes");
     return *cartes_nv1[i];
 }
 
 
 const Carte& JeuCarte::getCarteNiv2(size_t i) const{
-    if (i >= n2)
+    if (i >= 10)
         throw CarteException("Il n'y a que n2 cartes");
     return *cartes_nv2[i];
 }
 
 
 const Carte& JeuCarte::getCarteNiv3(size_t i) const{
-    if (i >= n3)
+    if (i >= 10)
         throw CarteException("Il n'y a que n3 cartes");
     return *cartes_nv3[i];
 }
