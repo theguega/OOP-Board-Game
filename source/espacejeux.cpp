@@ -11,9 +11,10 @@ Pyramide::Pyramide( Pioche& pNv1, Pioche& pNv2,Pioche& pNv3,Pioche& pNoble) {
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < array_cartes[i].size(); j++) {
                 array_cartes[i][j] =  nullptr;
-                this->remplirPyramide(pNv1,pNv2,pNv3,pNoble);
+                
             }
         }
+        this->remplirPyramide(pNv1,pNv2,pNv3,pNoble);
 
 };
 
