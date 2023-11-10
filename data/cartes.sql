@@ -2,6 +2,8 @@
 -- Pour voir la BDD en mode graphique : extension SQLite sur VSCode
 -- Execution : sqlite3 data_carte.sqlite < cartes.sql
 
+DROP TABLE IF EXISTS carte_noble;
+DROP TABLE IF EXISTS carte;
 
 CREATE TABLE carte_noble (
     id INTEGER PRIMARY KEY,
@@ -27,10 +29,10 @@ CREATE TABLE carte (
 );
 
 --Cartes Noble
-INSERT INTO carte_noble (capacite1, capacite2, nb_pts_privilege) VALUES ('TakeJetonToAdv', 2);
-INSERT INTO carte_noble (capacite1, capacite2, nb_pts_privilege) VALUES ('TakePrivilege', 2);
-INSERT INTO carte_noble (capacite1, capacite2, nb_pts_privilege) VALUES ('NewTurn', 2);
-INSERT INTO carte_noble (capacite1, capacite2, nb_pts_privilege) VALUES ('', 3);
+INSERT INTO carte_noble (capacite, nb_pts_privilege) VALUES ('TakeJetonToAdv', 2);
+INSERT INTO carte_noble (capacite, nb_pts_privilege) VALUES ('TakePrivilege', 2);
+INSERT INTO carte_noble (capacite, nb_pts_privilege) VALUES ('NewTurn', 2);
+INSERT INTO carte_noble (capacite, nb_pts_privilege) VALUES ('', 3);
 
 --Cartes Niveau 1
 
