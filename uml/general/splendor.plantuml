@@ -1,9 +1,6 @@
 @startuml splendor
 '    https://plantuml.com/class-diagram
 
-
-' Jetons
-
 class JetonException {
   - info : string
 }
@@ -22,20 +19,10 @@ enum CouleurJeton {
   PERLE
 }
 
+
+
 class Jeton {
   - couleur: CouleurJeton
-}
-
-class LotDeJetons {
-  - jetons: vector<const Jeton*>
-  - max_jetons: size_t
-  - max_or: size_t
-  - max_perle: size_t
-  - max_rubis: size_t
-  - max_onyx: size_t
-  - max_saphir: size_t
-  - max_dimant: size_t
-  - max_emeraude: size_t
 }
 
 class Privilege {
@@ -43,12 +30,10 @@ class Privilege {
 
 class LotPrivileges {
   - privileges: vector<const Privilege*>
-  - max_privileges: size_t
 }
 
 class Sac {
   - jetons: vector<const Jeton*>
-  - max_jetons: size_t
 }
 
 class Plateau {
@@ -58,12 +43,10 @@ class Plateau {
   - max_privileges : size_t
 }
 
-Jeton "25" --* LotDeJetons
-Jeton "0..25" -o "0..1" Sac
-
+LotDeJetons *--"25" Jeton
+Sac "0..1" o-- "0...25" Jeton
 Privilege "3" --* LotPrivileges
-
-Jeton "0..25" -o "0..1" Plateau
+Plateau "0..1" o- "0..25" Jeton
 Privilege "0..3" -o "0..1" Plateau
 
 ' Cartes
@@ -90,24 +73,16 @@ class Bonus{
 }
 
 class Prix{
-    - blanc : int
-    - bleu : int
-    - vert : int
-    - noir : int
-    - rouge : int
-    - perle : int
+
 }
 
 class Pioche {
     - type_cartes : enum
     - cartes : vector<Carte*>
-    - nb_cartes : int
 }
 
 class JeuCarte {
     - cartes_nv1 : array
-    - cartes_nv2 : array
-    - cartes_nv3 : array
     - cartes_nobles : array
 }
 
@@ -116,28 +91,21 @@ class Pyramide {
 
 Carte *--- JeuCarte
 Carte o-- Pyramide
-Carte o-- Pioche
+Pioche --o Carte
 Carte -- Bonus
 Carte -- Prix
-Carte -- CouleurCarte
-Carte -- TypeCarte
-Carte -- Capacite
+Carte - CouleurCarte
+TypeCarte - Carte
+Carte - Capacite
 
 ' Joueur
 
 class Joueur {
     - nom : string
-    - prenom string
     - typeDeJoueur : enum type
-    - ptsPrestige : int
-    - nbCouronnes : int
     - cartes : unordered_map
-    - nbCartes : size_t
     - jetons : unordered_map
-    - nbJetons : size_t
     - privileges : vector
-    - nbPrivileges : size_t
-    - strategy : *Strategy
 }
 
 abstract Strategy {
@@ -147,27 +115,24 @@ class StrategyHumain
 class StrategyIA
 
 Joueur *- Strategy
-
-
 StrategyHumain --|> Strategy
 StrategyIA --|> Strategy
-
 enum Type {
-IA
-HUMAIN
+    IA
+    HUMAIN
 }
 
 ' Partie
 
 class Partie {
-  - static instance: Partie*
-  - espaceJeux: EspaceJeux*
-  - joueurs: Joueur*[2]
-  - tour: int
-  - joueurCourant: int
+    - static instance: Partie*
+    - espaceJeux: EspaceJeux*
+    - joueurs: Joueur*[2]
+    - tour: int
+    - joueurCourant: int
 }
 
-' Others 
+' Others
 
 class EspaceJeux {
     + sac : Sac
@@ -180,12 +145,16 @@ class Jeu {
     + conditionsVictoire() : bool
 }
 
-Partie *- EspaceJeux
-Partie *- Joueur
+Partie *--- EspaceJeux
+Partie *-- Joueur
 
-EspaceJeux *-- Sac
-EspaceJeux *-- Pyramide
-EspaceJeux *-- Plateau
+EspaceJeux *--- Sac
+EspaceJeux *--- Pyramide
+EspaceJeux *--- Plateau
+EspaceJeux *--- LotDeJetons
+EspaceJeux *--- LotPrivileges
+EspaceJeux *-- JeuCarte
+Pioche -* EspaceJeux
 
 Jeu <-- Partie
 
