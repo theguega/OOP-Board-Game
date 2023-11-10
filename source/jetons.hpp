@@ -58,21 +58,25 @@ class LotDeJetons {
         const size_t max_dimant = 4;
         const size_t max_emeraude = 4;
 
+        //Constructeur non accessible par l'utilisateur : singleton
+        LotDeJetons();
+        ~LotDeJetons();
+
         //Récupération d'un jeton à partir de sa couleur (restitution de partie) (non accessible par l'utilisateur)
         //Sera accessible par la classe qui fera la restitution de partie
         const Jeton& getJeton(CouleurJeton c) const;
+
+        //pas de duplication du lot de jetons
+        LotDeJetons(const LotDeJetons&) = delete;
+        LotDeJetons& operator=(const LotDeJetons&) = delete;
     public:
         size_t getNbJetons() const { return jetons.size(); }
 
         //Récupération d'un jeton à partir de son indice
         const Jeton& getJetons(size_t i) const;
 
-        LotDeJetons();
-        ~LotDeJetons();
-
-        //pas de duplication du lot de jetons
-        LotDeJetons(const LotDeJetons&) = delete;
-        LotDeJetons& operator=(const LotDeJetons&) = delete;
+        //Singleton
+        static const LotDeJetons& getLotDeJetons();
 };
 
 class Privilege {
@@ -84,15 +88,20 @@ class LotPrivileges {
     private :
         std::vector<const Privilege*> privileges;
         const size_t max_privileges = 3;
-    public :
-        size_t getNbPrivileges() const { return privileges.size(); }
-        const Privilege& getPrivilege(size_t i) const;
+
+        //Constructeur non accessible par l'utilisateur : singleton
         LotPrivileges();
         ~LotPrivileges();
 
-        //pas de duplication du lot
+        //Constructeur non accessible par l'utilisateur : singleton
         LotPrivileges(const LotPrivileges&) = delete;
         LotPrivileges& operator=(const LotPrivileges&) = delete;
+    public :
+        size_t getNbPrivileges() const { return privileges.size(); }
+        const Privilege& getPrivilege(size_t i) const;  
+
+        //Singleton
+        static const LotPrivileges& getLotPrivileges();      
 };
 
 class Sac {
@@ -100,22 +109,29 @@ class Sac {
     //Au debut de la partie, le plateau est pleins, le sac est donc vide au même titre que la main des joueurs
     private :
         std::vector<const Jeton*> jetons;
-    public :
+
+        //Constructeur non accessible par l'utilisateur : singleton
         //Constructeur à partir d'un lot de jetons (dans le cas d'une nouvelle partie -> sac plein)
         explicit Sac(const LotDeJetons& lot); //explicit pour éviter les conversions implicites
-
         //Constructeur sans argument pour initialiser un sac vide (dans le cas d'une partie en cours)
         //par défaut : initialisation du vecteur vide
         Sac() = default;
 
+        //pas de duplication de sac
+        Sac(const Sac&) = delete;
+        Sac& operator=(const Sac&) = delete;
+    public :
         bool estVide() const { return jetons.empty(); }
+
         size_t getNbJetons() const { return jetons.size(); }
         void ajouterJeton(const Jeton& j);
         const Jeton& piocherJeton();
 
-        //pas de duplication de sac
-        Sac(const Sac&) = delete;
-        Sac& operator=(const Sac&) = delete;
+        //Singleton
+        //Avec tous les jetons (debut de partie)
+        static Sac& getSac(const LotDeJetons& lot);
+        //Sans jetons (restitution de partie)
+        static Sac& getSac();
 };
 
 class Plateau {
@@ -127,28 +143,34 @@ class Plateau {
         //Postionnement du jeton en imposant une positite (restitution de partie) (non accessible par l'utilisateur)
         //Sera accessible par la classe qui fera la restitution de partie
         void positionerJeton(const Jeton& jeton, const size_t i, const size_t j); //TODO
-    public :
-        const Jeton& recupererJeton(const size_t i, const size_t j);
-        const Privilege& recupererPrivilege();
 
-        //Postionnement du jeton en suivant l'ordre du plateau
-        void positionerJeton(const Jeton& jeton);
-
-        void poserPrivilege(const Privilege& privilege);
-
-        //Remplissage du plateau à partir du sac (on vide le sac)
-        void remplirPlateau(Sac& sac);
-        bool estVide() const;
-
+        //Constructeur non accessible par l'utilisateur : singleton
         //Constructeur à partir d'un sac et d'un lot de privilèges (dans le cas d'une nouvelle partie)
         Plateau(Sac& sac, const LotPrivileges& lotp);
-
         //Constructeur sans argument pour initialiser un plateau vide (restitution partie en cours)
         Plateau();
 
         //pas de duplication du plateau
         Plateau(const Plateau&) = delete;
         Plateau& operator=(const Plateau&) = delete;
+    public :
+        bool estVide() const;
+
+        const Jeton& recupererJeton(const size_t i, const size_t j);
+        const Privilege& recupererPrivilege();
+
+        //Postionnement du jeton en suivant l'ordre du plateau
+        void positionerJeton(const Jeton& jeton);
+        void poserPrivilege(const Privilege& privilege);
+
+        //Remplissage du plateau à partir du sac (on vide le sac)
+        void remplirPlateau(Sac& sac);
+
+        //Singleton
+        //Avec sac et lot de privilèges (debut de partie)
+        static Plateau& getPlateau(Sac& sac, const LotPrivileges& lotp);
+        //Sans sac et lot de privilèges (restitution de partie)
+        static Plateau& getPlateau();
 };
 
 #endif

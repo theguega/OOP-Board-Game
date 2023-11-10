@@ -79,6 +79,12 @@ LotDeJetons::~LotDeJetons() {
         delete jetons[i];
 }
 
+//Singleton
+const LotDeJetons& LotDeJetons::getLotDeJetons() {
+    static const LotDeJetons instance;
+    return instance;
+}
+
 //------------------------------------------------- Classe LotPrivilege
 
 std::ostream& operator<< (std::ostream& f, const Privilege& privilege) {
@@ -100,6 +106,12 @@ LotPrivileges::LotPrivileges() {
 LotPrivileges::~LotPrivileges() {
     for (size_t i = 0; i < getNbPrivileges(); i++)
         delete privileges[i];
+}
+
+//Singleton
+const LotPrivileges& LotPrivileges::getLotPrivileges() {
+    static const LotPrivileges instance;
+    return instance;
 }
 
 //------------------------------------------------- Classe Sac
@@ -130,6 +142,17 @@ const Jeton& Sac::piocherJeton() {
     return j;
 }
 
+//Singleton
+//Avec jetons
+Sac& Sac::getSac(const LotDeJetons& lot) {
+    static Sac instance(lot);
+    return instance;
+}
+//Sans jetons (pour restitution de partie)
+Sac& Sac::getSac() {
+    static Sac instance;
+    return instance;
+}
 
 
 //------------------------------------------------- Classe Plateau
@@ -250,4 +273,17 @@ bool Plateau::estVide() const {
             if (jetons[i][j] != nullptr)
                 return false;
     return true;
+}
+
+//Singleton
+//Avec sac et lot de privilèges (debut de partie)
+Plateau& Plateau::getPlateau(Sac& sac, const LotPrivileges& lotp) {
+    static Plateau instance(sac, lotp);
+    return instance;
+}
+
+//Sans sac et lot de privilèges (restitution de partie)
+Plateau& Plateau::getPlateau() {
+    static Plateau instance;
+    return instance;
 }
