@@ -127,3 +127,4 @@ void Pyramide::acheterCarte(int i, int j, Joueur& joueur, Pioche &pNv1, Pioche &
         this -> remplircasePyramide(i,j, pNv1, pNv2, pNv3, pNoble);
     }
 }
+

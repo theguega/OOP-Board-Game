@@ -1,4 +1,3 @@
-#include "splendor.hpp"
 #include "jetons.hpp"
 #include "joueur.hpp"
 #include "strategy.hpp"
