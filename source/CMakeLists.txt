@@ -17,6 +17,9 @@ add_executable(source
         main.cpp
         partie.cpp
         partie.hpp
-        splendor.hpp
         strategy.cpp
-        strategy.hpp)
+        strategy.hpp
+        sqlite/shell.c
+        sqlite/sqlite3.c
+        sqlite/sqlite3.h
+        sqlite/sqlite3ext.h)

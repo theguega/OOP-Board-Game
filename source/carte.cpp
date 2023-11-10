@@ -110,7 +110,6 @@ ostream& operator<<(ostream& f, const Carte& c){
     return f;
 }
 
-// Il faut tout modifier pour traiter le constructeur avec du sqlite
 
 JeuCarte::JeuCarte(){
     sqlite3* db;
@@ -130,20 +129,21 @@ JeuCarte::JeuCarte(){
     int i = 0;
     int j = 0;
     int k = 0;
+    int z = 0;
 
     while (sqlite3_step(stmt) == SQLITE_ROW) {
-        const char* type = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 0));
-        unsigned int p_blanc = sqlite3_column_int(stmt, 1);
-        unsigned int p_bleu = sqlite3_column_int(stmt, 2);
-        unsigned int p_vert = sqlite3_column_int(stmt, 3);
-        unsigned int p_noir = sqlite3_column_int(stmt, 4);
-        unsigned int p_rouge = sqlite3_column_int(stmt, 5);
-        unsigned int p_perle = sqlite3_column_int(stmt, 6);
-        const char* capacite = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 7));
-        const char* couleur_bonus = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 8));
-        unsigned int bonus = sqlite3_column_int(stmt, 9);
-        unsigned int nb_couronnes = sqlite3_column_int(stmt, 10);
-        unsigned int nb_pts_privileges = sqlite3_column_int(stmt, 11);
+        const char* type = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 1));
+        unsigned int p_blanc = sqlite3_column_int(stmt, 2);
+        unsigned int p_bleu = sqlite3_column_int(stmt, 3);
+        unsigned int p_vert = sqlite3_column_int(stmt, 4);
+        unsigned int p_noir = sqlite3_column_int(stmt, 5);
+        unsigned int p_rouge = sqlite3_column_int(stmt, 6);
+        unsigned int p_perle = sqlite3_column_int(stmt, 7);
+        const char* capacite = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 8));
+        const char* couleur_bonus = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 9));
+        unsigned int bonus = sqlite3_column_int(stmt, 10);
+        unsigned int nb_couronnes = sqlite3_column_int(stmt, 11);
+        unsigned int nb_pts_privileges = sqlite3_column_int(stmt, 12);
 
         if (type == "Niv1") {
             cartes_nv1[i] = new Carte(TypeCarte::Niv1, Prix(p_blanc, p_bleu, p_vert, p_noir, p_rouge, p_perle), StringToCapacite(capacite), Bonus(StringToCouleurCarte(couleur_bonus), bonus), nb_couronnes, nb_pts_privileges);
@@ -156,6 +156,10 @@ JeuCarte::JeuCarte(){
         else if (type == "Niv3") {
             cartes_nv3[k] = new Carte(TypeCarte::Niv3, Prix(p_blanc, p_bleu, p_vert, p_noir, p_rouge, p_perle), StringToCapacite(capacite), Bonus(StringToCouleurCarte(couleur_bonus), bonus), nb_couronnes, nb_pts_privileges);
             k++;
+        }
+        else if (type == "Noble") {
+            cartes_nobles[z] = new Carte(TypeCarte::Noble, StringToCapacite(capacite), nb_pts_privileges);
+            z++;
         }
     }
 }
