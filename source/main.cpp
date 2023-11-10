@@ -13,11 +13,11 @@ int main(int argc, const char * argv[]) {
     try
     {
         //Création du lot
-        LotDeJetons lotJetons;
+        const LotDeJetons& lotJetons = LotDeJetons::getLotDeJetons();
         //Création du sac
         Sac sac(lotJetons);
         //Creation du plateau
-        LotPrivileges lotPrivileges;
+        const LotPrivileges& lotPrivileges = LotPrivileges::getLotPrivileges();
         Plateau plateau(sac, lotPrivileges);
 
         //Recuperation de deux jetons sur le plateau et remise dans le sac

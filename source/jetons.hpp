@@ -58,21 +58,25 @@ class LotDeJetons {
         const size_t max_dimant = 4;
         const size_t max_emeraude = 4;
 
+        //Constructeur non accessible par l'utilisateur : singleton
+        LotDeJetons();
+        ~LotDeJetons();
+
         //Récupération d'un jeton à partir de sa couleur (restitution de partie) (non accessible par l'utilisateur)
         //Sera accessible par la classe qui fera la restitution de partie
         const Jeton& getJeton(CouleurJeton c) const;
+
+        //pas de duplication du lot de jetons
+        LotDeJetons(const LotDeJetons&) = delete;
+        LotDeJetons& operator=(const LotDeJetons&) = delete;
     public:
         size_t getNbJetons() const { return jetons.size(); }
 
         //Récupération d'un jeton à partir de son indice
         const Jeton& getJetons(size_t i) const;
 
-        LotDeJetons();
-        ~LotDeJetons();
-
-        //pas de duplication du lot de jetons
-        LotDeJetons(const LotDeJetons&) = delete;
-        LotDeJetons& operator=(const LotDeJetons&) = delete;
+        //Singleton
+        static const LotDeJetons& getLotDeJetons();
 };
 
 class Privilege {
@@ -84,15 +88,20 @@ class LotPrivileges {
     private :
         std::vector<const Privilege*> privileges;
         const size_t max_privileges = 3;
-    public :
-        size_t getNbPrivileges() const { return privileges.size(); }
-        const Privilege& getPrivilege(size_t i) const;
+
+        //Constructeur non accessible par l'utilisateur : singleton
         LotPrivileges();
         ~LotPrivileges();
 
-        //pas de duplication du lot
+        //Constructeur non accessible par l'utilisateur : singleton
         LotPrivileges(const LotPrivileges&) = delete;
         LotPrivileges& operator=(const LotPrivileges&) = delete;
+    public :
+        size_t getNbPrivileges() const { return privileges.size(); }
+        const Privilege& getPrivilege(size_t i) const;  
+
+        //Singleton
+        static const LotPrivileges& getLotPrivileges();      
 };
 
 class Sac {

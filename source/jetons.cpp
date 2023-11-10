@@ -79,6 +79,12 @@ LotDeJetons::~LotDeJetons() {
         delete jetons[i];
 }
 
+//Singleton
+const LotDeJetons& LotDeJetons::getLotDeJetons() {
+    static const LotDeJetons instance;
+    return instance;
+}
+
 //------------------------------------------------- Classe LotPrivilege
 
 std::ostream& operator<< (std::ostream& f, const Privilege& privilege) {
@@ -100,6 +106,12 @@ LotPrivileges::LotPrivileges() {
 LotPrivileges::~LotPrivileges() {
     for (size_t i = 0; i < getNbPrivileges(); i++)
         delete privileges[i];
+}
+
+//Singleton
+const LotPrivileges& LotPrivileges::getLotPrivileges() {
+    static const LotPrivileges instance;
+    return instance;
 }
 
 //------------------------------------------------- Classe Sac
