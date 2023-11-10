@@ -1,0 +1,41 @@
+@startuml
+
+class Pyramide {
+    - std::vector<const Carte*> array_cartes[4]
+
+    + Pyramide()
+    + ~Pyramide()
+    + estVide(): bool
+    + remplirPyramide()
+    + remplircasePyramide()
+    + reserverCarte()
+    + acheterCarte()
+}
+
+class EspaceJeux {
+    - LotDeJetons *lotJetons
+    - LotPrivileges *lotPrivileges
+    - Sac *sac
+    - Plateau *plateau
+    - JeuCarte *jeuxCartes
+    - Pioche *piocheNv1
+    - Pioche *piocheNv2
+    - Pioche *piocheNv3
+    - Pioche *piocheNoble
+    - Pyramide *pyramide
+
+    + EspaceJeux()
+    + ~EspaceJeux()
+}
+
+
+EspaceJeux *- LotDeJetons
+EspaceJeux *- LotPrivileges
+EspaceJeux *- Sac
+EspaceJeux *- Plateau
+
+
+EspaceJeux *- JeuCarte
+EspaceJeux *- Pioche
+EspaceJeux *- Pyramide
+@enduml

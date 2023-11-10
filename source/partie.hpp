@@ -42,7 +42,7 @@ class Partie {
     public: 
         
         int getTour() const { return tour; }
-        int getjoueurCourant() const { return joueurCourant; }
+        Joueur* getjoueurCourant() const { return joueurs[joueurCourant]; }
         
         bool finPartie();
         void changerJoueurCourant();
