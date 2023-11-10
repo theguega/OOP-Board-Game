@@ -18,7 +18,7 @@ int main(int argc, const char * argv[]) {
         Sac& sac = Sac::getSac(lotJetons);
         //Creation du plateau
         const LotPrivileges& lotPrivileges = LotPrivileges::getLotPrivileges();
-        Plateau plateau(sac, lotPrivileges);
+        Plateau& plateau = Plateau::getPlateau(sac, lotPrivileges);
 
         //Recuperation de deux jetons sur le plateau et remise dans le sac
         const Jeton& jeton1 = plateau.recupererJeton(0,0);

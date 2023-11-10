@@ -148,7 +148,7 @@ Sac& Sac::getSac(const LotDeJetons& lot) {
     static Sac instance(lot);
     return instance;
 }
-//Sans jetons
+//Sans jetons (pour restitution de partie)
 Sac& Sac::getSac() {
     static Sac instance;
     return instance;
@@ -273,4 +273,17 @@ bool Plateau::estVide() const {
             if (jetons[i][j] != nullptr)
                 return false;
     return true;
+}
+
+//Singleton
+//Avec sac et lot de privilèges (debut de partie)
+Plateau& Plateau::getPlateau(Sac& sac, const LotPrivileges& lotp) {
+    static Plateau instance(sac, lotp);
+    return instance;
+}
+
+//Sans sac et lot de privilèges (restitution de partie)
+Plateau& Plateau::getPlateau() {
+    static Plateau instance;
+    return instance;
 }

@@ -122,6 +122,7 @@ class Sac {
         Sac& operator=(const Sac&) = delete;
     public :
         bool estVide() const { return jetons.empty(); }
+
         size_t getNbJetons() const { return jetons.size(); }
         void ajouterJeton(const Jeton& j);
         const Jeton& piocherJeton();
@@ -142,28 +143,34 @@ class Plateau {
         //Postionnement du jeton en imposant une positite (restitution de partie) (non accessible par l'utilisateur)
         //Sera accessible par la classe qui fera la restitution de partie
         void positionerJeton(const Jeton& jeton, const size_t i, const size_t j); //TODO
-    public :
-        const Jeton& recupererJeton(const size_t i, const size_t j);
-        const Privilege& recupererPrivilege();
 
-        //Postionnement du jeton en suivant l'ordre du plateau
-        void positionerJeton(const Jeton& jeton);
-
-        void poserPrivilege(const Privilege& privilege);
-
-        //Remplissage du plateau à partir du sac (on vide le sac)
-        void remplirPlateau(Sac& sac);
-        bool estVide() const;
-
+        //Constructeur non accessible par l'utilisateur : singleton
         //Constructeur à partir d'un sac et d'un lot de privilèges (dans le cas d'une nouvelle partie)
         Plateau(Sac& sac, const LotPrivileges& lotp);
-
         //Constructeur sans argument pour initialiser un plateau vide (restitution partie en cours)
         Plateau();
 
         //pas de duplication du plateau
         Plateau(const Plateau&) = delete;
         Plateau& operator=(const Plateau&) = delete;
+    public :
+        bool estVide() const;
+
+        const Jeton& recupererJeton(const size_t i, const size_t j);
+        const Privilege& recupererPrivilege();
+
+        //Postionnement du jeton en suivant l'ordre du plateau
+        void positionerJeton(const Jeton& jeton);
+        void poserPrivilege(const Privilege& privilege);
+
+        //Remplissage du plateau à partir du sac (on vide le sac)
+        void remplirPlateau(Sac& sac);
+
+        //Singleton
+        //Avec sac et lot de privilèges (debut de partie)
+        static Plateau& getPlateau(Sac& sac, const LotPrivileges& lotp);
+        //Sans sac et lot de privilèges (restitution de partie)
+        static Plateau& getPlateau();
 };
 
 #endif
