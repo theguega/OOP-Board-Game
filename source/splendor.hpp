@@ -1,4 +1,4 @@
-#ifndef SPLENDOR_H
+w#ifndef SPLENDOR_H
 #define SPLENDOR_H
 
 // Déclaration de la classe Carte

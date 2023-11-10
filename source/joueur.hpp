@@ -7,6 +7,7 @@
 
 #include "splendor.hpp"
 #include "jetons.hpp"
+#include "carte.h"
 #include <iostream>
 #include <string>
 #include <array>
