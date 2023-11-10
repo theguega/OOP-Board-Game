@@ -111,16 +111,16 @@ class JeuCarte {
 private:
     // appliquer le design pattern singleton plus tard
     // eventuellement membre static pour chaque nombre de carte n1, n2, n3
-    array<const Carte*, n1> cartes_nv1; 
-    array<const Carte*, n2> cartes_nv2;
-    array<const Carte*, n3> cartes_nv3;
+    array<const Carte*, 10> cartes_nv1; 
+    array<const Carte*, 10> cartes_nv2;
+    array<const Carte*, 10> cartes_nv3;
     array<const Carte*, 4> cartes_nobles;
 public:
     JeuCarte();
     ~JeuCarte();
-    size_t getNbCartes_nv1() const { return n1; }
-    size_t getNbCartes_nv2() const { return n2; }
-    size_t getNbCartes_nv3() const { return n3; }
+    size_t getNbCartes_nv1() const { return 10; }
+    size_t getNbCartes_nv2() const { return 10; }
+    size_t getNbCartes_nv3() const { return 10; }
     size_t getNbCartes_nobles() const { return 4; }
     const Carte& getCarteNiv1(size_t i) const;
     const Carte& getCarteNiv2(size_t i) const;

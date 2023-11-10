@@ -5,7 +5,6 @@
 #ifndef PROJET_LO21_JOUEUR_HPP
 #define PROJET_LO21_JOUEUR_HPP
 
-#include "splendor.hpp"
 #include "jetons.hpp"
 #include "carte.h"
 #include <iostream>

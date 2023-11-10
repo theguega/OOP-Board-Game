@@ -33,7 +33,9 @@ int main(int argc, const char * argv[]) {
         plateau.positionerJeton(sac.piocherJeton());
 
         std::cout<<"Voilaaaa, on est content"<<std::endl;
-
+        
+        
+        /*
         std::cout << "Bonjour !\nVeuillez creer les joueurs : \n";
         std::string nom, prenom;
         std::string typedejoueur;
@@ -54,6 +56,7 @@ int main(int argc, const char * argv[]) {
         joueur1.addPrivilege(plateau.recupererPrivilege());
         //joueur1.afficherPrivileges();
         joueur1.afficherJoueur();
+        */
 
 
     }
