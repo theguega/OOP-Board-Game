@@ -1,3 +1,8 @@
+-- Fichier pour taper les requetes SQLite
+-- Pour voir la BDD en mode graphique : extension SQLite sur VSCode
+-- Execution : sqlite3 data_carte.sqlite < cartes.sql
+
+/*
 CREATE TABLE carte_noble (
     id INTEGER PRIMARY KEY,
     capacite TEXT,
@@ -17,7 +22,7 @@ CREATE TABLE carte (
     couleur_bonus TEXT,
     nb_bonus INTEGER,
     nb_couronnes INTEGER,
-    nb_pts_privilege INTEGER,
+    nb_pts_privilege INTEGER
 );
 
 --Cartes Noble
@@ -102,3 +107,6 @@ INSERT INTO carte (type_carte, prix_blanc, prix_bleu, prix_vert, prix_rouge, pri
 INSERT INTO carte (type_carte, prix_blanc, prix_bleu, prix_vert, prix_rouge, prix_noir, prix_perle, capacite, couleur_bonus, nb_bonus, nb_couronnes, nb_pts_privilege) VALUES ('Niv3', 0, 0, 0, 3, 0, 0, 'None', 'vert', 1, 1, 0);
 INSERT INTO carte (type_carte, prix_blanc, prix_bleu, prix_vert, prix_rouge, prix_noir, prix_perle, capacite, couleur_bonus, nb_bonus, nb_couronnes, nb_pts_privilege) VALUES ('Niv3', 0, 0, 0, 3, 0, 0, 'None', 'vert', 1, 1, 0);
 INSERT INTO carte (type_carte, prix_blanc, prix_bleu, prix_vert, prix_rouge, prix_noir, prix_perle, capacite, couleur_bonus, nb_bonus, nb_couronnes, nb_pts_privilege) VALUES ('Niv3', 0, 0, 0, 3, 0, 0, 'None', 'vert', 1, 1, 0);
+
+*/
+
