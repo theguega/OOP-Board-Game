@@ -4,7 +4,6 @@
 #include <string>
 #include <array>
 #include <vector>
-#include "splendor.hpp"
 #include "joueur.hpp"
 #include "jetons.hpp"
 #include "carte.h"
@@ -65,10 +64,10 @@ class EspaceJeux {
         // idealement espace jeux initialise tout les elements de jeux jsp si c'est pertinant d'init en reference
         
         // --------- init des jetons ---------
-        LotDeJetons *lotJetons = new LotDeJetons();
-        LotPrivileges *lotPrivileges = new LotPrivileges(); 
-        Sac *sac  = new Sac(*lotJetons); 
-        Plateau *plateau = new Plateau(*sac, *lotPrivileges); 
+        const LotDeJetons *lotJetons;
+        const LotPrivileges *lotPrivileges;
+        Sac *sac;
+        Plateau *plateau; 
         
         // --------- init des cartes ---------
         
@@ -79,7 +78,7 @@ class EspaceJeux {
         Pioche *piocheNoble = new Pioche(*jeuxCartes, TypeCarte::Noble);
         Pyramide *pyramide = new Pyramide(*piocheNv1, *piocheNv2, *piocheNv3, *piocheNoble);
     public:
-        EspaceJeux();
+        EspaceJeux() : lotJetons(&LotDeJetons::getLotDeJetons()), lotPrivileges(&LotPrivileges::getLotPrivileges()), sac(&Sac::getSac(*lotJetons)), plateau(&Plateau::getPlateau(*sac, *lotPrivileges)) {};
         ~EspaceJeux();
 
         EspaceJeux(const EspaceJeux&) = delete;

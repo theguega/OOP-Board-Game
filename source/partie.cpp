@@ -1,5 +1,4 @@
 #include "partie.hpp"
-#include "splendor.hpp"
 #include "joueur.hpp"
 #include "jetons.hpp"
 #include "carte.h"
@@ -29,12 +28,7 @@ Partie::Partie(std::string nomJoueur1, std::string prenomJoueur1, std::string no
     joueurCourant = 0;
 }
 
-Partie::~Partie() {
-    // Libérez la mémoire allouée 
-    delete joueurs[0];
-    delete joueurs[1];
-    delete espaceJeux;
-}
+
 
 void Partie::changerJoueurCourant() {
     switch (joueurCourant) {

@@ -9,7 +9,6 @@
 
 #include <vector>
 
-#include "splendor.hpp"
 #include "joueur.hpp"
 #include "jetons.hpp"
 #include "carte.h"
