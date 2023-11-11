@@ -1,5 +1,4 @@
-@startuml cartes
-
+@startuml
 enum CouleurCarte
 
 enum TypeCarte
@@ -81,13 +80,12 @@ class Pyramide {
     + acheterCarte() : Carte
 }
 
-Carte *--- JeuCarte
-Carte o-- Pyramide
-Carte o-- Pioche
-Carte -- Bonus
-Carte -- Prix
-Carte -- CouleurCarte
-Carte -- TypeCarte
-Carte -- Capacite
-
+Carte "67"---* JeuCarte
+Carte "*" --o "0...1" Pyramide
+Carte "0...30" --o "0...1" Pioche
+Carte o-- "0...1" Bonus
+Carte o-- "0...1"Prix
+Carte o-- CouleurCarte
+Carte o-- TypeCarte
+Carte o-- Capacite
 @enduml
