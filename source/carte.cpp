@@ -24,6 +24,16 @@ string toString(CouleurCarte c){
 }
 ostream& operator<<(ostream& f, CouleurCarte c){ f << toString(c); return f; }
 
+std::map<std::string, CouleurCarte> stringToCouleurCarteMap = {
+        {"blanc", CouleurCarte::blanc},
+        {"bleu", CouleurCarte::bleu},
+        {"vert", CouleurCarte::vert},
+        {"noir", CouleurCarte::noir},
+        {"rouge", CouleurCarte::rouge},
+        {"perle", CouleurCarte::perle},
+        {"indt", CouleurCarte::indt}
+};
+
 CouleurCarte StringToCouleurCarte(const std::string& couleurStr){
     auto tmp = stringToCouleurCarteMap.find(couleurStr);
     if (tmp != stringToCouleurCarteMap.end()) {
@@ -59,6 +69,15 @@ string toString(Capacite c){
     }
 }
 ostream& operator<<(ostream& f, Capacite c) { f << toString(c); return f; }
+
+std::map<std::string, Capacite> stringToCapaciteMap = {
+        {"NewTurn", Capacite::NewTurn},
+        {"TakePrivilege", Capacite::TakePrivilege},
+        {"TakeJetonFromBonus", Capacite::TakeJetonFromBonus},
+        {"TakeJetonToAdv", Capacite::TakeJetonToAdv},
+        {"AssociationBonus", Capacite::AssociationBonus},
+        {"None", Capacite::None}
+};
 
 Capacite StringToCapacite(const std::string& capaciteStr){
     auto tmp = stringToCapaciteMap.find(capaciteStr);
@@ -139,11 +158,12 @@ JeuCarte::JeuCarte(){
         unsigned int p_noir = sqlite3_column_int(stmt, 5);
         unsigned int p_rouge = sqlite3_column_int(stmt, 6);
         unsigned int p_perle = sqlite3_column_int(stmt, 7);
-        const char* capacite = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 8));
-        const char* couleur_bonus = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 9));
-        unsigned int bonus = sqlite3_column_int(stmt, 10);
-        unsigned int nb_couronnes = sqlite3_column_int(stmt, 11);
-        unsigned int nb_pts_privileges = sqlite3_column_int(stmt, 12);
+        const char* capacite1 = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 8));
+        const char* capacite2 = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 9));
+        const char* couleur_bonus = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 10));
+        unsigned int bonus = sqlite3_column_int(stmt, 11);
+        unsigned int nb_couronnes = sqlite3_column_int(stmt, 12);
+        unsigned int nb_pts_privileges = sqlite3_column_int(stmt, 13);
 
         if (type == "Niv1") {
             cartes_nv1[i] = new Carte(TypeCarte::Niv1, Prix(p_blanc, p_bleu, p_vert, p_noir, p_rouge, p_perle), StringToCapacite(capacite), Bonus(StringToCouleurCarte(couleur_bonus), bonus), nb_couronnes, nb_pts_privileges);
