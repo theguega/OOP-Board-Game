@@ -10,12 +10,12 @@
 class vuePlateau : public QWidget{
 private:
     //Choix entre pointeur et référence ?
-    Sac &sac;
-    Plateau &plateau;
+    Sac& sac;
+    Plateau& plateau;
     std::array<const vueJeton, 25> listeJetons;
 public:
     vuePlateau(Plateau &plateau);
-    vueJeton* recupereBouton(Jetons* jeton);
+    vueJeton* recupererBouton(Jeton* jeton);
     void remplirPlateau();
 
 };

@@ -11,8 +11,8 @@ private:
     int y;
 public:
     position(int x, int y) : x(x), y(y){}
-    getx() const {return x;}
-    gety() const {return y;}
+    int getx() const {return x;}
+    int gety() const {return y;}
 };
 
 
@@ -23,7 +23,7 @@ private:
     //récupère l'adresse du jeton auquel vueJeton est reliée
     Jeton* jeton;
 public:
-    vueJeton(QWidget* parent = nullptr, type couleur, Jeton* jeton);
+    vueJeton(QWidget* parent, Jeton* jeton);
     void apparaitre(position pos) const;
     void disparaitre() const;
     Jeton* getJeton() const {return jeton;}
