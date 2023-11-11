@@ -156,7 +156,7 @@ EspaceJeux *---"1" Plateau
 EspaceJeux *---"1" LotDeJetons
 EspaceJeux *---"1" LotPrivileges
 EspaceJeux *--"1" JeuCarte
-Pioche "1"-* EspaceJeux
+Pioche "4"-* EspaceJeux
 
 Jeu <-- Partie
 
