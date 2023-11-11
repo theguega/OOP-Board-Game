@@ -73,30 +73,32 @@ class Bonus{
 }
 
 class Prix{
-
+    - blanc, bleu, ... : int
 }
 
 class Pioche {
     - type_cartes : enum
     - cartes : vector<Carte*>
+    - nb_cartes : int
 }
 
 class JeuCarte {
     - cartes_nv1 : array
+    - ...
     - cartes_nobles : array
 }
 
 class Pyramide {
 }
 
-Carte *--- JeuCarte
-Carte o-- Pyramide
-Pioche --o Carte
-Carte -- Bonus
-Carte -- Prix
-Carte - CouleurCarte
-TypeCarte - Carte
-Carte - Capacite
+Carte "67" ---* JeuCarte
+Carte --o Pyramide
+Pioche "0...1" o-- "0...30"Carte
+Carte o-- "0...1" Bonus
+Carte o-- "0...1" Prix
+Carte o- CouleurCarte
+TypeCarte o- Carte
+Carte o- Capacite
 
 ' Joueur
 
