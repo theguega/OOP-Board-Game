@@ -16,7 +16,7 @@ private:
 
 public:
     pageMenuPrincipal(QWidget *parent = nullptr);
-    ~pageMenuPrincipal();  // Ajout du destructeur pour libérer la mémoire
+    ~pageMenuPrincipal();
     QPushButton* getBoutonQuitter() const { return boutonQuitter; }
     QPushButton* getBoutonSauvegarde() const { return boutonSauvegarde; }
     QPushButton* getBoutonDemarrer() const { return boutonDemarrer; }
