@@ -17,14 +17,16 @@ int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
 
-    //QScreen *ecran = QGuiApplication::primaryScreen();
-    //QSize tailleEcran = ecran->availableGeometry().size();
+    QScreen *ecran = QGuiApplication::primaryScreen();
+    QSize tailleEcran = ecran->availableGeometry().size();
 
-    /*int tailleLargeur = tailleEcran.width() / 2;
-    int tailleHauteur = tailleEcran.height() / 2;*/
+    int tailleLargeur = tailleEcran.width() / 2;
+    int tailleHauteur = tailleEcran.height() / 2;
 
     QWidget pagePrincipale;
     pagePrincipale.setWindowTitle("Splenduor Duel");
+
+    QStackedWidget toutesPages;
 
     // Création des pages directement dans la fonction
     pageMenuPrincipal menuPrincipal;
@@ -32,7 +34,7 @@ int main(int argc, char *argv[])
     pageSauvegarde scrollSauvegardes;
 
     // Ajout des pages à toutesPages
-    toutesPages pages(&menuPrincipal, &jeu, &scrollSauvegardes, &app);
+    toutesPages pages(menuPrincipal, jeu, scrollSauvegardes, app);
 
     QVBoxLayout mainLayout(&pagePrincipale);
     mainLayout.addWidget(&pages);

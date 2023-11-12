@@ -15,7 +15,6 @@ class Strategy {
 public:
     virtual ~Strategy() = default;
     virtual const Jeton& choisirJeton(Plateau& plateau) = 0;
-    virtual void remplirPlateauStrat(Plateau& plateau, Sac& sac) = 0;
 
     // actions optionnelles
     /*virtual Privilege utiliserPrivilege(const EspaceJeux& espaceJeux) = 0;
@@ -31,8 +30,6 @@ public:
 class StrategyHumain : public Strategy {
 public:
     const Jeton& choisirJeton(Plateau& plateau) override;
-    void remplirPlateauStrat(Plateau& plateau, Sac& sac) override;
-
     //Privilege utiliserPrivilege(const EspaceJeux& espaceJeux) override;
 };
 

@@ -5,7 +5,7 @@ pageSauvegarde::pageSauvegarde(QWidget *parent) : QScrollArea(parent), nSauvegar
     layoutSauvegardes = new QVBoxLayout(boutons);
 
     for (int i = 0; i < nSauvegardes; ++i) {
-        QPushButton *bouton = new QPushButton("Sauvegarde " + QString::number(i + 1));
+        Exemple : QPushButton *bouton = new QPushButton("Sauvegarde " + QString::number(i + 1));
         layoutSauvegardes->addWidget(bouton);
     }
 

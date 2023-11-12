@@ -29,15 +29,13 @@ class EspaceJeux {
 }
 
 
-Partie *--- EspaceJeux
-Partie *--"2" Joueur
+EspaceJeux *- LotDeJetons
+EspaceJeux *- LotPrivileges
+EspaceJeux *- Sac
+EspaceJeux *- Plateau
 
-EspaceJeux *---"1" Sac
-EspaceJeux *---"1" Pyramide
-EspaceJeux *---"1" Plateau
-EspaceJeux *---"1" LotDeJetons
-EspaceJeux *---"1" LotPrivileges
-EspaceJeux *--"1" JeuCarte
-Pioche "4"-* EspaceJeux
 
+EspaceJeux *- JeuCarte
+EspaceJeux *- Pioche
+EspaceJeux *- Pyramide
 @enduml

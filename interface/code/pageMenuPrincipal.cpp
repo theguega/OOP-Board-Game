@@ -14,6 +14,7 @@ pageMenuPrincipal::pageMenuPrincipal(QWidget *parent) : QWidget(parent) {
 }
 
 pageMenuPrincipal::~pageMenuPrincipal() {
+    // Libérer la mémoire des objets alloués dynamiquement
     delete boutonDemarrer;
     delete boutonSauvegarde;
     delete boutonQuitter;

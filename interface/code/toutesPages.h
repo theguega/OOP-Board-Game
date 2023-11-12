@@ -1,18 +1,12 @@
 #include <QStackedWidget>
+#include "pagePrincipale.h"
 #include "pageSauvegarde.h"
 #include "pageJeu.h"
 #include "pageMenuPrincipal.h"
 
-#ifndef TOUTESPAGES_H
-#define TOUTESPAGES_H
-
 class toutesPages : public QStackedWidget {
-    Q_OBJECT
 private:
 
 public:
-    toutesPages(pageMenuPrincipal* menuPrincipal, pageJeu* jeu, pageSauvegarde* scrollSauvegardes, QApplication* app);
-    ~toutesPages() = default;
+    toutesPages(pageMenuPrincipal& menuPrincipal, pageJeu& jeu, pageSauvegarde& scrollSauvegardes, QApplication& app);
 };
-
-#endif //TOUTESPAGES_H

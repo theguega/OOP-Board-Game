@@ -158,7 +158,6 @@ class Plateau {
 
         const Jeton& recupererJeton(const size_t i, const size_t j);
         const Privilege& recupererPrivilege();
-        bool pivilegeDisponible() const { return !privileges.empty(); }
 
         //Postionnement du jeton en suivant l'ordre du plateau
         void positionerJeton(const Jeton& jeton);
