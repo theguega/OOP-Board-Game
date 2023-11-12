@@ -7,12 +7,13 @@
 
 #include "jetons.hpp"
 #include "carte.h"
+#include "strategy.hpp"
+#include "espacejeux.hpp"
 #include <iostream>
 #include <string>
 #include <array>
 #include <vector>
 #include <unordered_map>
-#include "strategy.hpp"
 
 
 
@@ -41,11 +42,13 @@ private:
     const std::string nom;
     const std::string prenom;
     const type typeDeJoueur;
-    int ptsPrestige;
-    int nbCouronnes;
+    unsigned int ptsPrestige;
+    unsigned int nbCouronnes;
 
-    std::unordered_map</*CouleurCarte*/ CouleurJeton, std::vector<Carte*>> cartes;
+    std::unordered_map<CouleurCarte, std::vector<const Carte*>> cartes;
     size_t nbCartes;
+    std::vector<const Carte*> cartesReservees;
+    size_t nbCartesReservees;
     std::unordered_map<CouleurJeton, std::vector<const Jeton*>> jetons;
     size_t nbJetons;
     std::vector<const Privilege*> privileges;
@@ -64,11 +67,12 @@ public:
     std::string getNom() const { return nom; };
     std::string getPrenom() const { return prenom; };
     type getTypeDeJoueur() const { return typeDeJoueur; };
-    int getptsPrestige() const { return ptsPrestige; };
-    int getnbCouronnes() const { return nbCouronnes; };
+    unsigned int getptsPrestige() const { return ptsPrestige; };
+    unsigned int getnbCouronnes() const { return nbCouronnes; };
     //Carte **getCartes();
     size_t getNbCartes() const { return nbCartes; }
     //Jetons **getJetons();
+    size_t getNbCartesReservees() const { return nbCartesReservees; }
     size_t getNbJetons() const { return nbJetons; }
     //Privilege **getPrivileges();
     size_t getNbPrivileges() const { return nbPrivileges; }
@@ -79,13 +83,15 @@ public:
     void updatePtsPrestige(int pts) { ptsPrestige += pts; };
     void updateNbCouronnes(int couronnes) { nbCouronnes += couronnes; };
 
-    void addCarte(Carte *carte);
+    void addCarte(const Carte &carte);
+    void addCarteReservee(const Carte &carte) ;
     void addJeton(const Jeton &jeton);
     void addPrivilege(const Privilege &privilege);
 
     // Supprimer un element du vecteur --> attention il faudra voir le lien avec les autres classes DONE
     // Si on supprime un privilège il doit revenir sur le plateau
-    void supCarte(Carte *carte);
+    void supCarte(Carte &carte);
+    void supCarteReservee(const Carte &carte);
     void supJeton(Jeton *jeton);
     const Privilege& supPrivilege(); // a voir si on retire pas juste le premier privilege
 
@@ -97,8 +103,14 @@ public:
         std::cout << "Nombre de privilèges : " << &privileges << std::endl;
     }
 
+    // Actions optionnelles
+    void utiliserPrivilege(Plateau& plateau);
+    void remplirPlateau(Plateau& plateau, Sac& sac, Joueur& joueurAdverse);
 
-    void utiliserPrivilège(Plateau& plateau);
+    // Actions obligatoires
+    void recupererJetons(Plateau& plateau);
+    void acheterCarteJoaillerie (Pyramide& pyramide);
+    void orReserverCarte (Pyramide& pyramide, Plateau& plateau);
 
 
 };

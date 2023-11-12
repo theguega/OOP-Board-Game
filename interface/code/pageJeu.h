@@ -15,6 +15,7 @@ public:
     pageJeu(QWidget *parent = nullptr);
     void ajoutWidget(QWidget *objet);
     QPushButton* getRetourMenu(){return retourMenu;}
+    ~pageJeu();
 };
 
 #endif // PAGEJEU_H

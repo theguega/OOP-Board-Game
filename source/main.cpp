@@ -10,8 +10,8 @@
 
 int main(int argc, const char * argv[]) {
 
-    //JeuCarte j;
-    //Partie& partie = Partie::getInstance();
+    /*
+    Partie& partie = Partie::getInstance();*/
     std::cout<<"Test";
     
     return 0;

@@ -10,3 +10,8 @@ void pageJeu::ajoutWidget(QWidget *objet) {
     // Ajoutez ici le code pour gérer l'ajout d'autres widgets à votre page
     coucheJ->addWidget(objet);
 }
+
+pageJeu::~pageJeu() {
+    delete retourMenu;
+    delete coucheJ;
+}

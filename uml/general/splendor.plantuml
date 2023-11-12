@@ -116,7 +116,7 @@ abstract Strategy {
 class StrategyHumain
 class StrategyIA
 
-Joueur *- Strategy
+Joueur *- "1" Strategy
 StrategyHumain --|> Strategy
 StrategyIA --|> Strategy
 enum Type {
@@ -148,15 +148,15 @@ class Jeu {
 }
 
 Partie *--- EspaceJeux
-Partie *-- Joueur
+Partie *--"2" Joueur
 
-EspaceJeux *--- Sac
-EspaceJeux *--- Pyramide
-EspaceJeux *--- Plateau
-EspaceJeux *--- LotDeJetons
-EspaceJeux *--- LotPrivileges
-EspaceJeux *-- JeuCarte
-Pioche -* EspaceJeux
+EspaceJeux *---"1" Sac
+EspaceJeux *---"1" Pyramide
+EspaceJeux *---"1" Plateau
+EspaceJeux *---"1" LotDeJetons
+EspaceJeux *---"1" LotPrivileges
+EspaceJeux *--"1" JeuCarte
+Pioche "4"-* EspaceJeux
 
 Jeu <-- Partie
 

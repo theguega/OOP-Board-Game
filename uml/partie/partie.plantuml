@@ -21,4 +21,8 @@ class Partie {
   - Partie(const Partie&): delete
   - operator=(const Partie&): delete
 }
+
+
+Partie *--- EspaceJeux
+Partie *--"2" Joueur
 @enduml
