@@ -108,7 +108,7 @@ void::Joueur::supCarte(Carte &carte) {
     }
 }
 
-void::Joueur::supCarteReservee(Carte &carte) {
+void::Joueur::supCarteReservee(const Carte &carte) {
     for (int i = 0; i < cartesReservees.size(); i++) {
         if (cartesReservees[i] == &carte) {
             cartesReservees.erase(cartesReservees.begin() + i);
@@ -181,6 +181,63 @@ void Joueur::remplirPlateau(Plateau& plateau, Sac& sac, Joueur& joueurAdverse){
     addPrivilege(privilege);
 }
 
-void acheterCarteJoaillerie (EspaceJeux& espaceJeux){
+void Joueur::acheterCarteJoaillerie (Pyramide& pyramide){
+    // Voir comment gérer les bonus
+    std::cout << "Tapez 1 pour acheter une carte Réservée.\nTapez 2 pour acheter une carte du plateau." << std::endl;
+    unsigned int choix;
+    std::cin >> choix;
+    // Achat carte reservee
+    if (choix == 1){
+        std::cout << "Voici les cartes réservées : " << std::endl;
+        unsigned int i = 0;
+        // Affichage de la réserve
+        for (auto & cartesReservee : cartesReservees) {
+            std::cout <<"Numéro "<<i << " : ";
+            std::cout<<cartesReservee;
+            i++;
+        }
+        std::cout << "Tapez le numéro de la carte que vous voulez acheter : " << std::endl;
+        unsigned int numCarte;
+        std::cin >> numCarte;
+        // Vérifications
+        if (numCarte > cartesReservees.size()){
+            throw JoueurException("Le numéro de la carte est invalide.");
+        }
+        const Carte& carte = *cartesReservees[numCarte];
+        if (carte.getNbPtsPrivilege() > ptsPrestige){
+            throw JoueurException("Vous n'avez pas assez de points de prestige pour acheter cette carte...");
+        }
+        addCarte(carte);
+        supCarteReservee(carte);
+    }
+    // Achat carte du plateau
+    else if (choix == 2){
+        // Affichage des cartes
+        std::cout << "Voici les cartes du plateau : " << std::endl;
+        //espaceJeux.afficherPyramide() Gerer l'affichage de la pyramide
+
+        std::cout << "Tapez le niveau de la carte que vous voulez acheter : " << std::endl;
+        unsigned int niveau;
+        std::cin >> niveau;
+        std::cout << "Tapez le numero de la carte que vous voulez acheter : " << std::endl;
+        unsigned int numCarte;
+        std::cin >> numCarte;
+
+        // Vérifications
+        /*if (numCarte > espaceJeux.getNbCartesNiv(niveau)){
+            throw JoueurException("Le numéro de la carte est incorrect");
+        }*/
+
+        const Carte& carte = pyramide.acheterCarte(niveau, numCarte);
+        if (carte.getNbPtsPrivilege() > ptsPrestige){
+            throw JoueurException("Vous n'avez pas assez de points de prestige pour acheter cette carte");
+        }
+        addCarte(carte);
+        //pyramide.supprimerCarte(niveau, numCarte);
+    }
+    else {
+        throw JoueurException("Le choix est incorrect");
+    }
+
 
 }

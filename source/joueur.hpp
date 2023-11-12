@@ -91,7 +91,7 @@ public:
     // Supprimer un element du vecteur --> attention il faudra voir le lien avec les autres classes DONE
     // Si on supprime un privilège il doit revenir sur le plateau
     void supCarte(Carte &carte);
-    void supCarteReservee(Carte &carte);
+    void supCarteReservee(const Carte &carte);
     void supJeton(Jeton *jeton);
     const Privilege& supPrivilege(); // a voir si on retire pas juste le premier privilege
 
@@ -108,7 +108,7 @@ public:
     void remplirPlateau(Plateau& plateau, Sac& sac, Joueur& joueurAdverse);
 
     // Actions obligatoires
-    void acheterCarteJoaillerie (EspaceJeux& espaceJeux);
+    void acheterCarteJoaillerie (Pyramide& pyramide);
 
 
 };
