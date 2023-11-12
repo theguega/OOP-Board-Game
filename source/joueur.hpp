@@ -108,6 +108,7 @@ public:
     void remplirPlateau(Plateau& plateau, Sac& sac, Joueur& joueurAdverse);
 
     // Actions obligatoires
+    void recupererJetons(Plateau& plateau);
     void acheterCarteJoaillerie (Pyramide& pyramide);
     void orReserverCarte (Pyramide& pyramide, Plateau& plateau);
 
