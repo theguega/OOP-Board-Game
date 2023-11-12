@@ -135,7 +135,13 @@ void Partie::sauvegardePartie() {
     for (size_t i =0; i<4; i++) {
         for (size_t j =0; i<4; i++) {
             const Carte* carte = pyramide.getCarte(i,j);
-            //sql= "INSERT INTO pyramide (i, j, type_carte, prix_blanc, prix_bleu, prix_vert, prix_rouge, prix_noir, prix_perle, capacite1, capacite2, couleur_bonus, nb_bonus, nb_couronnes, nb_pts_privilege) VALUES (" + std::to_string(i) + ", " + std::to_string(j) + ", '" + toStringType(carte->getType()) + "', " + std::to_string(carte->getPrix().getNbJeton(Couleur::BLANC)) + ", " + std::to_string(carte->getPrix().getNbJeton(Couleur::BLEU)) + ", " + std::to_string(carte->getPrix().getNbJeton(Couleur::VERT)) + ", " + std::to_string(carte->getPrix().getNbJeton(Couleur::ROUGE)) + ", " + std::to_string(carte->getPrix().getNbJeton(Couleur::NOIR)) + ", " + std::to_string(carte->getPrix().getNbJeton(Couleur::PERLE)) + ", '" + toStringCapacite(carte->getCapacite1()) + "', '" + toStringCapacite(carte->getCapacite2()) + "', '" + toStringCouleur(carte->getCouleurBonus()) + "', " + std::to_string(carte->getNbBonus()) + ", " + std::to_string(carte->getNbCouronnes()) + ", " + std::to_string(carte->getNbPtsPrivilege()) + ");";
+            sql= "INSERT INTO pyramide (i, j, type_carte, prix_blanc, prix_bleu, prix_vert, prix_rouge, prix_noir, prix_perle, capacite1, capacite2, couleur_bonus, nb_bonus, nb_couronnes, nb_pts_privilege) VALUES (" + std::to_string(i) + ", " + std::to_string(j) + ", '" + TypeCartetoString(carte->getType()) + "', " + std::to_string(carte->getPrix().getBlanc()) + ", " + std::to_string(carte->getPrix().getBleu()) + ", " + std::to_string(carte->getPrix().getVert()) + ", " + std::to_string(carte->getPrix().getRouge()) + ", " + std::to_string(carte->getPrix().getNoir()) + ", " + std::to_string(carte->getPrix().getPerle()) + ", '" + CapacitetoString(carte->getCapacites()[0]) + "', '" + CapacitetoString(carte->getCapacites()[1]) + "', '" + CouleurCartetoString(carte->getBonus().getCouleur()) + "', " + std::to_string(carte->getBonus().getNbBonus()) + ", " + std::to_string(carte->getNbCouronnes()) + ", " + std::to_string(carte->getNbPtsPrivilege()) + ");";
+            rc = sqlite3_exec(db, sql.c_str(), NULL, NULL, NULL);
+            if (rc != SQLITE_OK) {
+                std::cerr << "Erreur lors de la sauvegarde de la pyramide" << std::endl;
+                sqlite3_close(db);
+                return;
+            }
         }
     }
 

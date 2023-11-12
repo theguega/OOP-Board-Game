@@ -10,7 +10,7 @@ using namespace std;
 std::initializer_list<CouleurCarte> CouleursCarte = { CouleurCarte::blanc, CouleurCarte::bleu, CouleurCarte::vert, CouleurCarte::noir, CouleurCarte::rouge, CouleurCarte::perle, CouleurCarte::indt };
 std::initializer_list<TypeCarte> TypesCarte = { TypeCarte::Niv1, TypeCarte::Niv2, TypeCarte::Niv3, TypeCarte::Noble };
 
-string toString(CouleurCarte c){
+string CouleurCartetoString(CouleurCarte c){
     switch (c){
         case CouleurCarte::blanc : return "blanc";
         case CouleurCarte::bleu: return "bleu";
@@ -22,7 +22,7 @@ string toString(CouleurCarte c){
         default: throw CarteException("Couleur inconnue");
     }
 }
-ostream& operator<<(ostream& f, CouleurCarte c){ f << toString(c); return f; }
+ostream& operator<<(ostream& f, CouleurCarte c){ f << CouleurCartetoString(c); return f; }
 
 CouleurCarte StringToCouleurCarte(const std::string& couleurStr){
     auto tmp = stringToCouleurCarteMap.find(couleurStr);
@@ -35,7 +35,7 @@ CouleurCarte StringToCouleurCarte(const std::string& couleurStr){
 }
 
 
-string toString(TypeCarte t){
+string TypeCartetoString(TypeCarte t){
     switch (t) {
         case TypeCarte::Niv1: return "Niv1";
         case TypeCarte::Niv2: return "Niv2";
@@ -44,10 +44,10 @@ string toString(TypeCarte t){
         default: throw CarteException("Type inconnue");
     }
 }
-ostream& operator<<(ostream& f, TypeCarte t) { f << toString(t); return f; }
+ostream& operator<<(ostream& f, TypeCarte t) { f << TypeCartetoString(t); return f; }
 
 
-string toString(Capacite c){
+string CapacitetoString(Capacite c){
     switch (c) {
         case Capacite::NewTurn: return "NewTurn";
         case Capacite::TakePrivilege: return "TakePrivilege";
@@ -58,7 +58,7 @@ string toString(Capacite c){
         default: throw CarteException("Capacite inconnue");
     }
 }
-ostream& operator<<(ostream& f, Capacite c) { f << toString(c); return f; }
+ostream& operator<<(ostream& f, Capacite c) { f << CapacitetoString(c); return f; }
 
 Capacite StringToCapacite(const std::string& capaciteStr){
     auto tmp = stringToCapaciteMap.find(capaciteStr);

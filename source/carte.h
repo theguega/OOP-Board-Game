@@ -18,7 +18,7 @@ public:
 
 enum class CouleurCarte {blanc, bleu, vert, noir, rouge, perle, indt}; // ajout de "indetermin�" car certaines carte ont une couleur de Bonus variable
 
-string toString(CouleurCarte c);
+string CouleurCartetoString(CouleurCarte c);
 ostream& operator<<(ostream& f, CouleurCarte c);
 extern std::initializer_list<CouleurCarte> CouleursCarte;
 std::map<std::string, CouleurCarte> stringToCouleurCarteMap = {
@@ -34,7 +34,7 @@ CouleurCarte StringToCouleurCarte(const string& couleurStr);
 
 
 enum class TypeCarte { Niv1, Niv2, Niv3, Noble };
-string toString(TypeCarte t);
+string TypeCartetoString(TypeCarte t);
 ostream& operator<<(ostream& f, TypeCarte t);
 extern std::initializer_list<TypeCarte> TypesCarte;
 
@@ -48,7 +48,7 @@ std::map<std::string, Capacite> stringToCapaciteMap = {
         {"AssociationBonus", Capacite::AssociationBonus},
         {"None", Capacite::None}
 };
-string toString(Capacite c);
+string CapacitetoString(Capacite c);
 ostream& operator<<(ostream& f, Capacite c);
 Capacite StringToCapacite(const string& capaciteStr);
 
