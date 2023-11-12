@@ -132,20 +132,22 @@ const Privilege&::Joueur::supPrivilege() {
     nbPrivileges--;
     return  sup;
 }
-/*
-bool::Joueur::nbPtsPrestigeParCouleurSupDix() const {
-    for (auto it = cartes.begin(); it != cartes.end(); it++) {
-        std::vector<Carte*> tab = it->second;
-        int somme = 0;
-        for (int i = 0; i < tab.size(); ++i) {
-            //somme += tab[i]->getNbPtsPrivilege();
-        }
-        if (somme >= 10) {
-            return true;
-        }
+
+
+
+bool Joueur::nbPtsPrestigeParCouleurSupDix() const{
+    // Itère sur toutes les couleurs
+    for (const auto& pair : cartes) {
+        const std::vector<const Carte*>& tab = pair.second;
+        unsigned int somme = 0;
+
+        // Calcule la somme pour chaque couleur
+        for (const auto* carte : tab) somme += carte->getNbPtsPrivilege();
+        if (somme >= 10) return true;
     }
     return false;
-}*/
+}
+
 
 void Joueur::utiliserPrivilège(Plateau& plateau){
     if (nbPrivileges == 0) {
