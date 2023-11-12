@@ -7,12 +7,13 @@
 
 #include "jetons.hpp"
 #include "carte.h"
+#include "strategy.hpp"
+#include "espacejeux.hpp"
 #include <iostream>
 #include <string>
 #include <array>
 #include <vector>
 #include <unordered_map>
-#include "strategy.hpp"
 
 
 
@@ -41,11 +42,12 @@ private:
     const std::string nom;
     const std::string prenom;
     const type typeDeJoueur;
-    int ptsPrestige;
-    int nbCouronnes;
+    unsigned int ptsPrestige;
+    unsigned int nbCouronnes;
 
-    std::unordered_map</*CouleurCarte*/ CouleurJeton, std::vector<Carte*>> cartes;
+    std::unordered_map<CouleurCarte, std::vector<const Carte*>> cartes;
     size_t nbCartes;
+    std::vector<const Carte*> cartesReservees;
     std::unordered_map<CouleurJeton, std::vector<const Jeton*>> jetons;
     size_t nbJetons;
     std::vector<const Privilege*> privileges;
@@ -64,8 +66,8 @@ public:
     std::string getNom() const { return nom; };
     std::string getPrenom() const { return prenom; };
     type getTypeDeJoueur() const { return typeDeJoueur; };
-    int getptsPrestige() const { return ptsPrestige; };
-    int getnbCouronnes() const { return nbCouronnes; };
+    unsigned int getptsPrestige() const { return ptsPrestige; };
+    unsigned int getnbCouronnes() const { return nbCouronnes; };
     //Carte **getCartes();
     size_t getNbCartes() const { return nbCartes; }
     //Jetons **getJetons();
@@ -79,7 +81,8 @@ public:
     void updatePtsPrestige(int pts) { ptsPrestige += pts; };
     void updateNbCouronnes(int couronnes) { nbCouronnes += couronnes; };
 
-    void addCarte(Carte *carte);
+    void addCarte(const Carte &carte);
+    void addCarteReservee(const Carte &carte) ;
     void addJeton(const Jeton &jeton);
     void addPrivilege(const Privilege &privilege);
 
@@ -97,8 +100,12 @@ public:
         std::cout << "Nombre de privilèges : " << &privileges << std::endl;
     }
 
-
+    // Actions optionnelles
     void utiliserPrivilège(Plateau& plateau);
+    void remplirPlateau(Plateau& plateau, Sac& sac, Joueur& joueurAdverse);
+
+    // Actions obligatoires
+    void acheterCarteJoaillerie (EspaceJeux& espaceJeux);
 
 
 };

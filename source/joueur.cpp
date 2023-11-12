@@ -71,11 +71,17 @@ void Joueur::afficherJetons() const {
 
 // Ajout des éléments
 
-void Joueur::addCarte(Carte *carte) {
-    //cartes[carte->getCouleur()].push_back(carte);
+void Joueur::addCarte(const Carte &carte) {
+    cartes[carte.getBonus().getCouleur()].push_back(&carte);
     nbCartes++;
-    //ptsPrestige += carte->getPtsPrestige();
-    //nbCouronnes += carte->getNbCouronnes();
+    ptsPrestige += carte.getNbPtsPrivilege();
+    nbCouronnes += carte.getNbCouronnes();
+}
+
+void Joueur::addCarteReservee(const Carte &carte) {
+    cartesReservees.push_back(&carte);
+    nbCartes++;
+
 }
 
 void Joueur::addJeton(const Jeton& jeton) {
@@ -144,5 +150,27 @@ void Joueur::utiliserPrivilège(Plateau& plateau){
     plateau.poserPrivilege(privilege);
     const Jeton& jetonSelec = strategy->choisirJeton(plateau);
     addJeton(jetonSelec);
+
+}
+
+void Joueur::remplirPlateau(Plateau& plateau, Sac& sac, Joueur& joueurAdverse){
+    strategy->remplirPlateauStrat(plateau, sac);
+    if (nbPrivileges == 3){
+        std::cout<< "Vous avez deja 3 privileges. Vous n'en recupererez donc pas plus !" << std::endl;
+        return;
+    }
+    // Verifier s'il reste des privileges sur le plateau
+    if (!plateau.pivilegeDisponible()){
+        std::cout<< "Il n'y a plus de privileges sur le plateau !\nLe joueur adverse perd donc un privilege..." << std::endl;
+        const Privilege& privilege = joueurAdverse.supPrivilege(); // recuperation du privilege du joueur adverse
+        addPrivilege(privilege); // ajout du privilege au joueur
+        return;
+    }
+    // Cas standard
+    const Privilege& privilege = plateau.recupererPrivilege();
+    addPrivilege(privilege);
+}
+
+void acheterCarteJoaillerie (EspaceJeux& espaceJeux){
 
 }

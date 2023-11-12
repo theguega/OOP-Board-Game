@@ -1,7 +1,6 @@
 //
 // Created by samma on 31/10/2023.
 //
-
 #include "strategy.hpp"
 #include "jetons.hpp"
 
@@ -21,4 +20,8 @@ const Jeton& StrategyHumain::choisirJeton(Plateau& plateau){
     std::cin >> j;
 
     return plateau.recupererJeton(i, j);
+}
+
+void StrategyHumain::remplirPlateauStrat(Plateau& plateau, Sac& sac){
+    plateau.remplirPlateau(sac);
 }
