@@ -21,15 +21,7 @@ enum class CouleurCarte {blanc, bleu, vert, noir, rouge, perle, indt}; // ajout 
 string toString(CouleurCarte c);
 ostream& operator<<(ostream& f, CouleurCarte c);
 extern std::initializer_list<CouleurCarte> CouleursCarte;
-std::map<std::string, CouleurCarte> stringToCouleurCarteMap = {
-        {"blanc", CouleurCarte::blanc},
-        {"bleu", CouleurCarte::bleu},
-        {"vert", CouleurCarte::vert},
-        {"noir", CouleurCarte::noir},
-        {"rouge", CouleurCarte::rouge},
-        {"perle", CouleurCarte::perle},
-        {"indt", CouleurCarte::indt}
-};
+extern std::map<string, CouleurCarte> stringToCouleurCarteMap;
 CouleurCarte StringToCouleurCarte(const string& couleurStr);
 
 
@@ -40,21 +32,15 @@ extern std::initializer_list<TypeCarte> TypesCarte;
 
 
 enum class Capacite { NewTurn, TakePrivilege, TakeJetonFromBonus, TakeJetonToAdv, AssociationBonus, None };
-std::map<std::string, Capacite> stringToCapaciteMap = {
-        {"NewTurn", Capacite::NewTurn},
-        {"TakePrivilege", Capacite::TakePrivilege},
-        {"TakeJetonFromBonus", Capacite::TakeJetonFromBonus},
-        {"TakeJetonToAdv", Capacite::TakeJetonToAdv},
-        {"AssociationBonus", Capacite::AssociationBonus},
-        {"None", Capacite::None}
-};
+extern std::map<std::string, Capacite> stringToCapaciteMap;
+extern std::initializer_list<Capacite> Capacites;
 string toString(Capacite c);
 ostream& operator<<(ostream& f, Capacite c);
 Capacite StringToCapacite(const string& capaciteStr);
 
 
 
-class Prix { // on l'encapsule dans la classe carte ? ou bien il y'a d'autres �l�ments qui ont un cout ?
+class Prix { // on l'encapsule dans la classe carte ? ou bien il y'a d'autres elements qui ont un cout ?
 private:
     unsigned int blanc, bleu, vert, noir, rouge, perle;
 public:
@@ -87,20 +73,18 @@ private:
     // eventuel ajout d'un champ ID, peut �tre util pour les cartes nobles par exemple, savoir qui est qui
     TypeCarte type;
     Prix prix;
-    Capacite capacite; 
+    Capacite capacite1;
+    Capacite capacite2;
     Bonus bonus;
     unsigned int nbCouronnes;
     unsigned int nbPtsPrivilege;
-    bool reserve = false;
 public:
-    Carte(TypeCarte t, Prix& p, Capacite c, Bonus& b, unsigned int nbC, unsigned int nbP); // constructeur classique
+    Carte(TypeCarte t, Prix& p, Capacite c1, Capacite c2, Bonus& b, unsigned int nbC, unsigned int nbP); // constructeur classique
     Carte(TypeCarte t, Capacite c, unsigned int nbP); // constructeur carte noble
     ~Carte() = default;
-    void reserver() { reserve = true; }
-    bool isReserve() const { return reserve; }
     TypeCarte getType() const { return type; }
     Prix getPrix() const { return prix; }
-    Capacite getCapacite() const { return capacite; }
+    Capacite getCapacites() const { return capacite1, capacite2; }
     Bonus getBonus() const { return bonus; }
     unsigned int getNbCouronnes() const { return nbCouronnes; }
     unsigned int getNbPtsPrivilege() const { return nbPtsPrivilege; }
@@ -111,16 +95,16 @@ class JeuCarte {
 private:
     // appliquer le design pattern singleton plus tard
     // eventuellement membre static pour chaque nombre de carte n1, n2, n3
-    array<const Carte*, 10> cartes_nv1; 
-    array<const Carte*, 10> cartes_nv2;
-    array<const Carte*, 10> cartes_nv3;
+    array<const Carte*, 30> cartes_nv1; 
+    array<const Carte*, 24> cartes_nv2;
+    array<const Carte*, 13> cartes_nv3;
     array<const Carte*, 4> cartes_nobles;
 public:
     JeuCarte();
     ~JeuCarte();
-    size_t getNbCartes_nv1() const { return 10; }
-    size_t getNbCartes_nv2() const { return 10; }
-    size_t getNbCartes_nv3() const { return 10; }
+    size_t getNbCartes_nv1() const { return 30; }
+    size_t getNbCartes_nv2() const { return 24; }
+    size_t getNbCartes_nv3() const { return 13; }
     size_t getNbCartes_nobles() const { return 4; }
     const Carte& getCarteNiv1(size_t i) const;
     const Carte& getCarteNiv2(size_t i) const;
@@ -143,11 +127,6 @@ public:
     const Carte& piocher();
     Pioche(const Pioche& p) = delete;
     Pioche& operator=(const Pioche& p) = delete;
-
 };
 
-
-//Je pense qu'il faudrait faire � peu pr�s comme le TD 4 : 
-// classe pioche --> pour nous il y aura 3 instances de pioches (3 niveaux)
-// classe Plateau --> classe Pyramide pour nous (l� o� il y a les cartes, le mot plateau est reserv� pour les jetons)
 

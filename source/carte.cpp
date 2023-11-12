@@ -9,6 +9,8 @@ using namespace std;
 
 std::initializer_list<CouleurCarte> CouleursCarte = { CouleurCarte::blanc, CouleurCarte::bleu, CouleurCarte::vert, CouleurCarte::noir, CouleurCarte::rouge, CouleurCarte::perle, CouleurCarte::indt };
 std::initializer_list<TypeCarte> TypesCarte = { TypeCarte::Niv1, TypeCarte::Niv2, TypeCarte::Niv3, TypeCarte::Noble };
+std::initializer_list<Capacite> Capacites = { Capacite::NewTurn, Capacite::TakePrivilege, Capacite::TakeJetonFromBonus, Capacite::TakeJetonToAdv, Capacite::AssociationBonus, Capacite::None };
+
 
 string toString(CouleurCarte c){
     switch (c){
@@ -23,6 +25,16 @@ string toString(CouleurCarte c){
     }
 }
 ostream& operator<<(ostream& f, CouleurCarte c){ f << toString(c); return f; }
+
+std::map<std::string, CouleurCarte> stringToCouleurCarteMap = {
+        {"blanc", CouleurCarte::blanc},
+        {"bleu", CouleurCarte::bleu},
+        {"vert", CouleurCarte::vert},
+        {"noir", CouleurCarte::noir},
+        {"rouge", CouleurCarte::rouge},
+        {"perle", CouleurCarte::perle},
+        {"indt", CouleurCarte::indt}
+};
 
 CouleurCarte StringToCouleurCarte(const std::string& couleurStr){
     auto tmp = stringToCouleurCarteMap.find(couleurStr);
@@ -60,6 +72,15 @@ string toString(Capacite c){
 }
 ostream& operator<<(ostream& f, Capacite c) { f << toString(c); return f; }
 
+std::map<std::string, Capacite> stringToCapaciteMap = {
+        {"NewTurn", Capacite::NewTurn},
+        {"TakePrivilege", Capacite::TakePrivilege},
+        {"TakeJetonFromBonus", Capacite::TakeJetonFromBonus},
+        {"TakeJetonToAdv", Capacite::TakeJetonToAdv},
+        {"AssociationBonus", Capacite::AssociationBonus},
+        {"None", Capacite::None}
+};
+
 Capacite StringToCapacite(const std::string& capaciteStr){
     auto tmp = stringToCapaciteMap.find(capaciteStr);
     if (tmp != stringToCapaciteMap.end()) {
@@ -85,15 +106,15 @@ ostream& operator<<(ostream& f, const Bonus& b){
 }
 
 
-Carte::Carte(TypeCarte t, Prix& p, Capacite c, Bonus& b, unsigned int nbC, unsigned int nbP) : type(t), prix(p), capacite(c), bonus(b), nbCouronnes(nbC), nbPtsPrivilege(nbP) {
+Carte::Carte(TypeCarte t, Prix& p, Capacite c1, Capacite c2, Bonus& b, unsigned int nbC, unsigned int nbP) : type(t), prix(p), capacite1(c1), capacite2(c2), bonus(b), nbCouronnes(nbC), nbPtsPrivilege(nbP) {
     if (t == TypeCarte::Noble)
-        throw CarteException("Veuillez utiliser le constructeur appropri�");
+        throw CarteException("Veuillez utiliser le constructeur approprie");
 }
 
 
-Carte::Carte(TypeCarte t, Capacite c, unsigned int nbP) : type(t), prix(0, 0, 0, 0, 0, 0), capacite(c), bonus(), nbCouronnes(0), nbPtsPrivilege(nbP) {
+Carte::Carte(TypeCarte t, Capacite c, unsigned int nbP) : type(t), prix(0, 0, 0, 0, 0, 0), capacite1(c), capacite2(Capacite::None), bonus(), nbCouronnes(0), nbPtsPrivilege(nbP) {
     if (t != TypeCarte::Noble)
-        throw CarteException("Veuillez utiliser le constructeur appropri�");
+        throw CarteException("Veuillez utiliser le constructeur approprie");
 }
 
 
@@ -101,7 +122,7 @@ ostream& operator<<(ostream& f, const Carte& c){
     f << "-------------------------------------\n";
     f << c.getType() << "        " << "Bonus : " << c.getBonus() << "\n";
     f << "-------------------------------------\n";
-    f << "Capacite : " << c.getCapacite() << "\n";
+    f << "Capacite : " << c.getCapacites() << "\n";
     f << "-------------------------------------\n";
     f << "Prix :\n" << c.getPrix() << "\n";
     f << "-------------------------------------\n";
@@ -110,54 +131,79 @@ ostream& operator<<(ostream& f, const Carte& c){
     return f;
 }
 
-// Il faut tout modifier pour traiter le constructeur avec du sqlite
 
 JeuCarte::JeuCarte(){
+    cartes_nv1.fill(nullptr);
+    cartes_nv2.fill(nullptr);
+    cartes_nv3.fill(nullptr);
+    cartes_nobles.fill(nullptr);
     sqlite3* db;
     sqlite3_stmt* stmt;
-
-    int rc = sqlite3_open("cartes.sql", &db);
-    if (rc != SQLITE_OK) {
-        std::cerr << "Impossible d'ouvrir la base de données: " << sqlite3_errmsg(db) << std::endl;
-        return;
-    }
-    rc = sqlite3_prepare_v2(db, "SELECT * FROM Cartes", -1, &stmt, nullptr);
-    if (rc != SQLITE_OK) {
-        std::cerr << "Erreur de préparation de la requête : " << sqlite3_errmsg(db) << std::endl;
-        sqlite3_close(db);
-        return;
-    }
+    sqlite3_stmt* stmt2;
     int i = 0;
     int j = 0;
     int k = 0;
+    int z = 0;
 
+    int rc = sqlite3_open("data_carte.sqlite", &db);
+    if (rc != SQLITE_OK) {
+        std::cerr << "Impossible d'ouvrir la base de donnees: " << sqlite3_errmsg(db) << std::endl;
+        return;
+    }
+    rc = sqlite3_prepare_v2(db, "SELECT * FROM 'carte'", -1, &stmt, nullptr);
+    if (rc != SQLITE_OK) {
+        std::cerr << "Erreur de preparation de la requete : " << sqlite3_errmsg(db) << std::endl;
+        sqlite3_close(db);
+        return;
+    }
     while (sqlite3_step(stmt) == SQLITE_ROW) {
-        const char* type = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 0));
-        unsigned int p_blanc = sqlite3_column_int(stmt, 1);
-        unsigned int p_bleu = sqlite3_column_int(stmt, 2);
-        unsigned int p_vert = sqlite3_column_int(stmt, 3);
-        unsigned int p_noir = sqlite3_column_int(stmt, 4);
-        unsigned int p_rouge = sqlite3_column_int(stmt, 5);
-        unsigned int p_perle = sqlite3_column_int(stmt, 6);
-        const char* capacite = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 7));
-        const char* couleur_bonus = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 8));
-        unsigned int bonus = sqlite3_column_int(stmt, 9);
-        unsigned int nb_couronnes = sqlite3_column_int(stmt, 10);
-        unsigned int nb_pts_privileges = sqlite3_column_int(stmt, 11);
+        string type = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 1));
+        unsigned int p_blanc = sqlite3_column_int(stmt, 2);
+        unsigned int p_bleu = sqlite3_column_int(stmt, 3);
+        unsigned int p_vert = sqlite3_column_int(stmt, 4);
+        unsigned int p_noir = sqlite3_column_int(stmt, 5);
+        unsigned int p_rouge = sqlite3_column_int(stmt, 6);
+        unsigned int p_perle = sqlite3_column_int(stmt, 7);
+        string capacite1 = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 8));
+        string capacite2 = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 9));
+        string couleur_bonus = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 10));
+        unsigned int bonus = sqlite3_column_int(stmt, 11);
+        unsigned int nb_couronnes = sqlite3_column_int(stmt, 12);
+        unsigned int nb_pts_privileges = sqlite3_column_int(stmt, 13);
 
+        Prix p(p_blanc, p_bleu, p_vert, p_noir, p_rouge, p_perle);
+        Bonus b(StringToCouleurCarte(couleur_bonus), bonus);
         if (type == "Niv1") {
-            cartes_nv1[i] = new Carte(TypeCarte::Niv1, Prix(p_blanc, p_bleu, p_vert, p_noir, p_rouge, p_perle), StringToCapacite(capacite), Bonus(StringToCouleurCarte(couleur_bonus), bonus), nb_couronnes, nb_pts_privileges);
+            cartes_nv1[i] = new Carte(TypeCarte::Niv1, p, StringToCapacite(capacite1), StringToCapacite(capacite2), b, nb_couronnes, nb_pts_privileges);
             i++;
         }
         else if (type == "Niv2") {
-            cartes_nv2[j] = new Carte(TypeCarte::Niv2, Prix(p_blanc, p_bleu, p_vert, p_noir, p_rouge, p_perle), StringToCapacite(capacite), Bonus(StringToCouleurCarte(couleur_bonus), bonus), nb_couronnes, nb_pts_privileges);
+            cartes_nv2[j] = new Carte(TypeCarte::Niv2, p, StringToCapacite(capacite1), StringToCapacite(capacite2), b, nb_couronnes, nb_pts_privileges);
             j++;
         }
         else if (type == "Niv3") {
-            cartes_nv3[k] = new Carte(TypeCarte::Niv3, Prix(p_blanc, p_bleu, p_vert, p_noir, p_rouge, p_perle), StringToCapacite(capacite), Bonus(StringToCouleurCarte(couleur_bonus), bonus), nb_couronnes, nb_pts_privileges);
+            cartes_nv3[k] = new Carte(TypeCarte::Niv3, p, StringToCapacite(capacite1), StringToCapacite(capacite2), b, nb_couronnes, nb_pts_privileges);
             k++;
         }
+        else {
+            throw CarteException("Erreur de construction, le type de carte ne convient pas ici");
+        }
     }
+    rc = sqlite3_prepare_v2(db, "SELECT * FROM 'carte_noble'", -1, &stmt2, nullptr);
+    if (rc != SQLITE_OK) {
+        std::cerr << "Erreur de preparation de la requete : " << sqlite3_errmsg(db) << std::endl;
+        sqlite3_close(db);
+        return;
+    }
+    while (sqlite3_step(stmt2) == SQLITE_ROW) {
+        string capacite = reinterpret_cast<const char*>(sqlite3_column_text(stmt2, 1));
+        unsigned int nb_pts_privileges = sqlite3_column_int(stmt2, 2);
+        cartes_nobles[z] = new Carte(TypeCarte::Noble, StringToCapacite(capacite), nb_pts_privileges);
+        z++;
+    }
+    sqlite3_finalize(stmt);
+    sqlite3_finalize(stmt2);
+    sqlite3_close(db);
 }
 
 
@@ -178,29 +224,29 @@ JeuCarte::~JeuCarte(){
 
 
 const Carte& JeuCarte::getCarteNiv1(size_t i) const{
-    if (i >= 10)
-        throw CarteException("Il n'y a que n1 cartes");
+    if (i >= 30)
+        throw CarteException("Il n'y a que 30 cartes de niveau 1");
     return *cartes_nv1[i];
 }
 
 
 const Carte& JeuCarte::getCarteNiv2(size_t i) const{
-    if (i >= 10)
-        throw CarteException("Il n'y a que n2 cartes");
+    if (i >= 24)
+        throw CarteException("Il n'y a que 24 cartes de niveau 2");
     return *cartes_nv2[i];
 }
 
 
 const Carte& JeuCarte::getCarteNiv3(size_t i) const{
-    if (i >= 10)
-        throw CarteException("Il n'y a que n3 cartes");
+    if (i >= 13)
+        throw CarteException("Il n'y a que 13 cartes de niveau 3");
     return *cartes_nv3[i];
 }
 
 
 const Carte& JeuCarte::getCarteNoble(size_t i) const{
     if (i >= 4)
-        throw CarteException("Il n'y a que 4 cartes");
+        throw CarteException("Il n'y a que 4 cartes nobles");
     return *cartes_nobles[i];
 }
 
@@ -211,17 +257,24 @@ Pioche::Pioche(const JeuCarte& j, TypeCarte t) : type_carte(t){
         for (size_t i = 0; i < nb_cartes; i++)
             cartes.push_back(&j.getCarteNiv1(i));
     }
-    if (t == TypeCarte::Niv2) {
+    else if (t == TypeCarte::Niv2) {
         nb_cartes = j.getNbCartes_nv2();
         for (size_t i = 0; i < nb_cartes; i++)
             cartes.push_back(&j.getCarteNiv2(i));
     }
-    if (t == TypeCarte::Niv3) {
+    else if (t == TypeCarte::Niv3) {
         nb_cartes = j.getNbCartes_nv3();
         for (size_t i = 0; i < nb_cartes; i++)
             cartes.push_back(&j.getCarteNiv3(i));
     }
-    // est-ce qu'on fait une pioche pour les cartes nobles, je suis pas s�r
+    else if (t == TypeCarte::Noble) {
+        nb_cartes = j.getNbCartes_nobles();
+        for (size_t i = 0; i < nb_cartes; i++)
+            cartes.push_back(&j.getCarteNoble(i));
+    }
+    else {
+        throw CarteException("Type de cartes inconnu");
+    }
 }
 
 
@@ -240,7 +293,7 @@ const Carte& Pioche::piocher(){
     size_t x = distrib(gen);
     const Carte* c = cartes[x];
     for (size_t i = x + 1; i < nb_cartes; i++)
-        cartes[i - 1] = cartes[i]; //Dplace toutes les cartes  droite vers la gauche.
+        cartes[i - 1] = cartes[i]; //Deplace toutes les cartes  droite vers la gauche.
     nb_cartes--;
     return *c;
 }
