@@ -153,4 +153,66 @@ void Partie::sauvegardePartie() {
         sqlite3_close(db);
         return;
     } 
+
+    //Fermeture de la base de donnée
+    sqlite3_close(db);
+}
+
+void Partie::enregisterScore() {
+    //a la fin d'une partie il faut enregistrer le score des joueurs dans la base de donnée
+    //on regarde si il existe déjà et on lui ajoute une victoire ou une défaite
+    //sinon on le crée et on lui ajoute une victoire ou une défaite
+
+    //Connexion à la base de donnée
+    sqlite3 *db;
+    int rc = sqlite3_open("score.sqlite", &db);
+    if (rc != SQLITE_OK) {
+        std::cerr << "Erreur lors de la connexion à la base de donnée" << std::endl;
+        sqlite3_close(db);
+        return;
+    }
+
+    for (size_t i = 0; i < 2; i++) {
+        //Recherche du joueur 
+        string sql = "SELECT * FROM score WHERE nom = '" + joueurs[i]->getNom() + "' AND prenom = '" + joueurs[i]->getPrenom() + "';";
+        sqlite3_stmt *stmt;
+        rc = sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, NULL);
+        if (rc != SQLITE_OK) {
+            std::cerr << "Erreur lors de la recherche du joueur 1" << std::endl;
+            sqlite3_close(db);
+            return;
+        }
+        rc = sqlite3_step(stmt);
+        if (rc == SQLITE_ROW) {
+            //Le joueur existe déjà
+            //On récupère son nombre de victoire et de défaite
+            int nbVictoire = sqlite3_column_int(stmt, 2);
+            int nbDefaite = sqlite3_column_int(stmt, 3);
+            //On incrémente le nombre de victoire ou de défaite
+            if (joueurs[i]->estGagnant()) {
+                nbVictoire++;
+            } else {
+                nbDefaite++;
+            }
+            //On met à jour le joueur
+            sql = "UPDATE score SET nbVictoire = " + std::to_string(nbVictoire) + ", nbDefaite = " + std::to_string(nbDefaite) + " WHERE nom = '" + joueurs[i]->getNom() + "' AND prenom = '" + joueurs[i]->getPrenom() + "';";
+            rc = sqlite3_exec(db, sql.c_str(), NULL, NULL, NULL);
+            if (rc != SQLITE_OK) {
+                std::cerr << "Erreur lors de la mise à jour du joueur 1" << std::endl;
+                sqlite3_close(db);
+                return;
+            }
+        } else {
+            //Le joueur n'existe pas
+            //On l'ajoute donc en lui attribuant une victoire ou une défaite
+            if (joueurs[i]->estGagnant()) {
+                sql = "INSERT INTO score (nom, prenom, nbVictoire, nbDefaite) VALUES ('" + joueurs[0]->getNom() + "', '" + joueurs[i]->getPrenom() + "', 1, 0);";
+            } else {
+                sql = "INSERT INTO score (nom, prenom, nbVictoire, nbDefaite) VALUES ('" + joueurs[0]->getNom() + "', '" + joueurs[i]->getPrenom() + "', 0, 1);";
+            }
+        }
+    }
+
+    //Fermeture de la base de donnée
+    sqlite3_close(db);
 }

@@ -55,7 +55,9 @@ class Partie {
         static void libererInstance();
 
         void sauvegardePartie();
-   
+        //void chargerPartie(); //si l'on décide qu'il est possible de joueur plusieurs partie en même temps
+
+        void enregisterScore();
 
         }; 
         
