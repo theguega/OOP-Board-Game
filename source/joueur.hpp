@@ -48,6 +48,7 @@ private:
     std::unordered_map<CouleurCarte, std::vector<const Carte*>> cartes;
     size_t nbCartes;
     std::vector<const Carte*> cartesReservees;
+    size_t nbCartesReservees;
     std::unordered_map<CouleurJeton, std::vector<const Jeton*>> jetons;
     size_t nbJetons;
     std::vector<const Privilege*> privileges;
@@ -71,6 +72,7 @@ public:
     //Carte **getCartes();
     size_t getNbCartes() const { return nbCartes; }
     //Jetons **getJetons();
+    size_t getNbCartesReservees() const { return nbCartesReservees; }
     size_t getNbJetons() const { return nbJetons; }
     //Privilege **getPrivileges();
     size_t getNbPrivileges() const { return nbPrivileges; }
@@ -88,7 +90,8 @@ public:
 
     // Supprimer un element du vecteur --> attention il faudra voir le lien avec les autres classes DONE
     // Si on supprime un privilège il doit revenir sur le plateau
-    void supCarte(Carte *carte);
+    void supCarte(Carte &carte);
+    void supCarteReservee(Carte &carte);
     void supJeton(Jeton *jeton);
     const Privilege& supPrivilege(); // a voir si on retire pas juste le premier privilege
 

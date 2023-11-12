@@ -97,16 +97,24 @@ void Joueur::addPrivilege(const Privilege &privilege) {
 
 // Suppression des éléments
 
-void::Joueur::supCarte(Carte *carte) {
-    /*
-    for (int i = 0; i < cartes[carte->getBonus()->getCouleur]; i++) {
-        if (cartes[carte->getBonus()->getCouleur][i] == carte) {
-            //nbCouronnes -= carte->getNbCouronnes();
-            //ptsPrestige -= carte->getPtsPrestige();
-            cartes[carte->getBonus()->getCouleur].erase(cartes[carte->getBonus()->getCouleur].begin() + i);
+void::Joueur::supCarte(Carte &carte) {
+    for (int i = 0; i < cartes[carte.getBonus().getCouleur()].size(); i++) {
+        if (cartes[carte.getBonus().getCouleur()][i] == &carte) {
+            nbCouronnes -= carte.getNbCouronnes();
+            ptsPrestige -= carte.getNbPtsPrivilege();
+            cartes[carte.getBonus().getCouleur()].erase(cartes[carte.getBonus().getCouleur()].begin() + i);
             nbCartes--;
         }
-    }*/
+    }
+}
+
+void::Joueur::supCarteReservee(Carte &carte) {
+    for (int i = 0; i < cartesReservees.size(); i++) {
+        if (cartesReservees[i] == &carte) {
+            cartesReservees.erase(cartesReservees.begin() + i);
+            nbCartesReservees--;
+        }
+    }
 }
 
 void::Joueur::supJeton(Jeton *jeton) {
@@ -124,7 +132,7 @@ const Privilege&::Joueur::supPrivilege() {
     nbPrivileges--;
     return  sup;
 }
-
+/*
 bool::Joueur::nbPtsPrestigeParCouleurSupDix() const {
     for (auto it = cartes.begin(); it != cartes.end(); it++) {
         std::vector<Carte*> tab = it->second;
@@ -137,7 +145,7 @@ bool::Joueur::nbPtsPrestigeParCouleurSupDix() const {
         }
     }
     return false;
-}
+}*/
 
 void Joueur::utiliserPrivilège(Plateau& plateau){
     if (nbPrivileges == 0) {
