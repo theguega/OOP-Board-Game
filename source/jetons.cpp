@@ -14,7 +14,7 @@ std::initializer_list<CouleurJeton> CouleursJeton = {
     CouleurJeton::RUBIS, CouleurJeton::SAPHIR, CouleurJeton::ÉMERAUDE, CouleurJeton::ONYX, CouleurJeton::DIAMANT, CouleurJeton::OR, CouleurJeton::PERLE 
 };
 
-std::string toString(CouleurJeton c) {
+std::string toStringCouleur(CouleurJeton c) {
     switch (c)
     {
     case CouleurJeton::RUBIS: return "Rubis";
@@ -29,7 +29,7 @@ std::string toString(CouleurJeton c) {
 }
 
 std::ostream& operator<<(std::ostream& f, CouleurJeton c) {
-    return f << toString(c);
+    return f << toStringCouleur(c);
 }
 
 //------------------------------------------------- Classe Jetons

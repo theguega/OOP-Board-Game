@@ -49,6 +49,8 @@ class Pyramide {
 
         void remplirPyramide(Pioche &pNv1, Pioche &pNv2,Pioche &pNv3,Pioche &pNoble); // parcour de toute la pyramide pour remplir les cases vides   
         void remplircasePyramide(int i, int j, Pioche &pNv1, Pioche &pNv2, Pioche &pNv3, Pioche &pNoble); // remplir une case de la pyramide
+
+        const Carte* getCarte(int i, int j) { return array_cartes[i][j]; }
         
         void reserverCarte(int i, int j, Joueur& joueur, Pioche &pNv1, Pioche &pNv2, Pioche &pNv3, Pioche &pNoble); 
         void acheterCarte(int i, int j, Joueur& joueur, Pioche &pNv1, Pioche &pNv2, Pioche &pNv3, Pioche &pNoble); 
@@ -80,6 +82,10 @@ class EspaceJeux {
     public:
         EspaceJeux() : lotJetons(&LotDeJetons::getLotDeJetons()), lotPrivileges(&LotPrivileges::getLotPrivileges()), sac(&Sac::getSac(*lotJetons)), plateau(&Plateau::getPlateau(*sac, *lotPrivileges)) {};
         ~EspaceJeux();
+
+        Plateau& getPlateau() const { return *plateau; }
+        Sac& getSac() const { return *sac; }
+        Pyramide& getPyramide() const { return *pyramide; }
 
         EspaceJeux(const EspaceJeux&) = delete;
         EspaceJeux& operator=(const EspaceJeux&) = delete;

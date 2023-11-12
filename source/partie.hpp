@@ -53,6 +53,8 @@ class Partie {
         static Partie& getInstance(std::string nomJoueur1, std::string prenomJoueur1, std::string nomJoueur2, std::string prenomJoueur2);
 
         static void libererInstance();
+
+        void sauvegardePartie();
    
 
         }; 
