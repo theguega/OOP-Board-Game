@@ -149,7 +149,10 @@ bool Joueur::nbPtsPrestigeParCouleurSupDix() const{
 }
 
 
-void Joueur::utiliserPrivilège(Plateau& plateau){
+
+///////////////////////// Actions d'un joueur /////////////////////////
+
+void Joueur::utiliserPrivilege(Plateau& plateau){
     if (nbPrivileges == 0) {
         throw JoueurException("Le joueur n'a pas de privilège");
     }
@@ -181,6 +184,54 @@ void Joueur::remplirPlateau(Plateau& plateau, Sac& sac, Joueur& joueurAdverse){
     addPrivilege(privilege);
 }
 
+void Joueur::orReserverCarte (Pyramide& pyramide, Plateau& plateau){
+    std::cout<<"Volez-vous réserver une carte de la pyramide ou de la pioche de niveau i ? (0, 1, 2, 3)" << std::endl;
+    unsigned int choix;
+    std::cin >> choix;
+
+    if (choix == 0){
+        // Reservation de la carte
+        std::cout << "Voici les cartes de la pyramide : " << std::endl;
+        //pyramide.afficherPyramide();
+        std::cout << "Tapez le niveau de la carte que vous voulez réserver : " << std::endl;
+        unsigned int niveau;
+        std::cin >> niveau;
+        std::cout << "Tapez le numero de la carte que vous voulez réserver : " << std::endl;
+        unsigned int numCarte;
+        std::cin >> numCarte;
+        // Vérifications
+        /*if (numCarte > pyramide.getNbCartesNiv(niveau)){
+            throw JoueurException("Le numéro de la carte est incorrect");
+        }*/
+        const Carte& carte = pyramide.reserverCarte(niveau, numCarte);
+        addCarteReservee(carte);
+        //pyramide.supprimerCarte(niveau, numCarte);
+
+        // Recuperation d'un jeton or
+        const Jeton& jeton = strategy->choisirJeton(plateau);
+        if(jeton.getCouleur() != CouleurJeton::OR){
+            throw JoueurException("Le jeton choisi n'est pas un jeton or");
+        }
+        addJeton(jeton);
+
+
+    }
+    else if (choix == 1 || choix == 2 || choix == 3){
+        // Reservation de la carte
+        //const Carte& carte = espacesJeux.piocherCarte(choix);
+        //addCarteReservee(carte);
+
+        // Recuperation d'un jeton or
+        const Jeton& jeton = strategy->choisirJeton(plateau);
+        if(jeton.getCouleur() != CouleurJeton::OR){
+            throw JoueurException("Le jeton choisi n'est pas un jeton or");
+        }
+        addJeton(jeton);
+    }
+
+
+}
+
 void Joueur::acheterCarteJoaillerie (Pyramide& pyramide){
     // Voir comment gérer les bonus
     std::cout << "Tapez 1 pour acheter une carte Réservée.\nTapez 2 pour acheter une carte du plateau." << std::endl;
@@ -199,7 +250,7 @@ void Joueur::acheterCarteJoaillerie (Pyramide& pyramide){
         std::cout << "Tapez le numéro de la carte que vous voulez acheter : " << std::endl;
         unsigned int numCarte;
         std::cin >> numCarte;
-        // Vérifications
+        // Vérifications -> voir plus au niveau des jetons dans la main
         if (numCarte > cartesReservees.size()){
             throw JoueurException("Le numéro de la carte est invalide.");
         }
@@ -241,3 +292,4 @@ void Joueur::acheterCarteJoaillerie (Pyramide& pyramide){
 
 
 }
+

@@ -104,11 +104,12 @@ public:
     }
 
     // Actions optionnelles
-    void utiliserPrivilège(Plateau& plateau);
+    void utiliserPrivilege(Plateau& plateau);
     void remplirPlateau(Plateau& plateau, Sac& sac, Joueur& joueurAdverse);
 
     // Actions obligatoires
     void acheterCarteJoaillerie (Pyramide& pyramide);
+    void orReserverCarte (Pyramide& pyramide, Plateau& plateau);
 
 
 };
