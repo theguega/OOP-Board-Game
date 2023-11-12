@@ -21,7 +21,7 @@ enum class CouleurCarte {blanc, bleu, vert, noir, rouge, perle, indt}; // ajout 
 string toString(CouleurCarte c);
 ostream& operator<<(ostream& f, CouleurCarte c);
 extern std::initializer_list<CouleurCarte> CouleursCarte;
-extern std::map<std::string, CouleurCarte> stringToCouleurCarteMap;
+extern std::map<string, CouleurCarte> stringToCouleurCarteMap;
 CouleurCarte StringToCouleurCarte(const string& couleurStr);
 
 
@@ -33,13 +33,14 @@ extern std::initializer_list<TypeCarte> TypesCarte;
 
 enum class Capacite { NewTurn, TakePrivilege, TakeJetonFromBonus, TakeJetonToAdv, AssociationBonus, None };
 extern std::map<std::string, Capacite> stringToCapaciteMap;
+extern std::initializer_list<Capacite> Capacites;
 string toString(Capacite c);
 ostream& operator<<(ostream& f, Capacite c);
 Capacite StringToCapacite(const string& capaciteStr);
 
 
 
-class Prix { // on l'encapsule dans la classe carte ? ou bien il y'a d'autres �l�ments qui ont un cout ?
+class Prix { // on l'encapsule dans la classe carte ? ou bien il y'a d'autres elements qui ont un cout ?
 private:
     unsigned int blanc, bleu, vert, noir, rouge, perle;
 public:
@@ -77,13 +78,10 @@ private:
     Bonus bonus;
     unsigned int nbCouronnes;
     unsigned int nbPtsPrivilege;
-    bool reserve = false;
 public:
     Carte(TypeCarte t, Prix& p, Capacite c1, Capacite c2, Bonus& b, unsigned int nbC, unsigned int nbP); // constructeur classique
     Carte(TypeCarte t, Capacite c, unsigned int nbP); // constructeur carte noble
     ~Carte() = default;
-    void reserver() { reserve = true; }
-    bool isReserve() const { return reserve; }
     TypeCarte getType() const { return type; }
     Prix getPrix() const { return prix; }
     Capacite getCapacites() const { return capacite1, capacite2; }
@@ -129,11 +127,6 @@ public:
     const Carte& piocher();
     Pioche(const Pioche& p) = delete;
     Pioche& operator=(const Pioche& p) = delete;
-
 };
 
-
-//Je pense qu'il faudrait faire � peu pr�s comme le TD 4 : 
-// classe pioche --> pour nous il y aura 3 instances de pioches (3 niveaux)
-// classe Plateau --> classe Pyramide pour nous (l� o� il y a les cartes, le mot plateau est reserv� pour les jetons)
 

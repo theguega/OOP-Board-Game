@@ -9,10 +9,12 @@ class Carte{
     - type : enum
     - prix : Prix
     - bonus : Bonus
-    - capacite : enum
+    - capacite1 : enum
+    - capacite2 : enum
     - nbCouronnes : int
     - nbPtsPrivilege : int
-    + Carte()
+    + Carte(TypeCarte t, Prix& p, Capacite c1, Capacite c2, Bonus& b, unsigned int nbC, unsigned int nbP);
+    + Carte(TypeCarte t, Capacite c, unsigned int nbP)
     + ~Carte()
     + getType()
     + getPrix() 
@@ -25,7 +27,7 @@ class Carte{
 class Bonus{
     - couleur : enum
     - nbBonus : int
-    + Bonus()
+    + Bonus(CouleurCarte c = CouleurCarte::indt, int n = 0)
     + setCouleur()
     + getCouleur()
     + getNbBonus()
@@ -38,7 +40,7 @@ class Prix{
     - noir : int
     - rouge : int
     - perle : int
-    + Prix()
+    + Prix(...)
     + getBlanc()
     + getBleu()
     + get...()
@@ -48,7 +50,7 @@ class Pioche {
     - type_cartes : enum
     - cartes : vector<Carte*>
     - nb_cartes : int
-    + Pioche()
+    + Pioche(const JeuCarte& j, TypeCarte t)
     + ~Pioche()
     + estVide()
     + getNbCartes()
