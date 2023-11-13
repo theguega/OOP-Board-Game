@@ -1,6 +1,9 @@
 #include "jetons.hpp"
 #include "joueur.hpp"
 #include "strategy.hpp"
+#include "espacejeux.hpp"
+#include "partie.hpp"
+#include "strategy.hpp"
 #include <iostream>
 #include <string>
 #include <array>

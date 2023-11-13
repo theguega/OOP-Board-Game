@@ -6,6 +6,7 @@
 #include "jetons.hpp"
 #include "joueur.hpp"
 #include "partie.hpp"
+#include "espacejeux.hpp"
 #include "carte.h"
 
 int main(int argc, const char * argv[]) {

@@ -1,9 +1,5 @@
 #include "partie.hpp"
-#include "joueur.hpp"
-#include "jetons.hpp"
-#include "carte.h"
-#include "espacejeux.hpp"
-#include "sqlite3.h"
+
 
 Partie::Partie() {
     // création et affectation de nouveaux joueurs 
@@ -133,7 +129,7 @@ void Partie::sauvegardePartie() {
     //Sauvegarde de la pyramide
     Pyramide& pyramide = espaceJeux->getPyramide();
     for (size_t i =0; i<4; i++) {
-        for (size_t j =0; i<4; i++) {
+        for (size_t j =0; i<pyramide.array_cartes[i].size(); i++) {
             const Carte* carte = pyramide.getCarte(i,j);
             sql= "INSERT INTO pyramide (i, j, type_carte, prix_blanc, prix_bleu, prix_vert, prix_rouge, prix_noir, prix_perle, capacite1, capacite2, couleur_bonus, nb_bonus, nb_couronnes, nb_pts_privilege) VALUES (" + std::to_string(i) + ", " + std::to_string(j) + ", '" + TypeCartetoString(carte->getType()) + "', " + std::to_string(carte->getPrix().getBlanc()) + ", " + std::to_string(carte->getPrix().getBleu()) + ", " + std::to_string(carte->getPrix().getVert()) + ", " + std::to_string(carte->getPrix().getRouge()) + ", " + std::to_string(carte->getPrix().getNoir()) + ", " + std::to_string(carte->getPrix().getPerle()) + ", '" + CapacitetoString(carte->getCapacite1()) + "', '" + CapacitetoString(carte->getCapacite2()) + "', '" + CouleurCartetoString(carte->getBonus().getCouleur()) + "', " + std::to_string(carte->getBonus().getNbBonus()) + ", " + std::to_string(carte->getNbCouronnes()) + ", " + std::to_string(carte->getNbPtsPrivilege()) + ");";
             rc = sqlite3_exec(db, sql.c_str(), NULL, NULL, NULL);

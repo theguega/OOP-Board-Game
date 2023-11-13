@@ -4,7 +4,7 @@
 #include <string>
 #include <array>
 #include <vector>
-#include "joueur.hpp"
+
 #include "jetons.hpp"
 #include "carte.h"
 
@@ -28,7 +28,7 @@ class Pyramide {
         void definitCarte(int i, int j, const Carte& c) { array_cartes[i][j] = &c; };
         
         const Carte* getCarte(int i, int j) { return array_cartes[i][j]; }; // retourne la carte de la pyramide sans la supprimer
-    
+        
         const Carte& reserverCarte(int i, int j); // retourne la carte de la pyramide et la supprime
         const Carte& acheterCarte(int i, int j); // retourne la carte de la pyramide et la supprime + rempli la case avec une nouvelle carte de la pioche
         const Carte& ReserverCartePioche(int niveau); //retourne une carte de la pioche
@@ -36,8 +36,9 @@ class Pyramide {
         int getNbCartesNiv(int niveau) const; // retourne le nombre de cartes d'un niveau dans la pyramide
         void afficherPyramide() const; // affiche la pyramide
         
+        friend class Partie;
 
-        friend Joueur;
+
         /*
         Pyramide(const Pyramide&) = delete;
         Pyramide& operator=(const Pyramide&) = delete; */ 
@@ -66,8 +67,15 @@ class EspaceJeux {
         EspaceJeux() : lotJetons(&LotDeJetons::getLotDeJetons()), lotPrivileges(&LotPrivileges::getLotPrivileges()), sac(&Sac::getSac(*lotJetons)), plateau(&Plateau::getPlateau(*sac, *lotPrivileges)) {};
         ~EspaceJeux();
 
+        Plateau& getPlateau() const { return *plateau; }
+        Pyramide& getPyramide() const {return *pyramide; }
+        
+
         EspaceJeux(const EspaceJeux&) = delete;
         EspaceJeux& operator=(const EspaceJeux&) = delete;
+
+        friend class Partie;
+ ;
 
 };
  

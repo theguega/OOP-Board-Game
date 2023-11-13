@@ -123,6 +123,9 @@ const Carte& Pyramide::reserverCarte(int niveau, int numero) {
         this -> remplircasePyramide(niveau,numero);
         return ma_carte; 
     }
+    else{
+        throw "erreur";
+    }
 }
 
 
@@ -134,6 +137,10 @@ const Carte& Pyramide::acheterCarte(int niveau, int numero) {
         this -> remplircasePyramide(niveau,numero);
         return ma_carte; 
     }
+    else{
+        throw "erreur";
+    }
+    
 }
 
 const Carte& Pyramide::ReserverCartePioche(int niveau) {
@@ -144,23 +151,36 @@ const Carte& Pyramide::ReserverCartePioche(int niveau) {
                              return pNv1.piocher(); ; // piocher/tirer des cartes de niveau 3
                             break;
                         }
+                        else{
+                            throw "erreur";
+                        }
                        
                     case 1:
                         if (not(pNv2.estVide())) {
                              return pNv2.piocher();  // piocher des cartes de niveau 2
                             break;
                         }
+                        else{
+                            throw "erreur";
+                        }
                     case 2:
                         if (not(pNv3.estVide())) {
                              return pNv3.piocher(); // piocher des cartes de niveau 1
                             break;
+                        }
+                        else{
+                            throw "erreur";
                         }
                     case 3:
                         if (not(pNoble.estVide())) {
                             return pNoble.piocher(); // piocher des cartes nobles
                             break;
                         }
+                        else{
+                            throw "erreur";
+                        }
                     default:
+                        throw "erreur";
                         break;
                 }
    
