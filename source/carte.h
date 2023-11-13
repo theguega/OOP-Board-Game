@@ -32,14 +32,7 @@ extern std::initializer_list<TypeCarte> TypesCarte;
 
 
 enum class Capacite { NewTurn, TakePrivilege, TakeJetonFromBonus, TakeJetonToAdv, AssociationBonus, None };
-std::map<std::string, Capacite> stringToCapaciteMap = {
-        {"NewTurn", Capacite::NewTurn},
-        {"TakePrivilege", Capacite::TakePrivilege},
-        {"TakeJetonFromBonus", Capacite::TakeJetonFromBonus},
-        {"TakeJetonToAdv", Capacite::TakeJetonToAdv},
-        {"AssociationBonus", Capacite::AssociationBonus},
-        {"None", Capacite::None}
-};
+extern std::map<std::string, Capacite> stringToCapaciteMap;
 string CapacitetoString(Capacite c);
 ostream& operator<<(ostream& f, Capacite c);
 Capacite StringToCapacite(const string& capaciteStr);
