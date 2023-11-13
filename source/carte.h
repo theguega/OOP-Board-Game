@@ -90,7 +90,8 @@ public:
     ~Carte() = default;
     TypeCarte getType() const { return type; }
     Prix getPrix() const { return prix; }
-    Capacite getCapacites() const { return capacite1, capacite2; }
+    Capacite getCapacite1() const { return capacite1; }
+    Capacite getCapacite2() const { return capacite2; }
     Bonus getBonus() const { return bonus; }
     unsigned int getNbCouronnes() const { return nbCouronnes; }
     unsigned int getNbPtsPrivilege() const { return nbPtsPrivilege; }
