@@ -30,7 +30,7 @@ private:
 };
 
 //Enum pour les couleurs : initialiser, to string, affichage.
-enum class CouleurJeton { RUBIS, SAPHIR, ÉMERAUDE, ONYX, DIAMANT, OR, PERLE };
+enum class CouleurJeton { RUBIS, SAPHIR, EMERAUDE, ONYX, DIAMANT, OR, PERLE };
 std::string toStringCouleur(CouleurJeton c);
 std::ostream& operator<<(std::ostream& f, CouleurJeton c);
 extern std::initializer_list<CouleurJeton> CouleursJeton;
