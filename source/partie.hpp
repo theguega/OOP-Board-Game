@@ -14,7 +14,7 @@
 #include "carte.h"
 #include "espacejeux.hpp"
 #include "strategy.hpp"
-#include "sqlite3.h"
+
 
 //La classe partie qui initialise les joueurs, le tour et l'espace de jeux 
 class Partie {  

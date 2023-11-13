@@ -75,10 +75,8 @@ class EspaceJeux {
         EspaceJeux& operator=(const EspaceJeux&) = delete;
 
         friend class Partie;
- ;
+ 
 
 };
  
-
-
-#endif  //ESPACEJEUX_H
+ #endif  //ESPACEJEUX_H
