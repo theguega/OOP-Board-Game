@@ -256,7 +256,7 @@ void Joueur::orReserverCarte (Pyramide& pyramide, Plateau& plateau){
     if (choix == 0){
         // Reservation de la carte
         std::cout << "Voici les cartes de la pyramide : " << std::endl;
-        //pyramide.afficherPyramide();
+        pyramide.afficherPyramide();
         std::cout << "Tapez le niveau de la carte que vous voulez réserver : " << std::endl;
         unsigned int niveau;
         std::cin >> niveau;
@@ -264,11 +264,11 @@ void Joueur::orReserverCarte (Pyramide& pyramide, Plateau& plateau){
         unsigned int numCarte;
         std::cin >> numCarte;
         // Vérifications
-        /*if (numCarte > pyramide.getNbCartesNiv(niveau)){
+        if (numCarte > pyramide.getNbCartesNiv(niveau)){
             throw JoueurException("Le numéro de la carte est incorrect");
-        }*/
-        /*const Carte& carte = pyramide.reserverCarte(niveau, numCarte);
-        addCarteReservee(carte);*/
+        }
+        const Carte& carte = pyramide.reserverCarte(niveau, numCarte);
+        addCarteReservee(carte);
         //pyramide.supprimerCarte(niveau, numCarte);
 
         // Recuperation d'un jeton or
@@ -282,8 +282,8 @@ void Joueur::orReserverCarte (Pyramide& pyramide, Plateau& plateau){
     }
     else if (choix == 1 || choix == 2 || choix == 3){
         // Reservation de la carte
-        //const Carte& carte = espacesJeux.piocherCarte(choix);
-        //addCarteReservee(carte);
+        const Carte& carte = pyramide.ReserverCartePioche(choix);
+        addCarteReservee(carte);
 
         // Recuperation d'un jeton or
         const Jeton& jeton = strategy->choisirJeton(plateau);
@@ -329,7 +329,7 @@ void Joueur::acheterCarteJoaillerie (Pyramide& pyramide){
     else if (choix == 2){
         // Affichage des cartes
         std::cout << "Voici les cartes du plateau : " << std::endl;
-        //espaceJeux.afficherPyramide() Gerer l'affichage de la pyramide
+        pyramide.afficherPyramide(); //Gerer l'affichage de la pyramide
 
         std::cout << "Tapez le niveau de la carte que vous voulez acheter : " << std::endl;
         unsigned int niveau;
@@ -339,16 +339,16 @@ void Joueur::acheterCarteJoaillerie (Pyramide& pyramide){
         std::cin >> numCarte;
 
         // Vérifications
-        /*if (numCarte > espaceJeux.getNbCartesNiv(niveau)){
+        if (numCarte > pyramide.getNbCartesNiv(niveau)){
             throw JoueurException("Le numéro de la carte est incorrect");
-        }*/
-        /*
+        }
+        
         const Carte& carte = pyramide.acheterCarte(niveau, numCarte);
         if (carte.getNbPtsPrivilege() > ptsPrestige){
             throw JoueurException("Vous n'avez pas assez de points de prestige pour acheter cette carte");
         }
         addCarte(carte);
-        //pyramide.supprimerCarte(niveau, numCarte);*/
+        //pyramide.supprimerCarte(niveau, numCarte);
     }
     else {
         throw JoueurException("Le choix est incorrect");
