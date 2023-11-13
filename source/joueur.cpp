@@ -267,9 +267,8 @@ void Joueur::orReserverCarte (Pyramide& pyramide, Plateau& plateau){
         /*if (numCarte > pyramide.getNbCartesNiv(niveau)){
             throw JoueurException("Le numéro de la carte est incorrect");
         }*/
-        /*const Carte& carte = pyramide.reserverCarte(niveau, numCarte);
+        /*const Carte& carte = pyramide.prendreCarte(niveau, numCarte);
         addCarteReservee(carte);*/
-        //pyramide.supprimerCarte(niveau, numCarte);
 
         // Recuperation d'un jeton or
         const Jeton& jeton = strategy->choisirJeton(plateau);
@@ -343,12 +342,12 @@ void Joueur::acheterCarteJoaillerie (Pyramide& pyramide){
             throw JoueurException("Le numéro de la carte est incorrect");
         }*/
         /*
-        const Carte& carte = pyramide.acheterCarte(niveau, numCarte);
+        const Carte& carte = pyramide.prendreCarte(niveau, numCarte);
         if (carte.getNbPtsPrivilege() > ptsPrestige){
             throw JoueurException("Vous n'avez pas assez de points de prestige pour acheter cette carte");
         }
         addCarte(carte);
-        //pyramide.supprimerCarte(niveau, numCarte);*/
+    */
     }
     else {
         throw JoueurException("Le choix est incorrect");
