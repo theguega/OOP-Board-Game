@@ -9,7 +9,6 @@
 #include "carte.h"
 #include "strategy.hpp"
 #include "espacejeux.hpp"
-
 #include <iostream>
 #include <string>
 #include <array>
