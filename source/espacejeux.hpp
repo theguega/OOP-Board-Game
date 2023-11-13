@@ -7,59 +7,35 @@
 #include "joueur.hpp"
 #include "jetons.hpp"
 #include "carte.h"
-/*
 
-Une solution pour reserver des cartes ? ou peut etre un vecteur de carte reservee dans joueur ?
-
-class CarteReservee {
-    Joueur& mon_joueur; 
-    std::vector<const Carte&> cartes_reservees;
-    public:
-
-        CarteReservee(Joueur& j): mon_joueur(j) {};
-        ~CarteReservee() = default;
-
-        void ajouterCarte(const Carte& c);
-        void acheterCarte(const Carte& c);
-        void supprimerCarte(const Carte& c);
-
-        bool estVide() const;
-
-        int getNbCartes() const;
-        std::vector<const Carte&> getCartes() const;
-
-        CarteReservee(const CarteReservee&) = delete;
-        CarteReservee& operator=(const CarteReservee&) = delete;
-}; 
-
-*/
 
 class Pyramide {
 
     private:    
         std::vector<const Carte*> array_cartes[4];
+        Pioche &pNv1;
+        Pioche &pNv2;
+        Pioche &pNv3;
+        Pioche &pNoble;
     public:
-
-        // peut etre mettre les pioches en attributs pour ne pas avoir a les passer en parametre a chaque fois    
-
-        Pyramide( Pioche &pNv1, Pioche &pNv2,Pioche &pNv3,Pioche &pNoble); // constructeur
+        Pyramide( Pioche *piocheNv1, Pioche *piocheNv2,Pioche *piocheNv3,Pioche *piocheNoble); // constructeur
         ~Pyramide(); 
 
         bool estVide() const;
 
-        void remplirPyramide(Pioche &pNv1, Pioche &pNv2,Pioche &pNv3,Pioche &pNoble); // parcour de toute la pyramide pour remplir les cases vides   
-        void remplircasePyramide(int i, int j, Pioche &pNv1, Pioche &pNv2, Pioche &pNv3, Pioche &pNoble); // remplir une case de la pyramide
-
-        const Carte* getCarte(int i, int j) { return array_cartes[i][j]; }
+        void remplirPyramide(); // parcour de toute la pyramide pour remplir les cases vides   
+        void remplircasePyramide(int i, int j); // remplir une case de la pyramide
+        void definitCarte(int i, int j, const Carte& c) { array_cartes[i][j] = &c; };
         
-        void reserverCarte(int i, int j, Joueur& joueur, Pioche &pNv1, Pioche &pNv2, Pioche &pNv3, Pioche &pNoble); 
-        void acheterCarte(int i, int j, Joueur& joueur, Pioche &pNv1, Pioche &pNv2, Pioche &pNv3, Pioche &pNoble); 
-
+        const Carte* getCarte(int i, int j) { return array_cartes[i][j]; }; // retourne la carte de la pyramide sans la supprimer
+    
+        const Carte& prendreCarte(int i, int j); // retourne la carte de la pyramide et la supprime + rempli la case avec une nouvelle carte de la pioche
+        const Carte& PiocherCarte(int niveau); //retourne une carte de la pioche
+        /*
         Pyramide(const Pyramide&) = delete;
-        Pyramide& operator=(const Pyramide&) = delete;
+        Pyramide& operator=(const Pyramide&) = delete; */ 
+     };
 
-
-};
 
 class EspaceJeux {
     private:
@@ -78,14 +54,10 @@ class EspaceJeux {
         Pioche *piocheNv2 = new Pioche(*jeuxCartes, TypeCarte::Niv2);
         Pioche *piocheNv3 = new Pioche(*jeuxCartes, TypeCarte::Niv3);
         Pioche *piocheNoble = new Pioche(*jeuxCartes, TypeCarte::Noble);
-        Pyramide *pyramide = new Pyramide(*piocheNv1, *piocheNv2, *piocheNv3, *piocheNoble);
+        Pyramide *pyramide = new Pyramide(piocheNv1, piocheNv2, piocheNv3, piocheNoble);
     public:
         EspaceJeux() : lotJetons(&LotDeJetons::getLotDeJetons()), lotPrivileges(&LotPrivileges::getLotPrivileges()), sac(&Sac::getSac(*lotJetons)), plateau(&Plateau::getPlateau(*sac, *lotPrivileges)) {};
         ~EspaceJeux();
-
-        Plateau& getPlateau() const { return *plateau; }
-        Sac& getSac() const { return *sac; }
-        Pyramide& getPyramide() const { return *pyramide; }
 
         EspaceJeux(const EspaceJeux&) = delete;
         EspaceJeux& operator=(const EspaceJeux&) = delete;

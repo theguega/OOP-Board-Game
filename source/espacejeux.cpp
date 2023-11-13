@@ -1,11 +1,11 @@
+
 #include "espacejeux.hpp"
 
-Pyramide::Pyramide( Pioche& pNv1, Pioche& pNv2,Pioche& pNv3,Pioche& pNoble) {
-       
+Pyramide::Pyramide( Pioche *piocheNv1, Pioche *piocheNv2,Pioche *piocheNv3,Pioche *piocheNoble): pNv1(*piocheNv1), pNv2(*piocheNv2), pNv3(*piocheNv3), pNoble(*piocheNoble) {
         // redimesionnement des tableaux
-        array_cartes[0].resize(2); // Tableau de 2 Cartes niv3
-        array_cartes[1].resize(3); // Tableau de 3 Cartes niv2
-        array_cartes[2].resize(4); // Tableau de 4 Cartes niv1
+        array_cartes[0].resize(3); // Tableau de 3 Cartes niv3
+        array_cartes[1].resize(4); // Tableau de 4 Cartes niv2
+        array_cartes[2].resize(5); // Tableau de 5 Cartes niv1
         array_cartes[3].resize(4); // Tableau de 4 Cartes (les nobles)
 
         for (int i = 0; i < 4; i++) {
@@ -14,7 +14,7 @@ Pyramide::Pyramide( Pioche& pNv1, Pioche& pNv2,Pioche& pNv3,Pioche& pNoble) {
                 
             }
         }
-        this->remplirPyramide(pNv1,pNv2,pNv3,pNoble);
+        this->remplirPyramide();
 
 };
 
@@ -31,7 +31,7 @@ Pyramide::~Pyramide() {
  // Obtenir une référence temporaire
 
 
-void Pyramide::remplirPyramide(Pioche &pNv1, Pioche &pNv2, Pioche &pNv3, Pioche &pNoble) {
+void Pyramide::remplirPyramide() {
     const Carte* ma_carte = nullptr;
 
     for (int i = 0; i < 4; i++) {
@@ -69,7 +69,7 @@ void Pyramide::remplirPyramide(Pioche &pNv1, Pioche &pNv2, Pioche &pNv3, Pioche 
     }
 }
 
-void Pyramide::remplircasePyramide(int i, int j, Pioche &pNv1, Pioche &pNv2, Pioche &pNv3, Pioche &pNoble) {
+void Pyramide::remplircasePyramide(int i , int j) {
     const Carte* ma_carte = nullptr;
     if (array_cartes[i][j] == nullptr) {
         switch (i) {
@@ -113,19 +113,56 @@ bool Pyramide::estVide() const {
     return true;
 }
 
-void Pyramide::reserverCarte(int i, int j, Joueur& joueur /*a voir en fct de comment marche startegy*/ , Pioche &pNv1, Pioche &pNv2, Pioche &pNv3, Pioche &pNoble) {
+const Carte& Pyramide::prendreCarte(int i, int j) {
     if (array_cartes[i][j] != nullptr) {
-        //actions en focntion du fonctionnement de strategy
+        const Carte& ma_carte = *array_cartes[i][j];
         array_cartes[i][j] = nullptr;
-        this -> remplircasePyramide(i,j, pNv1, pNv2, pNv3, pNoble);
+        this -> remplircasePyramide(i,j);
+        return ma_carte; 
     }
 }
 
-void Pyramide::acheterCarte(int i, int j, Joueur& joueur, Pioche &pNv1, Pioche &pNv2, Pioche &pNv3, Pioche &pNoble) {
+const Carte& Pyramide::PiocherCarte(int niveau) {
+
+    switch (niveau) {
+                    case 0:
+                        if (not(pNv3.estVide())) {
+                             return pNv3.piocher(); ; // piocher/tirer des cartes de niveau 3
+                            break;
+                        }
+                       
+                    case 1:
+                        if (not(pNv2.estVide())) {
+                             return pNv2.piocher();  // piocher des cartes de niveau 2
+                            break;
+                        }
+                    case 2:
+                        if (not(pNv1.estVide())) {
+                             return pNv1.piocher(); // piocher des cartes de niveau 1
+                            break;
+                        }
+                    case 3:
+                        if (not(pNoble.estVide())) {
+                            return pNoble.piocher(); // piocher des cartes nobles
+                            break;
+                        }
+                    default:
+                        break;
+                }
+   
+}
+/*
+void Pyramide::acheterCarte(int i, int j) {
     if (array_cartes[i][j] != nullptr) {
         //actions en focntion du fonctionnement de strategy
         array_cartes[i][j] = nullptr;
-        this -> remplircasePyramide(i,j, pNv1, pNv2, pNv3, pNoble);
+        this -> remplircasePyramide(i,j);
     }
 }
+*/
+//getnbcartes
+//achetercartes
+
+
+
 
