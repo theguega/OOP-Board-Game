@@ -33,14 +33,14 @@ Partie::Partie(std::string nomJoueur1, std::string prenomJoueur1, std::string no
 
 void Partie::changerJoueurCourant() {
     switch (joueurCourant) {
-        case 0:
-            joueurCourant = 1;
-            break;
-        case 1:
-            joueurCourant = 0;
-            break;
-        default:
-            break;
+    case 0:
+        joueurCourant = 1;
+        break;
+    case 1:
+        joueurCourant = 0;
+        break;
+    default:
+        break;
     }
 }
 
@@ -69,7 +69,7 @@ void Partie::libererInstance() {
         delete instance;
         instance = nullptr;
     }
-}   
+}
 
 //Sauvegarde de la partie dans save.sqlite
 void Partie::sauvegardePartie() {
@@ -79,7 +79,7 @@ void Partie::sauvegardePartie() {
     // joueur1, joueur2, plateau, infopartie, pyramide
 
     //Connexion à la base de donnée
-    sqlite3 *db;
+    sqlite3* db;
     int rc = sqlite3_open("save.sqlite", &db);
     if (rc != SQLITE_OK) {
         std::cerr << "Erreur lors de la connexion à la base de donnée" << std::endl;
@@ -116,10 +116,10 @@ void Partie::sauvegardePartie() {
 
     //Sauvegarde plateau
     Plateau& plateau = espaceJeux->getPlateau();
-    for (size_t i =0; i<plateau.getTaille(); i++) {
-        for (size_t j =0; i<plateau.getTaille(); i++) {
-            if (plateau.getJeton(i,j) != nullptr) {
-                sql = "INSERT INTO plateau (i, j, couleur) VALUES (" + std::to_string(i) + ", " + std::to_string(j) + ", '" + toStringCouleur(plateau.getJeton(i,j)->getCouleur()) + "');";
+    for (size_t i = 0; i < plateau.getTaille(); i++) {
+        for (size_t j = 0; i < plateau.getTaille(); i++) {
+            if (plateau.getJeton(i, j) != nullptr) {
+                sql = "INSERT INTO plateau (i, j, couleur) VALUES (" + std::to_string(i) + ", " + std::to_string(j) + ", '" + toStringCouleur(plateau.getJeton(i, j)->getCouleur()) + "');";
                 rc = sqlite3_exec(db, sql.c_str(), NULL, NULL, NULL);
                 if (rc != SQLITE_OK) {
                     std::cerr << "Erreur lors de la sauvegarde du plateau" << std::endl;
@@ -132,10 +132,10 @@ void Partie::sauvegardePartie() {
 
     //Sauvegarde de la pyramide
     Pyramide& pyramide = espaceJeux->getPyramide();
-    for (size_t i =0; i<4; i++) {
-        for (size_t j =0; i<4; i++) {
-            const Carte* carte = pyramide.getCarte(i,j);
-            sql= "INSERT INTO pyramide (i, j, type_carte, prix_blanc, prix_bleu, prix_vert, prix_rouge, prix_noir, prix_perle, capacite1, capacite2, couleur_bonus, nb_bonus, nb_couronnes, nb_pts_privilege) VALUES (" + std::to_string(i) + ", " + std::to_string(j) + ", '" + TypeCartetoString(carte->getType()) + "', " + std::to_string(carte->getPrix().getBlanc()) + ", " + std::to_string(carte->getPrix().getBleu()) + ", " + std::to_string(carte->getPrix().getVert()) + ", " + std::to_string(carte->getPrix().getRouge()) + ", " + std::to_string(carte->getPrix().getNoir()) + ", " + std::to_string(carte->getPrix().getPerle()) + ", '" + CapacitetoString(carte->getCapacite1()) + "', '" + CapacitetoString(carte->getCapacite2()) + "', '" + CouleurCartetoString(carte->getBonus().getCouleur()) + "', " + std::to_string(carte->getBonus().getNbBonus()) + ", " + std::to_string(carte->getNbCouronnes()) + ", " + std::to_string(carte->getNbPtsPrivilege()) + ");";
+    for (size_t i = 0; i < 4; i++) {
+        for (size_t j = 0; i < 4; i++) {
+            const Carte* carte = pyramide.getCarte(i, j);
+            sql = "INSERT INTO pyramide (i, j, type_carte, prix_blanc, prix_bleu, prix_vert, prix_rouge, prix_noir, prix_perle, capacite1, capacite2, couleur_bonus, nb_bonus, nb_couronnes, nb_pts_privilege) VALUES (" + std::to_string(i) + ", " + std::to_string(j) + ", '" + TypeCartetoString(carte->getType()) + "', " + std::to_string(carte->getPrix().getBlanc()) + ", " + std::to_string(carte->getPrix().getBleu()) + ", " + std::to_string(carte->getPrix().getVert()) + ", " + std::to_string(carte->getPrix().getRouge()) + ", " + std::to_string(carte->getPrix().getNoir()) + ", " + std::to_string(carte->getPrix().getPerle()) + ", '" + CapacitetoString(carte->getCapacite1()) + "', '" + CapacitetoString(carte->getCapacite2()) + "', '" + CouleurCartetoString(carte->getBonus().getCouleur()) + "', " + std::to_string(carte->getBonus().getNbBonus()) + ", " + std::to_string(carte->getNbCouronnes()) + ", " + std::to_string(carte->getNbPtsPrivilege()) + ");";
             rc = sqlite3_exec(db, sql.c_str(), NULL, NULL, NULL);
             if (rc != SQLITE_OK) {
                 std::cerr << "Erreur lors de la sauvegarde de la pyramide" << std::endl;
@@ -152,7 +152,7 @@ void Partie::sauvegardePartie() {
         std::cerr << "Erreur lors de la sauvegarde des infos de la partie" << std::endl;
         sqlite3_close(db);
         return;
-    } 
+    }
 
     //Fermeture de la base de donnée
     sqlite3_close(db);
@@ -164,7 +164,7 @@ void Partie::enregisterScore() {
     //sinon on le crée et on lui ajoute une victoire ou une défaite
 
     //Connexion à la base de donnée
-    sqlite3 *db;
+    sqlite3* db;
     int rc = sqlite3_open("score.sqlite", &db);
     if (rc != SQLITE_OK) {
         std::cerr << "Erreur lors de la connexion à la base de donnée" << std::endl;
@@ -175,7 +175,7 @@ void Partie::enregisterScore() {
     for (size_t i = 0; i < 2; i++) {
         //Recherche du joueur 
         string sql = "SELECT * FROM score WHERE nom = '" + joueurs[i]->getNom() + "' AND prenom = '" + joueurs[i]->getPrenom() + "';";
-        sqlite3_stmt *stmt;
+        sqlite3_stmt* stmt;
         rc = sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, NULL);
         if (rc != SQLITE_OK) {
             std::cerr << "Erreur lors de la recherche du joueur 1" << std::endl;
@@ -191,7 +191,8 @@ void Partie::enregisterScore() {
             //On incrémente le nombre de victoire ou de défaite
             if (joueurs[i]->estGagnant()) {
                 nbVictoire++;
-            } else {
+            }
+            else {
                 nbDefaite++;
             }
             //On met à jour le joueur
@@ -202,12 +203,14 @@ void Partie::enregisterScore() {
                 sqlite3_close(db);
                 return;
             }
-        } else {
+        }
+        else {
             //Le joueur n'existe pas
             //On l'ajoute donc en lui attribuant une victoire ou une défaite
             if (joueurs[i]->estGagnant()) {
                 sql = "INSERT INTO score (nom, prenom, nbVictoire, nbDefaite) VALUES ('" + joueurs[0]->getNom() + "', '" + joueurs[i]->getPrenom() + "', 1, 0);";
-            } else {
+            }
+            else {
                 sql = "INSERT INTO score (nom, prenom, nbVictoire, nbDefaite) VALUES ('" + joueurs[0]->getNom() + "', '" + joueurs[i]->getPrenom() + "', 0, 1);";
             }
         }
