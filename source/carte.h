@@ -18,7 +18,7 @@ public:
 
 enum class CouleurCarte {blanc, bleu, vert, noir, rouge, perle, indt}; // ajout de "indetermin�" car certaines carte ont une couleur de Bonus variable
 
-string toString(CouleurCarte c);
+string CouleurCartetoString(CouleurCarte c);
 ostream& operator<<(ostream& f, CouleurCarte c);
 extern std::initializer_list<CouleurCarte> CouleursCarte;
 extern std::map<string, CouleurCarte> stringToCouleurCarteMap;
@@ -26,15 +26,21 @@ CouleurCarte StringToCouleurCarte(const string& couleurStr);
 
 
 enum class TypeCarte { Niv1, Niv2, Niv3, Noble };
-string toString(TypeCarte t);
+string TypeCartetoString(TypeCarte t);
 ostream& operator<<(ostream& f, TypeCarte t);
 extern std::initializer_list<TypeCarte> TypesCarte;
 
 
 enum class Capacite { NewTurn, TakePrivilege, TakeJetonFromBonus, TakeJetonToAdv, AssociationBonus, None };
-extern std::map<std::string, Capacite> stringToCapaciteMap;
-extern std::initializer_list<Capacite> Capacites;
-string toString(Capacite c);
+std::map<std::string, Capacite> stringToCapaciteMap = {
+        {"NewTurn", Capacite::NewTurn},
+        {"TakePrivilege", Capacite::TakePrivilege},
+        {"TakeJetonFromBonus", Capacite::TakeJetonFromBonus},
+        {"TakeJetonToAdv", Capacite::TakeJetonToAdv},
+        {"AssociationBonus", Capacite::AssociationBonus},
+        {"None", Capacite::None}
+};
+string CapacitetoString(Capacite c);
 ostream& operator<<(ostream& f, Capacite c);
 Capacite StringToCapacite(const string& capaciteStr);
 
@@ -84,7 +90,8 @@ public:
     ~Carte() = default;
     TypeCarte getType() const { return type; }
     Prix getPrix() const { return prix; }
-    Capacite getCapacites() const { return capacite1, capacite2; }
+    Capacite getCapacite1() const { return capacite1; }
+    Capacite getCapacite2() const { return capacite2; }
     Bonus getBonus() const { return bonus; }
     unsigned int getNbCouronnes() const { return nbCouronnes; }
     unsigned int getNbPtsPrivilege() const { return nbPtsPrivilege; }

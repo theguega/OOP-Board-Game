@@ -12,7 +12,7 @@ std::initializer_list<TypeCarte> TypesCarte = { TypeCarte::Niv1, TypeCarte::Niv2
 std::initializer_list<Capacite> Capacites = { Capacite::NewTurn, Capacite::TakePrivilege, Capacite::TakeJetonFromBonus, Capacite::TakeJetonToAdv, Capacite::AssociationBonus, Capacite::None };
 
 
-string toString(CouleurCarte c){
+string CouleurCartetoString(CouleurCarte c){
     switch (c){
         case CouleurCarte::blanc : return "blanc";
         case CouleurCarte::bleu: return "bleu";
@@ -24,7 +24,7 @@ string toString(CouleurCarte c){
         default: throw CarteException("Couleur inconnue");
     }
 }
-ostream& operator<<(ostream& f, CouleurCarte c){ f << toString(c); return f; }
+ostream& operator<<(ostream& f, CouleurCarte c){ f << CouleurCartetoString(c); return f; }
 
 std::map<std::string, CouleurCarte> stringToCouleurCarteMap = {
         {"blanc", CouleurCarte::blanc},
@@ -47,7 +47,7 @@ CouleurCarte StringToCouleurCarte(const std::string& couleurStr){
 }
 
 
-string toString(TypeCarte t){
+string TypeCartetoString(TypeCarte t){
     switch (t) {
         case TypeCarte::Niv1: return "Niv1";
         case TypeCarte::Niv2: return "Niv2";
@@ -56,10 +56,10 @@ string toString(TypeCarte t){
         default: throw CarteException("Type inconnue");
     }
 }
-ostream& operator<<(ostream& f, TypeCarte t) { f << toString(t); return f; }
+ostream& operator<<(ostream& f, TypeCarte t) { f << TypeCartetoString(t); return f; }
 
 
-string toString(Capacite c){
+string CapacitetoString(Capacite c){
     switch (c) {
         case Capacite::NewTurn: return "NewTurn";
         case Capacite::TakePrivilege: return "TakePrivilege";
@@ -70,7 +70,7 @@ string toString(Capacite c){
         default: throw CarteException("Capacite inconnue");
     }
 }
-ostream& operator<<(ostream& f, Capacite c) { f << toString(c); return f; }
+ostream& operator<<(ostream& f, Capacite c) { f << CapacitetoString(c); return f; }
 
 std::map<std::string, Capacite> stringToCapaciteMap = {
         {"NewTurn", Capacite::NewTurn},

@@ -112,6 +112,9 @@ public:
     void acheterCarteJoaillerie (Pyramide& pyramide);
     void orReserverCarte (Pyramide& pyramide, Plateau& plateau);
 
+    // (J'en ai besoin pour les score comment on l'implémente) (Signe Theo)
+    bool estGagnant() {return ptsPrestige >= 15;}; //exemple deso c degeu
+
 
 };
 
