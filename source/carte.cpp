@@ -122,7 +122,7 @@ ostream& operator<<(ostream& f, const Carte& c){
     f << "-------------------------------------\n";
     f << c.getType() << "        " << "Bonus : " << c.getBonus() << "\n";
     f << "-------------------------------------\n";
-    f << "Capacite : " << c.getCapacites() << "\n";
+    f << "Capacite : " << c.getCapacite1() << ", " << c.getCapacite2() << "\n";
     f << "-------------------------------------\n";
     f << "Prix :\n" << c.getPrix() << "\n";
     f << "-------------------------------------\n";
