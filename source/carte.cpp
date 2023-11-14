@@ -140,9 +140,9 @@ JeuCarte::JeuCarte(){
     int k = 0;
     int z = 0;
 
-    int rc = sqlite3_open("data_carte.sqlite", &db);
+    int rc = sqlite3_open("/Users/theoguegan/Documents/UTC/GI01/LO21/Projet_LO21/data/data_carte.sqlite", &db);
     if (rc != SQLITE_OK) {
-        std::cerr << "Impossible d'ouvrir la base de donnees: " << sqlite3_errmsg(db) << std::endl;
+        std::cerr << "Impossible d'ouvrir la base de donnees11: " << sqlite3_errmsg(db) << std::endl;
         return;
     }
     rc = sqlite3_prepare_v2(db, "SELECT * FROM 'carte'", -1, &stmt, nullptr);

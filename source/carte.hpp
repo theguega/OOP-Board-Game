@@ -4,7 +4,7 @@
 #include <iostream>
 #include <map>
 #include <random>
-#include "sqlite/sqlite3.h"
+#include "sqlite3.h"
 
 using namespace std;
 
