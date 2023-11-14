@@ -11,7 +11,7 @@ int main(int argc, const char * argv[]) {
 }
 
 
-/*
+/*x
         std::cout << "Bonjour !\nVeuillez creer les joueurs : \n";
         std::string nom, prenom;
         std::string typedejoueur;
