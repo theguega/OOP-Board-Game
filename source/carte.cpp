@@ -140,7 +140,8 @@ JeuCarte::JeuCarte(){
     int k = 0;
     int z = 0;
 
-    int rc = sqlite3_open("/Users/theoguegan/Documents/UTC/GI01/LO21/Projet_LO21/data/data_carte.sqlite", &db);
+    // ##### Pour ouvrir la bdd, placez une copie de la bdd dans votre repertoir courant de vos fichiers de code #####
+    int rc = sqlite3_open("data_carte.sqlite", &db);
     if (rc != SQLITE_OK) {
         std::cerr << "Impossible d'ouvrir la base de donnees11: " << sqlite3_errmsg(db) << std::endl;
         return;

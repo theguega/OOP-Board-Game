@@ -6,6 +6,7 @@ int main(int argc, const char * argv[]) {
 
     Partie* partie = new Partie();
     std::cout<<"Test";
+    //delete partie;
     
     return 0;
 }
