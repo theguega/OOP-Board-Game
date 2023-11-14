@@ -1,5 +1,8 @@
 #include "partie.hpp"
 #include "C:\Users\Beziat\source\repos\Projet_LO21\source\sqlite\sqlite3.h"
+//#include "/Users/robertantaluca/Desktop/Projet_LO21/source/sqlite/sqlite3.h"
+//#include "sqlite3.h"
+
 
 Partie::Partie() {
     // création et affectation de nouveaux joueurs 
@@ -39,7 +42,7 @@ void Partie::changerJoueurCourant() {
             break;
     }
 }
-
+/*
 Partie& Partie::getInstance() {
     if (instance == nullptr) {
         instance = new Partie();
@@ -66,7 +69,7 @@ void Partie::libererInstance() {
         instance = nullptr;
     }
 }   
-
+*/
 //Sauvegarde de la partie dans save.sqlite
 void Partie::sauvegardePartie() {
     //Cette fonction aura pour objectif de push toutes les données importantes de la partie dans la base de donnée
