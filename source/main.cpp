@@ -11,7 +11,7 @@
 
 int main(int argc, const char * argv[]) {
 
-    Partie& partie = Partie::getInstance();
+    Partie* partie = new Partie();
     std::cout<<"Test";
     
     return 0;
