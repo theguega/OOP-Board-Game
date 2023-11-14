@@ -3,19 +3,23 @@
 
 #include <iostream>
 #include <string>
+
 #include <array>
 #include <vector>
+#include <unordered_map>
+#include <map>
 
-#include "joueur.hpp"
-#include "jetons.hpp"
-#include "carte.hpp"
-#include "espacejeux.hpp"
-#include "strategy.hpp"
+#include <random>
 
+// ###### Mettez ici le chemin absolu de la librairie sqlite de votre pc, masquez les autres #####
 //#include "C:\Users\Beziat\source\repos\Projet_LO21\source\sqlite\sqlite3.h"
 //#include "/Users/robertantaluca/Desktop/Projet_LO21/source/sqlite/sqlite3.h"
-//#include "sqlite3.h"
 #include "/Users/theoguegan/Documents/UTC/GI01/LO21/Projet_LO21/source/sqlite/sqlite3.h"
+//Samuel M
+//Maxime
+
+#include "joueur.hpp"
+#include "espacejeux.hpp"
 
 //La classe partie qui initialise les joueurs, le tour et l'espace de jeux 
 class Partie {  

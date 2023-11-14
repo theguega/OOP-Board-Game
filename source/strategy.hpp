@@ -1,12 +1,7 @@
 #ifndef PROJET_LO21_STRATEGY_HPP
 #define PROJET_LO21_STRATEGY_HPP
 
-#include <iostream>
-#include <string>
-#include <array>
-#include <vector>
-
-#include "jetons.hpp"
+#include "espacejeux.hpp"
 
 class Strategy {
 public:

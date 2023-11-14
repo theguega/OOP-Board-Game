@@ -4,17 +4,6 @@
 #include "jetons.hpp"
 #include "carte.hpp"
 #include "strategy.hpp"
-#include "espacejeux.hpp"
-
-#include <iostream>
-#include <string>
-#include <array>
-#include <vector>
-#include <unordered_map>
-#include <utility>
-
-
-
 
 // Rajouter classe exception
 class JoueurException

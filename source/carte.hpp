@@ -1,17 +1,6 @@
 #pragma once
-#include <iostream>
-#include <string>
-#include <vector>
-#include <array>
-#include <map>
-#include <random>
 
 #include "partie.hpp"
-
-// ###### Mettez ici le chemin absolu de la librairie sqlite de votre pc, masquez les autres #####
-//#include "C:\Users\Beziat\source\repos\Projet_LO21\source\sqlite\sqlite3.h"
-//#include "/Users/robertantaluca/Desktop/Projet_LO21/source/sqlite/sqlite3.h"
-#include "/Users/theoguegan/Documents/UTC/GI01/LO21/Projet_LO21/source/sqlite/sqlite3.h"
 
 using namespace std;
 
