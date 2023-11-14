@@ -140,8 +140,9 @@ JeuCarte::JeuCarte(){
     int k = 0;
     int z = 0;
 
-    // ##### Pour ouvrir la bdd, placez une copie de la bdd dans votre repertoir courant de vos fichiers de code #####
-    int rc = sqlite3_open("data_carte.sqlite", &db);
+    // ###### Mettez ici le chemin absolu de la BDD sqlite de votre pc, masquez les autres #####
+    int rc = sqlite3_open("/Users/theoguegan/Documents/UTC/GI01/LO21/Projet_LO21/data/data_carte.sqlite", &db);
+
     if (rc != SQLITE_OK) {
         std::cerr << "Impossible d'ouvrir la base de donnees: " << sqlite3_errmsg(db) << std::endl;
         return;
@@ -285,7 +286,7 @@ const Carte& Pioche::piocher(){
         throw CarteException("Plus de cartes dans cette pioche");
     std::random_device rd;
     std::mt19937 gen(rd());
-    std::uniform_int_distribution<> distrib(0, nb_cartes-1);
+    std::uniform_int_distribution<> distrib(0, static_cast<int>(nb_cartes)-1);
     size_t x = distrib(gen);
     const Carte* c = cartes[x];
     for (size_t i = x + 1; i < nb_cartes; i++)

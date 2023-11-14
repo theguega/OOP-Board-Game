@@ -1,6 +1,8 @@
 #ifndef PROJET_LO21_JOUEUR_HPP
 #define PROJET_LO21_JOUEUR_HPP
 
+#include <unordered_map>
+
 #include "jetons.hpp"
 #include "carte.hpp"
 #include "strategy.hpp"

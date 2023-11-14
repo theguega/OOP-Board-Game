@@ -27,7 +27,7 @@ class Pyramide {
         void remplircasePyramide(int i, int j); // remplir une case de la pyramide
         void definitCarte(int i, int j, const Carte& c) { array_cartes[i][j] = &c; };
         
-        const Carte* getCarte(int i, int j) { return array_cartes[i][j]; }; // retourne la carte de la pyramide sans la supprimer
+        const Carte* getCarte(size_t i, size_t j) { return array_cartes[i][j]; }; // retourne la carte de la pyramide sans la supprimer
         
         const Carte& reserverCarte(int i, int j); // retourne la carte de la pyramide et la supprime
         const Carte& acheterCarte(int i, int j); // retourne la carte de la pyramide et la supprime + rempli la case avec une nouvelle carte de la pioche

@@ -1,6 +1,22 @@
-#pragma once
+#ifndef CARTES_H
+#define CARTES_H
 
-#include "partie.hpp"
+#include <iostream>
+#include <string>
+
+#include <array>
+#include <vector>
+#include <unordered_map>
+#include <map>
+
+#include <random>
+
+// ###### Mettez ici le chemin absolu de la librairie sqlite de votre pc, masquez les autres #####
+//#include "C:\Users\Beziat\source\repos\Projet_LO21\source\sqlite\sqlite3.h"
+#include "sqlite/sqlite3.h" //Pour MAC
+//#include "sqlite\sqlite3.h" //Pour Windows
+//Samuel M
+//Maxime
 
 using namespace std;
 
@@ -127,4 +143,5 @@ public:
     Pioche& operator=(const Pioche& p) = delete;
 };
 
+#endif
 
