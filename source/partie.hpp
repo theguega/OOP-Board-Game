@@ -3,17 +3,9 @@
 
 #include <iostream>
 
-#include <string>
-
-#include <array>
-
-#include <vector>
-
-#include "joueur.hpp"
 #include "jetons.hpp"
-#include "carte.h"
-#include "espacejeux.hpp"
-#include "strategy.hpp"
+#include "carte.hpp"
+#include "joueur.hpp"
 
 //La classe partie qui initialise les joueurs, le tour et l'espace de jeux 
 class Partie {  

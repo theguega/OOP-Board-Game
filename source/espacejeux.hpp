@@ -1,12 +1,9 @@
 #ifndef ESPACEJEUX_H
 #define ESPACEJEUX_H
-#include <iostream>
-#include <string>
-#include <array>
-#include <vector>
 
+#include <iostream>
+#include "carte.hpp"
 #include "jetons.hpp"
-#include "carte.h"
 
 
 class Pyramide {

@@ -1,9 +1,11 @@
-#pragma once
+#ifndef CARTES_H
+#define CARTES_H
+
 #include <iostream>
-#include <string>
-#include <vector>
-#include <array>
 #include <map>
+#include <random>
+#include "sqlite/sqlite3.h"
+
 using namespace std;
 
 
@@ -129,4 +131,5 @@ public:
     Pioche& operator=(const Pioche& p) = delete;
 };
 
+#endif
 
