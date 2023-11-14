@@ -5,11 +5,12 @@
 #include <map>
 #include "carte.h"
 #include "partie.hpp"
-// ###### Mettez ici le chemin absolu de la librairie sqlite de votre pc, masquez les autres #####
 
-#include "C:\Users\Beziat\source\repos\Projet_LO21\source\sqlite\sqlite3.h"
+// ###### Mettez ici le chemin absolu de la librairie sqlite de votre pc, masquez les autres #####
+//#include "C:\Users\Beziat\source\repos\Projet_LO21\source\sqlite\sqlite3.h"
 //#include "/Users/robertantaluca/Desktop/Projet_LO21/source/sqlite/sqlite3.h"
-//#include "sqlite3.h"
+#include "/Users/theoguegan/Documents/UTC/GI01/LO21/Projet_LO21/source/sqlite/sqlite3.h"
+
 using namespace std;
 
 std::initializer_list<CouleurCarte> CouleursCarte = { CouleurCarte::blanc, CouleurCarte::bleu, CouleurCarte::vert, CouleurCarte::noir, CouleurCarte::rouge, CouleurCarte::perle, CouleurCarte::indt };
