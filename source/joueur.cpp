@@ -1,13 +1,4 @@
-
 #include "joueur.hpp"
-
-
-#include <iostream>
-#include <string>
-#include <array>
-#include <vector>
-#include <unordered_map>
-#include <utility>
 
 std::string toStringType(type t) {
     switch (t) {

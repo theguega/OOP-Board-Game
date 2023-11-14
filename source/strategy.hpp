@@ -1,15 +1,12 @@
-//
-// Created by samma on 31/10/2023.
-//
-
 #ifndef PROJET_LO21_STRATEGY_HPP
 #define PROJET_LO21_STRATEGY_HPP
 
-#include "jetons.hpp"
 #include <iostream>
 #include <string>
 #include <array>
 #include <vector>
+
+#include "jetons.hpp"
 
 class Strategy {
 public:

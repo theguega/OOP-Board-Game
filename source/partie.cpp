@@ -1,8 +1,4 @@
 #include "partie.hpp"
-#include "C:\Users\Beziat\source\repos\Projet_LO21\source\sqlite\sqlite3.h"
-//#include "/Users/robertantaluca/Desktop/Projet_LO21/source/sqlite/sqlite3.h"
-//#include "sqlite3.h"
-
 
 Partie::Partie() {
     // création et affectation de nouveaux joueurs 

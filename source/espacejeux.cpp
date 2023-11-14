@@ -1,4 +1,3 @@
-
 #include "espacejeux.hpp"
 
 Pyramide::Pyramide( Pioche *piocheNv1, Pioche *piocheNv2,Pioche *piocheNv3,Pioche *piocheNoble): pNv1(*piocheNv1), pNv2(*piocheNv2), pNv3(*piocheNv3), pNoble(*piocheNoble) {

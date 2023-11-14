@@ -1,12 +1,8 @@
-//
-// Created by samma on 28/10/2023.
-//
-
 #ifndef PROJET_LO21_JOUEUR_HPP
 #define PROJET_LO21_JOUEUR_HPP
 
 #include "jetons.hpp"
-#include "carte.h"
+#include "carte.hpp"
 #include "strategy.hpp"
 #include "espacejeux.hpp"
 
@@ -15,6 +11,7 @@
 #include <array>
 #include <vector>
 #include <unordered_map>
+#include <utility>
 
 
 

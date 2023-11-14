@@ -6,7 +6,7 @@
 #include <vector>
 
 #include "jetons.hpp"
-#include "carte.h"
+#include "carte.hpp"
 
 
 class Pyramide {
