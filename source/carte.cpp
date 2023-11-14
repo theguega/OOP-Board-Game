@@ -5,6 +5,8 @@
 #include <map>
 #include "carte.h"
 #include "partie.hpp"
+// ###### Mettez ici le chemin absolu de la librairie sqlite de votre pc, masquez les autres #####
+
 #include "C:\Users\Beziat\source\repos\Projet_LO21\source\sqlite\sqlite3.h"
 //#include "/Users/robertantaluca/Desktop/Projet_LO21/source/sqlite/sqlite3.h"
 //#include "sqlite3.h"
@@ -148,6 +150,7 @@ JeuCarte::JeuCarte(){
     int k = 0;
     int z = 0;
 
+    // ##### Pour ouvrir la bdd, placez une copie de la bdd dans votre repertoir courant de vos fichiers de code #####
     int rc = sqlite3_open("data_carte.sqlite", &db);
     if (rc != SQLITE_OK) {
         std::cerr << "Impossible d'ouvrir la base de donnees: " << sqlite3_errmsg(db) << std::endl;

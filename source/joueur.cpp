@@ -200,7 +200,7 @@ void Joueur::recupererJetons(Plateau& plateau){
     std::vector<const Jeton*> jetonsRecup;
 
 
-    for (int k = 0; k < nbJetonsRecup; k++){
+    for (unsigned int k = 0; k < nbJetonsRecup; k++){
         unsigned int i, j;
         std::cout << "Entrez la valeur de i : ";
         std::cin >> i;
@@ -262,7 +262,7 @@ void Joueur::orReserverCarte (Pyramide& pyramide, Plateau& plateau){
         unsigned int niveau;
         std::cin >> niveau;
         std::cout << "Tapez le numero de la carte que vous voulez réserver : " << std::endl;
-        unsigned int numCarte;
+        int numCarte;
         std::cin >> numCarte;
         // Vérifications
         if (numCarte > pyramide.getNbCartesNiv(niveau)){
@@ -337,7 +337,7 @@ void Joueur::acheterCarteJoaillerie (Pyramide& pyramide){
         unsigned int niveau;
         std::cin >> niveau;
         std::cout << "Tapez le numero de la carte que vous voulez acheter : " << std::endl;
-        unsigned int numCarte;
+        int numCarte;
         std::cin >> numCarte;
 
         // Vérifications
