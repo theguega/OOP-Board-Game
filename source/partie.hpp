@@ -68,52 +68,52 @@ class Partie {
 //  ######  Debut du pattern Builder, pour l'instant il n'est pas utilisé comme constructeur de Partie  ######
 // Masquez cette partie si vous compilez
 
-class PartieBuilder {
-public:
-    virtual ~PartieBuilder() {};
-    virtual void setEspaceJeu() const = 0;
-    virtual void setJoueurs(string nomJoueur1, string prenomJoueur1, string nomJoueur2, string prenomJoueur2) const = 0;
-    virtual void setTours() const = 0;
-    virtual void setJoueurCourant() const = 0;
-};
-
-
-class NewPartieBuilder : public PartieBuilder {
-private:
-    Partie* partie;
-public:
-    NewPartieBuilder() { this->Reset(); }
-    ~NewPartieBuilder() { delete partie; }
-    void Reset() { this->partie = new Partie(); }
-    void setEspaceJeu() const override;
-    void setJoueurs(string nomJoueur1, string prenomJoueur1, string nomJoueur2, string prenomJoueur2) const override;
-    void setTours() const override;
-    void setJoueurCourant()const override;
-};
-
-
-class LastPartieBuilder : public PartieBuilder {
-private:
-    Partie* partie;
-public:
-    LastPartieBuilder() { this->Reset(); }
-    ~LastPartieBuilder() { this->Reset(); }
-    void Reset() { this->partie = new Partie(); }
-    void setEspaceJeu() const override;
-    void setJoueurs(string nomJoueur1, string prenomJoueur1, string nomJoueur2, string prenomJoueur2) const override;
-    void setTours() const override;
-    void setJoueurCourant()const override;
-};
-
-
-class Director {
-private:
-    PartieBuilder* builder;
-public:
-    void set_builder(PartieBuilder* builder) { this->builder = builder; }
-    void BuildNewPartie();
-    void BuildLastPartie();
-};
+//class PartieBuilder {
+//public:
+//    virtual ~PartieBuilder() {};
+//    virtual void setEspaceJeu() const = 0;
+//    virtual void setJoueurs(string nomJoueur1, string prenomJoueur1, string nomJoueur2, string prenomJoueur2) const = 0;
+//    virtual void setTours() const = 0;
+//    virtual void setJoueurCourant() const = 0;
+//};
+//
+//
+//class NewPartieBuilder : public PartieBuilder {
+//private:
+//    Partie* partie;
+//public:
+//    NewPartieBuilder() { this->Reset(); }
+//    ~NewPartieBuilder() { delete partie; }
+//    void Reset() { this->partie = new Partie(); }
+//    void setEspaceJeu() const override;
+//    void setJoueurs(string nomJoueur1, string prenomJoueur1, string nomJoueur2, string prenomJoueur2) const override;
+//    void setTours() const override;
+//    void setJoueurCourant()const override;
+//};
+//
+//
+//class LastPartieBuilder : public PartieBuilder {
+//private:
+//    Partie* partie;
+//public:
+//    LastPartieBuilder() { this->Reset(); }
+//    ~LastPartieBuilder() { this->Reset(); }
+//    void Reset() { this->partie = new Partie(); }
+//    void setEspaceJeu() const override;
+//    void setJoueurs(string nomJoueur1, string prenomJoueur1, string nomJoueur2, string prenomJoueur2) const override;
+//    void setTours() const override;
+//    void setJoueurCourant()const override;
+//};
+//
+//
+//class Director {
+//private:
+//    PartieBuilder* builder;
+//public:
+//    void set_builder(PartieBuilder* builder) { this->builder = builder; }
+//    void BuildNewPartie();
+//    void BuildLastPartie();
+//};
 
 //  ######  Fin du pattern Builder  ######
 

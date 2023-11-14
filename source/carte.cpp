@@ -4,7 +4,7 @@
 #include <random>
 #include <map>
 #include "carte.h"
-#include "sqlite3.h"
+#include "C:\Users\Beziat\source\repos\Projet_LO21\source\sqlite\sqlite3.h"
 using namespace std;
 
 std::initializer_list<CouleurCarte> CouleursCarte = { CouleurCarte::blanc, CouleurCarte::bleu, CouleurCarte::vert, CouleurCarte::noir, CouleurCarte::rouge, CouleurCarte::perle, CouleurCarte::indt };
@@ -71,7 +71,7 @@ string CapacitetoString(Capacite c){
     }
 }
 ostream& operator<<(ostream& f, Capacite c) { f << CapacitetoString(c); return f; }
-/*
+
 std::map<std::string, Capacite> stringToCapaciteMap = {
         {"NewTurn", Capacite::NewTurn},
         {"TakePrivilege", Capacite::TakePrivilege},
@@ -80,7 +80,7 @@ std::map<std::string, Capacite> stringToCapaciteMap = {
         {"AssociationBonus", Capacite::AssociationBonus},
         {"None", Capacite::None}
 };
-*/
+
 Capacite StringToCapacite(const std::string& capaciteStr){
     auto tmp = stringToCapaciteMap.find(capaciteStr);
     if (tmp != stringToCapaciteMap.end()) {
@@ -122,7 +122,7 @@ ostream& operator<<(ostream& f, const Carte& c){
     f << "-------------------------------------\n";
     f << c.getType() << "        " << "Bonus : " << c.getBonus() << "\n";
     f << "-------------------------------------\n";
-    f << "Capacite : " << c.getCapacites() << "\n";
+    f << "Capacite : " << c.getCapacite1() << ", " << c.getCapacite2() << "\n";
     f << "-------------------------------------\n";
     f << "Prix :\n" << c.getPrix() << "\n";
     f << "-------------------------------------\n";

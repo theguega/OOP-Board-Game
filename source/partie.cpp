@@ -1,5 +1,5 @@
 #include "partie.hpp"
-#include "sqlite3.h"
+#include "C:\Users\Beziat\source\repos\Projet_LO21\source\sqlite\sqlite3.h"
 
 Partie::Partie() {
     // création et affectation de nouveaux joueurs 
@@ -216,82 +216,82 @@ void Partie::enregisterScore() {
 
 // ###########   Debut des méthodes Builder   #############
 
-void NewPartieBuilder::setEspaceJeu() const {
-    this->partie.espaceJeux = new EspaceJeux();
-}
-
-void NewPartieBuilder::setJoueurs(string nomJoueur1, string prenomJoueur1, string nomJoueur2, string prenomJoueur2) const {
-    this->partie.joueurs[0] = new Joueur(nomJoueur1, prenomJoueur1, type::HUMAIN);
-    this->partie.joueurs[1] = new Joueur(nomJoueur2, prenomJoueur2, type::HUMAIN);
-}
-
-void NewPartieBuilder::setTours() const {
-    this->partie.tour = 0;
-}
-
-void NewPartieBuilder::setJoueurCourant() const {
-    this->partie.joueurCourant = 0;
-}
-
-void Director::BuildNewPartie() {
-    this->builder->setEspaceJeu();
-    this->builder->setJoueurs();
-    this->builder->setTours();
-    this->builder->setJoueurCourant();
-}
-
-void Director::BuildLastPartie() {
-    this->builder->setEspaceJeu();
-    this->builder->setJoueurs();
-    this->builder->setTours();
-    this->builder->setJoueurCourant();
-}
-
-void LastPartieBuilder::setEspaceJeu() const {
-    sqlite3* db;
-    sqlite3_stmt* stmt;
-    int rc = sqlite3_open("save.sqlite", &db);
-    if (rc != SQLITE_OK) {
-        std::cerr << "Impossible d'ouvrir la base de donnees: " << sqlite3_errmsg(db) << std::endl;
-        return;
-    }
-    sqlite3_finalize(stmt);
-    sqlite3_close(db);
-}
-
-void LastPartieBuilder::setJoueurs() const {
-    sqlite3* db;
-    sqlite3_stmt* stmt;
-
-    int rc = sqlite3_open("save.sqlite", &db);
-    if (rc != SQLITE_OK) {
-        std::cerr << "Impossible d'ouvrir la base de donnees: " << sqlite3_errmsg(db) << std::endl;
-        return;
-    }
-    rc = sqlite3_prepare_v2(db, "SELECT * FROM 'joueur1'", -1, &stmt, nullptr);
-    if (rc != SQLITE_OK) {
-        std::cerr << "Erreur de preparation de la requete : " << sqlite3_errmsg(db) << std::endl;
-        sqlite3_close(db);
-        return;
-    }
-    if (sqlite3_step(stmt) == SQLITE_ROW) {
-        string nom = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 1));
-        string prenom = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 2));
-        string type = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 1));
-    }
-    this->partie.joueurs[0] = Joueur(nom, prenom, type);
-    // meme chose pour joueur 2
-    sqlite3_finalize(stmt);
-    sqlite3_close(db);
-}
-
-// regrouper tout sous un seul setter pour ne faire qu'un appel à la bdd
-void LastPartieBuilder::setTours() const {
-
-}
-
-void LastPartieBuilder::setJoueurCourant() const {
-
-}
+//void NewPartieBuilder::setEspaceJeu() const {
+//    this->partie.espaceJeux = new EspaceJeux();
+//}
+//
+//void NewPartieBuilder::setJoueurs(string nomJoueur1, string prenomJoueur1, string nomJoueur2, string prenomJoueur2) const {
+//    this->partie.joueurs[0] = new Joueur(nomJoueur1, prenomJoueur1, type::HUMAIN);
+//    this->partie.joueurs[1] = new Joueur(nomJoueur2, prenomJoueur2, type::HUMAIN);
+//}
+//
+//void NewPartieBuilder::setTours() const {
+//    this->partie.tour = 0;
+//}
+//
+//void NewPartieBuilder::setJoueurCourant() const {
+//    this->partie.joueurCourant = 0;
+//}
+//
+//void Director::BuildNewPartie() {
+//    this->builder->setEspaceJeu();
+//    this->builder->setJoueurs();
+//    this->builder->setTours();
+//    this->builder->setJoueurCourant();
+//}
+//
+//void Director::BuildLastPartie() {
+//    this->builder->setEspaceJeu();
+//    this->builder->setJoueurs();
+//    this->builder->setTours();
+//    this->builder->setJoueurCourant();
+//}
+//
+//void LastPartieBuilder::setEspaceJeu() const {
+//    sqlite3* db;
+//    sqlite3_stmt* stmt;
+//    int rc = sqlite3_open("save.sqlite", &db);
+//    if (rc != SQLITE_OK) {
+//        std::cerr << "Impossible d'ouvrir la base de donnees: " << sqlite3_errmsg(db) << std::endl;
+//        return;
+//    }
+//    sqlite3_finalize(stmt);
+//    sqlite3_close(db);
+//}
+//
+//void LastPartieBuilder::setJoueurs() const {
+//    sqlite3* db;
+//    sqlite3_stmt* stmt;
+//
+//    int rc = sqlite3_open("save.sqlite", &db);
+//    if (rc != SQLITE_OK) {
+//        std::cerr << "Impossible d'ouvrir la base de donnees: " << sqlite3_errmsg(db) << std::endl;
+//        return;
+//    }
+//    rc = sqlite3_prepare_v2(db, "SELECT * FROM 'joueur1'", -1, &stmt, nullptr);
+//    if (rc != SQLITE_OK) {
+//        std::cerr << "Erreur de preparation de la requete : " << sqlite3_errmsg(db) << std::endl;
+//        sqlite3_close(db);
+//        return;
+//    }
+//    if (sqlite3_step(stmt) == SQLITE_ROW) {
+//        string nom = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 1));
+//        string prenom = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 2));
+//        string type = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 1));
+//    }
+//    this->partie.joueurs[0] = Joueur(nom, prenom, type);
+//    // meme chose pour joueur 2
+//    sqlite3_finalize(stmt);
+//    sqlite3_close(db);
+//}
+//
+//// regrouper tout sous un seul setter pour ne faire qu'un appel à la bdd
+//void LastPartieBuilder::setTours() const {
+//
+//}
+//
+//void LastPartieBuilder::setJoueurCourant() const {
+//
+//}
 
 // ###########   fin des méthodes Builder   #############
