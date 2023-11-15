@@ -140,8 +140,12 @@ JeuCarte::JeuCarte(){
     int k = 0;
     int z = 0;
 
-    // ###### Mettez ici le chemin absolu de la BDD sqlite de votre pc, masquez les autres #####
-    int rc = sqlite3_open("/Users/theoguegan/Documents/UTC/GI01/LO21/Projet_LO21/data/data_carte.sqlite", &db);
+    //on ajoute le chemin relatif au chemin absolue du projet
+    std::string relativePath = "data/data_carte.sqlite";
+    std::filesystem::path absolutePath = projectPath / relativePath;
+    std::string absolutePathStr = absolutePath.string();
+
+    int rc = sqlite3_open(absolutePathStr.c_str(), &db); //conversion en char* pour sqlite3_open
 
     if (rc != SQLITE_OK) {
         std::cerr << "Impossible d'ouvrir la base de donnees: " << sqlite3_errmsg(db) << std::endl;

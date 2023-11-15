@@ -1,5 +1,12 @@
 #include "partie.hpp"
 
+//Mettez ici le chemin absolue vers le projet
+std::filesystem::path projectPath = string("/Users/theoguegan/Documents/UTC/GI01/LO21/Projet_LO21");
+//Samuel B
+//Robert
+//Samuel M
+//Maxime
+
 int main(int argc, const char * argv[]) {
 
     Partie *partie = new Partie();
