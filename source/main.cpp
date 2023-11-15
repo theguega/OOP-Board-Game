@@ -2,8 +2,10 @@
 #include <filesystem>
 
 //Mettez ici le chemin absolue vers le projet
-std::filesystem::path projectPath = string("\\Users\\Beziat\\source\\repos\\Projet_LO21");
+//Theo
+//std::filesystem::path projectPath = string("/Users/theoguegan/Documents/UTC/GI01/LO21/Projet_LO21");
 //Samuel B
+std::filesystem::path projectPath = string("\\Users\\Beziat\\source\\repos\\Projet_LO21");
 //Robert
 //Samuel M
 //Maxime
