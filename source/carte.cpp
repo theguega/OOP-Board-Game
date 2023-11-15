@@ -281,7 +281,7 @@ Pioche::Pioche(const JeuCarte& j, TypeCarte t) : type_carte(t){
 
 Pioche::~Pioche(){
     for (size_t i = 0; i < nb_cartes; i++)
-        delete cartes[i];
+        cartes[i] = nullptr;
 }
 
 

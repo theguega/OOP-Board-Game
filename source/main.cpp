@@ -11,7 +11,7 @@ int main(int argc, const char * argv[]) {
 
     Partie *partie = new Partie();
     std::cout<<"Test";
-    //delete partie;
+    delete partie;
     
     return 0;
 }
