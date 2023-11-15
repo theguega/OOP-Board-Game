@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <random>
+#include <array>
 
 //Gestion des jetons et des privileges pour splendor duel
 

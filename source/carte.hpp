@@ -13,8 +13,8 @@
 
 // ###### Mettez ici le chemin absolu de la librairie sqlite de votre pc, masquez les autres #####
 //#include "C:\Users\Beziat\source\repos\Projet_LO21\source\sqlite\sqlite3.h"
-#include "sqlite/sqlite3.h" //Pour MAC
-//#include "sqlite\sqlite3.h" //Pour Windows
+//#include "sqlite/sqlite3.h" //Pour MAC
+#include "sqlite\sqlite3.h" //Pour Windows
 //Samuel M
 //Maxime
 
