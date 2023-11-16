@@ -21,3 +21,13 @@ CREATE TABLE infopartie (
     tour INTERGER,
     joueurCourant  INTEGER
 );
+
+CREATE TABLE jetons_joueur (
+    id_joueur INTEGER,
+    couleur TEXT
+);
+
+CREATE TABLE cartes_joueur (
+    id_joueur INTEGER,
+    id_carte INTEGER
+);

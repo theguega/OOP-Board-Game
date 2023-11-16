@@ -90,23 +90,20 @@ void Partie::sauvegardePartie() {
         return;
     }
 
-    //Sauvegarde joueur1
-    sql = "INSERT INTO joueur (id, nom, prenom, type) VALUES (1,'" + joueurs[0]->getNom() + "', '" + joueurs[0]->getPrenom() + "', '" + toStringType(joueurs[0]->getTypeDeJoueur()) + "');";
-    rc = sqlite3_exec(db, sql.c_str(), NULL, NULL, NULL);
-    if (rc != SQLITE_OK) {
-        std::cerr << "Erreur lors de la sauvegarde du joueur 1" << std::endl;
-        sqlite3_close(db);
-        return;
+    //Sauvegarde joueurs
+    for(size_t i = 0; i<2; i++) {
+        //infos du joueur
+        sql = "INSERT INTO joueur (id, nom, prenom, type) VALUES (" + std::to_string(i+1) + ", '" + joueurs[i]->getNom() + "', '" + joueurs[i]->getPrenom() + "', '" + toStringType(joueurs[i]->getTypeDeJoueur()) + "');";
+        rc = sqlite3_exec(db, sql.c_str(), NULL, NULL, NULL);
+        if (rc != SQLITE_OK) {
+            std::cerr << "Erreur lors de la sauvegarde du joueur " << i+1 << std::endl;
+            sqlite3_close(db);
+            return;
+        }
     }
 
-    //Sauvegarde joueur2
-    sql = "INSERT INTO joueur (id, nom, prenom, type) VALUES (2,'" + joueurs[1]->getNom() + "', '" + joueurs[1]->getPrenom() + "', '" + toStringType(joueurs[1]->getTypeDeJoueur()) + "');";
-    rc = sqlite3_exec(db, sql.c_str(), NULL, NULL, NULL);
-    if (rc != SQLITE_OK) {
-        std::cerr << "Erreur lors de la sauvegarde du joueur 2" << std::endl;
-        sqlite3_close(db);
-        return;
-    }
+        //jetons
+        //cartes
 
     //Sauvegarde plateau
     Plateau& plateau = espaceJeux->getPlateau();

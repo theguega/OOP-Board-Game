@@ -35,7 +35,7 @@ private:
     unsigned int nbCouronnes;
 
     std::unordered_map<CouleurCarte, std::vector<const Carte*>> cartes;
-    size_t nbCartes;
+    size_t nbCartes; //inutile selon moi -> on peut utiliser des .size()
     std::vector<const Carte*> cartesReservees;
     size_t nbCartesReservees;
     std::unordered_map<CouleurJeton, std::vector<const Jeton*>> jetons;
@@ -65,6 +65,9 @@ public:
     size_t getNbJetons() const { return nbJetons; }
     //Privilege **getPrivileges();
     size_t getNbPrivileges() const { return nbPrivileges; }
+    //rajout par theo, si tu veux refaire mieux -> pour la sauvegarde
+    //getCarte& pour utiliser dnas un for et recup toutes les cartes et les sauvegarder
+    //getJeton& pour utiliser dnas un for et recup toutes les jetons et les sauvegarder
 
     bool nbPtsPrestigeParCouleurSupDix() const;
 
@@ -102,6 +105,8 @@ public:
     void orReserverCarte (Pyramide& pyramide, Plateau& plateau);
 
     // (J'en ai besoin pour les score comment on l'implémente) (Signe Theo)
+    //Je pense que c'est un attribut à définir à la fin de la partie
+    //bool estGagant() const { return gagnant; };
     bool estGagnant() {return ptsPrestige >= 15;}; //exemple deso c degeu
 
 
