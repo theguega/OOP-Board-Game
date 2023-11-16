@@ -12,7 +12,7 @@ std::filesystem::path projectPath = string("/Users/theoguegan/Documents/UTC/GI01
 
 int main(int argc, const char * argv[]) {
 
-    std::cout<<"Bonjour à combien de joueur voulez vous jouer ? (0,1,2)"<<std::endl;
+    std::cout<<"Bonjour, à combien de joueur voulez vous jouer ? (0,1,2)"<<std::endl;
     int nbJoueur;
     std::cin>>nbJoueur;
     switch (nbJoueur) {

@@ -1,17 +1,23 @@
-CREATE TABLE carte (
-    id INTEGER PRIMARY KEY,
-    type_carte TEXT NOT NULL,
-    prix_blanc INTEGER NOT NULL,
-    prix_bleu INTEGER NOT NULL,
-    prix_vert INTEGER NOT NULL,
-    prix_rouge INTEGER NOT NULL,
-    prix_noir INTEGER NOT NULL,
-    prix_perle INTEGER NOT NULL,
-    capacite1 TEXT,
-    capacite2 TEXT,
-    couleur_bonus TEXT,
-    nb_bonus INTEGER,
-    nb_couronnes INTEGER,
-    nb_pts_privilege INTEGER
+CREATE TABLE plateau (
+    i INTEGER,
+    j INTEGER,
+    couleur TEXT
 );
 
+CREATE TABLE pyramide (
+    i INTEGER,
+    j INTEGER,
+    id INTEGER
+);
+
+CREATE TABLE joueur (
+    id INTEGER,
+    nom TEXT,
+    prenom TEXT,
+    type TEXT
+);
+
+CREATE TABLE infopartie (
+    tour INTERGER,
+    joueurCourant  INTEGER
+);

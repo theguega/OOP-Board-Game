@@ -12,7 +12,7 @@
 class Pyramide {
 
     private:    
-        std::vector<const Carte*> array_cartes[4];
+        std::array<std::vector<const Carte*>,4> array_cartes;
         Pioche &pNv1;
         Pioche &pNv2;
         Pioche &pNv3;

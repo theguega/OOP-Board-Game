@@ -10,7 +10,6 @@ Pyramide::Pyramide( Pioche *piocheNv1, Pioche *piocheNv2,Pioche *piocheNv3,Pioch
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < array_cartes[i].size(); j++) {
                 array_cartes[i][j] =  nullptr;
-                
             }
         }
         this->remplirPyramide();
@@ -31,7 +30,7 @@ Pyramide::~Pyramide() {
 void Pyramide::remplirPyramide() {
     const Carte* ma_carte = nullptr;
 
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < array_cartes.size(); i++) {
         for (int j = 0; j < array_cartes[i].size(); j++) {
             if (array_cartes[i][j] == nullptr) {
                 switch (i) {
@@ -100,7 +99,7 @@ void Pyramide::remplircasePyramide(int i , int j) {
 }
 
 bool Pyramide::estVide() const {
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < array_cartes.size(); i++) {
         for (int j = 0; j < array_cartes[i].size(); j++) {
             if (array_cartes[i][j] != nullptr) {
                 return false;
@@ -121,7 +120,7 @@ const Carte& Pyramide::reserverCarte(int niveau, int numero) {
         return ma_carte; 
     }
     else{
-        throw "erreur";
+        throw "Pas de carte à cette emplacement";
     }
 }
 
@@ -135,7 +134,7 @@ const Carte& Pyramide::acheterCarte(int niveau, int numero) {
         return ma_carte; 
     }
     else{
-        throw "erreur";
+        throw "Pas de carte à cette emplacement";
     }
     
 }
@@ -149,7 +148,7 @@ const Carte& Pyramide::ReserverCartePioche(int niveau) {
                             break;
                         }
                         else{
-                            throw "erreur";
+                            throw "Pioche vide";
                         }
                        
                     case 1:
@@ -158,7 +157,7 @@ const Carte& Pyramide::ReserverCartePioche(int niveau) {
                             break;
                         }
                         else{
-                            throw "erreur";
+                            throw "Pioche vide";
                         }
                     case 2:
                         if (not(pNv3.estVide())) {
@@ -166,7 +165,7 @@ const Carte& Pyramide::ReserverCartePioche(int niveau) {
                             break;
                         }
                         else{
-                            throw "erreur";
+                            throw "Pioche vide";
                         }
                     case 3:
                         if (not(pNoble.estVide())) {
@@ -174,10 +173,10 @@ const Carte& Pyramide::ReserverCartePioche(int niveau) {
                             break;
                         }
                         else{
-                            throw "erreur";
+                            throw "Pioche vide";
                         }
                     default:
-                        throw "erreur";
+                        throw "Indice de pioche invalide";
                         break;
                 }
    
@@ -186,18 +185,9 @@ const Carte& Pyramide::ReserverCartePioche(int niveau) {
 
 void Pyramide::afficherPyramide() const {
     std::cout << "Pyramide : " << std::endl;
-    for (int i = 0; i < 3; i++) {
+    for (int i = 0; i < array_cartes.size()-1; i++) {
+        std::cout << "Niveau " << i + 1 << " : " << std::endl;
 
-         switch (i) {
-                    case 0:
-                        std::cout << "Niveau 1 " << std::endl;
-                    case 1:
-                        std::cout << "Niveau 2 " << std::endl;
-                    case 2:
-                        std::cout << "Niveau 3 " << std::endl;
-                    default:
-                        break;
-                }
         for (int j = 0; j < array_cartes[i].size(); j++) {
             if (array_cartes[i][j] != nullptr) {
                 std::cout << "Carte " << i << " " << j << " : " << *array_cartes[i][j] << std::endl;
