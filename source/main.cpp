@@ -10,8 +10,10 @@ std::filesystem::path projectPath = string("/Users/theoguegan/Documents/UTC/GI01
 int main(int argc, const char * argv[]) {
 
     Partie *partie = new Partie();
-    std::cout<<"Test";
+    std::cout<<"Breakpoint creation"<<std::endl;
     delete partie;
+    std::cout<<"Breakpoint destruction"<<std::endl;
+    std::cout<<"Test";
     
     return 0;
 }
