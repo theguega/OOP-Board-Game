@@ -68,5 +68,8 @@ int main(int argc, const char * argv[]) {
             return 0;
             break;
     }
+
+    //boucle de jeux
+
     return 0;
 }
