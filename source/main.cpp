@@ -12,60 +12,61 @@ std::filesystem::path projectPath = string("/Users/theoguegan/Documents/UTC/GI01
 
 int main(int argc, const char * argv[]) {
 
-    Partie *partie = new Partie();
-    std::cout<<"Breakpoint creation"<<std::endl;
-    delete partie;
-    std::cout<<"Breakpoint destruction"<<std::endl;
-    std::cout<<"Test";
-    
+    std::cout<<"Bonjour à combien de joueur voulez vous jouer ? (0,1,2)"<<std::endl;
+    int nbJoueur;
+    std::cin>>nbJoueur;
+    switch (nbJoueur) {
+        case 0: 
+        {
+            std::cout<<"IA vs IA"<<std::endl;
+            Partie *partie = new Partie();
+            std::cout<<"Breakpoint creation"<<std::endl;
+            delete partie;
+            std::cout<<"Breakpoint destruction"<<std::endl;
+            std::cout<<"Test";
+            break;
+        }
+        
+        case 1:
+        {
+            std::cout<<"IA vs HUMAIN"<<std::endl;
+            std::cout<<"Veuillez saisir le nom du joueur"<<std::endl;
+            std::string nom;
+            std::cin>>nom;
+            std::cout<<"Veuillez saisir le prenom du joueur"<<std::endl;
+            std::string prenom;
+            std::cin>>prenom;
+            Partie *partie1 = new Partie(nom, prenom);
+            std::cout<<"Breakpoint creation"<<std::endl;
+            delete partie1;
+            std::cout<<"Breakpoint destruction"<<std::endl;
+            break;
+        }
+        case 2:
+        {
+            std::cout<<"HUMAIN vs HUMAIN"<<std::endl;
+            std::cout<<"Veuillez saisir le nom du joueur 1"<<std::endl;
+            std::string nom1;
+            std::cin>>nom1;
+            std::cout<<"Veuillez saisir le prenom du joueur 1"<<std::endl;
+            std::string prenom1;
+            std::cin>>prenom1;
+            std::cout<<"Veuillez saisir le nom du joueur 2"<<std::endl;
+            std::string nom2;
+            std::cin>>nom2;
+            std::cout<<"Veuillez saisir le prenom du joueur 2"<<std::endl;
+            std::string prenom2;
+            std::cin>>prenom2;
+            Partie *partie2 = new Partie(nom1, prenom1, nom2, prenom2);
+            std::cout<<"Breakpoint creation"<<std::endl;
+            delete partie2;
+            std::cout<<"Breakpoint destruction"<<std::endl;
+            break;
+        }
+        default:
+            std::cout<<"Erreur, veuillez saisir un nombre entre 0 et 2"<<std::endl;
+            return 0;
+            break;
+    }
     return 0;
 }
-
-
-/*
-        std::cout << "Bonjour !\nVeuillez creer les joueurs : \n";
-        std::string nom, prenom;
-        std::string typedejoueur;
-        type typeDeJoueur;
-
-        std::cout << "Nom du joueur 1 : ";
-        std::cin >> nom;
-        std::cout << "Prenom du joueur 1 : ";
-        std::cin >> prenom;
-        std::cout << "Type de joueur (IA ou HUMAIN) : ";
-        std::cin >> typedejoueur;
-        typeDeJoueur = toType(typedejoueur);
-        Joueur joueur1(nom, prenom, typeDeJoueur);
-        std::cout << "\n\n";
-
-        joueur1.afficherJoueur();
-
-        joueur1.addPrivilege(plateau.recupererPrivilege());
-        //joueur1.afficherPrivileges();
-        joueur1.afficherJoueur();
-        */
-
-
-/*
-        //Création du lot
-        const LotDeJetons& lotJetons = LotDeJetons::getLotDeJetons();
-        //Création du sac
-        Sac& sac = Sac::getSac(lotJetons);
-        //Creation du plateau
-        const LotPrivileges& lotPrivileges = LotPrivileges::getLotPrivileges();
-        Plateau& plateau = Plateau::getPlateau(sac, lotPrivileges);
-
-        //Recuperation de deux jetons sur le plateau et remise dans le sac
-        const Jeton& jeton1 = plateau.recupererJeton(0,0);
-        std::cout << jeton1 << "\n";
-        sac.ajouterJeton(jeton1);
-        
-        const Jeton& jeton2 = plateau.recupererJeton(2,2);
-        std::cout << jeton2 << "\n";
-        sac.ajouterJeton(jeton2);
-
-        //Remise d'un jeton du sac sur le plateau
-        plateau.positionerJeton(sac.piocherJeton());
-
-        std::cout<<"Voilaaaa, on est content"<<std::endl;
-        */
