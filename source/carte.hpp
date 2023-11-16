@@ -90,15 +90,17 @@ private:
     Bonus bonus;
     unsigned int nbCouronnes;
     unsigned int nbPtsPrivilege;
+    unsigned int id;
 public:
-    Carte(TypeCarte t, Prix& p, Capacite c1, Capacite c2, Bonus& b, unsigned int nbC, unsigned int nbP); // constructeur classique
-    Carte(TypeCarte t, Capacite c, unsigned int nbP); // constructeur carte noble
+    Carte(TypeCarte t, Prix& p, Capacite c1, Capacite c2, Bonus& b, unsigned int nbC, unsigned int nbP, unsigned int id); // constructeur classique
+    Carte(TypeCarte t, Capacite c, unsigned int nbP, unsigned int id); // constructeur carte noble
     ~Carte() = default;
     TypeCarte getType() const { return type; }
     Prix getPrix() const { return prix; }
     Capacite getCapacite1() const { return capacite1; }
     Capacite getCapacite2() const { return capacite2; }
     Bonus getBonus() const { return bonus; }
+    unsigned int getId() const { return id; }
     unsigned int getNbCouronnes() const { return nbCouronnes; }
     unsigned int getNbPtsPrivilege() const { return nbPtsPrivilege; }
 };
@@ -107,18 +109,17 @@ ostream& operator<<(ostream& f, const Carte& c);
 class JeuCarte {
 private:
     // appliquer le design pattern singleton plus tard
-    // eventuellement membre static pour chaque nombre de carte n1, n2, n3
-    array<const Carte*, 30> cartes_nv1; 
-    array<const Carte*, 24> cartes_nv2;
-    array<const Carte*, 13> cartes_nv3;
-    array<const Carte*, 4> cartes_nobles;
+    vector<const Carte*> cartes_nv1; 
+    vector<const Carte*> cartes_nv2;
+    vector<const Carte*> cartes_nv3;
+    vector<const Carte*> cartes_nobles;
 public:
     JeuCarte();
     ~JeuCarte();
-    size_t getNbCartes_nv1() const { return 30; }
-    size_t getNbCartes_nv2() const { return 24; }
-    size_t getNbCartes_nv3() const { return 13; }
-    size_t getNbCartes_nobles() const { return 4; }
+    size_t getNbCartes_nv1() const { return cartes_nv1.size(); }
+    size_t getNbCartes_nv2() const { return cartes_nv2.size(); }
+    size_t getNbCartes_nv3() const { return cartes_nv3.size(); }
+    size_t getNbCartes_nobles() const { return cartes_nobles.size(); }
     const Carte& getCarteNiv1(size_t i) const;
     const Carte& getCarteNiv2(size_t i) const;
     const Carte& getCarteNiv3(size_t i) const;
@@ -131,12 +132,11 @@ class Pioche{
 private:
     TypeCarte type_carte;
     vector<const Carte*> cartes;
-    size_t nb_cartes = 0;
 public:
     explicit Pioche(const JeuCarte& j, TypeCarte t); // j'ai pris ca depuis le td mais a t on besoin du explicit ?
     ~Pioche();
-    bool estVide() const { return nb_cartes == 0; }
-    size_t getNbCartes() const { return nb_cartes; }
+    bool estVide() const { return getNbCartes() == 0; }
+    size_t getNbCartes() const { return cartes.size(); }
     const Carte& piocher();
     Pioche(const Pioche& p) = delete;
     Pioche& operator=(const Pioche& p) = delete;

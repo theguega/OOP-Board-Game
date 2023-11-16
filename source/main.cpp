@@ -21,6 +21,7 @@ int main(int argc, const char * argv[]) {
             std::cout<<"IA vs IA"<<std::endl;
             Partie *partie = new Partie();
             std::cout<<"Breakpoint creation"<<std::endl;
+            partie->sauvegardePartie();
             delete partie;
             std::cout<<"Breakpoint destruction"<<std::endl;
             std::cout<<"Test";

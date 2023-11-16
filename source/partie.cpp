@@ -1,27 +1,21 @@
 #include "partie.hpp"
 
-Partie::Partie() {
+Partie::Partie() : espaceJeux(new EspaceJeux()), tour(0), joueurCourant(0) {
     // création et affectation de nouveaux joueurs 
     joueurs[0] = new Joueur("Alain", "telligence", type::IA);
     joueurs[1] = new Joueur("AL", "Gorythme", type::IA);
-    tour = 0;
-    joueurCourant = 0;
 }
 
-Partie::Partie(std::string nomJoueur1, std::string prenomJoueur1) {
+Partie::Partie(std::string nomJoueur1, std::string prenomJoueur1) : espaceJeux(new EspaceJeux()), tour(0), joueurCourant(0) {
     // création et affectation de nouveaux joueurs 
     joueurs[0] = new Joueur(nomJoueur1, prenomJoueur1, type::HUMAIN);
     joueurs[1] = new Joueur("AL", "Gorythme", type::IA);
-    tour = 0;
-    joueurCourant = 0;
 }
 
-Partie::Partie(std::string nomJoueur1, std::string prenomJoueur1, std::string nomJoueur2, std::string prenomJoueur2) {
+Partie::Partie(std::string nomJoueur1, std::string prenomJoueur1, std::string nomJoueur2, std::string prenomJoueur2) : espaceJeux(new EspaceJeux()), tour(0), joueurCourant(0) {
     // création et affectation de nouveaux joueurs 
     joueurs[0] = new Joueur(nomJoueur1, prenomJoueur1, type::HUMAIN);
     joueurs[1] = new Joueur(nomJoueur2, prenomJoueur2, type::HUMAIN);
-    tour = 0;
-    joueurCourant = 0;
 }
 
 
@@ -73,9 +67,14 @@ void Partie::sauvegardePartie() {
     //Pour cela, il faudra créer une base de donnée avec les tables suivantes :
     // joueur1, joueur2, plateau, infopartie, pyramide
 
+    //on ajoute le chemin relatif au chemin absolue du projet
+    std::string relativePath = "data/save.sqlite";
+    std::filesystem::path absolutePath = projectPath / relativePath;
+    std::string absolutePathStr = absolutePath.string();
+
     //Connexion à la base de donnée
     sqlite3 *db;
-    int rc = sqlite3_open("save.sqlite", &db);
+    int rc = sqlite3_open(absolutePath.c_str(), &db);
     if (rc != SQLITE_OK) {
         std::cerr << "Erreur lors de la connexion à la base de donnée" << std::endl;
         sqlite3_close(db);

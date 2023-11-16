@@ -10,6 +10,7 @@
 #include <map>
 
 #include <random>
+#include <filesystem>
 
 #include "carte.hpp"
 #include "jetons.hpp"
@@ -17,12 +18,14 @@
 #include "joueur.hpp"
 #include "espacejeux.hpp"
 
+extern std::filesystem::path projectPath;
+
 //La classe partie qui initialise les joueurs, le tour et l'espace de jeux 
 class Partie {  
 
     //static Partie* instance;
     
-    EspaceJeux* espaceJeux = new EspaceJeux(); ;
+    EspaceJeux* espaceJeux;
     Joueur* joueurs[2];
     
     int tour;

@@ -14,3 +14,4 @@ CREATE TABLE carte (
     nb_couronnes INTEGER,
     nb_pts_privilege INTEGER
 );
+

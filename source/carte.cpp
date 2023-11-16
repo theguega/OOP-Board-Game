@@ -101,13 +101,13 @@ ostream& operator<<(ostream& f, const Bonus& b){
 }
 
 
-Carte::Carte(TypeCarte t, Prix& p, Capacite c1, Capacite c2, Bonus& b, unsigned int nbC, unsigned int nbP) : type(t), prix(p), capacite1(c1), capacite2(c2), bonus(b), nbCouronnes(nbC), nbPtsPrivilege(nbP) {
+Carte::Carte(TypeCarte t, Prix& p, Capacite c1, Capacite c2, Bonus& b, unsigned int nbC, unsigned int nbP, unsigned int id) : type(t), prix(p), capacite1(c1), capacite2(c2), bonus(b), nbCouronnes(nbC), nbPtsPrivilege(nbP), id(id) {
     if (t == TypeCarte::Noble)
         throw CarteException("Veuillez utiliser le constructeur approprie");
 }
 
 
-Carte::Carte(TypeCarte t, Capacite c, unsigned int nbP) : type(t), prix(0, 0, 0, 0, 0, 0), capacite1(c), capacite2(Capacite::None), bonus(), nbCouronnes(0), nbPtsPrivilege(nbP) {
+Carte::Carte(TypeCarte t, Capacite c, unsigned int nbP, unsigned int id) : type(t), prix(0, 0, 0, 0, 0, 0), capacite1(c), capacite2(Capacite::None), bonus(), nbCouronnes(0), nbPtsPrivilege(nbP), id(id) {
     if (t != TypeCarte::Noble)
         throw CarteException("Veuillez utiliser le constructeur approprie");
 }
@@ -128,17 +128,9 @@ ostream& operator<<(ostream& f, const Carte& c){
 
 
 JeuCarte::JeuCarte(){
-    cartes_nv1.fill(nullptr);
-    cartes_nv2.fill(nullptr);
-    cartes_nv3.fill(nullptr);
-    cartes_nobles.fill(nullptr);
     sqlite3* db;
     sqlite3_stmt* stmt;
     sqlite3_stmt* stmt2;
-    int i = 0;
-    int j = 0;
-    int k = 0;
-    int z = 0;
 
     //on ajoute le chemin relatif au chemin absolue du projet
     std::string relativePath = "data/data_carte.sqlite";
@@ -158,6 +150,7 @@ JeuCarte::JeuCarte(){
         return;
     }
     while (sqlite3_step(stmt) == SQLITE_ROW) {
+        unsigned int id = sqlite3_column_int(stmt, 0);
         string type = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 1));
         unsigned int p_blanc = sqlite3_column_int(stmt, 2);
         unsigned int p_bleu = sqlite3_column_int(stmt, 3);
@@ -175,16 +168,13 @@ JeuCarte::JeuCarte(){
         Prix p(p_blanc, p_bleu, p_vert, p_noir, p_rouge, p_perle);
         Bonus b(StringToCouleurCarte(couleur_bonus), bonus);
         if (type == "Niv1") {
-            cartes_nv1[i] = new Carte(TypeCarte::Niv1, p, StringToCapacite(capacite1), StringToCapacite(capacite2), b, nb_couronnes, nb_pts_privileges);
-            i++;
+            cartes_nv1.push_back(new Carte(TypeCarte::Niv1, p, StringToCapacite(capacite1), StringToCapacite(capacite2), b, nb_couronnes, nb_pts_privileges, id));
         }
         else if (type == "Niv2") {
-            cartes_nv2[j] = new Carte(TypeCarte::Niv2, p, StringToCapacite(capacite1), StringToCapacite(capacite2), b, nb_couronnes, nb_pts_privileges);
-            j++;
+            cartes_nv2.push_back(new Carte(TypeCarte::Niv2, p, StringToCapacite(capacite1), StringToCapacite(capacite2), b, nb_couronnes, nb_pts_privileges, id));
         }
         else if (type == "Niv3") {
-            cartes_nv3[k] = new Carte(TypeCarte::Niv3, p, StringToCapacite(capacite1), StringToCapacite(capacite2), b, nb_couronnes, nb_pts_privileges);
-            k++;
+            cartes_nv3.push_back(new Carte(TypeCarte::Niv3, p, StringToCapacite(capacite1), StringToCapacite(capacite2), b, nb_couronnes, nb_pts_privileges, id));
         }
         else {
             throw CarteException("Erreur de construction, le type de carte ne convient pas ici");
@@ -199,8 +189,8 @@ JeuCarte::JeuCarte(){
     while (sqlite3_step(stmt2) == SQLITE_ROW) {
         string capacite = reinterpret_cast<const char*>(sqlite3_column_text(stmt2, 1));
         unsigned int nb_pts_privileges = sqlite3_column_int(stmt2, 2);
-        cartes_nobles[z] = new Carte(TypeCarte::Noble, StringToCapacite(capacite), nb_pts_privileges);
-        z++;
+        unsigned int id = sqlite3_column_int(stmt2, 3);
+        cartes_nobles.push_back(new Carte(TypeCarte::Noble, StringToCapacite(capacite), nb_pts_privileges, id));
     }
     sqlite3_finalize(stmt);
     sqlite3_finalize(stmt2);
@@ -225,28 +215,28 @@ JeuCarte::~JeuCarte(){
 
 
 const Carte& JeuCarte::getCarteNiv1(size_t i) const{
-    if (i >= 30)
+    if (i >= getNbCartes_nv1())
         throw CarteException("Il n'y a que 30 cartes de niveau 1");
     return *cartes_nv1[i];
 }
 
 
 const Carte& JeuCarte::getCarteNiv2(size_t i) const{
-    if (i >= 24)
+    if (i >= getNbCartes_nv2())
         throw CarteException("Il n'y a que 24 cartes de niveau 2");
     return *cartes_nv2[i];
 }
 
 
 const Carte& JeuCarte::getCarteNiv3(size_t i) const{
-    if (i >= 13)
+    if (i >= getNbCartes_nv2())
         throw CarteException("Il n'y a que 13 cartes de niveau 3");
     return *cartes_nv3[i];
 }
 
 
 const Carte& JeuCarte::getCarteNoble(size_t i) const{
-    if (i >= 4)
+    if (i >= getNbCartes_nobles())
         throw CarteException("Il n'y a que 4 cartes nobles");
     return *cartes_nobles[i];
 }
@@ -254,23 +244,19 @@ const Carte& JeuCarte::getCarteNoble(size_t i) const{
 
 Pioche::Pioche(const JeuCarte& j, TypeCarte t) : type_carte(t){
     if (t == TypeCarte::Niv1) {
-        nb_cartes = j.getNbCartes_nv1();
-        for (size_t i = 0; i < nb_cartes; i++)
+        for (size_t i = 0; i < j.getNbCartes_nv1(); i++)
             cartes.push_back(&j.getCarteNiv1(i));
     }
     else if (t == TypeCarte::Niv2) {
-        nb_cartes = j.getNbCartes_nv2();
-        for (size_t i = 0; i < nb_cartes; i++)
+        for (size_t i = 0; i < j.getNbCartes_nv2(); i++)
             cartes.push_back(&j.getCarteNiv2(i));
     }
     else if (t == TypeCarte::Niv3) {
-        nb_cartes = j.getNbCartes_nv3();
-        for (size_t i = 0; i < nb_cartes; i++)
+        for (size_t i = 0; i < j.getNbCartes_nv3(); i++)
             cartes.push_back(&j.getCarteNiv3(i));
     }
     else if (t == TypeCarte::Noble) {
-        nb_cartes = j.getNbCartes_nobles();
-        for (size_t i = 0; i < nb_cartes; i++)
+        for (size_t i = 0; i < j.getNbCartes_nobles(); i++)
             cartes.push_back(&j.getCarteNoble(i));
     }
     else {
@@ -280,21 +266,23 @@ Pioche::Pioche(const JeuCarte& j, TypeCarte t) : type_carte(t){
 
 
 Pioche::~Pioche(){
-    for (size_t i = 0; i < nb_cartes; i++)
+    for (size_t i = 0; i < getNbCartes(); i++)
         cartes[i] = nullptr;
 }
 
 
 const Carte& Pioche::piocher(){
-    if (nb_cartes == 0)
+    if (estVide())
         throw CarteException("Plus de cartes dans cette pioche");
+
+    //génération d'un indice aléatoire
     std::random_device rd;
     std::mt19937 gen(rd());
-    std::uniform_int_distribution<> distrib(0, static_cast<int>(nb_cartes)-1);
-    size_t x = distrib(gen);
-    const Carte* c = cartes[x];
-    for (size_t i = x + 1; i < nb_cartes; i++)
-        cartes[i - 1] = cartes[i]; //Deplace toutes les cartes  droite vers la gauche.
-    nb_cartes--;
+    std::uniform_int_distribution<> distrib(0, static_cast<int>(cartes.size()) - 1);
+    size_t i = distrib(gen);
+
+    const Carte* c = cartes[i];
+    cartes.erase(cartes.begin() + i);
+
     return *c;
 }
