@@ -1,23 +1,11 @@
-//
-// Created by samma on 28/10/2023.
-//
-
 #ifndef PROJET_LO21_JOUEUR_HPP
 #define PROJET_LO21_JOUEUR_HPP
 
-#include "jetons.hpp"
-#include "carte.h"
-#include "strategy.hpp"
-#include "espacejeux.hpp"
-
-#include <iostream>
-#include <string>
-#include <array>
-#include <vector>
 #include <unordered_map>
 
-
-
+#include "jetons.hpp"
+#include "carte.hpp"
+#include "strategy.hpp"
 
 // Rajouter classe exception
 class JoueurException

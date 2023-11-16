@@ -1,4 +1,3 @@
-
 #include "espacejeux.hpp"
 
 Pyramide::Pyramide( Pioche *piocheNv1, Pioche *piocheNv2,Pioche *piocheNv3,Pioche *piocheNoble): pNv1(*piocheNv1), pNv2(*piocheNv2), pNv3(*piocheNv3), pNoble(*piocheNoble) {
@@ -21,9 +20,7 @@ Pyramide::Pyramide( Pioche *piocheNv1, Pioche *piocheNv2,Pioche *piocheNv3,Pioch
 Pyramide::~Pyramide() {
     for (int i = 0; i < 4; i++) {
         for (int j = 0; j < array_cartes[i].size(); j++) {
-            if (array_cartes[i][j] != nullptr) {
-                delete array_cartes[i][j];
-            }
+            array_cartes[i][j] = nullptr;
         }
     }
 };

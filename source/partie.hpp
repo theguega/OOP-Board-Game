@@ -2,18 +2,20 @@
 #define PARTIE_H
 
 #include <iostream>
-
 #include <string>
 
 #include <array>
-
 #include <vector>
+#include <unordered_map>
+#include <map>
 
-#include "joueur.hpp"
+#include <random>
+
+#include "carte.hpp"
 #include "jetons.hpp"
-#include "carte.h"
-#include "espacejeux.hpp"
 #include "strategy.hpp"
+#include "joueur.hpp"
+#include "espacejeux.hpp"
 
 //La classe partie qui initialise les joueurs, le tour et l'espace de jeux 
 class Partie {  
@@ -41,7 +43,7 @@ class Partie {
             
         Partie( std::string nomJoueur1, std::string prenomJoueur1, std::string nomJoueur2, std::string prenomJoueur2);
 
-        ~Partie() {delete joueurs[0]; delete joueurs[1]; delete espaceJeux;};
+        ~Partie() {delete espaceJeux; delete joueurs[0]; delete joueurs[1];}
         
         int getTour() const { return tour; }
         Joueur* getjoueurCourant() const { return joueurs[joueurCourant]; }

@@ -1,13 +1,5 @@
-#include <iostream>
-#include <string>
-#include <vector>
-#include <random>
-#include <map>
-#include "carte.h"
-#include "partie.hpp"
-#include "C:\Users\Beziat\source\repos\Projet_LO21\source\sqlite\sqlite3.h"
-//#include "/Users/robertantaluca/Desktop/Projet_LO21/source/sqlite/sqlite3.h"
-//#include "sqlite3.h"
+#include "carte.hpp"
+
 using namespace std;
 
 std::initializer_list<CouleurCarte> CouleursCarte = { CouleurCarte::blanc, CouleurCarte::bleu, CouleurCarte::vert, CouleurCarte::noir, CouleurCarte::rouge, CouleurCarte::perle, CouleurCarte::indt };
@@ -148,7 +140,13 @@ JeuCarte::JeuCarte(){
     int k = 0;
     int z = 0;
 
-    int rc = sqlite3_open("data_carte.sqlite", &db);
+    //on ajoute le chemin relatif au chemin absolue du projet
+    std::string relativePath = "data/data_carte.sqlite";
+    std::filesystem::path absolutePath = projectPath / relativePath;
+    std::string absolutePathStr = absolutePath.string();
+
+    int rc = sqlite3_open(absolutePathStr.c_str(), &db); //conversion en char* pour sqlite3_open
+
     if (rc != SQLITE_OK) {
         std::cerr << "Impossible d'ouvrir la base de donnees: " << sqlite3_errmsg(db) << std::endl;
         return;
@@ -283,7 +281,7 @@ Pioche::Pioche(const JeuCarte& j, TypeCarte t) : type_carte(t){
 
 Pioche::~Pioche(){
     for (size_t i = 0; i < nb_cartes; i++)
-        delete cartes[i];
+        cartes[i] = nullptr;
 }
 
 
@@ -292,7 +290,7 @@ const Carte& Pioche::piocher(){
         throw CarteException("Plus de cartes dans cette pioche");
     std::random_device rd;
     std::mt19937 gen(rd());
-    std::uniform_int_distribution<> distrib(0, nb_cartes-1);
+    std::uniform_int_distribution<> distrib(0, static_cast<int>(nb_cartes)-1);
     size_t x = distrib(gen);
     const Carte* c = cartes[x];
     for (size_t i = x + 1; i < nb_cartes; i++)

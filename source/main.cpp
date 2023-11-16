@@ -1,17 +1,21 @@
-#include <iostream>
-#include <string>
-#include <array>
-#include <vector>
-
-#include "jetons.hpp"
-#include "joueur.hpp"
 #include "partie.hpp"
-#include "espacejeux.hpp"
-#include "carte.h"
+#include <filesystem>
+
+//Mettez ici le chemin absolue vers le projet
+//Theo
+std::filesystem::path projectPath = string("/Users/theoguegan/Documents/UTC/GI01/LO21/Projet_LO21");
+//Samuel B
+//std::filesystem::path projectPath = string("\\Users\\Beziat\\source\\repos\\Projet_LO21");
+//Robert
+//Samuel M
+//Maxime
 
 int main(int argc, const char * argv[]) {
 
-    Partie* partie = new Partie();
+    Partie *partie = new Partie();
+    std::cout<<"Breakpoint creation"<<std::endl;
+    delete partie;
+    std::cout<<"Breakpoint destruction"<<std::endl;
     std::cout<<"Test";
     
     return 0;

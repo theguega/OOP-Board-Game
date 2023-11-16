@@ -1,10 +1,23 @@
-#pragma once
+#ifndef CARTES_H
+#define CARTES_H
+
 #include <iostream>
 #include <string>
-#include <vector>
+
 #include <array>
+#include <vector>
+#include <unordered_map>
 #include <map>
+
+#include <random>
+#include <filesystem>
+
+#include "sqlite/sqlite3.h" 
+#include <filesystem>
 using namespace std;
+extern std::filesystem::path projectPath;
+
+
 
 
 class CarteException{
@@ -129,4 +142,5 @@ public:
     Pioche& operator=(const Pioche& p) = delete;
 };
 
+#endif
 

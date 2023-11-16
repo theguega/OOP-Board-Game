@@ -1,11 +1,9 @@
 #ifndef JETONS_H
-#define JETONS_H
+#define JETONS_H 
 
 #include <iostream>
-#include <string>
+#include <random>
 #include <array>
-#include <vector>
-#include <tuple>
 
 //Gestion des jetons et des privileges pour splendor duel
 
