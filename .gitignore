@@ -1,7 +1,0 @@
-*.exe
-Degug
-*.xcodeproj
-*.vcxproj
-*.sln
-*.vscode
-*.DS_Store
