@@ -138,6 +138,7 @@ public:
     bool estVide() const { return getNbCartes() == 0; }
     size_t getNbCartes() const { return cartes.size(); }
     const Carte& piocher();
+    const Carte& piocher(int i);
     Pioche(const Pioche& p) = delete;
     Pioche& operator=(const Pioche& p) = delete;
 };

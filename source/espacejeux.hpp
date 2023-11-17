@@ -36,6 +36,10 @@ class Pyramide {
         int getNbCartesNiv(int niveau) const; // retourne le nombre de cartes d'un niveau dans la pyramide
         void afficherPyramide() const; // affiche la pyramide
         
+        Pioche& getPioche1() const { return pNv1; }
+        Pioche& getPioche2() const { return pNv2; }
+        Pioche& getPioche3() const { return pNv3; }
+        Pioche& getPiocheNoble() const { return pNoble; }
         friend class Partie;
 
 

@@ -140,7 +140,7 @@ JeuCarte::JeuCarte(){
     int rc = sqlite3_open(absolutePathStr.c_str(), &db); //conversion en char* pour sqlite3_open
 
     if (rc != SQLITE_OK) {
-        std::cerr << "Impossible d'ouvrir la base de donnees: " << sqlite3_errmsg(db) << std::endl;
+        std::cerr << "Impossible d'ouvrir la base de donnees 1: " << sqlite3_errmsg(db) << std::endl;
         return;
     }
     rc = sqlite3_prepare_v2(db, "SELECT * FROM 'carte'", -1, &stmt, nullptr);
@@ -284,5 +284,13 @@ const Carte& Pioche::piocher(){
     const Carte* c = cartes[i];
     cartes.erase(cartes.begin() + i);
 
+    return *c;
+}
+
+const Carte& Pioche::piocher(int i){
+    if (estVide())
+        throw CarteException("Plus de cartes dans cette pioche");
+    const Carte* c = cartes[i];
+    cartes.erase(cartes.begin() + i);
     return *c;
 }

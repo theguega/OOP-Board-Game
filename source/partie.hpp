@@ -27,22 +27,19 @@ public:
 };
 
 
-//La classe partie qui initialise les joueurs, le tour et l'espace de jeux 
 class Partie { 
     friend class PartieBuilder;
     friend class NewPartieBuilder;
     friend class LastPartieBuilder;
 private:
-    //static Partie* instance; 
-    static EspaceJeux* espaceJeux;
+    EspaceJeux* espaceJeux = new EspaceJeux();
     Joueur* joueurs[2]; 
     int tour;
     int joueurCourant;
-    /*Partie( vector<Joueur*> joueurs );  // utile ?? constructeur a partir d'un vecteur de joueurs */
-    /*
-    Partie(const Partie&) = delete;
-    Partie& operator=(const Partie&) = delete;
-    */
+    //static Partie* instance; 
+    //Partie( vector<Joueur*> joueurs );  // utile ?? constructeur a partir d'un vecteur de joueurs
+    //Partie(const Partie&) = delete;
+    //Partie& operator=(const Partie&) = delete;
 public: 
     ~Partie() {delete espaceJeux; delete joueurs[0]; delete joueurs[1];}   
 
@@ -79,9 +76,11 @@ public:
 class PartieBuilder {
 public:
     virtual ~PartieBuilder() {};
-    virtual void setJoueurs(string nomJoueur1, string prenomJoueur1, string nomJoueur2, string prenomJoueur2) const = 0;
+    virtual void setJoueurs() const = 0;
+    virtual void setCartesJoueurs() const = 0;
+    virtual void setJetonsAndPrivilegeJoueurs() const = 0;
     virtual void setTours_and_current() const = 0;
-    virtual Partie getResult() = 0;
+    virtual void updateEspaceJeu() const = 0;
     friend class Partie;
 };
 
@@ -91,11 +90,23 @@ private:
     Partie* partie;
 public:
     NewPartieBuilder() { this->Reset(); }
-    ~NewPartieBuilder() { delete partie; }
+    //~NewPartieBuilder() { delete partie; }
     void Reset() { this->partie = new Partie(); }
 
-    void setJoueurs(string nomJoueur1, string prenomJoueur1, string nomJoueur2, string prenomJoueur2) const override;
-    void setTours_and_current() const override;
+    void setJoueurs() const override {
+        partie->joueurs[0] = new Joueur("Alain", "telligence", type::IA);
+        partie->joueurs[1] = new Joueur("AL", "Gorythme", type::IA);
+    };
+
+    void setTours_and_current() const override {
+        partie->tour = 0;
+        partie->joueurCourant = 0;
+    };
+
+    Partie* GetProduct() {
+        Partie* result = this->partie;
+        return result;
+    }
 };
 
 
@@ -107,9 +118,15 @@ public:
     ~LastPartieBuilder() { this->Reset(); }
     void Reset() { this->partie = new Partie(); }
 
-    void setJoueurs(string nomJoueur1, string prenomJoueur1, string nomJoueur2, string prenomJoueur2) const override;
-    void updateEspaceJeu();
+    virtual void setCartesJoueurs() const override;
+    virtual void setJetonsAndPrivilegeJoueurs() const override;
+    void updateEspaceJeu() const override;
     void setTours_and_current() const override;
+
+    Partie* GetProduct() {
+        Partie* result = this->partie;
+        return result;
+    }
 };
 
 
@@ -118,9 +135,20 @@ private:
     PartieBuilder* builder;
 public:
     void set_builder(PartieBuilder* builder) { this->builder = builder; }
-    void BuildNewPartie();
-    void BuildLastPartie();
+
+    void BuildNewPartie() {
+        builder->setJoueurs();
+        builder->setTours_and_current();
+    };
+
+    void BuildLastPartie() {
+        builder->setCartesJoueurs();
+        builder->setJetonsAndPrivilegeJoueurs();
+        builder->updateEspaceJeu();
+        builder->setTours_and_current();
+    }
 };
+
 
 //  ######  Fin du pattern Builder  ######
 
