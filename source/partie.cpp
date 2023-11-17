@@ -74,7 +74,7 @@ void Partie::sauvegardePartie() {
 
     //Connexion à la base de donnée
     sqlite3 *db;
-    int rc = sqlite3_open(absolutePath.c_str(), &db);
+    int rc = sqlite3_open(absolutePathStr.c_str(), &db);
     if (rc != SQLITE_OK) {
         std::cerr << "Erreur lors de la connexion à la base de donnée" << std::endl;
         sqlite3_close(db);
