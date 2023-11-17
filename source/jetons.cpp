@@ -10,19 +10,19 @@
 
 //------------------------------------------------- Gestion de la couleur des jetons
 std::initializer_list<CouleurJeton> CouleursJeton = { 
-    CouleurJeton::RUBIS, CouleurJeton::SAPHIR, CouleurJeton::EMERAUDE, CouleurJeton::ONYX, CouleurJeton::DIAMANT, CouleurJeton::OR, CouleurJeton::PERLE 
+    CouleurJeton::ROUGE, CouleurJeton::BLEUE, CouleurJeton::VERT, CouleurJeton::NOIR, CouleurJeton::BLANC, CouleurJeton::OR, CouleurJeton::PERLE 
 };
 
 std::string toStringCouleur(CouleurJeton c) {
     switch (c)
     {
-    case CouleurJeton::RUBIS: return "Rubis";
-    case CouleurJeton::SAPHIR: return "Saphir";
-    case CouleurJeton::ONYX: return "Onyx";
-    case CouleurJeton::EMERAUDE: return "Emeraude";
-    case CouleurJeton::DIAMANT: return "Diamant";
-    case CouleurJeton::OR: return "Or";
-    case CouleurJeton::PERLE: return "Perle";
+    case CouleurJeton::ROUGE: return "R";
+    case CouleurJeton::BLEUE: return "B";
+    case CouleurJeton::NOIR: return "N";
+    case CouleurJeton::VERT: return "V";
+    case CouleurJeton::BLANC: return "B";
+    case CouleurJeton::OR: return "O";
+    case CouleurJeton::PERLE: return "P";
     default: throw JetonException("Couleur inconnue");
     }
 }
@@ -35,6 +35,10 @@ std::ostream& operator<<(std::ostream& f, CouleurJeton c) {
 
 std::ostream& operator<< (std::ostream& f, const Jeton& jeton) {
     f << jeton.getCouleur();
+    return f;
+}
+std::ostream& operator<< (std::ostream& f, const Jeton* jeton) {
+    f << *jeton;
     return f;
 }
 
@@ -62,15 +66,15 @@ LotDeJetons::LotDeJetons() {
     for (int i = 0; i < max_perle; i++)
         jetons.push_back(new Jeton(CouleurJeton::PERLE));
     for (int i = 0; i < max_dimant; i++)
-        jetons.push_back(new Jeton(CouleurJeton::DIAMANT));
+        jetons.push_back(new Jeton(CouleurJeton::BLANC));
     for (int i = 0; i < max_onyx; i++)
-        jetons.push_back(new Jeton(CouleurJeton::ONYX));
+        jetons.push_back(new Jeton(CouleurJeton::NOIR));
     for (int i = 0; i < max_rubis; i++)
-        jetons.push_back(new Jeton(CouleurJeton::RUBIS));
+        jetons.push_back(new Jeton(CouleurJeton::ROUGE));
     for (int i = 0; i < max_saphir; i++)
-        jetons.push_back(new Jeton(CouleurJeton::SAPHIR));
+        jetons.push_back(new Jeton(CouleurJeton::BLEUE));
     for (int i = 0; i < max_emeraude; i++)
-        jetons.push_back(new Jeton(CouleurJeton::EMERAUDE));
+        jetons.push_back(new Jeton(CouleurJeton::VERT));
 }
 
 LotDeJetons::~LotDeJetons() {
@@ -285,4 +289,22 @@ Plateau& Plateau::getPlateau(Sac& sac, const LotPrivileges& lotp) {
 Plateau& Plateau::getPlateau() {
     static Plateau instance;
     return instance;
+}
+
+std::ostream& operator<< (std::ostream& f, const Plateau& plateau) {
+    //On affiche une matrice avec dans chaque case la lettre correpondant au jetons
+    f<<"-----------"<<std::endl;
+    for (size_t i = 0; i < plateau.getTaille(); i++) {
+        f << "|";
+        for (size_t j = 0; j < plateau.getTaille(); j++) {
+            if (plateau.getJeton(i,j) == nullptr)
+                f << " ";
+            else
+                f << plateau.getJeton(i,j);
+            f << "|";
+        };
+        f<<std::endl;
+    }
+    f<<"-----------"<<std::endl;
+    return f;
 }

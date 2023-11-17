@@ -50,6 +50,8 @@ class Partie {
         
         int getTour() const { return tour; }
         Joueur* getjoueurCourant() const { return joueurs[joueurCourant]; }
+
+        EspaceJeux* getEspaceJeux() const { return espaceJeux; }
         
         bool finPartie();
         void changerJoueurCourant();

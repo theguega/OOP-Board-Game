@@ -28,7 +28,7 @@ private:
 };
 
 //Enum pour les couleurs : initialiser, to string, affichage.
-enum class CouleurJeton { RUBIS, SAPHIR, EMERAUDE, ONYX, DIAMANT, OR, PERLE };
+enum class CouleurJeton { ROUGE, BLEUE, NOIR, VERT, BLANC, OR, PERLE };
 std::string toStringCouleur(CouleurJeton c);
 std::ostream& operator<<(std::ostream& f, CouleurJeton c);
 extern std::initializer_list<CouleurJeton> CouleursJeton;
@@ -158,7 +158,7 @@ class Plateau {
         const Jeton& recupererJeton(const size_t i, const size_t j);
         const Privilege& recupererPrivilege();
         bool pivilegeDisponible() const { return !privileges.empty(); }
-        const Jeton* getJeton(const size_t i, const size_t j) { return jetons[i][j]; }
+        const Jeton* getJeton(const size_t i, const size_t j) const { return jetons[i][j]; }
 
         //Postionnement du jeton en suivant l'ordre du plateau
         void positionerJeton(const Jeton& jeton);
@@ -173,6 +173,7 @@ class Plateau {
         //Sans sac et lot de privilèges (restitution de partie)
         static Plateau& getPlateau();
 };
+std::ostream& operator<< (std::ostream& f, const Plateau& plateau);
 
 #endif
 
