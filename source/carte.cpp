@@ -287,10 +287,19 @@ const Carte& Pioche::piocher(){
     return *c;
 }
 
-const Carte& Pioche::piocher(int i){
+const Carte& Pioche::piocher(int id){
     if (estVide())
         throw CarteException("Plus de cartes dans cette pioche");
-    const Carte* c = cartes[i];
-    cartes.erase(cartes.begin() + i);
-    return *c;
+
+    auto it = std::find_if(cartes.begin(), cartes.end(), [id](const Carte* carte) {
+        return carte->getId() == id;
+        });
+
+    if (it != cartes.end()) {
+        const Carte* carteTrouvee = *it;
+        cartes.erase(it);
+        return *carteTrouvee;
+    }
+    else 
+        throw CarteException("Aucune carte avec l'ID spécifié n'a été trouvée dans cette pioche"); 
 }

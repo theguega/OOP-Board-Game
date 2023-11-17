@@ -70,17 +70,16 @@ public:
 
 
 
-//  ######  Debut du pattern Builder, pour l'instant il n'est pas utilisé comme constructeur de Partie  ######
-// Masquez cette partie si vous compilez
+//  ######  Debut du pattern Builder  ######
 
 class PartieBuilder {
 public:
     virtual ~PartieBuilder() {};
-    virtual void setJoueurs() const = 0;
-    virtual void setCartesJoueurs() const = 0;
-    virtual void setJetonsAndPrivilegeJoueurs() const = 0;
-    virtual void setTours_and_current() const = 0;
-    virtual void updateEspaceJeu() const = 0;
+    virtual void setJoueurs() const {};
+    virtual void setCartesJoueurs() const {};
+    virtual void setJetonsAndPrivilegeJoueurs() const {};
+    virtual void setTours_and_current() const {};
+    virtual void updateEspaceJeu() const {};
     friend class Partie;
 };
 
@@ -120,8 +119,8 @@ public:
 
     virtual void setCartesJoueurs() const override;
     virtual void setJetonsAndPrivilegeJoueurs() const override;
-    void updateEspaceJeu() const override;
-    void setTours_and_current() const override;
+    virtual void updateEspaceJeu() const override;
+    virtual void setTours_and_current() const override;
 
     Partie* GetProduct() {
         Partie* result = this->partie;

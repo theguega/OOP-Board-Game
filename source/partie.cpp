@@ -256,10 +256,10 @@ void LastPartieBuilder::setCartesJoueurs() const {
         // Pour chaque joueur, on l'initialise avec son pseudo et type
 
         int id_joueur = sqlite3_column_int(stmt, 0);
-        string nom = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 1));
-        string prenom = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 2));
-        string type = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 3));
-        this->partie->joueurs[i] = Joueur(nom, prenom, type);
+        std::string nom = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 1));
+        std::string prenom = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 2));
+        std::string type = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 3));
+         this->partie->joueurs[i] = Joueur(nom, prenom, type);
         
         // ##### On boucle sur chaque carte normale qu'avait le joueur en cours #####
 
@@ -295,11 +295,8 @@ void LastPartieBuilder::setCartesJoueurs() const {
                 CouleurCarte c = carte.getBonus().getCouleur();
                 this->partie->joueurs[i]->addCarte(carte);
             }
-            // TODO 
-            // chaque passage dans la boucle on recupere un nouvel ID de carte
-            // on la récupère dans une picohe et on la met dans les dicos du joueur
         }
-
+        sqlite3_finalize(stmt2);
         // TODO : On boucle sur toute les cartes nobles qu'avait le joueur
         // TODO : On boucle sur toute les cartes reservees qu'avait le joueur (a faire plus haut)  
         i++;
@@ -309,22 +306,63 @@ void LastPartieBuilder::setCartesJoueurs() const {
 }
 
 void LastPartieBuilder::setJetonsAndPrivilegeJoueurs() const{
+    sqlite3* db;
+    sqlite3_stmt* stmt;
+    std::string relativePath = "data/save.sqlite";
+    std::filesystem::path absolutePath = projectPath / relativePath;
+    std::string absolutePathStr = absolutePath.string();
+    int i = 0;
+
+    int rc = sqlite3_open(absolutePathStr.c_str(), &db);
+    if (rc != SQLITE_OK) {
+        std::cerr << "Impossible d'ouvrir la base de donnees: " << sqlite3_errmsg(db) << std::endl;
+        return;
+    }
+
     // TODO : On boucle sur chaque jeton qu'avait le joueur
-        // TODO : On lui remet ses privileges
+    // TODO : On lui remet ses privileges
+    sqlite3_finalize(stmt);
+    sqlite3_close(db);
 }
 
 
-//void LastPartieBuilder::updateEspaceJeu() {
-//    sqlite3* db;
-//    sqlite3_stmt* stmt;
-//    int rc = sqlite3_open("save.sqlite", &db);
-//    if (rc != SQLITE_OK) {
-//        std::cerr << "Impossible d'ouvrir la base de donnees: " << sqlite3_errmsg(db) << std::endl;
-//        return;
-//    }
-//    sqlite3_finalize(stmt);
-//    sqlite3_close(db);
-//}
+void LastPartieBuilder::updateEspaceJeu() const{
+    sqlite3* db;
+    sqlite3_stmt* stmt;
+    int rc = sqlite3_open("save.sqlite", &db);
+    if (rc != SQLITE_OK) {
+        std::cerr << "Impossible d'ouvrir la base de donnees: " << sqlite3_errmsg(db) << std::endl;
+        return;
+    }
+    rc = sqlite3_prepare_v2(db, "SELECT * FROM 'pyramide'", -1, &stmt, nullptr);
+    if (rc != SQLITE_OK) {
+        std::cerr << "Erreur de preparation de la requete : " << sqlite3_errmsg(db) << std::endl;
+        sqlite3_close(db);
+        return;
+    }
+    while (sqlite3_step(stmt) == SQLITE_ROW) {
+        int id_carte = sqlite3_column_int(stmt, 3);
+        int i = sqlite3_column_int(stmt, 0);
+        int j = sqlite3_column_int(stmt, 1);
+
+        if (i == 0) {
+            const Carte& carte = this->partie->espaceJeux->getPyramide().getPioche1().piocher(id_carte);
+            partie->espaceJeux->getPyramide().definitCarte(i, j, carte);
+        }
+        else if (i == 1) {
+            const Carte& carte = this->partie->espaceJeux->getPyramide().getPioche2().piocher(id_carte);
+            partie->espaceJeux->getPyramide().definitCarte(i, j, carte);
+        }
+        else if (i == 2) {
+            const Carte& carte = this->partie->espaceJeux->getPyramide().getPioche3().piocher(id_carte);
+            partie->espaceJeux->getPyramide().definitCarte(i, j, carte);
+        }
+    }
+    //TODO : maintenant qu'on a enlevé des pioches les cartes des joueurs, il faut les disposer sur le plateau. 
+    sqlite3_finalize(stmt);
+    sqlite3_close(db);
+}
+
 
 void LastPartieBuilder::setTours_and_current() const {
     sqlite3* db;
@@ -356,3 +394,8 @@ void LastPartieBuilder::setTours_and_current() const {
 
 
 // ###########   fin des méthodes Builder   #############
+
+// choses a eclaircir : 
+// - gestion des cartes nobles
+// - gestion des cartes reservees
+// - la question des jetons et privileges : un id finalement...?
