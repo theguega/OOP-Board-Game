@@ -149,9 +149,9 @@ void Joueur::utiliserPrivilege(Plateau& plateau){
     if (nbPrivileges == 0) {
         throw JoueurException("Le joueur n'a pas de privilège");
     }
-    /*if (plateau.getNbJtons()==0){
+    if (plateau.getTaille()==0){
         throw JoueurException("Le plateau n'a pas de jetons");
-    }*/
+    }
     const Privilege& privilege = supPrivilege();
     plateau.poserPrivilege(privilege);
     const Jeton& jetonSelec = strategy->choisirJeton(plateau);
@@ -259,10 +259,9 @@ void Joueur::orReserverCarte (Pyramide& pyramide, Plateau& plateau){
         if (numCarte > pyramide.getNbCartesNiv(niveau)){
             throw JoueurException("Le numéro de la carte est incorrect");
         }
-        const Carte& carte = pyramide.reserverCarte(niveau, numCarte);
+        const Carte& carte = pyramide.acheterCarte(niveau, numCarte);
         addCarteReservee(carte);
         
-        //pyramide.supprimerCarte(niveau, numCarte);
 
         // Recuperation d'un jeton or
         const Jeton& jeton = strategy->choisirJeton(plateau);
@@ -341,7 +340,6 @@ void Joueur::acheterCarteJoaillerie (Pyramide& pyramide){
             throw JoueurException("Vous n'avez pas assez de points de prestige pour acheter cette carte");
         }
         addCarte(carte);
-        //pyramide.supprimerCarte(niveau, numCarte);*/
     }
     else {
         throw JoueurException("Le choix est incorrect");
