@@ -257,36 +257,86 @@ void Partie::enregisterScore() {
 //void LastPartieBuilder::setJoueurs() const {
 //    sqlite3* db;
 //    sqlite3_stmt* stmt;
+//    std::string relativePath = "data/save.sqlite";
+//    std::filesystem::path absolutePath = projectPath / relativePath;
+//    std::string absolutePathStr = absolutePath.string();
+//    int i = 0;
 //
-//    int rc = sqlite3_open("save.sqlite", &db);
+//    int rc = sqlite3_open(absolutePathStr.c_str(), &db);
 //    if (rc != SQLITE_OK) {
 //        std::cerr << "Impossible d'ouvrir la base de donnees: " << sqlite3_errmsg(db) << std::endl;
 //        return;
 //    }
-//    rc = sqlite3_prepare_v2(db, "SELECT * FROM 'joueur1'", -1, &stmt, nullptr);
+//    rc = sqlite3_prepare_v2(db, "SELECT * FROM 'joueur'", -1, &stmt, nullptr);
+//    if (rc != SQLITE_OK) {
+//        std::cerr << "Erreur de preparation de la requete : " << sqlite3_errmsg(db) << std::endl;
+//        sqlite3_close(db);
+//        return;
+//    }
+//
+//    while (sqlite3_step(stmt) == SQLITE_ROW) {
+//        int id_joueur = sqlite3_column_int(stmt, 0);
+//        string nom = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 1));
+//        string prenom = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 2));
+//        string type = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 3));
+//        sqlite3_stmt* stmt2;
+//
+//        int sql = sqlite3_prepare_v2(db, "SELECT cartes_joueur.* FROM 'joueur' JOIN 'cartes_joueur' ON joueur.id = cartes_joueur.id_joueur WHERE joueur.id = ?", -1, &stmt2, nullptr);
+//        if (sql != SQLITE_OK) {
+//            std::cerr << "Erreur de préparation de la requête : " << sqlite3_errmsg(db) << std::endl;
+//            sqlite3_close(db);
+//            return;
+//        }
+//
+//        sql = sqlite3_bind_int(stmt2, 1, id_joueur);
+//        if (sql != SQLITE_OK) {
+//            std::cerr << "Erreur de liaison de paramètre : " << sqlite3_errmsg(db) << std::endl;
+//            sqlite3_finalize(stmt2);
+//            sqlite3_close(db);
+//            return;
+//        }
+//        while (sqlite3_step(stmt2) == SQLITE_ROW) {
+//            int id_carte = sqlite3_column_int(stmt2, 1);
+//            // TODO 
+//            // chaque passage dans la boucle on recupere un nouvel ID de carte
+//            // on la récupère dans une picohe et on la met dans les dicos du joueur
+//        }
+//        this->partie.joueurs[i] = Joueur(nom, prenom, type);
+//        i++
+//    }
+//    sqlite3_finalize(stmt);
+//    sqlite3_close(db);
+//}
+//
+//
+//
+//void LastPartieBuilder::setTours_and_current() const {
+//    sqlite3* db;
+//    sqlite3_stmt* stmt;
+//    std::string relativePath = "data/save.sqlite";
+//    std::filesystem::path absolutePath = projectPath / relativePath;
+//    std::string absolutePathStr = absolutePath.string();
+//
+//    int rc = sqlite3_open(absolutePathStr.c_str(), &db);
+//    if (rc != SQLITE_OK) {
+//        std::cerr << "Impossible d'ouvrir la base de donnees: " << sqlite3_errmsg(db) << std::endl;
+//        return;
+//    }
+//    rc = sqlite3_prepare_v2(db, "SELECT * FROM 'infopartie'", -1, &stmt, nullptr);
 //    if (rc != SQLITE_OK) {
 //        std::cerr << "Erreur de preparation de la requete : " << sqlite3_errmsg(db) << std::endl;
 //        sqlite3_close(db);
 //        return;
 //    }
 //    if (sqlite3_step(stmt) == SQLITE_ROW) {
-//        string nom = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 1));
-//        string prenom = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 2));
-//        string type = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 1));
+//        int tours = sqlite3_column_int(stmt, 0);
+//        int joueur_c = sqlite3_column_int(stmt, 1);
+//        this->partie.tour = tours;
+//        this->partie.joueurCourant = joueur_c;
 //    }
-//    this->partie.joueurs[0] = Joueur(nom, prenom, type);
-//    // meme chose pour joueur 2
 //    sqlite3_finalize(stmt);
 //    sqlite3_close(db);
 //}
-//
-//// regrouper tout sous un seul setter pour ne faire qu'un appel à la bdd
-//void LastPartieBuilder::setTours() const {
-//
-//}
-//
-//void LastPartieBuilder::setJoueurCourant() const {
-//
-//}
+
 
 // ###########   fin des méthodes Builder   #############

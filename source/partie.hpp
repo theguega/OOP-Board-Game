@@ -78,8 +78,7 @@ class Partie {
 //    virtual ~PartieBuilder() {};
 //    virtual void setEspaceJeu() const = 0;
 //    virtual void setJoueurs(string nomJoueur1, string prenomJoueur1, string nomJoueur2, string prenomJoueur2) const = 0;
-//    virtual void setTours() const = 0;
-//    virtual void setJoueurCourant() const = 0;
+//    virtual void setTours_and_current() const = 0;
 //};
 //
 //
@@ -92,8 +91,7 @@ class Partie {
 //    void Reset() { this->partie = new Partie(); }
 //    void setEspaceJeu() const override;
 //    void setJoueurs(string nomJoueur1, string prenomJoueur1, string nomJoueur2, string prenomJoueur2) const override;
-//    void setTours() const override;
-//    void setJoueurCourant()const override;
+//    void setTours_and_current() const override;
 //};
 //
 //
@@ -106,8 +104,7 @@ class Partie {
 //    void Reset() { this->partie = new Partie(); }
 //    void setEspaceJeu() const override;
 //    void setJoueurs(string nomJoueur1, string prenomJoueur1, string nomJoueur2, string prenomJoueur2) const override;
-//    void setTours() const override;
-//    void setJoueurCourant()const override;
+//    void setTours_and_current() const override;
 //};
 //
 //
