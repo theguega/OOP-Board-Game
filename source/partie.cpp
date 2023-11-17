@@ -1,23 +1,40 @@
 #include "partie.hpp"
 
-Partie::Partie() : espaceJeux(new EspaceJeux()), tour(0), joueurCourant(0) {
-    // création et affectation de nouveaux joueurs 
-    joueurs[0] = new Joueur("Alain", "telligence", type::IA);
-    joueurs[1] = new Joueur("AL", "Gorythme", type::IA);
+EspaceJeux* Partie::espaceJeux = new EspaceJeux();
+
+//Partie::Partie() : espaceJeux(new EspaceJeux()), tour(0), joueurCourant(0) {
+//    // création et affectation de nouveaux joueurs 
+//    joueurs[0] = new Joueur("Alain", "telligence", type::IA);
+//    joueurs[1] = new Joueur("AL", "Gorythme", type::IA);
+//}
+//
+//Partie::Partie(std::string nomJoueur1, std::string prenomJoueur1) : espaceJeux(new EspaceJeux()), tour(0), joueurCourant(0) {
+//    // création et affectation de nouveaux joueurs 
+//    joueurs[0] = new Joueur(nomJoueur1, prenomJoueur1, type::HUMAIN);
+//    joueurs[1] = new Joueur("AL", "Gorythme", type::IA);
+//}
+//
+//Partie::Partie(std::string nomJoueur1, std::string prenomJoueur1, std::string nomJoueur2, std::string prenomJoueur2) : espaceJeux(new EspaceJeux()), tour(0), joueurCourant(0) {
+//    // création et affectation de nouveaux joueurs 
+//    joueurs[0] = new Joueur(nomJoueur1, prenomJoueur1, type::HUMAIN);
+//    joueurs[1] = new Joueur(nomJoueur2, prenomJoueur2, type::HUMAIN);
+//}
+
+void Partie::setJoueurCourant(int n) {
+    if (n != 0 || n != 1)
+        throw PartieException("Il n'y a que deux joueurs");
+    else
+        joueurCourant = n;
 }
 
-Partie::Partie(std::string nomJoueur1, std::string prenomJoueur1) : espaceJeux(new EspaceJeux()), tour(0), joueurCourant(0) {
-    // création et affectation de nouveaux joueurs 
-    joueurs[0] = new Joueur(nomJoueur1, prenomJoueur1, type::HUMAIN);
-    joueurs[1] = new Joueur("AL", "Gorythme", type::IA);
+void Partie::setJoueur1(Joueur& j){
+    joueurs[0] = &j;
 }
 
-Partie::Partie(std::string nomJoueur1, std::string prenomJoueur1, std::string nomJoueur2, std::string prenomJoueur2) : espaceJeux(new EspaceJeux()), tour(0), joueurCourant(0) {
-    // création et affectation de nouveaux joueurs 
-    joueurs[0] = new Joueur(nomJoueur1, prenomJoueur1, type::HUMAIN);
-    joueurs[1] = new Joueur(nomJoueur2, prenomJoueur2, type::HUMAIN);
-}
 
+void Partie::setJoueur2(Joueur &j){
+    joueurs[1] = &j;
+}
 
 
 void Partie::changerJoueurCourant() {
@@ -211,132 +228,140 @@ void Partie::enregisterScore() {
 
 // ###########   Debut des méthodes Builder   #############
 
-//void NewPartieBuilder::setEspaceJeu() const {
-//    this->partie.espaceJeux = new EspaceJeux();
-//}
-//
-//void NewPartieBuilder::setJoueurs(string nomJoueur1, string prenomJoueur1, string nomJoueur2, string prenomJoueur2) const {
-//    this->partie.joueurs[0] = new Joueur(nomJoueur1, prenomJoueur1, type::HUMAIN);
-//    this->partie.joueurs[1] = new Joueur(nomJoueur2, prenomJoueur2, type::HUMAIN);
-//}
-//
-//void NewPartieBuilder::setTours() const {
-//    this->partie.tour = 0;
-//}
-//
-//void NewPartieBuilder::setJoueurCourant() const {
-//    this->partie.joueurCourant = 0;
-//}
-//
-//void Director::BuildNewPartie() {
-//    this->builder->setEspaceJeu();
-//    this->builder->setJoueurs();
-//    this->builder->setTours();
-//    this->builder->setJoueurCourant();
-//}
-//
-//void Director::BuildLastPartie() {
-//    this->builder->setEspaceJeu();
-//    this->builder->setJoueurs();
-//    this->builder->setTours();
-//    this->builder->setJoueurCourant();
-//}
-//
-//void LastPartieBuilder::setEspaceJeu() const {
-//    sqlite3* db;
-//    sqlite3_stmt* stmt;
-//    int rc = sqlite3_open("save.sqlite", &db);
-//    if (rc != SQLITE_OK) {
-//        std::cerr << "Impossible d'ouvrir la base de donnees: " << sqlite3_errmsg(db) << std::endl;
-//        return;
-//    }
-//    sqlite3_finalize(stmt);
-//    sqlite3_close(db);
-//}
-//
-//void LastPartieBuilder::setJoueurs() const {
-//    sqlite3* db;
-//    sqlite3_stmt* stmt;
-//    std::string relativePath = "data/save.sqlite";
-//    std::filesystem::path absolutePath = projectPath / relativePath;
-//    std::string absolutePathStr = absolutePath.string();
-//    int i = 0;
-//
-//    int rc = sqlite3_open(absolutePathStr.c_str(), &db);
-//    if (rc != SQLITE_OK) {
-//        std::cerr << "Impossible d'ouvrir la base de donnees: " << sqlite3_errmsg(db) << std::endl;
-//        return;
-//    }
-//    rc = sqlite3_prepare_v2(db, "SELECT * FROM 'joueur'", -1, &stmt, nullptr);
-//    if (rc != SQLITE_OK) {
-//        std::cerr << "Erreur de preparation de la requete : " << sqlite3_errmsg(db) << std::endl;
-//        sqlite3_close(db);
-//        return;
-//    }
-//
-//    while (sqlite3_step(stmt) == SQLITE_ROW) {
-//        int id_joueur = sqlite3_column_int(stmt, 0);
-//        string nom = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 1));
-//        string prenom = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 2));
-//        string type = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 3));
-//        sqlite3_stmt* stmt2;
-//
-//        int sql = sqlite3_prepare_v2(db, "SELECT cartes_joueur.* FROM 'joueur' JOIN 'cartes_joueur' ON joueur.id = cartes_joueur.id_joueur WHERE joueur.id = ?", -1, &stmt2, nullptr);
-//        if (sql != SQLITE_OK) {
-//            std::cerr << "Erreur de préparation de la requête : " << sqlite3_errmsg(db) << std::endl;
-//            sqlite3_close(db);
-//            return;
-//        }
-//
-//        sql = sqlite3_bind_int(stmt2, 1, id_joueur);
-//        if (sql != SQLITE_OK) {
-//            std::cerr << "Erreur de liaison de paramètre : " << sqlite3_errmsg(db) << std::endl;
-//            sqlite3_finalize(stmt2);
-//            sqlite3_close(db);
-//            return;
-//        }
-//        while (sqlite3_step(stmt2) == SQLITE_ROW) {
-//            int id_carte = sqlite3_column_int(stmt2, 1);
-//            // TODO 
-//            // chaque passage dans la boucle on recupere un nouvel ID de carte
-//            // on la récupère dans une picohe et on la met dans les dicos du joueur
-//        }
-//        this->partie.joueurs[i] = Joueur(nom, prenom, type);
-//        i++
-//    }
-//    sqlite3_finalize(stmt);
-//    sqlite3_close(db);
-//}
-//
-//
-//
-//void LastPartieBuilder::setTours_and_current() const {
-//    sqlite3* db;
-//    sqlite3_stmt* stmt;
-//    std::string relativePath = "data/save.sqlite";
-//    std::filesystem::path absolutePath = projectPath / relativePath;
-//    std::string absolutePathStr = absolutePath.string();
-//
-//    int rc = sqlite3_open(absolutePathStr.c_str(), &db);
-//    if (rc != SQLITE_OK) {
-//        std::cerr << "Impossible d'ouvrir la base de donnees: " << sqlite3_errmsg(db) << std::endl;
-//        return;
-//    }
-//    rc = sqlite3_prepare_v2(db, "SELECT * FROM 'infopartie'", -1, &stmt, nullptr);
-//    if (rc != SQLITE_OK) {
-//        std::cerr << "Erreur de preparation de la requete : " << sqlite3_errmsg(db) << std::endl;
-//        sqlite3_close(db);
-//        return;
-//    }
-//    if (sqlite3_step(stmt) == SQLITE_ROW) {
-//        int tours = sqlite3_column_int(stmt, 0);
-//        int joueur_c = sqlite3_column_int(stmt, 1);
-//        this->partie.tour = tours;
-//        this->partie.joueurCourant = joueur_c;
-//    }
-//    sqlite3_finalize(stmt);
-//    sqlite3_close(db);
-//}
+void NewPartieBuilder::setJoueurs(string nomJoueur1, string prenomJoueur1, string nomJoueur2, string prenomJoueur2) const {
+    partie->joueurs[0] = new Joueur(nomJoueur1, prenomJoueur1, type::HUMAIN);
+    partie->joueurs[1] = new Joueur(nomJoueur2, prenomJoueur2, type::HUMAIN);
+}
+
+void NewPartieBuilder::setTours_and_current() const {
+    partie->tour = 0;
+    partie->joueurCourant = 0;
+}
+
+void Director::BuildNewPartie() {
+    this->builder->setEspaceJeu();
+    this->builder->setJoueurs();
+    this->builder->setTours();
+    this->builder->setJoueurCourant();
+}
+
+void LastPartieBuilder::setEspaceJeu() const {
+    this->partie.espaceJeux = new EspaceJeux();
+}
+
+void LastPartieBuilder::setJoueurs() const {
+    sqlite3* db;
+    sqlite3_stmt* stmt;
+    std::string relativePath = "data/save.sqlite";
+    std::filesystem::path absolutePath = projectPath / relativePath;
+    std::string absolutePathStr = absolutePath.string();
+    int i = 0;
+
+    int rc = sqlite3_open(absolutePathStr.c_str(), &db);
+    if (rc != SQLITE_OK) {
+        std::cerr << "Impossible d'ouvrir la base de donnees: " << sqlite3_errmsg(db) << std::endl;
+        return;
+    }
+    rc = sqlite3_prepare_v2(db, "SELECT * FROM 'joueur'", -1, &stmt, nullptr);
+    if (rc != SQLITE_OK) {
+        std::cerr << "Erreur de preparation de la requete : " << sqlite3_errmsg(db) << std::endl;
+        sqlite3_close(db);
+        return;
+    }
+
+    while (sqlite3_step(stmt) == SQLITE_ROW) {
+        int id_joueur = sqlite3_column_int(stmt, 0);
+        string nom = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 1));
+        string prenom = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 2));
+        string type = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 3));
+        this->partie.joueurs[i] = Joueur(nom, prenom, type);
+        sqlite3_stmt* stmt2;
+
+        int sql = sqlite3_prepare_v2(db, "SELECT cartes_joueur.* FROM 'joueur' JOIN 'cartes_joueur' ON joueur.id = cartes_joueur.id_joueur WHERE joueur.id = ?", -1, &stmt2, nullptr);
+        if (sql != SQLITE_OK) {
+            std::cerr << "Erreur de préparation de la requête : " << sqlite3_errmsg(db) << std::endl;
+            sqlite3_close(db);
+            return;
+        }
+
+        sql = sqlite3_bind_int(stmt2, 1, id_joueur);
+        if (sql != SQLITE_OK) {
+            std::cerr << "Erreur de liaison de paramètre : " << sqlite3_errmsg(db) << std::endl;
+            sqlite3_finalize(stmt2);
+            sqlite3_close(db);
+            return;
+        }
+        while (sqlite3_step(stmt2) == SQLITE_ROW) {
+            int id_carte = sqlite3_column_int(stmt2, 1);
+            if (1 <= id <= 30) {
+                Carte* carte = this->partie.EspaceJeu.piocheNv1.piocher(i);
+                CouleurCarte c = carte->getBonus().getCouleur();
+                this->partie.joueurs[i].cartes[c].pushback(carte);
+            }
+            else if () {
+
+            }
+            else if () {
+
+            }
+            // TODO 
+            // chaque passage dans la boucle on recupere un nouvel ID de carte
+            // on la récupère dans une picohe et on la met dans les dicos du joueur
+        }
+        i++
+    }
+    sqlite3_finalize(stmt);
+    sqlite3_close(db);
+}
+
+
+void LastPartieBuilder::updateEspaceJeu() {
+    sqlite3* db;
+    sqlite3_stmt* stmt;
+    int rc = sqlite3_open("save.sqlite", &db);
+    if (rc != SQLITE_OK) {
+        std::cerr << "Impossible d'ouvrir la base de donnees: " << sqlite3_errmsg(db) << std::endl;
+        return;
+    }
+    sqlite3_finalize(stmt);
+    sqlite3_close(db);
+}
+
+void LastPartieBuilder::setTours_and_current() const {
+    sqlite3* db;
+    sqlite3_stmt* stmt;
+    std::string relativePath = "data/save.sqlite";
+    std::filesystem::path absolutePath = projectPath / relativePath;
+    std::string absolutePathStr = absolutePath.string();
+
+    int rc = sqlite3_open(absolutePathStr.c_str(), &db);
+    if (rc != SQLITE_OK) {
+        std::cerr << "Impossible d'ouvrir la base de donnees: " << sqlite3_errmsg(db) << std::endl;
+        return;
+    }
+    rc = sqlite3_prepare_v2(db, "SELECT * FROM 'infopartie'", -1, &stmt, nullptr);
+    if (rc != SQLITE_OK) {
+        std::cerr << "Erreur de preparation de la requete : " << sqlite3_errmsg(db) << std::endl;
+        sqlite3_close(db);
+        return;
+    }
+    if (sqlite3_step(stmt) == SQLITE_ROW) {
+        int tours = sqlite3_column_int(stmt, 0);
+        int joueur_c = sqlite3_column_int(stmt, 1);
+        this->partie.tour = tours;
+        this->partie.joueurCourant = joueur_c;
+    }
+    sqlite3_finalize(stmt);
+    sqlite3_close(db);
+}
+
+void Director::BuildLastPartie() {
+    this->builder->setEspaceJeu();
+    this->builder->setJoueurs();
+    this->builder->updateEspaceJeu();
+    this->builder->setTours();
+    this->builder->setJoueurCourant();
+}
 
 
 // ###########   fin des méthodes Builder   #############

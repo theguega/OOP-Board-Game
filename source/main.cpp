@@ -16,7 +16,7 @@ int main(int argc, const char * argv[]) {
     std::cout<<"Bonjour, à combien de joueur voulez vous jouer ? (0,1,2)"<<std::endl;
     int nbJoueur;
     std::cin>>nbJoueur;
-    switch (nbJoueur) {
+    /*switch (nbJoueur) {
         case 0: 
         {
             std::cout<<"IA vs IA"<<std::endl;
@@ -69,7 +69,7 @@ int main(int argc, const char * argv[]) {
             std::cout<<"Erreur, veuillez saisir un nombre entre 0 et 2"<<std::endl;
             return 0;
             break;
-    }
+    }*/
 
     //boucle de jeux
 
