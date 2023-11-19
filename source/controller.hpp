@@ -3,8 +3,10 @@
 
 class controller {
 private:
+	Partie* partie;
 public:
 	controller();
 	~controller();
+	void lancerPartie();
 };
 #endif

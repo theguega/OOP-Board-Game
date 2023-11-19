@@ -96,10 +96,10 @@ public:
     Carte(TypeCarte t, Capacite c, unsigned int nbP, unsigned int id); // constructeur carte noble
     ~Carte() = default;
     TypeCarte getType() const { return type; }
-    Prix getPrix() const { return prix; }
+    const Prix& getPrix() const { return prix; }
     Capacite getCapacite1() const { return capacite1; }
     Capacite getCapacite2() const { return capacite2; }
-    Bonus getBonus() const { return bonus; }
+    const Bonus& getBonus() const { return bonus; }
     unsigned int getId() const { return id; }
     unsigned int getNbCouronnes() const { return nbCouronnes; }
     unsigned int getNbPtsPrivilege() const { return nbPtsPrivilege; }
@@ -138,6 +138,7 @@ public:
     bool estVide() const { return getNbCartes() == 0; }
     size_t getNbCartes() const { return cartes.size(); }
     const Carte& piocher();
+    const Carte& piocher(int id);
     Pioche(const Pioche& p) = delete;
     Pioche& operator=(const Pioche& p) = delete;
 };

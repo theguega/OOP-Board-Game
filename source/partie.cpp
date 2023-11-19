@@ -1,5 +1,7 @@
 #include "partie.hpp"
 
+EspaceJeux* Partie::espaceJeux = new EspaceJeux();
+
 Partie::Partie() : espaceJeux(new EspaceJeux()), tour(0), joueurCourant(0) {
     // création et affectation de nouveaux joueurs 
     joueurs[0] = new Joueur("Alain", "telligence", type::IA);
@@ -18,6 +20,21 @@ Partie::Partie(std::string nomJoueur1, std::string prenomJoueur1, std::string no
     joueurs[1] = new Joueur(nomJoueur2, prenomJoueur2, type::HUMAIN);
 }
 
+void Partie::setJoueurCourant(int n) {
+    if (n != 0 || n != 1)
+        throw PartieException("Il n'y a que deux joueurs");
+    else
+        joueurCourant = n;
+}
+
+void Partie::setJoueur1(Joueur& j){
+    joueurs[0] = &j;
+}
+
+
+void Partie::setJoueur2(Joueur &j){
+    joueurs[1] = &j;
+}
 
 
 void Partie::changerJoueurCourant() {
@@ -211,56 +228,14 @@ void Partie::enregisterScore() {
 
 // ###########   Debut des méthodes Builder   #############
 
-//void NewPartieBuilder::setEspaceJeu() const {
-//    this->partie.espaceJeux = new EspaceJeux();
-//}
-//
-//void NewPartieBuilder::setJoueurs(string nomJoueur1, string prenomJoueur1, string nomJoueur2, string prenomJoueur2) const {
-//    this->partie.joueurs[0] = new Joueur(nomJoueur1, prenomJoueur1, type::HUMAIN);
-//    this->partie.joueurs[1] = new Joueur(nomJoueur2, prenomJoueur2, type::HUMAIN);
-//}
-//
-//void NewPartieBuilder::setTours() const {
-//    this->partie.tour = 0;
-//}
-//
-//void NewPartieBuilder::setJoueurCourant() const {
-//    this->partie.joueurCourant = 0;
-//}
-//
-//void Director::BuildNewPartie() {
-//    this->builder->setEspaceJeu();
-//    this->builder->setJoueurs();
-//    this->builder->setTours();
-//    this->builder->setJoueurCourant();
-//}
-//
-//void Director::BuildLastPartie() {
-//    this->builder->setEspaceJeu();
-//    this->builder->setJoueurs();
-//    this->builder->setTours();
-//    this->builder->setJoueurCourant();
-//}
-//
-//void LastPartieBuilder::setEspaceJeu() const {
-//    sqlite3* db;
-//    sqlite3_stmt* stmt;
-//    int rc = sqlite3_open("save.sqlite", &db);
-//    if (rc != SQLITE_OK) {
-//        std::cerr << "Impossible d'ouvrir la base de donnees: " << sqlite3_errmsg(db) << std::endl;
-//        return;
-//    }
-//    sqlite3_finalize(stmt);
-//    sqlite3_close(db);
-//}
-//
-//void LastPartieBuilder::setJoueurs() const {
+//void LastPartieBuilder::setJoueurs(){
 //    sqlite3* db;
 //    sqlite3_stmt* stmt;
 //    std::string relativePath = "data/save.sqlite";
 //    std::filesystem::path absolutePath = projectPath / relativePath;
 //    std::string absolutePathStr = absolutePath.string();
 //    int i = 0;
+//    int priv_tmp = 0;
 //
 //    int rc = sqlite3_open(absolutePathStr.c_str(), &db);
 //    if (rc != SQLITE_OK) {
@@ -273,44 +248,160 @@ void Partie::enregisterScore() {
 //        sqlite3_close(db);
 //        return;
 //    }
-//
 //    while (sqlite3_step(stmt) == SQLITE_ROW) {
-//        int id_joueur = sqlite3_column_int(stmt, 0);
-//        string nom = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 1));
-//        string prenom = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 2));
-//        string type = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 3));
-//        sqlite3_stmt* stmt2;
+//        std::string nom = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 1));
+//        std::string prenom = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 2));
+//        std::string type = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 3));
+//        int nb_privileges = sqlite3_column_int(stmt, 4);
+//        this->partie->joueurs[i] = Joueur(nom, prenom, type);
 //
-//        int sql = sqlite3_prepare_v2(db, "SELECT cartes_joueur.* FROM 'joueur' JOIN 'cartes_joueur' ON joueur.id = cartes_joueur.id_joueur WHERE joueur.id = ?", -1, &stmt2, nullptr);
-//        if (sql != SQLITE_OK) {
-//            std::cerr << "Erreur de préparation de la requête : " << sqlite3_errmsg(db) << std::endl;
-//            sqlite3_close(db);
-//            return;
+//        for (int j = 0; j < nb_privileges; j++, priv_tmp++) {
+//            const Privilege& p = this->partie->espaceJeux.lotPrivileges.getPrivilege(priv_tmp);
+//            if (i == 0)
+//                this->partie->getJoueur1().addPrivilege(p);
+//            else
+//                this->partie->getJoueur2().addPrivilege(p);
 //        }
-//
-//        sql = sqlite3_bind_int(stmt2, 1, id_joueur);
-//        if (sql != SQLITE_OK) {
-//            std::cerr << "Erreur de liaison de paramètre : " << sqlite3_errmsg(db) << std::endl;
-//            sqlite3_finalize(stmt2);
-//            sqlite3_close(db);
-//            return;
-//        }
-//        while (sqlite3_step(stmt2) == SQLITE_ROW) {
-//            int id_carte = sqlite3_column_int(stmt2, 1);
-//            // TODO 
-//            // chaque passage dans la boucle on recupere un nouvel ID de carte
-//            // on la récupère dans une picohe et on la met dans les dicos du joueur
-//        }
-//        this->partie.joueurs[i] = Joueur(nom, prenom, type);
-//        i++
+//        i++;
 //    }
 //    sqlite3_finalize(stmt);
 //    sqlite3_close(db);
 //}
 //
 //
+//void LastPartieBuilder::setCartesJoueurs() const {
+//    sqlite3* db;
+//    sqlite3_stmt* stmt;
+//    std::string relativePath = "data/save.sqlite";
+//    std::filesystem::path absolutePath = projectPath / relativePath;
+//    std::string absolutePathStr = absolutePath.string();
+//    int i = 0;
+//    int nb_cartes_nv1 = partie->espaceJeux->getPyramide().getPioche1().getNbCartes();
+//    int nb_cartes_nv2 = partie->espaceJeux->getPyramide().getPioche2().getNbCartes();
+//    int nb_cartes_nv3 = partie->espaceJeux->getPyramide().getPioche3().getNbCartes();
+//    int nb_cartes_noble = partie->espaceJeux->getPyramide().getPiocheNoble().getNbCartes();
 //
-//void LastPartieBuilder::setTours_and_current() const {
+//    int rc = sqlite3_open(absolutePathStr.c_str(), &db);
+//    if (rc != SQLITE_OK) {
+//        std::cerr << "Impossible d'ouvrir la base de donnees: " << sqlite3_errmsg(db) << std::endl;
+//        return;
+//    }
+//    rc = sqlite3_prepare_v2(db, "SELECT id FROM 'joueur'", -1, &stmt, nullptr);
+//    if (rc != SQLITE_OK) {
+//        std::cerr << "Erreur de preparation de la requete : " << sqlite3_errmsg(db) << std::endl;
+//        sqlite3_close(db);
+//        return;
+//    }
+//
+//    while (sqlite3_step(stmt) == SQLITE_ROW) {
+//        int id_joueur = sqlite3_column_int(stmt, 0);
+//        string sql = "SELECT cartes_joueur.* FROM 'joueur' JOIN 'cartes_joueur' ON joueur.id = cartes_joueur.id_joueur WHERE joueur.id = '" + to_string(id_joueur) + "';";
+//        sqlite3_stmt * stmt2;
+//
+//        int rc2 = sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt2, nullptr);
+//        if (rc2 != SQLITE_OK) {
+//            std::cerr << "Erreur de préparation de la requête : " << sqlite3_errmsg(db) << std::endl;
+//            sqlite3_close(db);
+//            return;
+//        }
+//
+//        while (sqlite3_step(stmt2) == SQLITE_ROW) {
+//            int id_carte = sqlite3_column_int(stmt2, 1);
+//            if (1 <= id_carte <= nb_cartes_nv1) {
+//                const Carte& carte = this->partie->espaceJeux->getPyramide().getPioche1().piocher(id_carte);
+//                CouleurCarte c = carte.getBonus().getCouleur();
+//                this->partie->joueurs[i]->addCarte(carte);
+//            }
+//            else if (nb_cartes_nv1 < id_carte <= nb_cartes_nv1+nb_cartes_nv2) {
+//                const Carte& carte = this->partie->espaceJeux->getPyramide().getPioche2().piocher(id_carte);
+//                CouleurCarte c = carte.getBonus().getCouleur();
+//                this->partie->joueurs[i]->addCarte(carte);
+//            }
+//            else if (nb_cartes_nv1 + nb_cartes_nv2 < id_carte <= nb_cartes_nv1 + nb_cartes_nv2 + nb_cartes_nv3) {
+//                const Carte& carte = this->partie->espaceJeux->getPyramide().getPioche3().piocher(id_carte);
+//                CouleurCarte c = carte.getBonus().getCouleur();
+//                this->partie->joueurs[i]->addCarte(carte);
+//            }
+//        }
+//        sqlite3_finalize(stmt2);
+//        // TODO : On boucle sur toute les cartes nobles qu'avait le joueur
+//        // TODO : On boucle sur toute les cartes reservees qu'avait le joueur (a faire plus haut)  
+//        i++;
+//    }
+//    sqlite3_finalize(stmt);
+//    sqlite3_close(db);
+//}
+//
+//
+//void LastPartieBuilder::setJetonsJoueurs() const{
+//    sqlite3* db;
+//    sqlite3_stmt* stmt;
+//    std::string relativePath = "data/save.sqlite";
+//    std::filesystem::path absolutePath = projectPath / relativePath;
+//    std::string absolutePathStr = absolutePath.string();
+//
+//    int rc = sqlite3_open(absolutePathStr.c_str(), &db);
+//    if (rc != SQLITE_OK) {
+//        std::cerr << "Impossible d'ouvrir la base de donnees: " << sqlite3_errmsg(db) << std::endl;
+//        return;
+//    }
+//    rc = sqlite3_prepare_v2(db, "SELECT * FROM 'jetons_joueurs WHERE id_joueur = '1'", -1, &stmt, nullptr);
+//    if (rc != SQLITE_OK) {
+//        std::cerr << "Erreur de preparation de la requete : " << sqlite3_errmsg(db) << std::endl;
+//        sqlite3_close(db);
+//        return;
+//    }
+//
+//    while (sqlite3_step(stmt) == SQLITE_ROW) {
+//        string couleur = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 1));
+//        const Jeton& j = this->partie->espaceJeux.lotJetons.getJeton(toStringCouleur(couleur));
+//        this->partie->getJoueur1().addJeton(j);
+//    }
+//
+//    sqlite3_finalize(stmt);
+//    sqlite3_close(db);
+//}
+//
+//
+//void LastPartieBuilder::updateEspaceJeu() const{
+//    sqlite3* db;
+//    sqlite3_stmt* stmt;
+//    int rc = sqlite3_open("save.sqlite", &db);
+//    if (rc != SQLITE_OK) {
+//        std::cerr << "Impossible d'ouvrir la base de donnees: " << sqlite3_errmsg(db) << std::endl;
+//        return;
+//    }
+//    rc = sqlite3_prepare_v2(db, "SELECT * FROM 'pyramide'", -1, &stmt, nullptr);
+//    if (rc != SQLITE_OK) {
+//        std::cerr << "Erreur de preparation de la requete : " << sqlite3_errmsg(db) << std::endl;
+//        sqlite3_close(db);
+//        return;
+//    }
+//    while (sqlite3_step(stmt) == SQLITE_ROW) {
+//        int id_carte = sqlite3_column_int(stmt, 3);
+//        int i = sqlite3_column_int(stmt, 0);
+//        int j = sqlite3_column_int(stmt, 1);
+//
+//        if (i == 0) {
+//            const Carte& carte = this->partie->espaceJeux->getPyramide().getPioche1().piocher(id_carte);
+//            partie->espaceJeux->getPyramide().definitCarte(i, j, carte);
+//        }
+//        else if (i == 1) {
+//            const Carte& carte = this->partie->espaceJeux->getPyramide().getPioche2().piocher(id_carte);
+//            partie->espaceJeux->getPyramide().definitCarte(i, j, carte);
+//        }
+//        else if (i == 2) {
+//            const Carte& carte = this->partie->espaceJeux->getPyramide().getPioche3().piocher(id_carte);
+//            partie->espaceJeux->getPyramide().definitCarte(i, j, carte);
+//        }
+//    }
+//    //TODO : maintenant qu'on a enlevé des pioches les cartes des joueurs, il faut les disposer sur le plateau. 
+//    sqlite3_finalize(stmt);
+//    sqlite3_close(db);
+//}
+//
+//
+//void LastPartieBuilder::setInfosPartie() const {
 //    sqlite3* db;
 //    sqlite3_stmt* stmt;
 //    std::string relativePath = "data/save.sqlite";
@@ -331,8 +422,8 @@ void Partie::enregisterScore() {
 //    if (sqlite3_step(stmt) == SQLITE_ROW) {
 //        int tours = sqlite3_column_int(stmt, 0);
 //        int joueur_c = sqlite3_column_int(stmt, 1);
-//        this->partie.tour = tours;
-//        this->partie.joueurCourant = joueur_c;
+//        partie->tour = tours;
+//        partie->joueurCourant = joueur_c;
 //    }
 //    sqlite3_finalize(stmt);
 //    sqlite3_close(db);
@@ -340,3 +431,8 @@ void Partie::enregisterScore() {
 
 
 // ###########   fin des méthodes Builder   #############
+
+// choses a eclaircir : 
+// - gestion des cartes nobles
+// - gestion des cartes reservees
+// - la question des jetons et privileges : un id finalement...?

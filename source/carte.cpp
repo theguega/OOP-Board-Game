@@ -140,7 +140,7 @@ JeuCarte::JeuCarte(){
     int rc = sqlite3_open(absolutePathStr.c_str(), &db); //conversion en char* pour sqlite3_open
 
     if (rc != SQLITE_OK) {
-        std::cerr << "Impossible d'ouvrir la base de donnees: " << sqlite3_errmsg(db) << std::endl;
+        std::cerr << "Impossible d'ouvrir la base de donnees 1: " << sqlite3_errmsg(db) << std::endl;
         return;
     }
     rc = sqlite3_prepare_v2(db, "SELECT * FROM 'carte'", -1, &stmt, nullptr);
@@ -285,4 +285,21 @@ const Carte& Pioche::piocher(){
     cartes.erase(cartes.begin() + i);
 
     return *c;
+}
+
+const Carte& Pioche::piocher(int id){
+    if (estVide())
+        throw CarteException("Plus de cartes dans cette pioche");
+
+    auto it = std::find_if(cartes.begin(), cartes.end(), [id](const Carte* carte) {
+        return carte->getId() == id;
+        });
+
+    if (it != cartes.end()) {
+        const Carte* carteTrouvee = *it;
+        cartes.erase(it);
+        return *carteTrouvee;
+    }
+    else 
+        throw CarteException("Aucune carte avec l'ID spécifié n'a été trouvée dans cette pioche"); 
 }

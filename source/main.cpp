@@ -5,17 +5,26 @@
 //Theo
 //std::filesystem::path projectPath = string("/Users/theoguegan/Documents/UTC/GI01/LO21/Projet_LO21");
 //Samuel B
-//std::filesystem::path projectPath = string("\\Users\\Beziat\\source\\repos\\Projet_LO21");
+std::filesystem::path projectPath = string("\\Users\\Beziat\\source\\repos\\Projet_LO21");
 //Robert
-std::filesystem::path projectPath = string("/Users/robertantaluca/Desktop/Projet_LO21");
+//std::filesystem::path projectPath = string("/Users/robertantaluca/Desktop/Projet_LO21");
 //Samuel M
 //Maxime
 
 int main(int argc, const char * argv[]) {
 
-    std::cout<<"Bonjour, Ã  combien de joueur voulez vous jouer ? (0,1,2)"<<std::endl;
+    std::cout << "Bonjour, à combien de joueur voulez vous jouer ? (0,1,2)" << std::endl;
     int nbJoueur;
-    std::cin>>nbJoueur;
+    std::cin >> nbJoueur;
+    //Director* director = new Director();
+    //NewPartieBuilder* builder = new NewPartieBuilder();
+    //director->set_builder(builder);
+    //std::cout << "Standard basic product:\n";
+    //director->BuildNewPartie();
+
+    //Partie* p = builder->GetProduct();
+    //delete p;
+    //delete director;
     switch (nbJoueur) {
         case 0: 
         {
