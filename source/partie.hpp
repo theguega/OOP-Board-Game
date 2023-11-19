@@ -42,6 +42,11 @@ private:
     //Partie& operator=(const Partie&) = delete;
 public: 
     ~Partie() {delete espaceJeux; delete joueurs[0]; delete joueurs[1];}   
+    Partie();
+
+    Partie(std::string nomJoueur1, std::string prenomJoueur1);
+
+    Partie(std::string nomJoueur1, std::string prenomJoueur1, std::string nomJoueur2, std::string prenomJoueur2);
 
     EspaceJeux& getEspaceJeux() const { return *espaceJeux; }
 
@@ -72,82 +77,82 @@ public:
 
 //  ######  Debut du pattern Builder  ######
 
-class PartieBuilder {
-public:
-    virtual ~PartieBuilder() {};
-    virtual void setJoueurs() const {};
-    virtual void setCartesJoueurs() const {};
-    virtual void setJetonsJoueurs() const {};
-    virtual void setTours_and_current() const {};
-    virtual void updateEspaceJeu() const {};
-    friend class Partie;
-};
-
-
-class NewPartieBuilder : public PartieBuilder {
-private:
-    Partie* partie;
-public:
-    NewPartieBuilder() { this->Reset(); }
-    //~NewPartieBuilder() { delete partie; }
-    void Reset() { this->partie = new Partie(); }
-
-    void setJoueurs() const override {
-        partie->joueurs[0] = new Joueur("Alain", "telligence", type::IA);
-        partie->joueurs[1] = new Joueur("AL", "Gorythme", type::IA);
-    };
-
-    void setTours_and_current() const override {
-        partie->tour = 0;
-        partie->joueurCourant = 0;
-    };
-
-    Partie* GetProduct() {
-        Partie* result = this->partie;
-        return result;
-    }
-};
-
-
-class LastPartieBuilder : public PartieBuilder {
-private:
-    Partie* partie;
-public:
-    LastPartieBuilder() { this->Reset(); }
-    ~LastPartieBuilder() { this->Reset(); }
-    void Reset() { this->partie = new Partie(); }
-
-    virtual void setJoueurs();
-    virtual void setCartesJoueurs() const override;
-    virtual void setJetonsJoueurs() const override;
-    virtual void updateEspaceJeu() const override;
-    virtual void setTours_and_current() const override;
-
-    Partie* GetProduct() {
-        Partie* result = this->partie;
-        return result;
-    }
-};
-
-
-class Director {
-private:
-    PartieBuilder* builder;
-public:
-    void set_builder(PartieBuilder* builder) { this->builder = builder; }
-
-    void BuildNewPartie() {
-        builder->setJoueurs();
-        builder->setTours_and_current();
-    };
-
-    void BuildLastPartie() {
-        builder->setCartesJoueurs();
-        builder->setJetonsAndPrivilegeJoueurs();
-        builder->updateEspaceJeu();
-        builder->setTours_and_current();
-    }
-};
+//class PartieBuilder {
+//public:
+//    virtual ~PartieBuilder() {};
+//    virtual void setJoueurs() const {};
+//    virtual void setCartesJoueurs() const {};
+//    virtual void setJetonsJoueurs() const {};
+//    virtual void updateEspaceJeu() const {};
+//    virtual void setInfosPartie() const {};
+//    friend class Partie;
+//};
+//
+//
+//class NewPartieBuilder : public PartieBuilder {
+//private:
+//    Partie* partie;
+//public:
+//    NewPartieBuilder() { this->Reset(); }
+//    ~NewPartieBuilder() { delete partie; }
+//    void Reset() { this->partie = new Partie(); }
+//
+//    void setJoueurs() const override {
+//        partie->joueurs[0] = new Joueur("Alain", "telligence", type::IA);
+//        partie->joueurs[1] = new Joueur("AL", "Gorythme", type::IA);
+//    };
+//
+//    void setInfosPartie() const override {
+//        partie->tour = 0;
+//        partie->joueurCourant = 0;
+//    };
+//
+//    Partie* GetProduct() {
+//        Partie* result = this->partie;
+//        return result;
+//    }
+//};
+//
+//
+//class LastPartieBuilder : public PartieBuilder {
+//private:
+//    Partie* partie;
+//public:
+//    LastPartieBuilder() { this->Reset(); }
+//    ~LastPartieBuilder() { delete partie; }
+//    void Reset() { this->partie = new Partie(); }
+//
+//    virtual void setJoueurs();
+//    virtual void setCartesJoueurs() const override;
+//    virtual void setJetonsJoueurs() const override;
+//    virtual void updateEspaceJeu() const override;
+//    virtual void setInfosPartie() const override;
+//
+//    Partie* GetProduct() {
+//        Partie* result = this->partie;
+//        return result;
+//    }
+//};
+//
+//
+//class Director {
+//private:
+//    PartieBuilder* builder;
+//public:
+//    void set_builder(PartieBuilder* builder) { this->builder = builder; }
+//
+//    void BuildNewPartie() {
+//        builder->setJoueurs();
+//        builder->setInfosPartie();
+//    };
+//
+//    void BuildLastPartie() {
+//        builder->setCartesJoueurs();
+//        builder->setJetonsJoueurs();
+//        builder->updateEspaceJeu();
+//        builder->setInfosPartie();
+//    }
+//};
 
 
 //  ######  Fin du pattern Builder  ######
