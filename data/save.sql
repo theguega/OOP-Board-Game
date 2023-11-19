@@ -30,5 +30,6 @@ CREATE TABLE jetons_joueur (
 
 CREATE TABLE cartes_joueur (
     id_joueur INTEGER,
-    id_carte INTEGER
+    id_carte INTEGER,
+    reserve INTEGER
 );
