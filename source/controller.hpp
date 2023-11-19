@@ -1,12 +1,27 @@
 #ifndef CONTROLLER_H
 #define CONTROLLER_H
 
-class controller {
+#include "partie.hpp"
+
+class Controller {
 private:
 	Partie* partie;
+	Joueur* joueur_courant;
 public:
-	controller();
-	~controller();
+	Controller();
+	~Controller();
+	// getters
+	Joueur& getJoueurCourant{ return joueur_courant; }
+	Partie& getPartie{ return partie; }
 	void lancerPartie();
+	// actions obligatoires
+
+	// actions optionnelles
+
+	// end of turn checkings
+	
+	void newTurn();
+
 };
+
 #endif
