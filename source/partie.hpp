@@ -77,7 +77,7 @@ public:
     virtual ~PartieBuilder() {};
     virtual void setJoueurs() const {};
     virtual void setCartesJoueurs() const {};
-    virtual void setJetonsAndPrivilegeJoueurs() const {};
+    virtual void setJetonsJoueurs() const {};
     virtual void setTours_and_current() const {};
     virtual void updateEspaceJeu() const {};
     friend class Partie;
@@ -117,8 +117,9 @@ public:
     ~LastPartieBuilder() { this->Reset(); }
     void Reset() { this->partie = new Partie(); }
 
+    virtual void setJoueurs();
     virtual void setCartesJoueurs() const override;
-    virtual void setJetonsAndPrivilegeJoueurs() const override;
+    virtual void setJetonsJoueurs() const override;
     virtual void updateEspaceJeu() const override;
     virtual void setTours_and_current() const override;
 
