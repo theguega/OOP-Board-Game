@@ -319,6 +319,18 @@ void LastPartieBuilder::setJetonsAndPrivilegeJoueurs() const{
         return;
     }
 
+    rc = sqlite3_prepare_v2(db, "SELECT * FROM 'jetons_joueurs WHERE id_joueur = '1'", -1, &stmt, nullptr);
+    if (rc != SQLITE_OK) {
+        std::cerr << "Erreur de preparation de la requete : " << sqlite3_errmsg(db) << std::endl;
+        sqlite3_close(db);
+        return;
+    }
+
+    while (sqlite3_step(stmt) == SQLITE_ROW) {
+        string couleur = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 1));
+        const Jeton& j = this->partie->espaceJeux.lotJetons.getJeton(stringtocouleur(couleur));
+        this->partie->getJoueur1().addJeton(j);
+    }
     // TODO : On boucle sur chaque jeton qu'avait le joueur
     // TODO : On lui remet ses privileges
     sqlite3_finalize(stmt);
