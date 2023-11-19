@@ -1,20 +1,19 @@
 #include "partie.hpp"
 
-EspaceJeux* Partie::espaceJeux = new EspaceJeux();
 
-Partie::Partie() : espaceJeux(new EspaceJeux()), tour(0), joueurCourant(0) {
+Partie::Partie() : tour(0), joueurCourant(0) {
     // création et affectation de nouveaux joueurs 
     joueurs[0] = new Joueur("Alain", "telligence", type::IA);
     joueurs[1] = new Joueur("AL", "Gorythme", type::IA);
 }
 
-Partie::Partie(std::string nomJoueur1, std::string prenomJoueur1) : espaceJeux(new EspaceJeux()), tour(0), joueurCourant(0) {
+Partie::Partie(std::string nomJoueur1, std::string prenomJoueur1) : tour(0), joueurCourant(0) {
     // création et affectation de nouveaux joueurs 
     joueurs[0] = new Joueur(nomJoueur1, prenomJoueur1, type::HUMAIN);
     joueurs[1] = new Joueur("AL", "Gorythme", type::IA);
 }
 
-Partie::Partie(std::string nomJoueur1, std::string prenomJoueur1, std::string nomJoueur2, std::string prenomJoueur2) : espaceJeux(new EspaceJeux()), tour(0), joueurCourant(0) {
+Partie::Partie(std::string nomJoueur1, std::string prenomJoueur1, std::string nomJoueur2, std::string prenomJoueur2) : tour(0), joueurCourant(0) {
     // création et affectation de nouveaux joueurs 
     joueurs[0] = new Joueur(nomJoueur1, prenomJoueur1, type::HUMAIN);
     joueurs[1] = new Joueur(nomJoueur2, prenomJoueur2, type::HUMAIN);
