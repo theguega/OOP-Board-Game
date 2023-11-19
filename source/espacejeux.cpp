@@ -190,7 +190,7 @@ void Pyramide::afficherPyramide() const {
 
         for (int j = 0; j < array_cartes[i].size(); j++) {
             if (array_cartes[i][j] != nullptr) {
-                std::cout << "Carte " << i << " " << j << " : " << *array_cartes[i][j] << std::endl;
+                std::cout << "Carte " << i << " " << j << " : " << std::endl << *array_cartes[i][j] << std::endl;
             }
         }
     }
