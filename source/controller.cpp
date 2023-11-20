@@ -71,7 +71,12 @@ void Controller::lancerPartie() {
 }
 
 void Controller::tour_suivant() {
-    // TODO
+    // verifs
+    if (partie->getTour() % 2 == 0)
+        joueurCourant = partie->getJoueur1();
+    else
+        joueurCourant = partie->getJoueur2();
+    partie->incrementeTour();
 }
 
 

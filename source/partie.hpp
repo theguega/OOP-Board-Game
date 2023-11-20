@@ -50,13 +50,14 @@ public:
 
     EspaceJeux& getEspaceJeux() const { return *espaceJeux; }
 
-    Joueur& getJoueur1() const { return *joueurs[0]; }
-    Joueur& getJoueur2() const { return *joueurs[1]; }
+    Joueur* getJoueur1() const { return joueurs[0]; }
+    Joueur* getJoueur2() const { return joueurs[1]; }
     void setJoueur1(Joueur& j);
     void setJoueur2(Joueur& j);
 
     int getTour() const { return tour; }
     void setTour(int n) { tour = n; }
+    void incrementeTour() { tour++; }
 
     bool finPartie();
 
