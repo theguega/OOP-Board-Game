@@ -20,6 +20,7 @@
 //    joueurs[1] = new Joueur(nomJoueur2, prenomJoueur2, type::HUMAIN);
 //}
 
+
 Partie::Partie(){
     joueurs[0] = nullptr;
     joueurs[1] = nullptr;

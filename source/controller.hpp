@@ -20,6 +20,7 @@ public:
 	void tour_suivant();
 
 	// Actions optionnelles
+
 	void utiliserPrivilege(Plateau& plateau);
 	void remplirPlateau(Plateau& plateau, Sac& sac, Joueur& joueurAdverse);
 
