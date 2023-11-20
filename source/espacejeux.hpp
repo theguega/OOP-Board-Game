@@ -12,7 +12,7 @@
 class Pyramide {
 
     private:    
-        std::vector<const Carte*> array_cartes[4];
+        std::array<std::vector<const Carte*>,4> array_cartes;
         Pioche &pNv1;
         Pioche &pNv2;
         Pioche &pNv3;
@@ -36,6 +36,10 @@ class Pyramide {
         int getNbCartesNiv(int niveau) const; // retourne le nombre de cartes d'un niveau dans la pyramide
         void afficherPyramide() const; // affiche la pyramide
         
+        Pioche& getPioche1() const { return pNv1; }
+        Pioche& getPioche2() const { return pNv2; }
+        Pioche& getPioche3() const { return pNv3; }
+        Pioche& getPiocheNoble() const { return pNoble; }
         friend class Partie;
 
 
@@ -65,7 +69,7 @@ class EspaceJeux {
         Pyramide *pyramide = new Pyramide(piocheNv1, piocheNv2, piocheNv3, piocheNoble);
     public:
         EspaceJeux() : lotJetons(&LotDeJetons::getLotDeJetons()), lotPrivileges(&LotPrivileges::getLotPrivileges()), sac(&Sac::getSac(*lotJetons)), plateau(&Plateau::getPlateau(*sac, *lotPrivileges)) {};
-        ~EspaceJeux() { delete jeuxCartes; delete piocheNv1; delete piocheNv2; delete piocheNv3; delete piocheNoble; delete pyramide; } ;
+        ~EspaceJeux() { delete jeuxCartes; delete piocheNv1; delete piocheNv2; delete piocheNv3; delete piocheNoble; delete pyramide; };
 
         Plateau& getPlateau() const { return *plateau; }
         Pyramide& getPyramide() const {return *pyramide; }
