@@ -1,5 +1,7 @@
 #include "partie.hpp"
 
+// ##### Implementation des constructeur mais il y a Builder mtn #####
+// 
 //Partie::Partie() : espaceJeux(new EspaceJeux()), tour(0), joueurCourant(0) {
 //    // création et affectation de nouveaux joueurs 
 //    joueurs[0] = new Joueur("Alain", "telligence", type::IA);
@@ -18,13 +20,6 @@
 //    joueurs[1] = new Joueur(nomJoueur2, prenomJoueur2, type::HUMAIN);
 //}
 
-void Partie::setJoueurCourant(int n) {
-    if (n != 0 || n != 1)
-        throw PartieException("Il n'y a que deux joueurs");
-    else
-        joueurCourant = n;
-}
-
 Partie::Partie(){
     joueurs[0] = nullptr;
     joueurs[1] = nullptr;
@@ -40,18 +35,7 @@ void Partie::setJoueur2(Joueur &j){
 }
 
 
-void Partie::changerJoueurCourant() {
-    switch (joueurCourant) {
-        case 0:
-            joueurCourant = 1;
-            break;
-        case 1:
-            joueurCourant = 0;
-            break;
-        default:
-            break;
-    }
-}
+// ##### Methodes pour le singleton #####
 /*
 Partie& Partie::getInstance() {
     if (instance == nullptr) {
@@ -81,6 +65,8 @@ void Partie::libererInstance() {
 }   
 */
 
+
+// ##### Methodes pour la sauvegarde #####
 
 //Sauvegarde de la partie dans save.sqlite
 // 
@@ -232,7 +218,7 @@ void Partie::libererInstance() {
 //}
 
 
-// ###########   Debut des méthodes Builder   #############
+// ###########   Debut des méthodes LastPartieBuilder   #############
 
 //void LastPartieBuilder::setJoueurs(){
 //    sqlite3* db;

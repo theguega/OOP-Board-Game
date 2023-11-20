@@ -17,6 +17,5 @@ int main(int argc, const char * argv[]) {
     control.getPartie().getJoueur1().afficherJoueur();
     control.getPartie().getJoueur2().afficherJoueur();
 
-
     return 0;
 }

@@ -35,7 +35,7 @@ private:
     EspaceJeux* espaceJeux = new EspaceJeux();
     Joueur* joueurs[2]; 
     int tour;
-    int joueurCourant;
+    // #### implementation Singleton ####
     //static Partie* instance; 
     //Partie( vector<Joueur*> joueurs );  // utile ?? constructeur a partir d'un vecteur de joueurs
     //Partie(const Partie&) = delete;
@@ -58,12 +58,8 @@ public:
     int getTour() const { return tour; }
     void setTour(int n) { tour = n; }
 
-    Joueur* getJoueurCourant() const { return joueurs[joueurCourant]; }
-    void setJoueurCourant(int n);
-
     bool finPartie();
-    void changerJoueurCourant();
-    void tour_suivant(){tour++;}
+
     static Partie& getInstance();
     static Partie& getInstance(std::string nomJoueur1, std::string prenomJoueur1);
     static Partie& getInstance(std::string nomJoueur1, std::string prenomJoueur1, std::string nomJoueur2, std::string prenomJoueur2);
@@ -116,7 +112,6 @@ public:
     };
     void setInfosPartie() const override {
         partie->tour = 0;
-        partie->joueurCourant = 0;
     };
 
     Partie* GetProduct() {

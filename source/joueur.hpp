@@ -93,15 +93,6 @@ public:
         std::cout << "Nombre de privilèges : " << &privileges << std::endl;
     }
 
-    // Actions optionnelles
-    void utiliserPrivilege(Plateau& plateau);
-    void remplirPlateau(Plateau& plateau, Sac& sac, Joueur& joueurAdverse);
-
-    // Actions obligatoires
-    void recupererJetons(Plateau& plateau);
-    void acheterCarteJoaillerie (Pyramide& pyramide);
-    void orReserverCarte (Pyramide& pyramide, Plateau& plateau);
-
     // (J'en ai besoin pour les score comment on l'implémente) (Signe Theo)
     //Je pense que c'est un attribut à définir à la fin de la partie
     //bool estGagant() const { return gagnant; };
