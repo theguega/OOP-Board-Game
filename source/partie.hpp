@@ -101,18 +101,18 @@ public:
     void Reset() { this->partie = new Partie(); }
 
     void set2IA() const override {
-        partie->joueurs[0] = new Joueur("Alain", "telligence", type::IA);
-        partie->joueurs[1] = new Joueur("AL", "Gorythme", type::IA);
+        partie->joueurs[0] = new Joueur("Alain telligence", type::IA);
+        partie->joueurs[1] = new Joueur("AL Gorythme", type::IA);
     };
 
     void set1player(string pseudo) const override {
-        partie->joueurs[0] = new Joueur("Alain", "telligence", type::HUMAIN);
-        partie->joueurs[1] = new Joueur("AL", "Gorythme", type::IA);
+        partie->joueurs[0] = new Joueur(pseudo, type::HUMAIN);
+        partie->joueurs[1] = new Joueur("AL Gorythme", type::IA);
     };
 
     void set2player(string pseudo1, string pseudo2) const override {
-        partie->joueurs[0] = new Joueur("Alain", "telligence", type::HUMAIN);
-        partie->joueurs[1] = new Joueur("AL", "Gorythme", type::HUMAIN);
+        partie->joueurs[0] = new Joueur(pseudo1, type::HUMAIN);
+        partie->joueurs[1] = new Joueur(pseudo2, type::HUMAIN);
     };
     void setInfosPartie() const override {
         partie->tour = 0;

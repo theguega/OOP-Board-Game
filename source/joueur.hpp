@@ -28,8 +28,7 @@ type toType(std::string s);
 class Joueur {
 private:
     // Rajouter un tab static avec les deux joueurs
-    const std::string nom;
-    const std::string prenom;
+    const string pseudo;
     const type typeDeJoueur;
     unsigned int ptsPrestige;
     unsigned int nbCouronnes;
@@ -45,7 +44,7 @@ private:
     Strategy* strategy;
 public:
     // Constructeur done
-    Joueur(std::string nom, std::string prenom, type typeDeJoueur);
+    Joueur(string pseudo, type typeDeJoueur);
 
     // Destructeur
     ~Joueur();
@@ -53,8 +52,7 @@ public:
 
 
     // Getters Done
-    std::string getNom() const { return nom; };
-    std::string getPrenom() const { return prenom; };
+    std::string getPseudo() const { return pseudo; };
     type getTypeDeJoueur() const { return typeDeJoueur; };
     unsigned int getptsPrestige() const { return ptsPrestige; };
     unsigned int getnbCouronnes() const { return nbCouronnes; };

@@ -3,12 +3,16 @@
 
 #include "partie.hpp"
 
-class controller {
+class Controller {
 private:
 	Partie* partie;
 public:
-	controller();
-	~controller();
+	Controller();
+	~Controller() { delete partie; }
+	const Partie& getPartie() { return *partie; };
+	void parametrerPartie();
 	void lancerPartie();
+
+
 };
 #endif

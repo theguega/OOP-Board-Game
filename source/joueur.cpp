@@ -14,8 +14,8 @@ type toType(std::string s) {
 }
 
 // Constructeur
-Joueur::Joueur(std::string nom, std::string prenom, type typeDeJoueur):
-               nom(nom), prenom(prenom), typeDeJoueur(typeDeJoueur),  nbCartes(0),
+Joueur::Joueur(string pseudo, type typeDeJoueur):
+               pseudo(pseudo), typeDeJoueur(typeDeJoueur), nbCartes(0),
                 nbJetons(0), nbPrivileges(0), ptsPrestige(0), nbCouronnes(0) {
 
 }
@@ -38,14 +38,13 @@ Joueur::~Joueur() {
 // Affichages
 
 void Joueur::afficherJoueur() const {
-    std::cout << "Nom : " << nom << std::endl;
-    std::cout << "Prenom : " << prenom << std::endl;
+    std::cout << "Pseudo : " << pseudo << std::endl;
     std::cout << "Type de joueur : " << toStringType(typeDeJoueur) << std::endl;
     std::cout << "Points de prestiges : " << ptsPrestige << std::endl;
     std::cout << "Nombre de couronnes : " << nbCouronnes << std::endl;
     std::cout << "Nombre de cartes : " << nbCartes << std::endl;
     std::cout << "Nombre de jetons : " << nbJetons << std::endl;
-    std::cout << "Nombre de privilèges : " << nbPrivileges << std::endl;
+    std::cout << "Nombre de privileges : " << nbPrivileges << std::endl;
 }
 
 void Joueur::afficherCartes() const {
