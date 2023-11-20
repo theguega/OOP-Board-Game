@@ -1,12 +1,14 @@
 #ifndef CONTROLLER_H
 #define CONTROLLER_H
 
+#include <ctime>
+#include <cstdlib>
 #include "partie.hpp"
 
 class Controller {
 private:
 	Partie* partie;
-	Joueur* joueurCourant;
+	Joueur* joueurCourant = nullptr;
 public:
 	Controller();
 	~Controller() { delete partie; }

@@ -54,19 +54,34 @@ Controller::Controller() {
 
 
 void Controller::setJoueurCourant(int n) {
-    //switch (joueurCourant) {
-    //case 0:
-    //    joueurCourant = 1;
-    //    break;
-    //case 1:
-    //    joueurCourant = 0;
-    //    break;
-    //default:
-    //    break;
-    //}
+    switch (n) {
+    case 0:
+        joueurCourant = partie->getJoueur1();
+        break;
+    case 1:
+        joueurCourant = partie->getJoueur2();
+        break;
+    default:
+        break;
+    }
 }
 
 void Controller::lancerPartie() {
+    // choix aleatoire entre 0 et 1 pour le choix du joueur qui commence
+    std::srand(std::time(0));
+    int rd_number = std::rand() % 2;
+    setJoueurCourant(rd_number);
+    switch (rd_number) {
+    case 0:
+        cout << "#### c'est " << partie->getJoueur1()->getPseudo() << " qui commence, son adversaire recoit 1 privilege ####";
+        break;
+    case 1:
+        cout << "#### c'est " << partie->getJoueur2()->getPseudo() << " qui commence, son adversaire recoit 1 privilege ####";
+        break;
+    default:
+        break;
+    }
+    partie->incrementeTour();
     // TODO
 }
 
