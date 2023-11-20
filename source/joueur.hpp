@@ -33,11 +33,11 @@ private:
     unsigned int ptsPrestige;
     unsigned int nbCouronnes;
 
-    std::unordered_map<CouleurCarte, std::vector<const Carte*>> cartes;
+    std::unordered_map<Couleur, std::vector<const Carte*>> cartes;
     size_t nbCartes; //inutile selon moi -> on peut utiliser des .size()
     std::vector<const Carte*> cartesReservees;
     size_t nbCartesReservees;
-    std::unordered_map<CouleurJeton, std::vector<const Jeton*>> jetons;
+    std::unordered_map<Couleur, std::vector<const Jeton*>> jetons;
     size_t nbJetons;
     std::vector<const Privilege*> privileges;
     size_t nbPrivileges;

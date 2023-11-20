@@ -265,7 +265,7 @@ void Joueur::orReserverCarte (Pyramide& pyramide, Plateau& plateau){
 
         // Recuperation d'un jeton or
         const Jeton& jeton = strategy->choisirJeton(plateau);
-        if(jeton.getCouleur() != CouleurJeton::OR){
+        if(jeton.getCouleur() != Couleur::OR){
             throw JoueurException("Le jeton choisi n'est pas un jeton or");
         }
         addJeton(jeton);
@@ -279,7 +279,7 @@ void Joueur::orReserverCarte (Pyramide& pyramide, Plateau& plateau){
 
         // Recuperation d'un jeton or
         const Jeton& jeton = strategy->choisirJeton(plateau);
-        if(jeton.getCouleur() != CouleurJeton::OR){
+        if(jeton.getCouleur() != Couleur::OR){
             throw JoueurException("Le jeton choisi n'est pas un jeton or");
         }
         addJeton(jeton);

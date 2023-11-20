@@ -4,6 +4,11 @@
 #include <iostream>
 #include <random>
 #include <array>
+#include <unordered_map>
+#include <map>
+#include <string>
+
+using namespace std;
 
 //Gestion des jetons et des privileges pour splendor duel
 
@@ -27,19 +32,30 @@ private:
     std::string info;
 };
 
-//Enum pour les couleurs : initialiser, to string, affichage.
-enum class CouleurJeton { ROUGE, BLEUE, NOIR, VERT, BLANC, OR, PERLE };
-std::string toStringCouleur(CouleurJeton c);
-std::ostream& operator<<(std::ostream& f, CouleurJeton c);
-extern std::initializer_list<CouleurJeton> CouleursJeton;
+class CouleurException
+{
+public:
+    CouleurException(const std::string& i) :info(i) {}
+    std::string getInfo() const { return info; }
+private:
+    std::string info;
+};
+
+//Enum pour les couleurs : initialiser, to string, affichage, string to couleur.
+enum class Couleur { BLANC, BLEU, VERT, ROUGE, NOIR, PERLE, OR, INDT};
+std::string toStringCouleur(Couleur c);
+std::ostream& operator<<(std::ostream& f, Couleur c);
+extern std::initializer_list<Couleur> Couleurs;
+extern std::map<string, Couleur> stringToCouleurMap;
+Couleur StringToCouleur(const string& couleurStr);
 
 //Classe Jetons
 class Jeton {
     private :
-        const CouleurJeton couleur;
+        const Couleur couleur;
     public :
-        Jeton(CouleurJeton c) : couleur(c) {}
-        CouleurJeton getCouleur() const { return couleur; }
+        Jeton(Couleur c) : couleur(c) {}
+        Couleur getCouleur() const { return couleur; }
 };
 std::ostream& operator<< (std::ostream& f, const Jeton& jeton);
 
@@ -50,11 +66,11 @@ class LotDeJetons {
         const size_t max_or = 3;
         const size_t max_perle = 2;
 
-        const size_t max_rubis = 4;
-        const size_t max_onyx = 4;
-        const size_t max_saphir = 4;
-        const size_t max_dimant = 4;
-        const size_t max_emeraude = 4;
+        const size_t max_rouge = 4;
+        const size_t max_noir = 4;
+        const size_t max_bleu = 4;
+        const size_t max_blanc = 4;
+        const size_t max_vert = 4;
 
         //Constructeur non accessible par l'utilisateur : singleton
         LotDeJetons();
@@ -62,7 +78,7 @@ class LotDeJetons {
 
         //Récupération d'un jeton à partir de sa couleur (restitution de partie) (non accessible par l'utilisateur)
         //Sera accessible par la classe qui fera la restitution de partie
-        const Jeton& getJeton(CouleurJeton c) const;
+        const Jeton& getJeton(Couleur c) const;
 
         //pas de duplication du lot de jetons
         LotDeJetons(const LotDeJetons&) = delete;

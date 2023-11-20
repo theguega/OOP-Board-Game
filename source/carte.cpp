@@ -2,44 +2,8 @@
 
 using namespace std;
 
-std::initializer_list<CouleurCarte> CouleursCarte = { CouleurCarte::blanc, CouleurCarte::bleu, CouleurCarte::vert, CouleurCarte::noir, CouleurCarte::rouge, CouleurCarte::perle, CouleurCarte::indt };
 std::initializer_list<TypeCarte> TypesCarte = { TypeCarte::Niv1, TypeCarte::Niv2, TypeCarte::Niv3, TypeCarte::Noble };
 std::initializer_list<Capacite> Capacites = { Capacite::NewTurn, Capacite::TakePrivilege, Capacite::TakeJetonFromBonus, Capacite::TakeJetonToAdv, Capacite::AssociationBonus, Capacite::None };
-
-
-string CouleurCartetoString(CouleurCarte c){
-    switch (c){
-        case CouleurCarte::blanc : return "blanc";
-        case CouleurCarte::bleu: return "bleu";
-        case CouleurCarte::vert: return "vert";
-        case CouleurCarte::noir: return "noir";
-        case CouleurCarte::rouge: return "rouge";
-        case CouleurCarte::perle: return "perle";
-        case CouleurCarte::indt: return "indt";
-        default: throw CarteException("Couleur inconnue");
-    }
-}
-ostream& operator<<(ostream& f, CouleurCarte c){ f << CouleurCartetoString(c); return f; }
-
-std::map<std::string, CouleurCarte> stringToCouleurCarteMap = {
-        {"blanc", CouleurCarte::blanc},
-        {"bleu", CouleurCarte::bleu},
-        {"vert", CouleurCarte::vert},
-        {"noir", CouleurCarte::noir},
-        {"rouge", CouleurCarte::rouge},
-        {"perle", CouleurCarte::perle},
-        {"indt", CouleurCarte::indt}
-};
-
-CouleurCarte StringToCouleurCarte(const std::string& couleurStr){
-    auto tmp = stringToCouleurCarteMap.find(couleurStr);
-    if (tmp != stringToCouleurCarteMap.end()) {
-        return tmp->second;
-    }
-    else {
-        return CouleurCarte::indt;
-    }
-}
 
 
 string TypeCartetoString(TypeCarte t){
@@ -166,7 +130,7 @@ JeuCarte::JeuCarte(){
         unsigned int nb_pts_privileges = sqlite3_column_int(stmt, 13);
 
         Prix p(p_blanc, p_bleu, p_vert, p_noir, p_rouge, p_perle);
-        Bonus b(StringToCouleurCarte(couleur_bonus), bonus);
+        Bonus b(StringToCouleur(couleur_bonus), bonus);
         if (type == "Niv1") {
             cartes_nv1.push_back(new Carte(TypeCarte::Niv1, p, StringToCapacite(capacite1), StringToCapacite(capacite2), b, nb_couronnes, nb_pts_privileges, id));
         }
