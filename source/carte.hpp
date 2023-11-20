@@ -13,11 +13,9 @@
 #include <filesystem>
 
 #include "sqlite/sqlite3.h" 
-#include <filesystem>
+#include "jetons.hpp"
 using namespace std;
 extern std::filesystem::path projectPath;
-
-
 
 
 class CarteException{
@@ -27,15 +25,6 @@ public:
     CarteException(const string& i) : info(i) {}
     string getInfo() const { return info; }
 };
-
-
-enum class CouleurCarte {blanc, bleu, vert, noir, rouge, perle, indt}; // ajout de "indetermin�" car certaines carte ont une couleur de Bonus variable
-
-string CouleurCartetoString(CouleurCarte c);
-ostream& operator<<(ostream& f, CouleurCarte c);
-extern std::initializer_list<CouleurCarte> CouleursCarte;
-extern std::map<string, CouleurCarte> stringToCouleurCarteMap;
-CouleurCarte StringToCouleurCarte(const string& couleurStr);
 
 
 enum class TypeCarte { Niv1, Niv2, Niv3, Noble };
@@ -69,12 +58,12 @@ ostream& operator<<(ostream& f, const Prix& p);
 
 class Bonus {
 private:
-    CouleurCarte couleur;
+    Couleur couleur;
     unsigned int nbBonus;
 public:
-    Bonus(CouleurCarte c = CouleurCarte::indt, int n = 0) : couleur(c), nbBonus(n) {}
-    void setCouleur(CouleurCarte c) { couleur = c; };
-    CouleurCarte getCouleur() const { return couleur; }
+    Bonus(Couleur c = Couleur::INDT, int n = 0) : couleur(c), nbBonus(n) {}
+    void setCouleur(Couleur c) { couleur = c; };
+    Couleur getCouleur() const { return couleur; }
     unsigned int getNbBonus() const { return nbBonus; }
 };
 ostream& operator<<(ostream& f, const Bonus& b);

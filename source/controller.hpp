@@ -6,17 +6,21 @@
 class Controller {
 private:
 	Partie* partie;
-	Joueur* joueur_courant;
+	Joueur* joueurCourant;
 public:
 	Controller();
-	~Controller();
-
+	~Controller() { delete partie; }
 	// getters
-	Joueur& getJoueurCourant{ return joueur_courant; }
-	Partie& getPartie{ return partie; }
+	Partie& getPartie() { return *partie; };
+	Joueur& getJoueurCourant() { return *joueurCourant; }
+	// setters
+	void setJoueurCourant(int n);
+	// actions partie
 	void lancerPartie();
+	void tour_suivant();
 
-	// actions optionnelles
+	// Actions optionnelles
+
 	void utiliserPrivilege(Plateau& plateau);
 	void remplirPlateau(Plateau& plateau, Sac& sac, Joueur& joueurAdverse);
 
@@ -25,9 +29,7 @@ public:
 	void acheterCarteJoaillerie(Pyramide& pyramide);
 	void orReserverCarte(Pyramide& pyramide, Plateau& plateau);
 
-	// end of turn checkings
-	
-	void newTurn();
+	// verifications
 
 };
 

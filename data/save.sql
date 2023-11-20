@@ -12,14 +12,13 @@ CREATE TABLE pyramide (
 
 CREATE TABLE joueur (
     id INTEGER,
-    nom TEXT,
-    prenom TEXT,
-    type TEXT,
+    pseudo TEXT,
+    type_j TEXT,
     privileges INTEGER
 );
 
 CREATE TABLE infopartie (
-    tour INTERGER,
+    tour INTEGER,
     joueurCourant  INTEGER
 );
 
@@ -30,5 +29,6 @@ CREATE TABLE jetons_joueur (
 
 CREATE TABLE cartes_joueur (
     id_joueur INTEGER,
-    id_carte INTEGER
+    id_carte INTEGER,
+    reserve INTEGER
 );

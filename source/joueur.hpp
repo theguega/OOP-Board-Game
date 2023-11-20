@@ -28,24 +28,23 @@ type toType(std::string s);
 class Joueur {
 private:
     // Rajouter un tab static avec les deux joueurs
-    const std::string nom;
-    const std::string prenom;
+    const string pseudo;
     const type typeDeJoueur;
     unsigned int ptsPrestige;
     unsigned int nbCouronnes;
 
-    std::unordered_map<CouleurCarte, std::vector<const Carte*>> cartes;
+    std::unordered_map<Couleur, std::vector<const Carte*>> cartes;
     size_t nbCartes; //inutile selon moi -> on peut utiliser des .size()
     std::vector<const Carte*> cartesReservees;
     size_t nbCartesReservees;
-    std::unordered_map<CouleurJeton, std::vector<const Jeton*>> jetons;
+    std::unordered_map<Couleur, std::vector<const Jeton*>> jetons;
     size_t nbJetons;
     std::vector<const Privilege*> privileges;
     size_t nbPrivileges;
     Strategy* strategy;
 public:
     // Constructeur done
-    Joueur(std::string nom, std::string prenom, type typeDeJoueur);
+    Joueur(string pseudo, type typeDeJoueur);
 
     // Destructeur
     ~Joueur();
@@ -53,8 +52,7 @@ public:
 
 
     // Getters Done
-    std::string getNom() const { return nom; };
-    std::string getPrenom() const { return prenom; };
+    std::string getPseudo() const { return pseudo; };
     type getTypeDeJoueur() const { return typeDeJoueur; };
     unsigned int getptsPrestige() const { return ptsPrestige; };
     unsigned int getnbCouronnes() const { return nbCouronnes; };
@@ -94,15 +92,6 @@ public:
     void afficherPrivileges() const{
         std::cout << "Nombre de privilèges : " << &privileges << std::endl;
     }
-
-    // Actions optionnelles
-    void utiliserPrivilege(Plateau& plateau);
-    void remplirPlateau(Plateau& plateau, Sac& sac, Joueur& joueurAdverse);
-
-    // Actions obligatoires
-    void recupererJetons(Plateau& plateau);
-    void acheterCarteJoaillerie (Pyramide& pyramide);
-    void orReserverCarte (Pyramide& pyramide, Plateau& plateau);
 
     // (J'en ai besoin pour les score comment on l'implémente) (Signe Theo)
     //Je pense que c'est un attribut à définir à la fin de la partie
