@@ -28,9 +28,9 @@ public:
 
 
 class Partie { 
-    /*friend class PartieBuilder;
+    friend class PartieBuilder;
     friend class NewPartieBuilder;
-    friend class LastPartieBuilder;*/
+    friend class LastPartieBuilder;
 private:
     EspaceJeux* espaceJeux = new EspaceJeux();
     Joueur* joueurs[2]; 
