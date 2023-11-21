@@ -15,8 +15,7 @@ type toType(std::string s) {
 
 // Constructeur
 Joueur::Joueur(string pseudo, type typeDeJoueur):
-               pseudo(pseudo), typeDeJoueur(typeDeJoueur), nbCartes(0),
-                nbJetons(0), nbPrivileges(0), ptsPrestige(0), nbCouronnes(0) {
+               pseudo(pseudo), typeDeJoueur(typeDeJoueur), ptsPrestige(0), nbCouronnes(0) {
 
 }
 
@@ -42,20 +41,21 @@ void Joueur::afficherJoueur() const {
     std::cout << "Type de joueur : " << toStringType(typeDeJoueur) << std::endl;
     std::cout << "Points de prestiges : " << ptsPrestige << std::endl;
     std::cout << "Nombre de couronnes : " << nbCouronnes << std::endl;
-    std::cout << "Nombre de cartes : " << nbCartes << std::endl;
-    std::cout << "Nombre de jetons : " << nbJetons << std::endl;
-    std::cout << "Nombre de privileges : " << nbPrivileges << std::endl;
+    std::cout << "Nombre de cartes : " << getNbCartes() << std::endl;
+    std::cout << "Nombre de cartes réservées : " << getNbCartesReservees() << std::endl;
+    std::cout << "Nombre de jetons : " << getNbJetons() << std::endl;
+    std::cout << "Nombre de privileges : " << getNbPrivileges() << std::endl;
 }
 
 void Joueur::afficherCartes() const {
-    for (int i = 0; i < nbCartes; i++) {
+    for (int i = 0; i < getNbCartes(); i++) {
         std::cout << "Carte " << i << " : " << std::endl;
         //cartes[i]->afficherCarte();
     }
 }
 
 void Joueur::afficherJetons() const {
-    for (int i = 0; i < nbJetons; i++) {
+    for (int i = 0; i < getNbJetons(); i++) {
         std::cout << "Jeton " << i << " : " << std::endl;
         //jetons[i]->afficherJeton();
     }
@@ -65,25 +65,20 @@ void Joueur::afficherJetons() const {
 
 void Joueur::addCarte(const Carte &carte) {
     cartes[carte.getBonus().getCouleur()].push_back(&carte);
-    nbCartes++;
     ptsPrestige += carte.getNbPtsPrivilege();
     nbCouronnes += carte.getNbCouronnes();
 }
 
 void Joueur::addCarteReservee(const Carte &carte) {
-    cartesReservees.push_back(&carte);
-    nbCartes++;
-
+    cartesReservees[carte.getBonus().getCouleur()].push_back(&carte);
 }
 
 void Joueur::addJeton(const Jeton& jeton) {
     jetons[jeton.getCouleur()].push_back(&jeton);
-    nbJetons++;
 }
 
 void Joueur::addPrivilege(const Privilege &privilege) {
     privileges.push_back(&privilege);
-    nbPrivileges++;
 }
 
 
@@ -95,16 +90,14 @@ void::Joueur::supCarte(Carte &carte) {
             nbCouronnes -= carte.getNbCouronnes();
             ptsPrestige -= carte.getNbPtsPrivilege();
             cartes[carte.getBonus().getCouleur()].erase(cartes[carte.getBonus().getCouleur()].begin() + i);
-            nbCartes--;
         }
     }
 }
 
 void::Joueur::supCarteReservee(const Carte &carte) {
-    for (int i = 0; i < cartesReservees.size(); i++) {
-        if (cartesReservees[i] == &carte) {
-            cartesReservees.erase(cartesReservees.begin() + i);
-            nbCartesReservees--;
+    for (int i = 0; i < cartes[carte.getBonus().getCouleur()].size(); i++) {
+        if (cartesReservees[carte.getBonus().getCouleur()][i] == &carte) {
+            cartesReservees[carte.getBonus().getCouleur()].erase(cartes[carte.getBonus().getCouleur()].begin() + i);
         }
     }
 }
@@ -113,7 +106,6 @@ void::Joueur::supJeton(Jeton *jeton) {
     for (int i = 0; i < jetons[jeton->getCouleur()].size(); i++) {
         if (jetons[jeton->getCouleur()][i] == jeton) {
             jetons[jeton->getCouleur()].erase(jetons[jeton->getCouleur()].begin() + i);
-            nbJetons--;
         }
     }
 }
@@ -121,7 +113,6 @@ void::Joueur::supJeton(Jeton *jeton) {
 const Privilege&::Joueur::supPrivilege(Plateau& plateau) {
     const Privilege& sup = *privileges[0];
     privileges.erase(privileges.begin());
-    nbPrivileges--;
     // rajout du privilège sur le plateau
     plateau.poserPrivilege(sup);
 
@@ -148,7 +139,7 @@ bool Joueur::nbPtsPrestigeParCouleurSupDix() const{
 ///////////////////////// Actions d'un joueur /////////////////////////
 
 void Joueur::utiliserPrivilege(Plateau& plateau){
-    if (nbPrivileges == 0) {
+    if (privileges.size() == 0) {
         throw JoueurException("Le joueur n'a pas de privilège");
     }
     if (plateau.getTaille()==0){
@@ -163,7 +154,7 @@ void Joueur::utiliserPrivilege(Plateau& plateau){
 
 void Joueur::remplirPlateau(Plateau& plateau, Sac& sac, Joueur& joueurAdverse){
     strategy->remplirPlateauStrat(plateau, sac);
-    if (nbPrivileges == 3){
+    if (privileges.size() == 3){
         std::cout<< "Vous avez deja 3 privileges. Vous n'en recupererez donc pas plus !" << std::endl;
         return;
     }
@@ -207,7 +198,7 @@ void Joueur::recupererJetons(Plateau& plateau){
     }
 
     // Verifier que les jetons sont adjacents
-    if (nbJetons > 1) {
+    if (jetons.size() > 1) {
         bool result1 = true;
         bool result2 = true;
         bool result3 = true;
