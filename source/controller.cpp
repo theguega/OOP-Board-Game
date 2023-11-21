@@ -347,10 +347,52 @@ void Controller::sauvegardePartie() {
            sqlite3_close(db);
            return;
        }
-   }
+       
+       //jetons (toutes les couleurs sauf indt)
+       for (Couleur c : Couleurs){
+            if (c!=Couleur::INDT) {
+                for (size_t j = 0; j<getPartie().getJoueur(i)->getNbJetons(c); j++) {
+                    sql = "INSERT INTO jeton (id_joueur, couleur) VALUES (" + std::to_string(i+1) + ", '" + toStringCouleur(c) + "');";
+                    rc = sqlite3_exec(db, sql.c_str(), NULL, NULL, NULL);
+                    if (rc != SQLITE_OK) {
+                        std::cerr << "Erreur lors de la sauvegarde du jeton " << std::endl;
+                        sqlite3_close(db);
+                        return;
+                    }
+                }
+            }
+       }
 
-       //jetons
-       //cartes
+       //cartes (toutes les couleurs sauf ind et or)
+         for (Couleur c : Couleurs){
+                if (c!=Couleur::INDT && c!=Couleur::OR) {
+                 for (size_t j = 0; j<getPartie().getJoueur(i)->getNbCartes(c); j++) {
+                      sql = "INSERT INTO carte (id_joueur, id_carte, noble, reservee) VALUES (" + std::to_string(i+1) + ", " + std::to_string(getPartie().getJoueur(i)->getCarte(c,j).getId()) + ", " + TypeCartetoString(getPartie().getJoueur(i)->getCarte(c,j).getType()) + ",0);";
+                      rc = sqlite3_exec(db, sql.c_str(), NULL, NULL, NULL);
+                      if (rc != SQLITE_OK) {
+                            std::cerr << "Erreur lors de la sauvegarde de la carte " << std::endl;
+                            sqlite3_close(db);
+                            return;
+                      }
+                 }
+                }
+         }
+
+         //cartes reservees (toutes les couleurs sauf ind et or)
+         for (Couleur c : Couleurs){
+                if (c!=Couleur::INDT && c!=Couleur::OR) {
+                 for (size_t j = 0; j<getPartie().getJoueur(i)->getNbCartesReservees(c); j++) {
+                      sql = "INSERT INTO carte (id_joueur, id_carte, noble, reservee) VALUES (" + std::to_string(i+1) + ", " + std::to_string(getPartie().getJoueur(i)->getCarteReservee(c,j).getId()) + ", " + TypeCartetoString(getPartie().getJoueur(i)->getCarteReservee(c,j).getType()) + ",1);";
+                      rc = sqlite3_exec(db, sql.c_str(), NULL, NULL, NULL);
+                      if (rc != SQLITE_OK) {
+                            std::cerr << "Erreur lors de la sauvegarde de la carte " << std::endl;
+                            sqlite3_close(db);
+                            return;
+                      }
+                 }
+                }
+         }
+   }
 
    //Sauvegarde plateau
    Plateau& plateau = getPartie().getEspaceJeux().getPlateau();
@@ -370,8 +412,8 @@ void Controller::sauvegardePartie() {
 
    //Sauvegarde de la pyramide
    Pyramide& pyramide = getPartie().getEspaceJeux().getPyramide();
-   for (size_t i =0; i<4; i++) {
-       for (size_t j =0; j<pyramide.getNbCartesNiv(i); j++) {
+   for (int i =0; i<4; i++) {
+       for (int j =0; j<pyramide.getNbCartesNiv(i); j++) {
            const Carte* carte = pyramide.getCarte(i,j);
            sql= "INSERT INTO pyramide (i, j, id) VALUES (" + std::to_string(i) + ", " + std::to_string(j) + ", " + std::to_string(carte->getId()) + ");";
            rc = sqlite3_exec(db, sql.c_str(), NULL, NULL, NULL);
