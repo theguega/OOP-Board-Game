@@ -24,14 +24,14 @@ class Pyramide {
         bool estVide() const;
 
         void remplirPyramide(); // parcour de toute la pyramide pour remplir les cases vides   
-        void remplircasePyramide(int i, int j); // remplir une case de la pyramide
+        void remplircasePyramide(unsigned int i, unsigned int j); // remplir une case de la pyramide
         void definitCarte(int i, int j, const Carte& c) { array_cartes[i][j] = &c; };
         
         const Carte* getCarte(size_t i, size_t j) { return array_cartes[i][j]; }; // retourne la carte de la pyramide sans la supprimer
         
         const Carte& reserverCarte(int i, int j); // retourne la carte de la pyramide et la supprime
-        const Carte& acheterCarte(int i, int j); // retourne la carte de la pyramide et la supprime + rempli la case avec une nouvelle carte de la pioche
-        const Carte& ReserverCartePioche(int niveau); //retourne une carte de la pioche
+        const Carte& acheterCarte(unsigned int i,unsigned int j); // retourne la carte de la pyramide et la supprime + rempli la case avec une nouvelle carte de la pioche
+        const Carte& ReserverCartePioche(unsigned int niveau); //retourne une carte de la pioche
         
         size_t getNbCartesNiv(int niveau) const {return array_cartes[niveau].size(); }; // retourne le nombre de cartes d'un niveau dans la pyramide
         void afficherPyramide() const; // affiche la pyramide
