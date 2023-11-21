@@ -293,17 +293,18 @@ void Joueur::acheterCarteJoaillerie (Pyramide& pyramide){
         // Affichage de la réserve
         for (auto & cartesReservee : cartesReservees) {
             std::cout <<"Numéro "<<i << " : ";
-            std::cout<<cartesReservee;
+            //std::cout<<cartesReservee;
             i++;
         }
         std::cout << "Tapez le numéro de la carte que vous voulez acheter : " << std::endl;
         unsigned int numCarte;
+        Couleur couleur = Couleur::BLEU;
         std::cin >> numCarte;
         // Vérifications -> voir plus au niveau des jetons dans la main
         if (numCarte > cartesReservees.size()){
             throw JoueurException("Le numéro de la carte est invalide.");
         }
-        const Carte& carte = *cartesReservees[numCarte];
+        const Carte& carte = *cartesReservees[couleur][numCarte];
         if (carte.getNbPtsPrivilege() > ptsPrestige){
             throw JoueurException("Vous n'avez pas assez de points de prestige pour acheter cette carte...");
         }
