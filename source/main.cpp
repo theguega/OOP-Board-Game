@@ -13,10 +13,28 @@ std::filesystem::path projectPath = string("\\Users\\Beziat\\source\\repos\\Proj
 
 
 int main(int argc, const char * argv[]) {
+    int i = 0;
     Controller control;
-    control.getPartie().getJoueur1()->afficherJoueur();
-    control.getPartie().getJoueur2()->afficherJoueur();
-    cout << control.getPartie().getEspaceJeux().getPlateau();
-    control.getPartie().getEspaceJeux().getPyramide().afficherPyramide();
+    control.lancerPartie();
+
+    while (control.getPartie().getJoueur1()->estGagnant() == false && control.getPartie().getJoueur2()->estGagnant() == false) {
+        // TODO
+        // simulation victoire d'un joueur
+        if (i == 5)
+            control.getJoueurCourant().updatePtsPrestige(16);
+        control.getJoueurCourant().afficherJoueur();
+        i++;
+        control.tour_suivant();
+    }
+
+    if (control.getPartie().getJoueur1()->estGagnant())
+        cout << control.getPartie().getJoueur1()->getPseudo() << " est gagnant;";
+    else if (control.getPartie().getJoueur2()->estGagnant())
+        cout << control.getPartie().getJoueur2()->getPseudo() << " est gagnant;";
+
+    //control.getPartie().getJoueur1()->afficherJoueur();
+    //control.getPartie().getJoueur2()->afficherJoueur();
+    //cout << control.getPartie().getEspaceJeux().getPlateau();
+    //control.getPartie().getEspaceJeux().getPyramide().afficherPyramide();
     return 0;
 }

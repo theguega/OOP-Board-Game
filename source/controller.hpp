@@ -1,11 +1,14 @@
 #ifndef CONTROLLER_H
 #define CONTROLLER_H
 
+#include <ctime>
+#include <cstdlib>
 #include "partie.hpp"
 
 class Controller {
 private:
 	Partie* partie;
+	Joueur* joueurCourant = nullptr;
 public:
 	Controller();
 	~Controller() { delete partie; }
@@ -19,6 +22,7 @@ public:
 	void tour_suivant();
 
 	// Actions optionnelles
+
 	void utiliserPrivilege(Plateau& plateau);
 	void remplirPlateau(Plateau& plateau, Sac& sac, Joueur& joueurAdverse);
 
