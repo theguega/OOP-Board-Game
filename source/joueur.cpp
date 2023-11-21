@@ -43,6 +43,40 @@ Joueur::~Joueur() {
     }*/
 }
 
+// Getter
+size_t Joueur::getNbCartes() const {
+    size_t nbCartes = 0;
+    for (const auto& couleur : Couleurs) {
+        if (couleur != Couleur::INDT && couleur != Couleur::OR) {
+            nbCartes += cartes.at(couleur).size();
+        }
+    }
+
+    return nbCartes;
+}
+
+size_t Joueur::getNbCartesReservees() const {
+    size_t nbCartes = 0;
+    for (const auto& couleur : Couleurs) {
+        if (couleur != Couleur::INDT && couleur != Couleur::OR) {
+            nbCartes += cartesReservees.at(couleur).size();
+        }
+    }
+
+    return nbCartes;
+}
+
+size_t Joueur::getNbJetons() const {
+    size_t nbJetons = 0;
+    for (const auto& couleur : Couleurs) {
+        if (couleur != Couleur::INDT && couleur != Couleur::OR) {
+            nbJetons += jetons.at(couleur).size();
+        }
+    }
+
+    return nbJetons;
+}
+
 // Affichages
 
 void Joueur::afficherJoueur() const {

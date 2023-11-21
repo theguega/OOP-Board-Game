@@ -54,12 +54,12 @@ public:
     unsigned int getptsPrestige() const { return ptsPrestige; };
     unsigned int getnbCouronnes() const { return nbCouronnes; };
     //Carte **getCartes();
-    size_t getNbCartes() const { return cartes.size(); };
+    size_t getNbCartes() const {};
     size_t getNbCartes(Couleur c) const { return cartes.at(c).size(); }
     //Jetons **getJetons();
-    size_t getNbCartesReservees() const { return cartesReservees.size(); }
+    size_t getNbCartesReservees() const {}
     size_t getNbCartesReservees(Couleur c) const { return cartesReservees.at(c).size(); }
-    size_t getNbJetons() const { return jetons.size(); }
+    size_t getNbJetons() const {}
     size_t getNbJetons(Couleur c) const { return jetons.at(c).size(); }
     //Privilege **getPrivileges();
     size_t getNbPrivileges() const { return privileges.size(); }
