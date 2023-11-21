@@ -73,14 +73,6 @@ const Jeton& LotDeJetons::getJetons(size_t i) const {
     return *jetons[i];
 }
 
-//recuperation d'un jeton à partir de sa couleur (non accessible par l'utilisateur)
-const Jeton& LotDeJetons::getJeton(Couleur c) const {
-    for (size_t i = 0; i < jetons.size(); i++)
-        if (jetons[i]->getCouleur() == c)
-            return *jetons[i];
-    throw JetonException("Couleur de jeton incorrecte");
-}
-
 LotDeJetons::LotDeJetons() { 
     //création de tous les jetons
     for (int i = 0; i < max_or; i++)

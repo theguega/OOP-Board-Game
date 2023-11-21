@@ -50,6 +50,7 @@ public:
 
     EspaceJeux& getEspaceJeux() const { return *espaceJeux; }
 
+    Joueur* getJoueur(size_t i) const { return joueurs[i]; }
     Joueur* getJoueur1() const { return joueurs[0]; }
     Joueur* getJoueur2() const { return joueurs[1]; }
     void setJoueur1(Joueur& j);
@@ -65,8 +66,6 @@ public:
     static Partie& getInstance(std::string nomJoueur1, std::string prenomJoueur1);
     static Partie& getInstance(std::string nomJoueur1, std::string prenomJoueur1, std::string nomJoueur2, std::string prenomJoueur2);
     static void libererInstance();
-    void sauvegardePartie();
-    //void chargerPartie(); //si l'on décide qu'il est possible de joueur plusieurs partie en même temps
     void enregisterScore();
 }; 
 

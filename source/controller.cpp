@@ -307,3 +307,172 @@ void Controller::acheterCarteJoaillerie(Pyramide& pyramide) {
     //    throw JoueurException("Le choix est incorrect");
     //}
 }
+
+void Controller::sauvegardePartie() {
+   //Cette fonction aura pour objectif de push toutes les données importantes de la partie dans la base de donnée
+   //Afin de pouvoir reprendre la partie plus tard
+   //Pour cela, il faudra créer une base de donnée avec les tables suivantes :
+   // joueur1, joueur2, plateau, infopartie, pyramide
+
+   //on ajoute le chemin relatif au chemin absolue du projet
+   std::string relativePath = "data/save.sqlite";
+   std::filesystem::path absolutePath = projectPath / relativePath;
+   std::string absolutePathStr = absolutePath.string();
+
+   //Connexion à la base de donnée
+   sqlite3 *db;
+   int rc = sqlite3_open(absolutePathStr.c_str(), &db);
+   if (rc != SQLITE_OK) {
+       std::cerr << "Erreur lors de la connexion à la base de donnée" << std::endl;
+       sqlite3_close(db);
+       return;
+   }
+
+   //Nettoyage de l'ancienne sauvegarde
+   string sql = "DELETE FROM joueur; DELETE FROM plateau; DELETE FROM infopartie; DELETE FROM pyramide;";
+   rc = sqlite3_exec(db, sql.c_str(), NULL, NULL, NULL);
+   if (rc != SQLITE_OK) {
+       std::cerr << "Erreur lors du nettoyage de la base de donnée" << std::endl;
+       sqlite3_close(db);
+       return;
+   }
+
+   //Sauvegarde joueurs
+   for(size_t i = 0; i<2; i++) {
+       //infos du joueur
+       sql = "INSERT INTO joueur (id, pseudo, type_joueur, privileges) VALUES (" + std::to_string(i+1) + ", '" + getPartie().getJoueur(i)->getPseudo() + "', '" + toStringType(getPartie().getJoueur(i)->getTypeDeJoueur()) + "', " +std::to_string(getPartie().getJoueur(i)->getNbPrivileges()) + ");";
+       rc = sqlite3_exec(db, sql.c_str(), NULL, NULL, NULL);
+       if (rc != SQLITE_OK) {
+           std::cerr << "Erreur lors de la sauvegarde du joueur " << std::endl;
+           sqlite3_close(db);
+           return;
+       }
+   }
+
+       //jetons
+       //cartes
+
+   //Sauvegarde plateau
+   Plateau& plateau = getPartie().getEspaceJeux().getPlateau();
+   for (size_t i =0; i<plateau.getTaille(); i++) {
+       for (size_t j =0; j<plateau.getTaille(); j++) {
+           if (plateau.getJeton(i,j) != nullptr) {
+               sql = "INSERT INTO plateau (i, j, couleur) VALUES (" + std::to_string(i) + ", " + std::to_string(j) + ", '" + toStringCouleur(plateau.getJeton(i,j)->getCouleur()) + "');";
+               rc = sqlite3_exec(db, sql.c_str(), NULL, NULL, NULL);
+               if (rc != SQLITE_OK) {
+                   std::cerr << "Erreur lors de la sauvegarde du plateau" << std::endl;
+                   sqlite3_close(db);
+                   return;
+               }
+           }
+       }
+   }
+
+   //Sauvegarde de la pyramide
+   Pyramide& pyramide = getPartie().getEspaceJeux().getPyramide();
+   for (size_t i =0; i<4; i++) {
+       for (size_t j =0; j<pyramide.getNbCartesNiv(i); j++) {
+           const Carte* carte = pyramide.getCarte(i,j);
+           sql= "INSERT INTO pyramide (i, j, id) VALUES (" + std::to_string(i) + ", " + std::to_string(j) + ", " + std::to_string(carte->getId()) + ");";
+           rc = sqlite3_exec(db, sql.c_str(), NULL, NULL, NULL);
+           if (rc != SQLITE_OK) {
+               std::cerr << "Erreur lors de la sauvegarde de la pyramide" << std::endl;
+               sqlite3_close(db);
+               return;
+           }
+       }
+   }
+
+   //Sauvegarde des infos de la partie
+   //recuperation du joueur courant :
+    int joueurCourant = 0;
+    if (getPartie().getJoueur2() == this->joueurCourant ){
+        joueurCourant = 1;
+    }
+    int tour = getPartie().getTour();
+   sql = "INSERT INTO infopartie (tour, joueurCourant) VALUES (" + std::to_string(tour) + ", " + std::to_string(joueurCourant) + ");";
+   rc = sqlite3_exec(db, sql.c_str(), NULL, NULL, NULL);
+   if (rc != SQLITE_OK) {
+       std::cerr << "Erreur lors de la sauvegarde des infos de la partie" << std::endl;
+       sqlite3_close(db);
+       return;
+   } 
+
+   //Fermeture de la base de donnée
+   sqlite3_close(db);
+}
+
+//sauvegarde du score des joueurs à la fin de la partie
+void Controller::enregisterScore() {
+   //a la fin d'une partie il faut enregistrer le score des joueurs dans la base de donnée
+   //on regarde si il existe déjà et on lui ajoute une victoire ou une défaite
+   //sinon on le crée et on lui ajoute une victoire ou une défaite
+
+   //on ajoute le chemin relatif au chemin absolue du projet
+   std::string relativePath = "data/score.sqlite";
+   std::filesystem::path absolutePath = projectPath / relativePath;
+   std::string absolutePathStr = absolutePath.string();
+
+   //Connexion à la base de donnée
+   sqlite3 *db;
+   int rc = sqlite3_open(absolutePathStr.c_str(), &db);
+   if (rc != SQLITE_OK) {
+       std::cerr << "Erreur lors de la connexion à la base de donnée" << std::endl;
+       sqlite3_close(db);
+       return;
+   }
+
+   for (int i = 0; i<2; i++) {
+       //on regarde si le joueur existe déjà
+       string sql = "SELECT * FROM score WHERE pseudo = '" + getPartie().getJoueur(i)->getPseudo() + "';";
+       sqlite3_stmt *stmt;
+       rc = sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, NULL);
+       if (rc != SQLITE_OK) {
+           std::cerr << "Erreur lors de la recherche du joueur dans la base de donnée" << std::endl;
+           sqlite3_close(db);
+           return;
+       }
+
+       rc = sqlite3_step(stmt);
+       if (rc == SQLITE_ROW) {
+           //le joueur existe déjà
+           //on récupère son nombre de victoire et de défaite
+           int nbVictoire = sqlite3_column_int(stmt, 1);
+           int nbDefaite = sqlite3_column_int(stmt, 2);
+           //on met à jour son nombre de victoire ou de défaite
+           if (getPartie().getJoueur(i)->estGagnant()) {
+               nbVictoire++;
+           }
+           else {
+               nbDefaite++;
+           }
+           //on met à jour le score du joueur
+           sql = "UPDATE score SET nbVictoire = " + std::to_string(nbVictoire) + ", nbDefaite = " + std::to_string(nbDefaite) + " WHERE pseudo = '" + getPartie().getJoueur(i)->getPseudo() + "';";
+           rc = sqlite3_exec(db, sql.c_str(), NULL, NULL, NULL);
+           if (rc != SQLITE_OK) {
+               std::cerr << "Erreur lors de la mise à jour du score du joueur" << std::endl;
+                sqlite3_close(db);
+           }
+       } else {
+        //sinon on ajoute le joueur dans la base de donnée avec le bon score
+        int nbVictoire = 0;
+        int nbDefaite = 0;
+        if (getPartie().getJoueur(i)->estGagnant()) {
+            nbVictoire++;
+        }
+        else {
+            nbDefaite++;
+        }
+
+        sql = "INSERT INTO score (pseudo, nbVictoire, nbDefaite) VALUES ('" + getPartie().getJoueur(i)->getPseudo() + "', " + std::to_string(nbVictoire) + ", " + std::to_string(nbDefaite) + ");";
+        rc = sqlite3_exec(db, sql.c_str(), NULL, NULL, NULL);
+        if (rc != SQLITE_OK) {
+            std::cerr << "Erreur lors de l'ajout du joueur dans la base de donnée" << std::endl;
+            sqlite3_close(db);
+            }
+       }
+   }
+
+   //Fermeture de la base de donnée
+   sqlite3_close(db);
+}

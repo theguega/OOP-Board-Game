@@ -36,5 +36,8 @@ int main(int argc, const char * argv[]) {
     //control.getPartie().getJoueur2()->afficherJoueur();
     cout << control.getPartie().getEspaceJeux().getPlateau();
     //control.getPartie().getEspaceJeux().getPyramide().afficherPyramide();
+
+    control.enregisterScore();
+    control.sauvegardePartie();
     return 0;
 }
