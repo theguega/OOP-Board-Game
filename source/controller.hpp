@@ -1,8 +1,7 @@
 #ifndef CONTROLLER_H
 #define CONTROLLER_H
 
-#include <ctime>
-#include <cstdlib>
+#include <random>
 #include "partie.hpp"
 
 class Controller {
