@@ -396,8 +396,8 @@ void Controller::sauvegardePartie() {
 
    //Sauvegarde plateau
    Plateau& plateau = getPartie().getEspaceJeux().getPlateau();
-   for (size_t i =0; i<plateau.getTaille(); i++) {
-       for (size_t j =0; j<plateau.getTaille(); j++) {
+   for (size_t i =0; i<plateau.getLargeurMatrice(); i++) {
+       for (size_t j =0; j<plateau.getLargeurMatrice(); j++) {
            if (plateau.getJeton(i,j) != nullptr) {
                sql = "INSERT INTO plateau (i, j, couleur) VALUES (" + std::to_string(i) + ", " + std::to_string(j) + ", '" + toStringCouleur(plateau.getJeton(i,j)->getCouleur()) + "');";
                rc = sqlite3_exec(db, sql.c_str(), NULL, NULL, NULL);

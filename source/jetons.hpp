@@ -156,14 +156,14 @@ class Plateau {
 
         //Constructeur non accessible par l'utilisateur : singleton
         //Constructeur à partir d'un lot de privilèges
-        Plateau(const LotPrivileges& lotp);
+        explicit Plateau(const LotPrivileges& lotp); //on evite la conversion du lot de privilèges en plateau
 
         //pas de duplication du plateau
         Plateau(const Plateau&) = delete;
         Plateau& operator=(const Plateau&) = delete;
     public :
         bool estVide() const;
-        size_t getTaille() const { return jetons.size()*jetons.size(); }
+        size_t getLargeurMatrice() const { return jetons.size(); }
 
         const Jeton& recupererJeton(const size_t i, const size_t j);
         const Privilege& recupererPrivilege();

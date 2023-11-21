@@ -19,10 +19,10 @@ Joueur::Joueur(string pseudo, type typeDeJoueur):
                 //on initialise les map avec les bonnes couleurs
                 for (const auto& couleur : Couleurs) {
                     if (couleur != Couleur::INDT) {
-                        jetons[couleur] = std::vector<const Jeton*>();
+                        jetons[couleur];
                         if (couleur != Couleur::OR) {
-                            cartes[couleur] = std::vector<const Carte*>();
-                            cartesReservees[couleur] = std::vector<const Carte*>();
+                            cartes[couleur];
+                            cartesReservees[couleur];
                         }
                     }
                 }
@@ -151,7 +151,7 @@ void Joueur::utiliserPrivilege(Plateau& plateau){
     if (privileges.size() == 0) {
         throw JoueurException("Le joueur n'a pas de privilège");
     }
-    if (plateau.getTaille()==0){
+    if (plateau.getLargeurMatrice()==0){
         throw JoueurException("Le plateau n'a pas de jetons");
     }
     const Privilege& privilege = supPrivilege(plateau);

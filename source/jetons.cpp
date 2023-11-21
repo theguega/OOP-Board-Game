@@ -16,14 +16,14 @@ std::initializer_list<Couleur> Couleurs = {
 std::string toStringCouleur(Couleur c) {
     switch (c)
     {
-    case Couleur::BLANC: return "Blanc";
-    case Couleur::BLEU: return "Bleu ";
-    case Couleur::VERT: return "Vert ";
-    case Couleur::ROUGE: return "Rouge";
-    case Couleur::NOIR: return "Noir ";
-    case Couleur::PERLE: return "Perle";
-    case Couleur::OR: return "Or   ";
-    case Couleur::INDT: return "Indt ";
+    case Couleur::BLANC: return "W";
+    case Couleur::BLEU: return "B";
+    case Couleur::VERT: return "G";
+    case Couleur::ROUGE: return "R";
+    case Couleur::NOIR: return "B";
+    case Couleur::PERLE: return "P";
+    case Couleur::OR: return "G";
+    case Couleur::INDT: return "I";
     default: throw JetonException("Couleur inconnue");
     }
 }
@@ -291,9 +291,9 @@ Plateau& Plateau::getPlateau(const LotPrivileges& lotp) {
 std::ostream& operator<< (std::ostream& f, const Plateau& plateau) {
     //On affiche une matrice avec dans chaque case la lettre correpondant au jetons
     f<<"-------------------------------"<<std::endl;
-    for (size_t i = 0; i < plateau.getTaille(); i++) {
+    for (size_t i = 0; i < plateau.getLargeurMatrice(); i++) {
         f << "|";
-        for (size_t j = 0; j < plateau.getTaille(); j++) {
+        for (size_t j = 0; j < plateau.getLargeurMatrice(); j++) {
             if (plateau.getJeton(i,j) == nullptr)
                 f << " ";
             else
