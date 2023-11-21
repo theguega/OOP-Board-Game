@@ -129,7 +129,7 @@ public:
     ~LastPartieBuilder() { delete partie; }
     void Reset() { this->partie = new Partie(); }
 
-    virtual void setJoueurs();
+    virtual void setJoueurs() const override;
     virtual void setCartesJoueurs() const override;
     virtual void setJetonsJoueurs() const override;
     virtual void updateEspaceJeu() const override;

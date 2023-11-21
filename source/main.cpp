@@ -4,9 +4,9 @@
 
 //Mettez ici le chemin absolue vers le projet
 //Theo
-std::filesystem::path projectPath = string("/Users/theoguegan/Documents/UTC/GI01/LO21/Projet_LO21");
+//std::filesystem::path projectPath = string("/Users/theoguegan/Documents/UTC/GI01/LO21/Projet_LO21");
 //Samuel B
-//std::filesystem::path projectPath = string("\\Users\\Beziat\\source\\repos\\Projet_LO21");
+std::filesystem::path projectPath = string("\\Users\\Beziat\\source\\repos\\Projet_LO21");
 //Robert
 //std::filesystem::path projectPath = string("/Users/robertantaluca/Desktop/Projet_LO21");
 //Samuel M
@@ -17,6 +17,7 @@ std::filesystem::path projectPath = string("/Users/theoguegan/Documents/UTC/GI01
 int main(int argc, const char * argv[]) {
     int i = 0;
     Controller control;
+    //control.getJoueurCourant().afficherJoueur();
     control.lancerPartie();
 
     while (control.getPartie().getJoueur1()->estGagnant() == false && control.getPartie().getJoueur2()->estGagnant() == false) {
@@ -39,7 +40,7 @@ int main(int argc, const char * argv[]) {
     cout << control.getPartie().getEspaceJeux().getPlateau();
     //control.getPartie().getEspaceJeux().getPyramide().afficherPyramide();
 
-    control.enregisterScore();
-    control.sauvegardePartie();
+    //control.enregisterScore();
+    //control.sauvegardePartie();
     return 0;
 }

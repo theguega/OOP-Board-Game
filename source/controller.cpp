@@ -3,7 +3,7 @@
 Controller::Controller() {
 	Director* director = new Director();
 	string statut_partie;
-	std::cout << "Ancienne ou nouvelle partie ? (New/old)" << std::endl;
+	std::cout << "Ancienne ou nouvelle partie ? (New/Old)" << std::endl;
 	std::cin >> statut_partie;
 	if (statut_partie == "New") {
 		NewPartieBuilder* builder = new NewPartieBuilder();
@@ -50,7 +50,41 @@ Controller::Controller() {
         }
         delete director;
 	} else if (statut_partie == "Old") {
+        LastPartieBuilder* builder = new LastPartieBuilder();
+        director->set_builder(builder);
+        director->BuildLastPartie();
+        Partie* p = builder->GetProduct();
+        partie = p;
+        delete director;
+        // joueurcourant
+        sqlite3* db;
+        sqlite3_stmt* stmt;
+        std::string relativePath = "data/save.sqlite";
+        std::filesystem::path absolutePath = projectPath / relativePath;
+        std::string absolutePathStr = absolutePath.string();
 
+        int rc = sqlite3_open(absolutePathStr.c_str(), &db);
+        if (rc != SQLITE_OK) {
+            std::cerr << "Impossible d'ouvrir la base de donnees 8: " << sqlite3_errmsg(db) << std::endl;
+            return;
+        }
+        rc = sqlite3_prepare_v2(db, "SELECT * FROM 'infopartie'", -1, &stmt, nullptr);
+        if (rc != SQLITE_OK) {
+            std::cerr << "Erreur de preparation de la requete 9: " << sqlite3_errmsg(db) << std::endl;
+            sqlite3_close(db);
+            return;
+        }
+        if (sqlite3_step(stmt) == SQLITE_ROW) {
+            int joueur_c = sqlite3_column_int(stmt, 1);
+            if (joueur_c == 0) {
+                joueurCourant = partie->getJoueur1();
+            }
+            else if (joueur_c == 1) {
+                joueurCourant = partie->getJoueur2();
+            }
+        }
+        sqlite3_finalize(stmt);
+        sqlite3_close(db);
     } else {
         throw PartieException("Veuillez entrer un statut valide (New ou Old)");
     }
@@ -90,6 +124,7 @@ void Controller::lancerPartie() {
         break;
     }
     partie->setTour(0);
+    partie->getEspaceJeux().getPyramide().remplirPyramide();
     // TODO
 }
 

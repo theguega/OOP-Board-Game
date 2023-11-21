@@ -72,7 +72,7 @@ void Partie::libererInstance() {
 
 // ###########   Debut des méthodes LastPartieBuilder   #############
 
-void LastPartieBuilder::setJoueurs(){
+void LastPartieBuilder::setJoueurs() const {
     sqlite3* db;
     sqlite3_stmt* stmt;
     std::string relativePath = "data/save.sqlite";
@@ -82,12 +82,12 @@ void LastPartieBuilder::setJoueurs(){
 
     int rc = sqlite3_open(absolutePathStr.c_str(), &db);
     if (rc != SQLITE_OK) {
-        std::cerr << "Impossible d'ouvrir la base de donnees: " << sqlite3_errmsg(db) << std::endl;
+        std::cerr << "Impossible d'ouvrir la base de donnees 1: " << sqlite3_errmsg(db) << std::endl;
         return;
     }
     rc = sqlite3_prepare_v2(db, "SELECT * FROM 'joueur'", -1, &stmt, nullptr);
     if (rc != SQLITE_OK) {
-        std::cerr << "Erreur de preparation de la requete : " << sqlite3_errmsg(db) << std::endl;
+        std::cerr << "Erreur de preparation de la requete joueur: " << sqlite3_errmsg(db) << std::endl;
         sqlite3_close(db);
         return;
     }
@@ -128,12 +128,12 @@ void LastPartieBuilder::setCartesJoueurs() const {
 
     int rc = sqlite3_open(absolutePathStr.c_str(), &db);
     if (rc != SQLITE_OK) {
-        std::cerr << "Impossible d'ouvrir la base de donnees: " << sqlite3_errmsg(db) << std::endl;
+        std::cerr << "Impossible d'ouvrir la base de donnees 2: " << sqlite3_errmsg(db) << std::endl;
         return;
     }
     rc = sqlite3_prepare_v2(db, "SELECT id FROM 'joueur'", -1, &stmt, nullptr);
     if (rc != SQLITE_OK) {
-        std::cerr << "Erreur de preparation de la requete : " << sqlite3_errmsg(db) << std::endl;
+        std::cerr << "Erreur de preparation de la requete  joueur 2: " << sqlite3_errmsg(db) << std::endl;
         sqlite3_close(db);
         return;
     }
@@ -145,7 +145,7 @@ void LastPartieBuilder::setCartesJoueurs() const {
 
         int rc2 = sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt2, nullptr);
         if (rc2 != SQLITE_OK) {
-            std::cerr << "Erreur de préparation de la requête : " << sqlite3_errmsg(db) << std::endl;
+            std::cerr << "Erreur de préparation de la requête joueur 3 : " << sqlite3_errmsg(db) << std::endl;
             sqlite3_close(db);
             return;
         }
@@ -202,13 +202,13 @@ void LastPartieBuilder::setJetonsJoueurs() const{
 
     int rc = sqlite3_open(absolutePathStr.c_str(), &db);
     if (rc != SQLITE_OK) {
-        std::cerr << "Impossible d'ouvrir la base de donnees: " << sqlite3_errmsg(db) << std::endl;
+        std::cerr << "Impossible d'ouvrir la base de donnees 3: " << sqlite3_errmsg(db) << std::endl;
         return;
     }
 
-    rc = sqlite3_prepare_v2(db, "SELECT * FROM 'jetons_joueurs WHERE id_joueur = '1'", -1, &stmt, nullptr);
+    rc = sqlite3_prepare_v2(db, "SELECT * FROM 'jetons_joueur' WHERE id_joueur = 1", -1, &stmt, nullptr);
     if (rc != SQLITE_OK) {
-        std::cerr << "Erreur de preparation de la requete : " << sqlite3_errmsg(db) << std::endl;
+        std::cerr << "Erreur de preparation de la requete jeton 1: " << sqlite3_errmsg(db) << std::endl;
         sqlite3_close(db);
         return;
     }
@@ -219,9 +219,9 @@ void LastPartieBuilder::setJetonsJoueurs() const{
         this->partie->getJoueur1()->addJeton(j);
     }
 
-    rc = sqlite3_prepare_v2(db, "SELECT * FROM 'jetons_joueurs WHERE id_joueur = '2'", -1, &stmt2, nullptr);
+    rc = sqlite3_prepare_v2(db, "SELECT * FROM 'jetons_joueur' WHERE id_joueur = 2", -1, &stmt2, nullptr);
     if (rc != SQLITE_OK) {
-        std::cerr << "Erreur de preparation de la requete : " << sqlite3_errmsg(db) << std::endl;
+        std::cerr << "Erreur de preparation de la requete jeton 4: " << sqlite3_errmsg(db) << std::endl;
         sqlite3_close(db);
         return;
     }
@@ -241,15 +241,19 @@ void LastPartieBuilder::updateEspaceJeu() const{
     sqlite3* db;
     sqlite3_stmt* stmt;
     sqlite3_stmt* stmt2;
-    int rc = sqlite3_open("save.sqlite", &db);
+    std::string relativePath = "data/save.sqlite";
+    std::filesystem::path absolutePath = projectPath / relativePath;
+    std::string absolutePathStr = absolutePath.string();
+
+    int rc = sqlite3_open(absolutePathStr.c_str(), &db);
     if (rc != SQLITE_OK) {
-        std::cerr << "Impossible d'ouvrir la base de donnees: " << sqlite3_errmsg(db) << std::endl;
+        std::cerr << "Impossible d'ouvrir la base de donnees 6: " << sqlite3_errmsg(db) << std::endl;
         return;
     }
     // Cartes sur la pyramide
     rc = sqlite3_prepare_v2(db, "SELECT * FROM 'pyramide'", -1, &stmt, nullptr);
     if (rc != SQLITE_OK) {
-        std::cerr << "Erreur de preparation de la requete : " << sqlite3_errmsg(db) << std::endl;
+        std::cerr << "Erreur de preparation de la requete pyr: " << sqlite3_errmsg(db) << std::endl;
         sqlite3_close(db);
         return;
     }
@@ -257,7 +261,6 @@ void LastPartieBuilder::updateEspaceJeu() const{
         int i = sqlite3_column_int(stmt, 0);
         int j = sqlite3_column_int(stmt, 1);
         int id_carte = sqlite3_column_int(stmt, 2);
-
         if (i == 0) {
             const Carte& carte = this->partie->espaceJeux->getPyramide().getPioche1().piocher(id_carte);
             partie->espaceJeux->getPyramide().definitCarte(i, j, carte);
@@ -274,7 +277,7 @@ void LastPartieBuilder::updateEspaceJeu() const{
     // Jetons sur le plateau
     rc = sqlite3_prepare_v2(db, "SELECT * FROM 'plateau'", -1, &stmt2, nullptr);
     if (rc != SQLITE_OK) {
-        std::cerr << "Erreur de preparation de la requete : " << sqlite3_errmsg(db) << std::endl;
+        std::cerr << "Erreur de preparation de la requete 7 : " << sqlite3_errmsg(db) << std::endl;
         sqlite3_close(db);
         return;
     }
@@ -299,12 +302,12 @@ void LastPartieBuilder::setInfosPartie() const {
 
     int rc = sqlite3_open(absolutePathStr.c_str(), &db);
     if (rc != SQLITE_OK) {
-        std::cerr << "Impossible d'ouvrir la base de donnees: " << sqlite3_errmsg(db) << std::endl;
+        std::cerr << "Impossible d'ouvrir la base de donnees 8: " << sqlite3_errmsg(db) << std::endl;
         return;
     }
     rc = sqlite3_prepare_v2(db, "SELECT * FROM 'infopartie'", -1, &stmt, nullptr);
     if (rc != SQLITE_OK) {
-        std::cerr << "Erreur de preparation de la requete : " << sqlite3_errmsg(db) << std::endl;
+        std::cerr << "Erreur de preparation de la requete 9: " << sqlite3_errmsg(db) << std::endl;
         sqlite3_close(db);
         return;
     }
