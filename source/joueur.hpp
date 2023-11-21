@@ -28,6 +28,7 @@ type toType(std::string s);
 class Joueur {
 private:
     // Rajouter un tab static avec les deux joueurs
+    static  std::vector<Joueur*> joueurs;
     const string pseudo;
     const type typeDeJoueur;
     unsigned int ptsPrestige;
@@ -63,7 +64,9 @@ public:
     size_t getNbJetons() const { return nbJetons; }
     //Privilege **getPrivileges();
     size_t getNbPrivileges() const { return nbPrivileges; }
+
     //rajout par theo, si tu veux refaire mieux -> pour la sauvegarde
+
     //getCarte& pour utiliser dnas un for et recup toutes les cartes et les sauvegarder
     //getJeton& pour utiliser dnas un for et recup toutes les jetons et les sauvegarder
 
@@ -83,7 +86,7 @@ public:
     void supCarte(Carte &carte);
     void supCarteReservee(const Carte &carte);
     void supJeton(Jeton *jeton);
-    const Privilege& supPrivilege(); // a voir si on retire pas juste le premier privilege
+    const Privilege& supPrivilege(Plateau& plateau); // a voir si on retire pas juste le premier privilege
 
     // Affichage Done
     void afficherJoueur() const;
@@ -93,10 +96,19 @@ public:
         std::cout << "Nombre de privilèges : " << &privileges << std::endl;
     }
 
-    // (J'en ai besoin pour les score comment on l'implémente) (Signe Theo)
+    // Actions optionnelles
+    void utiliserPrivilege(Plateau& plateau);
+    void remplirPlateau(Plateau& plateau, Sac& sac, Joueur& joueurAdverse);
+
+    // Actions obligatoires
+    void recupererJetons(Plateau& plateau);
+    void acheterCarteJoaillerie (Pyramide& pyramide);
+    void orReserverCarte (Pyramide& pyramide, Plateau& plateau);
+
+    // (J'en ai besoin pour les score comment on l'implémente) (Signe Theo) / J'ai pas tt capé mais pour moi c'est une méthode de partie ça
     //Je pense que c'est un attribut à définir à la fin de la partie
     //bool estGagant() const { return gagnant; };
-    bool estGagnant() {return ptsPrestige >= 15;}; //exemple deso c degeu
+    bool estGagnant() const {return ptsPrestige >= 15;}; //exemple deso c degeu
 
 
 };

@@ -10,7 +10,7 @@
 //Robert
 //std::filesystem::path projectPath = string("/Users/robertantaluca/Desktop/Projet_LO21");
 //Samuel M
-//std::filesystem::path projectPath = string("C:/Users/samma/Documents/Programmation/LO21/Projet_LO21");
+std::filesystem::path projectPath = string("C:/Users/samma/Documents/Programmation/LO21/Projet_LO21");
 //Maxime
 
 

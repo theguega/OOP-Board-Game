@@ -118,10 +118,13 @@ void::Joueur::supJeton(Jeton *jeton) {
     }
 }
 
-const Privilege&::Joueur::supPrivilege() {
+const Privilege&::Joueur::supPrivilege(Plateau& plateau) {
     const Privilege& sup = *privileges[0];
     privileges.erase(privileges.begin());
     nbPrivileges--;
+    // rajout du privilège sur le plateau
+    plateau.poserPrivilege(sup);
+
     return  sup;
 }
 
@@ -151,7 +154,7 @@ void Joueur::utiliserPrivilege(Plateau& plateau){
     if (plateau.getTaille()==0){
         throw JoueurException("Le plateau n'a pas de jetons");
     }
-    const Privilege& privilege = supPrivilege();
+    const Privilege& privilege = supPrivilege(plateau);
     plateau.poserPrivilege(privilege);
     const Jeton& jetonSelec = strategy->choisirJeton(plateau);
     addJeton(jetonSelec);
@@ -167,7 +170,7 @@ void Joueur::remplirPlateau(Plateau& plateau, Sac& sac, Joueur& joueurAdverse){
     // Verifier s'il reste des privileges sur le plateau
     if (!plateau.pivilegeDisponible()){
         std::cout<< "Il n'y a plus de privileges sur le plateau !\nLe joueur adverse perd donc un privilege..." << std::endl;
-        const Privilege& privilege = joueurAdverse.supPrivilege(); // recuperation du privilege du joueur adverse
+        const Privilege& privilege = joueurAdverse.supPrivilege(plateau); // recuperation du privilege du joueur adverse
         addPrivilege(privilege); // ajout du privilege au joueur
         return;
     }
@@ -198,7 +201,7 @@ void Joueur::recupererJetons(Plateau& plateau){
         std::cin >> j;
         const Jeton& jeton = plateau.recupererJeton(i, j);
         // Ajout des coordonnees
-        vecteurCoordonnees.push_back(std::make_pair(i, j));
+        vecteurCoordonnees.emplace_back(i, j);
         // Ajout du jeton
         jetonsRecup.push_back(&jeton);
     }
@@ -233,8 +236,8 @@ void Joueur::recupererJetons(Plateau& plateau){
     }
 
     // ajout des jetons dans la main du joueur
-    for (int i = 0; i < jetonsRecup.size(); i++){
-        addJeton(*jetonsRecup[i]);
+    for (auto & i : jetonsRecup){
+        addJeton(*i);
     }
 
 }
@@ -264,7 +267,7 @@ void Joueur::orReserverCarte (Pyramide& pyramide, Plateau& plateau){
 
         // Recuperation d'un jeton or
         const Jeton& jeton = strategy->choisirJeton(plateau);
-        if(jeton.getCouleur() != CouleurJeton::OR){
+        if(jeton.getCouleur() != Couleur::OR){
             throw JoueurException("Le jeton choisi n'est pas un jeton or");
         }
         addJeton(jeton);
@@ -278,7 +281,7 @@ void Joueur::orReserverCarte (Pyramide& pyramide, Plateau& plateau){
 
         // Recuperation d'un jeton or
         const Jeton& jeton = strategy->choisirJeton(plateau);
-        if(jeton.getCouleur() != CouleurJeton::OR){
+        if(jeton.getCouleur() != Couleur::OR){
             throw JoueurException("Le jeton choisi n'est pas un jeton or");
         }
         addJeton(jeton);
