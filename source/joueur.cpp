@@ -51,7 +51,7 @@ void Joueur::afficherJoueur() const {
     std::cout << "Points de prestiges : " << ptsPrestige << std::endl;
     std::cout << "Nombre de couronnes : " << nbCouronnes << std::endl;
     std::cout << "Nombre de cartes : " << getNbCartes() << std::endl;
-    std::cout << "Nombre de cartes réservées : " << getNbCartesReservees() << std::endl;
+    std::cout << "Nombre de cartes reservees : " << getNbCartesReservees() << std::endl;
     std::cout << "Nombre de jetons : " << getNbJetons() << std::endl;
     std::cout << "Nombre de privileges : " << getNbPrivileges() << std::endl;
 }
@@ -82,6 +82,10 @@ void Joueur::addCarteReservee(const Carte &carte) {
     cartesReservees[carte.getBonus().getCouleur()].push_back(&carte);
 }
 
+void Joueur::addCarteNoble(const Carte& carte){
+    cartesNobles.push_back(&carte);
+}
+
 void Joueur::addJeton(const Jeton& jeton) {
     jetons[jeton.getCouleur()].push_back(&jeton);
 }
@@ -107,6 +111,14 @@ void::Joueur::supCarteReservee(const Carte &carte) {
     for (int i = 0; i < cartes[carte.getBonus().getCouleur()].size(); i++) {
         if (cartesReservees[carte.getBonus().getCouleur()][i] == &carte) {
             cartesReservees[carte.getBonus().getCouleur()].erase(cartes[carte.getBonus().getCouleur()].begin() + i);
+        }
+    }
+}
+
+void Joueur::supCarteNoble(const Carte& carte){
+    for (int i = 0; i < cartesNobles.size(); i++) {
+        if (cartesNobles[i] == &carte) {
+            cartesNobles.erase(cartesNobles.begin()+i);
         }
     }
 }

@@ -136,6 +136,7 @@ class Sac {
         size_t getNbJetons() const { return jetons.size(); }
         void ajouterJeton(const Jeton& j);
         const Jeton& piocherJeton();
+        const Jeton& piocherJeton(Couleur c);
 
         //Singleton
         //Avec tous les jetons (debut de partie)
@@ -150,9 +151,7 @@ class Plateau {
         std::array<std::array<const Jeton*, 5>, 5> jetons;
         std::vector<const Privilege*> privileges;
 
-        //Postionnement du jeton en imposant une positite (restitution de partie) (non accessible par l'utilisateur)
-        //Sera accessible par la classe qui fera la restitution de partie
-        void positionerJeton(const Jeton& jeton, const size_t i, const size_t j); //TODO
+
 
         //Constructeur non accessible par l'utilisateur : singleton
         //Constructeur à partir d'un lot de privilèges
@@ -173,7 +172,9 @@ class Plateau {
         //Postionnement du jeton en suivant l'ordre du plateau
         void positionerJeton(const Jeton& jeton);
         void poserPrivilege(const Privilege& privilege);
-
+        //Postionnement du jeton en imposant une positite (restitution de partie) (non accessible par l'utilisateur)
+        //Sera accessible par la classe qui fera la restitution de partie
+        void positionerJeton(const Jeton& jeton, const size_t i, const size_t j); //TODO
         //Remplissage du plateau à partir du sac (on vide le sac)
         void remplirPlateau(Sac& sac);
 
