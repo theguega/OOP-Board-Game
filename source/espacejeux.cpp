@@ -196,15 +196,3 @@ void Pyramide::afficherPyramide() const {
     }
 
 }
-
-int Pyramide::getNbCartesNiv(int niveau) const {
-    niveau--;// pour que l'utilisateur rentre les coordonnées de 1 à 3
-    int nbCartes = 0;
-    for (int i = 0; i < array_cartes[niveau].size(); i++) {
-        if (array_cartes[niveau][i] != nullptr) {
-            nbCartes++;
-        }
-    }
-    return nbCartes;
-
-}

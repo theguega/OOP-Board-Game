@@ -16,7 +16,16 @@ type toType(std::string s) {
 // Constructeur
 Joueur::Joueur(string pseudo, type typeDeJoueur):
                pseudo(pseudo), typeDeJoueur(typeDeJoueur), ptsPrestige(0), nbCouronnes(0) {
-
+                //on initialise les map avec les bonnes couleurs
+                for (const auto& couleur : Couleurs) {
+                    if (couleur != Couleur::INDT) {
+                        jetons[couleur] = std::vector<const Jeton*>();
+                        if (couleur != Couleur::OR) {
+                            cartes[couleur] = std::vector<const Carte*>();
+                            cartesReservees[couleur] = std::vector<const Carte*>();
+                        }
+                    }
+                }
 }
 
 // Destructeur

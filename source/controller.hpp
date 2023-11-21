@@ -30,6 +30,10 @@ public:
 	void acheterCarteJoaillerie(Pyramide& pyramide);
 	void orReserverCarte(Pyramide& pyramide, Plateau& plateau);
 
+	//gestion données
+	void sauvegardePartie();
+	void enregisterScore();
+
 	// verifications
 
 };

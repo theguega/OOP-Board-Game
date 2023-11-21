@@ -54,16 +54,19 @@ public:
     unsigned int getptsPrestige() const { return ptsPrestige; };
     unsigned int getnbCouronnes() const { return nbCouronnes; };
     //Carte **getCartes();
-    size_t getNbCartes() const { return cartes.size(); }
+    size_t getNbCartes() const { return cartes.size(); };
+    size_t getNbCartes(Couleur c) const { return cartes.at(c).size(); }
     //Jetons **getJetons();
     size_t getNbCartesReservees() const { return cartesReservees.size(); }
     unsigned int getNbCartesNobles() const { return cartesNobles.size(); }
+    size_t getNbCartesReservees(Couleur c) const { return cartesReservees.at(c).size(); }
     size_t getNbJetons() const { return jetons.size(); }
+    size_t getNbJetons(Couleur c) const { return jetons.at(c).size(); }
     //Privilege **getPrivileges();
     size_t getNbPrivileges() const { return privileges.size(); }
-    //rajout par theo, si tu veux refaire mieux -> pour la sauvegarde
-    //getCarte& pour utiliser dnas un for et recup toutes les cartes et les sauvegarder
-    //getJeton& pour utiliser dnas un for et recup toutes les jetons et les sauvegarder
+    //pb d'itération sur les cartes
+    const Carte& getCarte(Couleur c, size_t i) const { return *cartes.at(c).at(i); }
+    const Carte& getCarteReservee(Couleur c, size_t i) const { return *cartesReservees.at(c).at(i); }
 
     bool nbPtsPrestigeParCouleurSupDix() const;
 

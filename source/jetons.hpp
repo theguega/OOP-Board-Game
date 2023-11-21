@@ -76,10 +76,6 @@ class LotDeJetons {
         LotDeJetons();
         ~LotDeJetons();
 
-        //Récupération d'un jeton à partir de sa couleur (restitution de partie) (non accessible par l'utilisateur)
-        //Sera accessible par la classe qui fera la restitution de partie
-        const Jeton& getJeton(Couleur c) const;
-
         //pas de duplication du lot de jetons
         LotDeJetons(const LotDeJetons&) = delete;
         LotDeJetons& operator=(const LotDeJetons&) = delete;
