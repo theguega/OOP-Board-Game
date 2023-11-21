@@ -389,11 +389,13 @@ void LastPartieBuilder::setJetonsJoueurs() const{
 void LastPartieBuilder::updateEspaceJeu() const{
     sqlite3* db;
     sqlite3_stmt* stmt;
+    sqlite3_stmt* stmt2;
     int rc = sqlite3_open("save.sqlite", &db);
     if (rc != SQLITE_OK) {
         std::cerr << "Impossible d'ouvrir la base de donnees: " << sqlite3_errmsg(db) << std::endl;
         return;
     }
+    // Cartes sur la pyramide
     rc = sqlite3_prepare_v2(db, "SELECT * FROM 'pyramide'", -1, &stmt, nullptr);
     if (rc != SQLITE_OK) {
         std::cerr << "Erreur de preparation de la requete : " << sqlite3_errmsg(db) << std::endl;
@@ -401,9 +403,9 @@ void LastPartieBuilder::updateEspaceJeu() const{
         return;
     }
     while (sqlite3_step(stmt) == SQLITE_ROW) {
-        int id_carte = sqlite3_column_int(stmt, 3);
         int i = sqlite3_column_int(stmt, 0);
         int j = sqlite3_column_int(stmt, 1);
+        int id_carte = sqlite3_column_int(stmt, 2);
 
         if (i == 0) {
             const Carte& carte = this->partie->espaceJeux->getPyramide().getPioche1().piocher(id_carte);
@@ -418,7 +420,20 @@ void LastPartieBuilder::updateEspaceJeu() const{
             partie->espaceJeux->getPyramide().definitCarte(i, j, carte);
         }
     }
-    //TODO : maintenant qu'on a enlevé des pioches les cartes des joueurs, il faut les disposer sur le plateau. 
+    // Jetons sur le plateau
+    rc = sqlite3_prepare_v2(db, "SELECT * FROM 'plateau'", -1, &stmt2, nullptr);
+    if (rc != SQLITE_OK) {
+        std::cerr << "Erreur de preparation de la requete : " << sqlite3_errmsg(db) << std::endl;
+        sqlite3_close(db);
+        return;
+    }
+    while (sqlite3_step(stmt2) == SQLITE_ROW) {
+        int i = sqlite3_column_int(stmt2, 0);
+        int j = sqlite3_column_int(stmt2, 1);
+        string couleur = reinterpret_cast<const char*>(sqlite3_column_text(stmt2, 2));
+
+        partie->espaceJeux->getPlateau().positionerJeton(i, j, partie->getEspaceJeux().getSac().piocherJeton(StringToCouleur(couleur))));
+    }
     sqlite3_finalize(stmt);
     sqlite3_close(db);
 }
@@ -444,9 +459,7 @@ void LastPartieBuilder::setInfosPartie() const {
     }
     if (sqlite3_step(stmt) == SQLITE_ROW) {
         int tours = sqlite3_column_int(stmt, 0);
-        int joueur_c = sqlite3_column_int(stmt, 1);
         partie->tour = tours;
-        partie->joueurCourant = joueur_c;
     }
     sqlite3_finalize(stmt);
     sqlite3_close(db);
