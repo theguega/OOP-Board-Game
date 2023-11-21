@@ -12,7 +12,7 @@ Pyramide::Pyramide( Pioche *piocheNv1, Pioche *piocheNv2,Pioche *piocheNv3,Pioch
                 array_cartes[i][j] =  nullptr;
             }
         }
-        this->remplirPyramide();
+        //this->remplirPyramide();
 
 };
 
