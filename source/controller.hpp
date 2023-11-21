@@ -4,9 +4,6 @@
 #include "partie.hpp"
 
 class Controller {
-#include "partie.hpp"
-
-class Controller {
 private:
 	Partie* partie;
 public:
