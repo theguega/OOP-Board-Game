@@ -140,12 +140,13 @@ const LotPrivileges& LotPrivileges::getLotPrivileges() {
 }
 
 //------------------------------------------------- Classe Sac
-
+
+
 const Jeton& Sac::piocherJeton(Couleur c) {
     for (size_t i = 0; i < jetons.size(); i++)
         if (jetons[i]->getCouleur() == c) {
-            const Jeton* jt = *jetons[i];
-            jetons.erase(jetons[i]);
+            const Jeton* jt = jetons[i];
+            jetons.erase(jetons.begin()+i);
             return *jt;
         }
     throw JetonException("Couleur de jeton incorrecte");
@@ -191,6 +192,10 @@ Sac& Sac::getSac() {
 
 
 //------------------------------------------------- Classe Plateau
+
+void Plateau::positionerJeton(const Jeton& jeton, const size_t i, const size_t j){
+    jetons[i][j] = &jeton;
+}
 
 Plateau::Plateau(const LotPrivileges& lotp) {
     //initialisation des privilèges

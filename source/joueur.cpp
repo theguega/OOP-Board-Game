@@ -42,7 +42,7 @@ void Joueur::afficherJoueur() const {
     std::cout << "Points de prestiges : " << ptsPrestige << std::endl;
     std::cout << "Nombre de couronnes : " << nbCouronnes << std::endl;
     std::cout << "Nombre de cartes : " << getNbCartes() << std::endl;
-    std::cout << "Nombre de cartes réservées : " << getNbCartesReservees() << std::endl;
+    std::cout << "Nombre de cartes reservees : " << getNbCartesReservees() << std::endl;
     std::cout << "Nombre de jetons : " << getNbJetons() << std::endl;
     std::cout << "Nombre de privileges : " << getNbPrivileges() << std::endl;
 }
@@ -108,8 +108,8 @@ void::Joueur::supCarteReservee(const Carte &carte) {
 
 void Joueur::supCarteNoble(const Carte& carte){
     for (int i = 0; i < cartesNobles.size(); i++) {
-        if (cartesNobes[i] == &carte) {
-            cartesNobles.erase(cartesNobles[i]);
+        if (cartesNobles[i] == &carte) {
+            cartesNobles.erase(cartesNobles.begin()+i);
         }
     }
 }

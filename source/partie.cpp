@@ -252,9 +252,9 @@ void LastPartieBuilder::setJoueurs(){
         for (int j = 0; j < nb_privileges; j++) {
             const Privilege& p = this->partie->getEspaceJeux().getPlateau().recupererPrivilege();
             if (i == 0)
-                this->partie->getJoueur1().addPrivilege(p);
+                this->partie->getJoueur1()->addPrivilege(p);
             else
-                this->partie->getJoueur2().addPrivilege(p);
+                this->partie->getJoueur2()->addPrivilege(p);
         }
         i++;
     }
@@ -301,7 +301,7 @@ void LastPartieBuilder::setCartesJoueurs() const {
 
         while (sqlite3_step(stmt2) == SQLITE_ROW) {
             int id_carte = sqlite3_column_int(stmt2, 1);
-            int noble = sqlite3_column_int(stmt2, 2)
+            int noble = sqlite3_column_int(stmt2, 2);
             int reserve = sqlite3_column_int(stmt2, 3);
 
             if (noble == 1) {
@@ -310,7 +310,7 @@ void LastPartieBuilder::setCartesJoueurs() const {
             }
             else if (1 <= id_carte <= nb_cartes_nv1) {
                 const Carte& carte = this->partie->espaceJeux->getPyramide().getPioche1().piocher(id_carte);
-                CouleurCarte c = carte.getBonus().getCouleur();
+                Couleur c = carte.getBonus().getCouleur();
                 if (reserve == 0)
                     this->partie->joueurs[i]->addCarte(carte);
                 else
@@ -318,7 +318,7 @@ void LastPartieBuilder::setCartesJoueurs() const {
             }
             else if (nb_cartes_nv1 < id_carte <= nb_cartes_nv1+nb_cartes_nv2) {
                 const Carte& carte = this->partie->espaceJeux->getPyramide().getPioche2().piocher(id_carte);
-                CouleurCarte c = carte.getBonus().getCouleur();
+                Couleur c = carte.getBonus().getCouleur();
                 if (reserve == 0)
                     this->partie->joueurs[i]->addCarte(carte);
                 else
@@ -326,7 +326,7 @@ void LastPartieBuilder::setCartesJoueurs() const {
             }
             else if (nb_cartes_nv1 + nb_cartes_nv2 < id_carte <= nb_cartes_nv1 + nb_cartes_nv2 + nb_cartes_nv3) {
                 const Carte& carte = this->partie->espaceJeux->getPyramide().getPioche3().piocher(id_carte);
-                CouleurCarte c = carte.getBonus().getCouleur();
+                Couleur c = carte.getBonus().getCouleur();
                 if (reserve == 0)
                     this->partie->joueurs[i]->addCarte(carte);
                 else
@@ -365,7 +365,7 @@ void LastPartieBuilder::setJetonsJoueurs() const{
     while (sqlite3_step(stmt) == SQLITE_ROW) {
         string couleur = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 1));
         const Jeton& j = this->partie->espaceJeux->getSac().piocherJeton(StringToCouleur(couleur));
-        this->partie->getJoueur1().addJeton(j);
+        this->partie->getJoueur1()->addJeton(j);
     }
 
     rc = sqlite3_prepare_v2(db, "SELECT * FROM 'jetons_joueurs WHERE id_joueur = '2'", -1, &stmt2, nullptr);
@@ -378,7 +378,7 @@ void LastPartieBuilder::setJetonsJoueurs() const{
     while (sqlite3_step(stmt2) == SQLITE_ROW) {
         string couleur = reinterpret_cast<const char*>(sqlite3_column_text(stmt2, 1));
         const Jeton& j = this->partie->espaceJeux->getSac().piocherJeton(StringToCouleur(couleur));
-        this->partie->getJoueur2().addJeton(j);
+        this->partie->getJoueur2()->addJeton(j);
     }
 
     sqlite3_finalize(stmt);
@@ -432,7 +432,7 @@ void LastPartieBuilder::updateEspaceJeu() const{
         int j = sqlite3_column_int(stmt2, 1);
         string couleur = reinterpret_cast<const char*>(sqlite3_column_text(stmt2, 2));
 
-        partie->espaceJeux->getPlateau().positionerJeton(i, j, partie->getEspaceJeux().getSac().piocherJeton(StringToCouleur(couleur))));
+        partie->getEspaceJeux().getPlateau().positionerJeton(partie->getEspaceJeux().getSac().piocherJeton(StringToCouleur(couleur)),i, j);
     }
     sqlite3_finalize(stmt);
     sqlite3_close(db);
