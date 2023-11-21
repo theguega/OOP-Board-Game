@@ -73,6 +73,10 @@ void Joueur::addCarteReservee(const Carte &carte) {
     cartesReservees[carte.getBonus().getCouleur()].push_back(&carte);
 }
 
+void Joueur::addCarteNoble(const Carte& carte){
+    cartesNobles.push_back(&carte);
+}
+
 void Joueur::addJeton(const Jeton& jeton) {
     jetons[jeton.getCouleur()].push_back(&jeton);
 }
@@ -98,6 +102,14 @@ void::Joueur::supCarteReservee(const Carte &carte) {
     for (int i = 0; i < cartes[carte.getBonus().getCouleur()].size(); i++) {
         if (cartesReservees[carte.getBonus().getCouleur()][i] == &carte) {
             cartesReservees[carte.getBonus().getCouleur()].erase(cartes[carte.getBonus().getCouleur()].begin() + i);
+        }
+    }
+}
+
+void Joueur::supCarteNoble(const Carte& carte){
+    for (int i = 0; i < cartesNobles.size(); i++) {
+        if (cartesNobes[i] == &carte) {
+            cartesNobles.erase(cartesNobles[i]);
         }
     }
 }

@@ -140,6 +140,7 @@ class Sac {
         size_t getNbJetons() const { return jetons.size(); }
         void ajouterJeton(const Jeton& j);
         const Jeton& piocherJeton();
+        const Jeton& piocherJeton(Couleur c);
 
         //Singleton
         //Avec tous les jetons (debut de partie)

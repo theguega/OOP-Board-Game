@@ -140,6 +140,16 @@ const LotPrivileges& LotPrivileges::getLotPrivileges() {
 }
 
 //------------------------------------------------- Classe Sac
+
+const Jeton& Sac::piocherJeton(Couleur c) {
+    for (size_t i = 0; i < jetons.size(); i++)
+        if (jetons[i]->getCouleur() == c) {
+            const Jeton* jt = *jetons[i];
+            jetons.erase(jetons[i]);
+            return *jt;
+        }
+    throw JetonException("Couleur de jeton incorrecte");
+}
 
 Sac::Sac(const LotDeJetons& lot) {
     for (size_t i = 0; i < lot.getNbJetons(); i++)

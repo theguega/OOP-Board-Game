@@ -36,6 +36,7 @@ private:
     std::unordered_map<Couleur, std::vector<const Carte*>> cartes;
     std::unordered_map<Couleur, std::vector<const Carte*>> cartesReservees;
     std::unordered_map<Couleur, std::vector<const Jeton*>> jetons;
+    std::vector<const Carte*> cartesNobles;
     std::vector<const Privilege*> privileges;
     Strategy* strategy;
 public:
@@ -56,6 +57,7 @@ public:
     size_t getNbCartes() const { return cartes.size(); }
     //Jetons **getJetons();
     size_t getNbCartesReservees() const { return cartesReservees.size(); }
+    unsigned int getNbCartesNobles() const { return cartesNobles.size(); }
     size_t getNbJetons() const { return jetons.size(); }
     //Privilege **getPrivileges();
     size_t getNbPrivileges() const { return privileges.size(); }
@@ -71,6 +73,7 @@ public:
 
     void addCarte(const Carte &carte);
     void addCarteReservee(const Carte &carte) ;
+    void addCarteNoble(const Carte& carte);
     void addJeton(const Jeton &jeton);
     void addPrivilege(const Privilege &privilege);
 
@@ -78,6 +81,7 @@ public:
     // Si on supprime un privilège il doit revenir sur le plateau
     void supCarte(Carte &carte);
     void supCarteReservee(const Carte &carte);
+    void supCarteNoble(const Carte& carte);
     void supJeton(Jeton *jeton);
     const Privilege& supPrivilege(); // a voir si on retire pas juste le premier privilege
 

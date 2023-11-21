@@ -73,6 +73,7 @@ class EspaceJeux {
 
         Plateau& getPlateau() const { return *plateau; }
         Pyramide& getPyramide() const {return *pyramide; }
+        Sac& getSac() const { return *sac; }
         
 
         EspaceJeux(const EspaceJeux&) = delete;
