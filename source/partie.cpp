@@ -121,10 +121,10 @@ void LastPartieBuilder::setCartesJoueurs() const {
     std::filesystem::path absolutePath = projectPath / relativePath;
     std::string absolutePathStr = absolutePath.string();
     int i = 0;
-    int nb_cartes_nv1 = partie->espaceJeux->getPyramide().getPioche1().getNbCartes();
-    int nb_cartes_nv2 = partie->espaceJeux->getPyramide().getPioche2().getNbCartes();
-    int nb_cartes_nv3 = partie->espaceJeux->getPyramide().getPioche3().getNbCartes();
-    int nb_cartes_noble = partie->espaceJeux->getPyramide().getPiocheNoble().getNbCartes();
+    size_t nb_cartes_nv1 = partie->espaceJeux->getPyramide().getPioche1().getNbCartes();
+    size_t nb_cartes_nv2 = partie->espaceJeux->getPyramide().getPioche2().getNbCartes();
+    size_t nb_cartes_nv3 = partie->espaceJeux->getPyramide().getPioche3().getNbCartes();
+    size_t nb_cartes_noble = partie->espaceJeux->getPyramide().getPiocheNoble().getNbCartes();
 
     int rc = sqlite3_open(absolutePathStr.c_str(), &db);
     if (rc != SQLITE_OK) {

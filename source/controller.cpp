@@ -367,7 +367,7 @@ void Controller::sauvegardePartie() {
          for (Couleur c : Couleurs){
                 if (c!=Couleur::INDT && c!=Couleur::OR) {
                  for (size_t j = 0; j<getPartie().getJoueur(i)->getNbCartes(c); j++) {
-                      sql = "INSERT INTO carte (id_joueur, id_carte, noble, reservee) VALUES (" + std::to_string(i+1) + ", " + std::to_string(getPartie().getJoueur(i)->getCarte(c,j).getId()) + ", " + TypeCartetoString(getPartie().getJoueur(i)->getCarte(c,j).getType()) + ",0);";
+                      sql = "INSERT INTO carte (id_joueur, id_carte, noble, reservee) VALUES (" + std::to_string(i+1) + ", " + std::to_string(getPartie().getJoueur(i)->getCarte(c,j).getId()) + ",0,0);";
                       rc = sqlite3_exec(db, sql.c_str(), NULL, NULL, NULL);
                       if (rc != SQLITE_OK) {
                             std::cerr << "Erreur lors de la sauvegarde de la carte " << std::endl;
@@ -377,6 +377,17 @@ void Controller::sauvegardePartie() {
                  }
                 }
          }
+
+         //cartes nobles
+            for (size_t j = 0; j<getPartie().getJoueur(i)->getNbCartesNobles(); j++) {
+                sql = "INSERT INTO carte (id_joueur, id_carte, noble, reservee) VALUES (" + std::to_string(i+1) + ", " + std::to_string(getPartie().getJoueur(i)->getCarteNoble(j).getId()) + ",1,0);";
+                rc = sqlite3_exec(db, sql.c_str(), NULL, NULL, NULL);
+                if (rc != SQLITE_OK) {
+                    std::cerr << "Erreur lors de la sauvegarde de la carte" << std::endl;
+                    sqlite3_close(db);
+                    return;
+                }
+            }
 
          //cartes reservees (toutes les couleurs sauf ind et or)
          for (Couleur c : Couleurs){
@@ -479,8 +490,8 @@ void Controller::enregisterScore() {
        if (rc == SQLITE_ROW) {
            //le joueur existe déjà
            //on récupère son nombre de victoire et de défaite
-           int nbVictoire = sqlite3_column_int(stmt, 1);
-           int nbDefaite = sqlite3_column_int(stmt, 2);
+           int nbVictoire = sqlite3_column_int(stmt, 2);
+           int nbDefaite = sqlite3_column_int(stmt, 3);
            //on met à jour son nombre de victoire ou de défaite
            if (getPartie().getJoueur(i)->estGagnant()) {
                nbVictoire++;
@@ -490,6 +501,7 @@ void Controller::enregisterScore() {
            }
            //on met à jour le score du joueur
            sql = "UPDATE score SET nbVictoire = " + std::to_string(nbVictoire) + ", nbDefaite = " + std::to_string(nbDefaite) + " WHERE pseudo = '" + getPartie().getJoueur(i)->getPseudo() + "';";
+           std::cout<<sql<<std::endl;
            rc = sqlite3_exec(db, sql.c_str(), NULL, NULL, NULL);
            if (rc != SQLITE_OK) {
                std::cerr << "Erreur lors de la mise à jour du score du joueur" << std::endl;
@@ -507,6 +519,7 @@ void Controller::enregisterScore() {
         }
 
         sql = "INSERT INTO score (pseudo, nbVictoire, nbDefaite) VALUES ('" + getPartie().getJoueur(i)->getPseudo() + "', " + std::to_string(nbVictoire) + ", " + std::to_string(nbDefaite) + ");";
+        std::cout<<sql<<std::endl;
         rc = sqlite3_exec(db, sql.c_str(), NULL, NULL, NULL);
         if (rc != SQLITE_OK) {
             std::cerr << "Erreur lors de l'ajout du joueur dans la base de donnée" << std::endl;

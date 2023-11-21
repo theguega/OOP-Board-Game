@@ -59,7 +59,7 @@ public:
     size_t getNbCartes(Couleur c) const { return cartes.at(c).size(); }
     //Jetons **getJetons();
     size_t getNbCartesReservees() const;
-    unsigned int getNbCartesNobles() const { return cartesNobles.size(); }
+    size_t getNbCartesNobles() const { return cartesNobles.size(); }
     size_t getNbCartesReservees(Couleur c) const { return cartesReservees.at(c).size(); }
     size_t getNbJetons() const;
     size_t getNbJetons(Couleur c) const { return jetons.at(c).size(); }
@@ -67,6 +67,7 @@ public:
     size_t getNbPrivileges() const { return privileges.size(); }
     const Carte& getCarte(Couleur c, size_t i) const { return *cartes.at(c).at(i); }
     const Carte& getCarteReservee(Couleur c, size_t i) const { return *cartesReservees.at(c).at(i); }
+    const Carte& getCarteNoble(size_t i) const { return *cartesNobles[i]; }
 
     bool nbPtsPrestigeParCouleurSupDix() const;
 
