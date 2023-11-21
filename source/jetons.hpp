@@ -159,10 +159,8 @@ class Plateau {
         void positionerJeton(const Jeton& jeton, const size_t i, const size_t j); //TODO
 
         //Constructeur non accessible par l'utilisateur : singleton
-        //Constructeur à partir d'un sac et d'un lot de privilèges (dans le cas d'une nouvelle partie)
-        Plateau(Sac& sac, const LotPrivileges& lotp);
-        //Constructeur sans argument pour initialiser un plateau vide (restitution partie en cours)
-        Plateau();
+        //Constructeur à partir d'un lot de privilèges
+        Plateau(const LotPrivileges& lotp);
 
         //pas de duplication du plateau
         Plateau(const Plateau&) = delete;
@@ -184,10 +182,8 @@ class Plateau {
         void remplirPlateau(Sac& sac);
 
         //Singleton
-        //Avec sac et lot de privilèges (debut de partie)
-        static Plateau& getPlateau(Sac& sac, const LotPrivileges& lotp);
-        //Sans sac et lot de privilèges (restitution de partie)
-        static Plateau& getPlateau();
+        //Lot de privilèges (debut de partie)
+        static Plateau& getPlateau(const LotPrivileges& lotp);
 };
 std::ostream& operator<< (std::ostream& f, const Plateau& plateau);
 

@@ -68,7 +68,7 @@ class EspaceJeux {
         Pioche *piocheNoble = new Pioche(*jeuxCartes, TypeCarte::Noble);
         Pyramide *pyramide = new Pyramide(piocheNv1, piocheNv2, piocheNv3, piocheNoble);
     public:
-        EspaceJeux() : lotJetons(&LotDeJetons::getLotDeJetons()), lotPrivileges(&LotPrivileges::getLotPrivileges()), sac(&Sac::getSac(*lotJetons)), plateau(&Plateau::getPlateau(*sac, *lotPrivileges)) {};
+        EspaceJeux() : lotJetons(&LotDeJetons::getLotDeJetons()), lotPrivileges(&LotPrivileges::getLotPrivileges()), sac(&Sac::getSac(*lotJetons)), plateau(&Plateau::getPlateau(*lotPrivileges)) {};
         ~EspaceJeux() { delete jeuxCartes; delete piocheNv1; delete piocheNv2; delete piocheNv3; delete piocheNoble; delete pyramide; };
 
         Plateau& getPlateau() const { return *plateau; }

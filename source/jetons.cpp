@@ -182,7 +182,7 @@ Sac& Sac::getSac() {
 
 //------------------------------------------------- Classe Plateau
 
-Plateau::Plateau(Sac& sac, const LotPrivileges& lotp) {
+Plateau::Plateau(const LotPrivileges& lotp) {
     //initialisation des privilèges
     for (size_t i = 0; i < lotp.getNbPrivileges(); i++)
         poserPrivilege(lotp.getPrivilege(i));
@@ -191,17 +191,6 @@ Plateau::Plateau(Sac& sac, const LotPrivileges& lotp) {
     for (size_t i = 0; i < jetons.size(); i++)
         for (size_t j = 0; j < jetons.size(); j++)
             jetons[i][j] = nullptr;
-
-    //remplissage du plateau
-    remplirPlateau(sac);
-}
-
-Plateau::Plateau() {
-    //initialisation du plateau vide
-    for (size_t i = 0; i < jetons.size(); i++)
-        for (size_t j = 0; j < jetons.size(); j++)
-            jetons[i][j] = nullptr;
-    //pas de privilege à initialiser (par défaut par le vecteur)
 }
 
 const Jeton& Plateau::recupererJeton(const size_t i, const size_t j) {
@@ -302,14 +291,8 @@ bool Plateau::estVide() const {
 
 //Singleton
 //Avec sac et lot de privilèges (debut de partie)
-Plateau& Plateau::getPlateau(Sac& sac, const LotPrivileges& lotp) {
-    static Plateau instance(sac, lotp);
-    return instance;
-}
-
-//Sans sac et lot de privilèges (restitution de partie)
-Plateau& Plateau::getPlateau() {
-    static Plateau instance;
+Plateau& Plateau::getPlateau(const LotPrivileges& lotp) {
+    static Plateau instance(lotp);
     return instance;
 }
 
