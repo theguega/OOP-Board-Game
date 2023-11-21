@@ -4,9 +4,11 @@
 #include "partie.hpp"
 
 class Controller {
+#include "partie.hpp"
+
+class Controller {
 private:
 	Partie* partie;
-	Joueur* joueurCourant;
 public:
 	Controller();
 	~Controller() { delete partie; }
@@ -31,5 +33,6 @@ public:
 	// verifications
 
 };
+
 
 #endif
