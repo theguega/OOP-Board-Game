@@ -73,21 +73,23 @@ void Controller::lancerPartie() {
     setJoueurCourant(rd_number);
     switch (rd_number) {
     case 0:
-        cout << "#### c'est " << partie->getJoueur1()->getPseudo() << " qui commence, son adversaire recoit 1 privilege ####";
+        cout << "#### c'est " << partie->getJoueur1()->getPseudo() << " qui commence, son adversaire recoit 1 privilege ####\n";
+        partie->getJoueur2()->addPrivilege(partie->getEspaceJeux().getPlateau().recupererPrivilege());
         break;
     case 1:
-        cout << "#### c'est " << partie->getJoueur2()->getPseudo() << " qui commence, son adversaire recoit 1 privilege ####";
+        cout << "#### c'est " << partie->getJoueur2()->getPseudo() << " qui commence, son adversaire recoit 1 privilege ####\n";
+        partie->getJoueur1()->addPrivilege(partie->getEspaceJeux().getPlateau().recupererPrivilege());
         break;
     default:
         break;
     }
-    partie->incrementeTour();
+    partie->setTour(0);
     // TODO
 }
 
 void Controller::tour_suivant() {
     // verifs
-    if (partie->getTour() % 2 == 0)
+    if (joueurCourant == partie->getJoueur2())
         joueurCourant = partie->getJoueur1();
     else
         joueurCourant = partie->getJoueur2();
