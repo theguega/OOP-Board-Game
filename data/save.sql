@@ -13,7 +13,7 @@ CREATE TABLE pyramide (
 CREATE TABLE joueur (
     id INTEGER,
     pseudo TEXT,
-    type_j TEXT,
+    type_joueur TEXT,
     privileges INTEGER
 );
 

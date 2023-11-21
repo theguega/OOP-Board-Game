@@ -3,7 +3,7 @@
 Controller::Controller() {
 	Director* director = new Director();
 	string statut_partie;
-	std::cout << "ancienne ou nouvelle partie ?";
+	std::cout << "Ancienne ou nouvelle partie ? (New/old)" << std::endl;
 	std::cin >> statut_partie;
 	if (statut_partie == "New") {
 		NewPartieBuilder* builder = new NewPartieBuilder();
@@ -49,7 +49,11 @@ Controller::Controller() {
             break;
         }
         delete director;
-	}
+	} else if (statut_partie == "Old") {
+
+    } else {
+        throw PartieException("Veuillez entrer un statut valide (New ou Old)");
+    }
 }
 
 
@@ -68,8 +72,10 @@ void Controller::setJoueurCourant(int n) {
 
 void Controller::lancerPartie() {
     // choix aleatoire entre 0 et 1 pour le choix du joueur qui commence
-    std::srand(std::time(0));
-    int rd_number = std::rand() % 2;
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> distrib(0, 1);
+    int rd_number = distrib(gen);
     setJoueurCourant(rd_number);
     switch (rd_number) {
     case 0:
@@ -101,7 +107,7 @@ void Controller::tour_suivant() {
 
 void Controller::utiliserPrivilege(Plateau& plateau) {
     //if (nbPrivileges == 0) {
-    //    throw JoueurException("Le joueur n'a pas de privilège");
+    //    throw JoueurException("Le joueur n'a pas de privilï¿½ge");
     //}
     ///*if (plateau.getNbJtons()==0){
     //    throw JoueurException("Le plateau n'a pas de jetons");
@@ -195,7 +201,7 @@ void Controller::recupererJetons(Plateau& plateau) {
 }
 
 void Controller::orReserverCarte(Pyramide& pyramide, Plateau& plateau) {
-    //std::cout << "Volez-vous réserver une carte de la pyramide ou de la pioche de niveau i ? (0, 1, 2, 3)" << std::endl;
+    //std::cout << "Volez-vous rï¿½server une carte de la pyramide ou de la pioche de niveau i ? (0, 1, 2, 3)" << std::endl;
     //unsigned int choix;
     //std::cin >> choix;
 
@@ -203,15 +209,15 @@ void Controller::orReserverCarte(Pyramide& pyramide, Plateau& plateau) {
     //    // Reservation de la carte
     //    std::cout << "Voici les cartes de la pyramide : " << std::endl;
     //    pyramide.afficherPyramide();
-    //    std::cout << "Tapez le niveau de la carte que vous voulez réserver : " << std::endl;
+    //    std::cout << "Tapez le niveau de la carte que vous voulez rï¿½server : " << std::endl;
     //    unsigned int niveau;
     //    std::cin >> niveau;
-    //    std::cout << "Tapez le numero de la carte que vous voulez réserver : " << std::endl;
+    //    std::cout << "Tapez le numero de la carte que vous voulez rï¿½server : " << std::endl;
     //    int numCarte;
     //    std::cin >> numCarte;
-    //    // Vérifications
+    //    // Vï¿½rifications
     //    if (numCarte > pyramide.getNbCartesNiv(niveau)) {
-    //        throw JoueurException("Le numéro de la carte est incorrect");
+    //        throw JoueurException("Le numï¿½ro de la carte est incorrect");
     //    }
     //    const Carte& carte = pyramide.reserverCarte(niveau, numCarte);
     //    addCarteReservee(carte);
@@ -244,26 +250,26 @@ void Controller::orReserverCarte(Pyramide& pyramide, Plateau& plateau) {
 }
 
 void Controller::acheterCarteJoaillerie(Pyramide& pyramide) {
-    //// Voir comment gérer les bonus
-    //std::cout << "Tapez 1 pour acheter une carte Réservée.\nTapez 2 pour acheter une carte du plateau." << std::endl;
+    //// Voir comment gï¿½rer les bonus
+    //std::cout << "Tapez 1 pour acheter une carte Rï¿½servï¿½e.\nTapez 2 pour acheter une carte du plateau." << std::endl;
     //unsigned int choix;
     //std::cin >> choix;
     //// Achat carte reservee
     //if (choix == 1) {
-    //    std::cout << "Voici les cartes réservées : " << std::endl;
+    //    std::cout << "Voici les cartes rï¿½servï¿½es : " << std::endl;
     //    unsigned int i = 0;
-    //    // Affichage de la réserve
+    //    // Affichage de la rï¿½serve
     //    for (auto& cartesReservee : cartesReservees) {
-    //        std::cout << "Numéro " << i << " : ";
+    //        std::cout << "Numï¿½ro " << i << " : ";
     //        std::cout << cartesReservee;
     //        i++;
     //    }
-    //    std::cout << "Tapez le numéro de la carte que vous voulez acheter : " << std::endl;
+    //    std::cout << "Tapez le numï¿½ro de la carte que vous voulez acheter : " << std::endl;
     //    unsigned int numCarte;
     //    std::cin >> numCarte;
-    //    // Vérifications -> voir plus au niveau des jetons dans la main
+    //    // Vï¿½rifications -> voir plus au niveau des jetons dans la main
     //    if (numCarte > cartesReservees.size()) {
-    //        throw JoueurException("Le numéro de la carte est invalide.");
+    //        throw JoueurException("Le numï¿½ro de la carte est invalide.");
     //    }
     //    const Carte& carte = *cartesReservees[numCarte];
     //    if (carte.getNbPtsPrivilege() > ptsPrestige) {
@@ -285,9 +291,9 @@ void Controller::acheterCarteJoaillerie(Pyramide& pyramide) {
     //    int numCarte;
     //    std::cin >> numCarte;
 
-    //    // Vérifications
+    //    // Vï¿½rifications
     //    if (numCarte > pyramide.getNbCartesNiv(niveau)) {
-    //        throw JoueurException("Le numéro de la carte est incorrect");
+    //        throw JoueurException("Le numï¿½ro de la carte est incorrect");
     //    }
 
     //    const Carte& carte = pyramide.acheterCarte(niveau, numCarte);
