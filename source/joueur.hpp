@@ -34,13 +34,9 @@ private:
     unsigned int nbCouronnes;
 
     std::unordered_map<Couleur, std::vector<const Carte*>> cartes;
-    size_t nbCartes; //inutile selon moi -> on peut utiliser des .size()
-    std::vector<const Carte*> cartesReservees;
-    size_t nbCartesReservees;
+    std::unordered_map<Couleur, std::vector<const Carte*>> cartesReservees;
     std::unordered_map<Couleur, std::vector<const Jeton*>> jetons;
-    size_t nbJetons;
     std::vector<const Privilege*> privileges;
-    size_t nbPrivileges;
     Strategy* strategy;
 public:
     // Constructeur done
@@ -57,12 +53,12 @@ public:
     unsigned int getptsPrestige() const { return ptsPrestige; };
     unsigned int getnbCouronnes() const { return nbCouronnes; };
     //Carte **getCartes();
-    size_t getNbCartes() const { return nbCartes; }
+    size_t getNbCartes() const { return cartes.size(); }
     //Jetons **getJetons();
-    size_t getNbCartesReservees() const { return nbCartesReservees; }
-    size_t getNbJetons() const { return nbJetons; }
+    size_t getNbCartesReservees() const { return cartesReservees.size(); }
+    size_t getNbJetons() const { return jetons.size(); }
     //Privilege **getPrivileges();
-    size_t getNbPrivileges() const { return nbPrivileges; }
+    size_t getNbPrivileges() const { return privileges.size(); }
     //rajout par theo, si tu veux refaire mieux -> pour la sauvegarde
     //getCarte& pour utiliser dnas un for et recup toutes les cartes et les sauvegarder
     //getJeton& pour utiliser dnas un for et recup toutes les jetons et les sauvegarder
