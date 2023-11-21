@@ -298,6 +298,7 @@ void Joueur::acheterCarteJoaillerie (Pyramide& pyramide){
         }
         std::cout << "Tapez le numéro de la carte que vous voulez acheter : " << std::endl;
         unsigned int numCarte;
+        ///// VOir couleur à modifier
         Couleur couleur = Couleur::BLEU;
         std::cin >> numCarte;
         // Vérifications -> voir plus au niveau des jetons dans la main
