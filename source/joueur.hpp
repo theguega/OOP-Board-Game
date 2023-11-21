@@ -6,7 +6,7 @@
 #include "jetons.hpp"
 #include "carte.hpp"
 #include "strategy.hpp"
-
+// rajouter itération cartes + jetons + privilèges
 // Rajouter classe exception
 class JoueurException
 {

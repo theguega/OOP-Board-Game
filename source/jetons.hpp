@@ -169,7 +169,7 @@ class Plateau {
         Plateau& operator=(const Plateau&) = delete;
     public :
         bool estVide() const;
-        size_t getTaille() const { return jetons.size(); }
+        size_t getTaille() const { return jetons.size()*jetons.size(); }
 
         const Jeton& recupererJeton(const size_t i, const size_t j);
         const Privilege& recupererPrivilege();

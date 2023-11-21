@@ -65,7 +65,7 @@ void Pyramide::remplirPyramide() {
     }
 }
 
-void Pyramide::remplircasePyramide(int i , int j) {
+void Pyramide::remplircasePyramide(unsigned int i , unsigned int j) {
     const Carte* ma_carte = nullptr;
     if (array_cartes[i][j] == nullptr) {
         switch (i) {
@@ -125,7 +125,7 @@ const Carte& Pyramide::reserverCarte(int niveau, int numero) {
 }
 
 
-const Carte& Pyramide::acheterCarte(int niveau, int numero) {
+const Carte& Pyramide::acheterCarte(unsigned int niveau, unsigned int numero) {
     niveau--;  numero++; // pour que l'utilisateur rentre les coordonnées de 1 à 5
     if (array_cartes[niveau][numero] != nullptr) {
         const Carte& ma_carte = *array_cartes[niveau][numero];
@@ -139,7 +139,7 @@ const Carte& Pyramide::acheterCarte(int niveau, int numero) {
     
 }
 
-const Carte& Pyramide::ReserverCartePioche(int niveau) {
+const Carte& Pyramide::ReserverCartePioche(unsigned int niveau) {
 
     switch (niveau) {
                     case 0:
@@ -197,7 +197,7 @@ void Pyramide::afficherPyramide() const {
 
 }
 
-int Pyramide::getNbCartesNiv(int niveau) const {
+int Pyramide::getNbCartesNiv(unsigned int niveau) const {
     niveau--;// pour que l'utilisateur rentre les coordonnées de 1 à 3
     int nbCartes = 0;
     for (int i = 0; i < array_cartes[niveau].size(); i++) {
