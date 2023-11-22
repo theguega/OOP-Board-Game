@@ -32,7 +32,7 @@ class Partie {
     friend class NewPartieBuilder;
     friend class LastPartieBuilder;
 private:
-    EspaceJeux* espaceJeux = new EspaceJeux();
+    EspaceJeux* espaceJeux;
     Joueur* joueurs[2]; 
     int tour;
     // #### implementation Singleton ####

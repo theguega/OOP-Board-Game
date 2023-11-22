@@ -61,14 +61,16 @@ class EspaceJeux {
         
         // --------- init des cartes ---------
         
-        JeuCarte *jeuxCartes = new JeuCarte();
-        Pioche *piocheNv1 = new Pioche(*jeuxCartes, TypeCarte::Niv1);
-        Pioche *piocheNv2 = new Pioche(*jeuxCartes, TypeCarte::Niv2);
-        Pioche *piocheNv3 = new Pioche(*jeuxCartes, TypeCarte::Niv3);
-        Pioche *piocheNoble = new Pioche(*jeuxCartes, TypeCarte::Noble);
-        Pyramide *pyramide = new Pyramide(piocheNv1, piocheNv2, piocheNv3, piocheNoble);
+        JeuCarte *jeuxCartes;
+        Pioche *piocheNv1;
+        Pioche *piocheNv2 ;
+        Pioche *piocheNv3 ;
+        Pioche *piocheNoble ;
+        Pyramide *pyramide ;
+
     public:
-        EspaceJeux() : lotJetons(&LotDeJetons::getLotDeJetons()), lotPrivileges(&LotPrivileges::getLotPrivileges()), sac(&Sac::getSac(*lotJetons)), plateau(&Plateau::getPlateau(*lotPrivileges)) {};
+        EspaceJeux() : lotJetons(&LotDeJetons::getLotDeJetons()), lotPrivileges(&LotPrivileges::getLotPrivileges()), sac(&Sac::getSac(*lotJetons)), plateau(&Plateau::getPlateau(*lotPrivileges)),  jeuxCartes(new JeuCarte()), piocheNv1(new Pioche(*jeuxCartes, TypeCarte::Niv1)), piocheNv2(new Pioche(*jeuxCartes, TypeCarte::Niv2)), piocheNv3(new Pioche(*jeuxCartes, TypeCarte::Niv3)), piocheNoble(new Pioche(*jeuxCartes, TypeCarte::Noble)), pyramide(new Pyramide(piocheNv1, piocheNv2, piocheNv3, piocheNoble)) {}
+
         ~EspaceJeux() { delete jeuxCartes; delete piocheNv1; delete piocheNv2; delete piocheNv3; delete piocheNoble; delete pyramide; };
 
         Plateau& getPlateau() const { return *plateau; }

@@ -21,7 +21,7 @@
 //}
 
 
-Partie::Partie(){
+Partie::Partie(): espaceJeux(new EspaceJeux()){
     joueurs[0] = nullptr;
     joueurs[1] = nullptr;
 }
