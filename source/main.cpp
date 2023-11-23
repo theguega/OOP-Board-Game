@@ -1,7 +1,6 @@
 #include "controller.hpp"
 #include <filesystem>
 
-
 //Mettez ici le chemin absolue vers le projet
 //Theo
 //std::filesystem::path projectPath = string("/Users/theoguegan/Documents/UTC/GI01/LO21/Projet_LO21");

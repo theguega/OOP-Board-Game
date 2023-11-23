@@ -104,6 +104,7 @@ void Controller::setJoueurCourant(int n) {
     }
 }
 
+
 void Controller::lancerPartie() {
     // choix aleatoire entre 0 et 1 pour le choix du joueur qui commence
     std::random_device rd;
