@@ -14,6 +14,7 @@ public:
 	// getters
 	Partie& getPartie() { return *partie; };
 	Joueur& getJoueurCourant() { return *joueurCourant; }
+	Joueur& getJoueurAdverse();
 	// setters
 	void setJoueurCourant(int n);
 	// actions partie
