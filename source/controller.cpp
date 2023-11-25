@@ -14,7 +14,7 @@ Controller::Controller() {
         switch (nbJoueur) {
         case 0:
         {   cout << "IA vs IA" << std::endl;
-            director->BuildNew2IAPartie();
+            director->BuildNewPartie("Alain Telligence", type::IA, "Al Gorythme", type::IA);
             Partie* p = builder->GetProduct();
             partie = p;
             break;
@@ -25,7 +25,7 @@ Controller::Controller() {
             cout<<"Veuillez saisir le pseudo du joueur"<<std::endl;
             string pseudo;
             std::cin>>pseudo;
-            director->BuildNew1playerPartie(pseudo);
+            director->BuildNewPartie(pseudo, type::HUMAIN, "Al Gorythme", type::IA);
             Partie* p = builder->GetProduct();
             partie = p;
             break;
@@ -39,7 +39,7 @@ Controller::Controller() {
             std::cout<<"Veuillez saisir le pseudo du joueur 2"<<std::endl;
             string pseudo2;
             cin>>pseudo2;
-            director->BuildNew2playerPartie(pseudo1, pseudo2);
+            director->BuildNewPartie(pseudo1, type::HUMAIN, pseudo2, type::HUMAIN);
             Partie* p = builder->GetProduct();
             partie = p;
             break;

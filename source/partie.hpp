@@ -40,13 +40,9 @@ private:
     //Partie( vector<Joueur*> joueurs );  // utile ?? constructeur a partir d'un vecteur de joueurs
     //Partie(const Partie&) = delete;
     //Partie& operator=(const Partie&) = delete;
-public: 
-    ~Partie() {delete espaceJeux; delete joueurs[0]; delete joueurs[1];}   
+public:
     Partie();
-
-    Partie(std::string nomJoueur1, std::string prenomJoueur1);
-
-    Partie(std::string nomJoueur1, std::string prenomJoueur1, std::string nomJoueur2, std::string prenomJoueur2);
+    ~Partie() {delete espaceJeux; delete joueurs[0]; delete joueurs[1];}   
 
     EspaceJeux& getEspaceJeux() const { return *espaceJeux; }
 
@@ -76,14 +72,12 @@ public:
 class PartieBuilder {
 public:
     virtual ~PartieBuilder() {};
-    virtual void set2IA() const {};
-    virtual void set1player(string pseudo) const {};
-    virtual void set2player(string pseudo1, string pseudo2) const {};
-    virtual void setJoueurs() const {};
-    virtual void setCartesJoueurs() const {};
-    virtual void setJetonsJoueurs() const {};
-    virtual void updateEspaceJeu() const {};
-    virtual void setInfosPartie() const {};
+    virtual void setJoueurs(string pseudo1, type t1, string pseudo2, type t2) const = 0;
+    virtual void setJoueurs() const = 0;
+    virtual void setCartesJoueurs() const = 0;
+    virtual void setJetonsJoueurs() const = 0;
+    virtual void updateEspaceJeu() const = 0;
+    virtual void setInfosPartie() const = 0;
     friend class Partie;
 };
 
@@ -96,20 +90,16 @@ public:
     ~NewPartieBuilder() { delete partie; }
     void Reset() { this->partie = new Partie(); }
 
-    void set2IA() const override {
-        partie->joueurs[0] = new Joueur("Alain telligence", type::IA);
-        partie->joueurs[1] = new Joueur("AL Gorythme", type::IA);
+    void setJoueurs(string pseudo1, type t1, string pseudo2, type t2) const override {
+        partie->joueurs[0] = new Joueur(pseudo1, t1);
+        partie->joueurs[1] = new Joueur(pseudo2, t2);
     };
 
-    void set1player(string pseudo) const override {
-        partie->joueurs[0] = new Joueur(pseudo, type::HUMAIN);
-        partie->joueurs[1] = new Joueur("AL Gorythme", type::IA);
-    };
+    void setJoueurs() const override {};
+    void setCartesJoueurs() const override {};
+    void setJetonsJoueurs() const override {};
+    void updateEspaceJeu() const override {};
 
-    void set2player(string pseudo1, string pseudo2) const override {
-        partie->joueurs[0] = new Joueur(pseudo1, type::HUMAIN);
-        partie->joueurs[1] = new Joueur(pseudo2, type::HUMAIN);
-    };
     void setInfosPartie() const override {
         partie->tour = 0;
     };
@@ -129,6 +119,7 @@ public:
     ~LastPartieBuilder() { delete partie; }
     void Reset() { this->partie = new Partie(); }
 
+    virtual void setJoueurs(string pseudo1, type t1, string pseudo2, type t2) const {};
     virtual void setJoueurs() const override;
     virtual void setCartesJoueurs() const override;
     virtual void setJetonsJoueurs() const override;
@@ -148,18 +139,8 @@ private:
 public:
     void set_builder(PartieBuilder* builder) { this->builder = builder; }
 
-    void BuildNew2IAPartie() {
-        builder->set2IA();
-        builder->setInfosPartie();
-    };
-
-    void BuildNew1playerPartie(string pseudo) {
-        builder->set1player(pseudo);
-        builder->setInfosPartie();
-    };
-
-    void BuildNew2playerPartie(string pseudo1, string pseudo2) {
-        builder->set2player(pseudo1, pseudo2);
+    void BuildNewPartie(string pseudo1, type t1, string pseudo2, type t2) {
+        builder->setJoueurs(pseudo1, t1, pseudo2, t2);
         builder->setInfosPartie();
     };
 
