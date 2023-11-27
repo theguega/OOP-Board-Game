@@ -32,54 +32,129 @@ int main(int argc, const char * argv[]) {
                 switch (etat_tour) {
                     case 0:
                         unsigned int etat_action = 0; 
-                        while (etat_action != 4) {
-            
+                        while (etat_action != 4) {         
                             switch (etat_action)
                                 {
                                 case 0:
-                                    std::cout << "Actions optionnelles : " << endl;
+                                    std::cout << "Actions optionnelles: " << endl;
                                     std::cout << "1. Utiliser un privilège" << endl;
                                     std:: cout << "2. Remplir le plateau" << endl;
-                                    std::cout << "3. Ne rien faire" << endl;
+                                    std::cout << "3. Ne plus faire d'actions optionnelles" << endl;
                                     std::cout << "Votre choix (1/2/3): ";
                                     cin >> etat_action;
                                     std::cout << endl;
                                     break;
 
                                 case 1:
-                                try
-                                {
-                                    control.utiliserPrivilege(control.getPartie().getEspaceJeux().getPlateau());
+                                    try
+                                    {
+                                        control.utiliserPrivilege(control.getPartie().getEspaceJeux().getPlateau());
+                                        etat_action = 0;
                                     }
                                     catch(const std::exception& e)
+                                        {
+                                            std::cout << e.what() << '\n';
+                                            etat_action = 0;
+                                    }   
+                                    break;
+                                case 2:
+                                    try
                                     {
+                                        control.remplirPlateau(control.getPartie().getEspaceJeux().getPlateau(), control.getPartie().getEspaceJeux().getSac(), control.getJoueurAdverse());
                                         etat_action = 0;
-                                }
-                                
-                                    
+                                    }
+                                    catch(const std::exception& e)
+                                        {
+                                            std::cout << e.what() << '\n';
+                                            etat_action = 0;
+                                    }   
                                     break;
 
-                                
-                                default:
+                                case 3:
+                                    
+                                    etat_tour = 1;
+                                    etat_action = 4;
                                     break;
-                                }
+
+                                default:
+                                        break;
+                                    }
 
                         }
                         break;
+
+
+                        case 1:
+                        unsigned int etat_action = 0; 
+                        while (etat_action != 4) {         
+                            switch (etat_action)
+                                {
+                                case 0:
+                                    std::cout << "Actions obligatoires: " << endl;
+                                    std::cout << "1. Récupérer des jetons" << endl;
+                                    std:: cout << "2. Acheter une carte joaillerie" << endl;
+                                    std::cout << "3. Réserver une carte" << endl;
+                                    cin >> etat_action;
+                                    std::cout << endl;
+                                    break;
+                                case 1: 
+                                    try
+                                    {
+                                        control.recupererJetons(control.getPartie().getEspaceJeux().getPlateau());
+                                        etat_action = 4;
+                                    }
+                                    catch(const std::exception& e)
+                                        {
+                                            std::cout << e.what() << '\n';
+                                            etat_action = 0;
+                                    }   
+                                    break;
+                                case 2:
+                                    try
+                                    {
+                                        control.acheterCarteJoaillerie(control.getPartie().getEspaceJeux().getPyramide());
+                                        etat_action = 4;
+                                    }
+                                    catch(const std::exception& e)
+                                        {
+                                            std::cout << e.what() << '\n';
+                                            etat_action = 0;
+                                    }   
+                                    break;
+                                case 3:
+                                    try
+                                    {
+                                        control.orReserverCarte(control.getPartie().getEspaceJeux().getPyramide(), control.getPartie().getEspaceJeux().getPlateau());
+                                        etat_action = 4;
+                                    }
+                                    catch(const std::exception& e)
+                                        {
+                                            std::cout << e.what() << '\n';
+                                            etat_action = 0;
+                                    }   
+                                    break;
+                                default:
+                                        break;
+                                    }
+                            etat_tour = 2;
+
+                        }
+                        break;
+                    case 2:
+                    //verif de fin de tout
+                    break;
+
                                 
                     default:
                         break;
                 }
-
-
-
-                }
+            }
                 
         
-            }
-
-            control.setJoueurCourant(i); // dommage que changerJoueurCourant() ai disparu, je trouve cette solution moins élégante
         }
+
+        control.setJoueurCourant(i); // dommage que changerJoueurCourant() ai disparu, je trouve cette solution moins élégante
+    }
 
 
     /*
