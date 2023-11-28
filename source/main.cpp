@@ -1,5 +1,13 @@
 #include "controller.hpp"
 #include <filesystem>
+#include <QApplication>
+#include <QWidget>
+#include <QDebug>
+#include "vueCarte.h"
+#include "pageCreation.h"
+#include "vueJeton.h"
+#include "vuePlateau.h"
+#include "toutesPages.h"
 
 //Mettez ici le chemin absolue vers le projet
 //Theo
@@ -178,5 +186,34 @@ int main(int argc, const char * argv[]) {
     //control.enregisterScore();
     //control.sauvegardePartie();
     
+
+    QApplication app(argc, argv);
+
+    /*vueCarte carte = vueCarte(nullptr);
+    carte.show();*/
+
+    /*pageCreation page = pageCreation(nullptr);
+    page.show();*/
+
+    /*QWidget* widget = new QWidget;
+
+    vueJeton* jeton = new vueJeton(nullptr);
+
+    QHBoxLayout* layout = new QHBoxLayout;
+    layout->addWidget(jeton);
+
+    widget -> setLayout(layout);
+
+    widget->show();*/
+
+    /*vuePlateau* plateau = new vuePlateau(nullptr, 500, 500);
+    plateau -> show();*/
+
+    toutesPages* page = new toutesPages(nullptr, &app);
+    page->show();
+
+    return app.exec();
+
+
     return 0;
 }
