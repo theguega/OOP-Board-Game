@@ -187,7 +187,7 @@ int main(int argc, const char * argv[]) {
     //control.sauvegardePartie();
     
 
-    QApplication app(argc, argv);
+    //QApplication app(argc, argv);
 
     /*vueCarte carte = vueCarte(nullptr);
     carte.show();*/
@@ -209,10 +209,10 @@ int main(int argc, const char * argv[]) {
     /*vuePlateau* plateau = new vuePlateau(nullptr, 500, 500);
     plateau -> show();*/
 
-    toutesPages* page = new toutesPages(nullptr, &app);
-    page->show();
+    //toutesPages* page = new toutesPages(nullptr, &app);
+    //page->show();
 
-    return app.exec();
+    //return app.exec();
 
 
     return 0;

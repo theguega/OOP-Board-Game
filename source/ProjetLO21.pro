@@ -17,13 +17,13 @@ SOURCES += \
     interface/code/vueJeton.cpp \
     interface/code/vuePlateau.cpp \
     interface/code/vuePyramide.cpp \
-    backend/carte.cpp \
-    backend/controller.cpp \
-    backend/espacejeux.cpp \
-    backend/jetons.cpp \
-    backend/joueur.cpp \
-    backend/partie.cpp \
-    backend/strategy.cpp 
+    back-end/carte.cpp \
+    back-end/controller.cpp \
+    back-end/espacejeux.cpp \
+    back-end/jetons.cpp \
+    back-end/joueur.cpp \
+    back-end/partie.cpp \
+    back-end/strategy.cpp 
 
 HEADERS += \
     interface/code/pageCreation.h \
@@ -38,13 +38,13 @@ HEADERS += \
     interface/code/vueJeton.h \
     interface/code/vuePlateau.h \
     interface/code/vuePyramide.h \
-    backend/carte.hpp \
-    backend/controller.hpp \
-    backend/espacejeux.hpp \
-    backend/jetons.hpp \
-    backend/joueur.hpp \
-    backend/partie.hpp \
-    backend/strategy.hpp 
+    back-end/carte.hpp \
+    back-end/controller.hpp \
+    back-end/espacejeux.hpp \
+    back-end/jetons.hpp \
+    back-end/joueur.hpp \
+    back-end/partie.hpp \
+    back-end/strategy.hpp 
 
 DISTFILES += \
     data/data_carte.sqlite \
