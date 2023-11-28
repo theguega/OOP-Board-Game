@@ -1,13 +1,13 @@
-#include "controller.hpp"
+#include "back-end/controller.hpp"
 #include <filesystem>
 #include <QApplication>
 #include <QWidget>
 #include <QDebug>
-#include "vueCarte.h"
-#include "pageCreation.h"
-#include "vueJeton.h"
-#include "vuePlateau.h"
-#include "toutesPages.h"
+#include "interface/code/vueCarte.h"
+#include "interface/code/pageCreation.h"
+#include "interface/code/vueJeton.h"
+#include "interface/code/vuePlateau.h"
+#include "interface/code/toutesPages.h"
 
 //Mettez ici le chemin absolue vers le projet
 //Theo

@@ -10,8 +10,6 @@ SOURCES += \
     interface/code/pagePrincipale.cpp \
     interface/code/pageSauvegarde.cpp \
     interface/code/popUp.cpp \
-    interface/code/source.cpp \
-    interface/code/source2.cpp \
     interface/code/toutesPages.cpp \
     interface/code/vueCarte.cpp \
     interface/code/vueJeton.cpp \

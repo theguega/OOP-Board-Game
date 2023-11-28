@@ -7,10 +7,10 @@
 #include <QHBoxLayout>
 #include <QScreen>
 #include <QSize>
-#include <vuePlateau.h>
-#include "vuePlateau.h"
-#include "pageJoueur.h"
-#include "popUp.h"
+#include <interface/code/vuePlateau.h>
+#include "interface/code/vuePlateau.h"
+#include "interface/code/pageJoueur.h"
+#include "interface/code/popUp.h"
 
 class pageJeu : public QWidget {
     Q_OBJECT

@@ -1,6 +1,6 @@
 #include <QWidget>
 #include <QPushButton>
-#include <vueJeton.h>
+#include <interface/code/vueJeton.h>
 
 vueJeton::vueJeton(QWidget* parent, int rad) : QPushButton(parent){
 

@@ -8,8 +8,8 @@
 #include <QStringList>
 #include <QPushButton>
 #include <QString>
-#include <popUp.h>
-#include <pageJeu.h>
+#include <interface/code/popUp.h>
+#include <interface/code/pageJeu.h>
 
 class pageCreation : public QWidget{
     Q_OBJECT
