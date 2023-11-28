@@ -3,6 +3,7 @@
 *.idea
 *.vscode
 *.vs
+*.pro.user
 source/sqlite/.DS_Store
 source/.DS_Store
 uml/.DS_Store
