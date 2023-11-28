@@ -8,6 +8,7 @@
 #include "interface/code/vueJeton.h"
 #include "interface/code/vuePlateau.h"
 #include "interface/code/toutesPages.h"
+#include <iostream>
 
 //Mettez ici le chemin absolue vers le projet
 //Theo
@@ -21,10 +22,11 @@ std::filesystem::path projectPath = string("\\Users\\Beziat\\source\\repos\\Proj
 //Maxime
 
 
-int main(int argc, const char * argv[]) {
+int main(int argc, char * argv[]) {
+    QApplication a(argc, argv);
     int i = 0;
     Controller control;
-    //control.getJoueurCourant().afficherJoueur();
+    control.getJoueurCourant().afficherJoueur();
     control.lancerPartie();
 
     while (control.getPartie().getJoueur1()->estGagnant() == false && control.getPartie().getJoueur2()->estGagnant() == false) {
@@ -34,13 +36,13 @@ int main(int argc, const char * argv[]) {
         for (unsigned int i = 0; i < 2; i++) {
             control.getJoueurCourant().afficherJoueur();
             
-            unsigned int etat_tour = 0; 
+            unsigned int etat_tour = 0;
             while (etat_tour != 4) {
                 // actions optionelles
                 switch (etat_tour) {
                     case 0:
-                        unsigned int etat_action = 0; 
-                        while (etat_action != 4) {         
+                        unsigned int etat_action = 0;
+                        while (etat_action != 4) {
                             switch (etat_action)
                                 {
                                 case 0:
@@ -63,7 +65,7 @@ int main(int argc, const char * argv[]) {
                                         {
                                             std::cout << e.what() << '\n';
                                             etat_action = 0;
-                                    }   
+                                    }
                                     break;
                                 case 2:
                                     try
@@ -75,7 +77,7 @@ int main(int argc, const char * argv[]) {
                                         {
                                             std::cout << e.what() << '\n';
                                             etat_action = 0;
-                                    }   
+                                    }
                                     break;
 
                                 case 3:
@@ -93,8 +95,8 @@ int main(int argc, const char * argv[]) {
 
 
                         case 1:
-                        unsigned int etat_action = 0; 
-                        while (etat_action != 4) {         
+                        unsigned int etat_action = 0;
+                        while (etat_action != 4) {
                             switch (etat_action)
                                 {
                                 case 0:
@@ -105,7 +107,7 @@ int main(int argc, const char * argv[]) {
                                     cin >> etat_action;
                                     std::cout << endl;
                                     break;
-                                case 1: 
+                                case 1:
                                     try
                                     {
                                         control.recupererJetons(control.getPartie().getEspaceJeux().getPlateau());
@@ -115,7 +117,7 @@ int main(int argc, const char * argv[]) {
                                         {
                                             std::cout << e.what() << '\n';
                                             etat_action = 0;
-                                    }   
+                                    }
                                     break;
                                 case 2:
                                     try
@@ -127,7 +129,7 @@ int main(int argc, const char * argv[]) {
                                         {
                                             std::cout << e.what() << '\n';
                                             etat_action = 0;
-                                    }   
+                                    }
                                     break;
                                 case 3:
                                     try
@@ -139,7 +141,7 @@ int main(int argc, const char * argv[]) {
                                         {
                                             std::cout << e.what() << '\n';
                                             etat_action = 0;
-                                    }   
+                                    }
                                     break;
                                 default:
                                         break;
@@ -178,14 +180,18 @@ int main(int argc, const char * argv[]) {
     else if (control.getPartie().getJoueur2()->estGagnant())
         cout << control.getPartie().getJoueur2()->getPseudo() << " est gagnant;"<<std::endl;
 
-    //control.getPartie().getJoueur1()->afficherJoueur();
-    //control.getPartie().getJoueur2()->afficherJoueur();
-    cout << control.getPartie().getEspaceJeux().getPlateau();
+//    //control.getPartie().getJoueur1()->afficherJoueur();
+//    //control.getPartie().getJoueur2()->afficherJoueur();
+//    cout << control.getPartie().getEspaceJeux().getPlateau();
     //control.getPartie().getEspaceJeux().getPyramide().afficherPyramide();
 
     //control.enregisterScore();
     //control.sauvegardePartie();
-    
+
+
+    //#########################################
+    // ##### Partie avec l'application Qt #####
+    //#########################################
 
     //QApplication app(argc, argv);
 
@@ -215,5 +221,5 @@ int main(int argc, const char * argv[]) {
     //return app.exec();
 
 
-    return 0;
+    return a.exec();
 }

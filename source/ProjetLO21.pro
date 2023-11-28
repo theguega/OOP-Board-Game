@@ -1,5 +1,6 @@
 QT += widgets
 QT += sql
+CONFIG += console
 
 SOURCES += \
     main.cpp \
@@ -21,7 +22,8 @@ SOURCES += \
     back-end/jetons.cpp \
     back-end/joueur.cpp \
     back-end/partie.cpp \
-    back-end/strategy.cpp 
+    back-end/strategy.cpp \
+    sqlite/sqlite3.c
 
 HEADERS += \
     interface/code/pageCreation.h \
@@ -42,7 +44,8 @@ HEADERS += \
     back-end/jetons.hpp \
     back-end/joueur.hpp \
     back-end/partie.hpp \
-    back-end/strategy.hpp 
+    back-end/strategy.hpp \
+    sqlite/sqlite3.h
 
 DISTFILES += \
     data/data_carte.sqlite \
