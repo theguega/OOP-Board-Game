@@ -1,7 +1,6 @@
 *.vscode
 *.DS_Store
 *.idea
-*.gitignore
 *.vscode
 *.vs
 source/sqlite/.DS_Store
