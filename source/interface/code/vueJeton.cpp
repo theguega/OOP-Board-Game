@@ -1,16 +1,15 @@
 #include <QWidget>
 #include <QPushButton>
-#include <jetons.hpp>
 #include <vueJeton.h>
 
-vueJeton::vueJeton(QWidget* parent, Jeton* jeton) : QPushButton(parent), jeton(jeton){
+vueJeton::vueJeton(QWidget* parent, int rad) : QPushButton(parent){
 
-    switch(jeton->getcouleur()){
+    /*switch(couleur){
         case bleuclair:
             setStyleSheet("QPushButton { border-radius: 50px; background-color: lightblue; }");
             break;
 
-        case yellow:
+        case jaune:
             setStyleSheet("QPushButton { border-radius: 50px; background-color: yellow; }");
             break;
 
@@ -33,13 +32,42 @@ vueJeton::vueJeton(QWidget* parent, Jeton* jeton) : QPushButton(parent), jeton(j
         case perle:
             setStyleSheet("QPushButton { border-radius: 50px; background-color: pink; }");
             break;
-    }
+    }*/
+
+    this->rad = rad;
+
+    //setText("Test"); //Def le texte (inute pour la suite)
+    setFixedSize(rad*2, rad*2); //Fixe la taille et qui permet d'avoir une taille de 2x le rad pour avoir pile la taille du bouton
+    setStyleSheet(QString("QPushButton { "
+                         "border-radius: %1px; " // Rayon du bord pour rendre le bouton circulaire
+                         "background-color: pink; " // Couleur de fond
+                         "color: white; " // Couleur du texte
+                          "}"
+                          ).arg(rad));
+    /*"QPushButton:pressed { " // Style lorsqu'il est enfoncé
+    "background-color: %3; " // Couleur sombre pour effet d'enfoncement
+    "}"  */
+    //Def le style du bouton (plus tard switch selon la couleur du jeton)
+
+    afficherCroix = false; //afficherCroix est un booléen pour savoir si on montre la croix de sélection (false d'origine)
 }
 
-void vueJeton::apparaitre(position pos){
-    move((pos.getx(), pos.gety()));
+void vueJeton::apparaitre(){ //Fait apparaitre le jeton (utile quand on voudra les remettre sur le plateau)
     show();
 }
-void vueJeton::disparaitre() const{
+
+void vueJeton::disparaitre(){ //Fait dispparaitre le jeton (utile quand on voudra les enelevr du plateau)
     hide();
+}
+
+bool vueJeton::getEstVisible(){ //Je sais plus à quoi ça sert (surement inutile)
+    return estVisible;
+}
+
+void vueJeton::changeAfficherCroix(){ //Change l'ffichage de la croix par son inverse
+    afficherCroix = !afficherCroix;
+}
+
+void vueJeton::enleverCroix(){ //Enleve la croix du jeton (utilse quand on voudra faire une deselection depuis le plateau)
+    afficherCroix = false;
 }

@@ -1,0 +1,86 @@
+@startuml
+
+class toutesPages <<La macro Q_OBJECT est utilisée>>{
+    +method toutesPages(pageMenuPrincipal* menuPrincipal, pageJeu* jeu, pageSauvegarde* scrollSauvegardes, QApplication* app)
+    +method ~toutesPages()
+}
+
+class pageJeu <<La macro Q_OBJECT est utilisée>>{
+    -attribute QPushButton *retourMenu
+    -attribute QVBoxLayout *coucheJ
+    +method pageJeu(QWidget *parent = nullptr)
+    +method void ajoutWidget(QWidget *objet)
+    +method QPushButton* getRetourMenu()
+    ~pageJeu();
+}
+
+class pageMenuPrincipal <<La macro Q_OBJECT est utilisée>>{
+    -attribute QPushButton *boutonDemarrer
+    -attribute QPushButton *boutonSauvegarde
+    -attribute QPushButton *boutonQuitter
+    -attribute QVBoxLayout *coucheMP
+
+    +method pageMenuPrincipal(QWidget *parent = nullptr)
+    +method QPushButton* getBoutonQuitter() const
+    +method QPushButton* getBoutonSauvegarde() const
+    +method QPushButton* getBoutonDemarrer() const
+    ~pageMenuPrincipal();
+}
+
+class pageSauvegarde <<La macro Q_OBJECT est utilisée>>{
+    -attribute int nSauvegardes
+    -attribute QWidget *boutons
+    -attribute QVBoxLayout *layoutSauvegardes
+    -attribute QPushButton *retourMenuSauv
+
+    +method pageSauvegarde(QWidget *parent = nullptr);
+    +method QPushButton* getRetourMenuSauv(){return retourMenuSauv;}
+    ~pageSauvegarde();
+}
+
+class position{
+    -attribute int x
+    -attribute int y
+
+    +method position(int x, int y) : x(x), y(y){}
+    +method getx() const {return x;}
+    +method gety() const {return y;}
+}
+
+class vueJeton <<La macro Q_OBJECT est utilisée>>{
+    -attribute Jeton* jeton;
+
+    +method vueJeton(QWidget* parent = nullptr, type couleur, Jeton* jeton);
+    +method void apparaitre(position pos) const;
+    +method void disparaitre() const;
+    +method Jeton* getJeton() const {return jeton;}
+}
+
+class vuePlateau{
+    -attribute Sac &sac;
+    -attribute Plateau &plateau;
+    -attribute std::array<const vueJeton, 25> listeJetons;
+
+    +method (Plateau &plateau);
+    +method vueJeton* recupereBouton(Jetons* jeton);
+    +method void remplirPlateau();
+
+}
+
+class vueCarte{
+}
+
+toutesPages --* "1" pageJeu
+toutesPages --* "1" pageMenuPrincipal
+toutesPages --* "1" pageSauvegarde
+vueJeton --* "1" position
+vuePlateau --* "n" vueJeton
+toutesPages <|--QWidget
+pageSauvegarde <|-- QScrollArea
+vueJeton <|-- QPushButton
+pageJeu <|--QWidget
+pageMenuPrincipal <|-- QWidget
+vuePlateau <|-- QWidget
+toutesPages <|-- QWidget QStackedWidget
+
+@enduml

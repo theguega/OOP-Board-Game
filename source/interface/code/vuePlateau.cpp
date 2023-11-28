@@ -1,34 +1,109 @@
 #include <QWidget>
-#include <jetons.hpp>
-#include <vueJeton.h>
 #include <array>
-#include <vuePlateau.h>
+#include <QVBoxLayout>
+#include <QPushButton>
+#include "vuePlateau.h"
+#include "vueJeton.h"
 
-vuePlateau::vuePlateau(Plateau& plateau) : plateau(plateau){
-    sac = plateau.getPlateau();
-    for(int i = 0; i < 25; i++){
+vuePlateau::vuePlateau(QWidget* parent, int hauteur, int largeur) : QWidget(parent){
+    h = hauteur; //Def la hateur du plateau
+    l = largeur; //Def la largeur du plateau
+
+    nbJetons = 25; //Nombre de jetons sur la plateau (sera récupérer depuis le back après)
+    setFixedSize(l, h); //Fixe la taille du plateau
+    //sac = plateau->getSac();
+    for(int i = 0; i < nbJetons; i++){
         //Créer un getteur pour les Jetons
-        listeJetons[i] = sac.getJeton(i);
+        listeJetons[i] = new vueJeton(nullptr, (h - 100)/(2*sqrt(nbJetons)));
+        layoutJetons -> addWidget(listeJetons[i], i / 5, i % 5);
+        QObject::connect(listeJetons[i], &vueJeton::clicked, [this, i]() {
+            boutonClique(i); //Permet d'appeler la fonction boutonClique(int i) lorsque le bouton i est cliqué
+        });
     }
+    for(int i = 0; i < 3; i++){
+        jetonSelection[i] = nullptr; //Initialise jetonSelection avec nullptr
+    }
+
+    boutonValider = new QPushButton("Valider le choix des jetons"); //Créer le bouton valider (pour la selection des jetons)
+
+    layout = new QVBoxLayout; //Layout pour mettre le Grid + les boutons en dessous
+
+    layout -> addLayout(layoutJetons); //Ajoute layoutJetons au layout vertical
+    layout -> addWidget(boutonValider); //Ajoute layoutJetons au layout vertical (faire un QHBoxLayout pour ajouter aussi un bouton desselctionner)
+
+    setLayout(layout); //Set le layout
+
+    connect(boutonValider, &QPushButton::clicked, this, &vuePlateau::validerJetons); //connect boutonValider avec valliderJetons
+
+    info = new popUpInfo(nullptr, "Vos jetons ont bien été ajouté");
 }
 
-vueJeton* vuePlateau::recupererBouton(Jetons* jeton){
-    for(int i = 0; i < 25; i++){
-        if(listeJetons[i]->jeton == jeton){
-            return listeJetons[i]
+void vuePlateau::boutonClique(int i){
+    int j = 0;
+    qDebug() << nbJetonSelection;
+    if(estSelectionne(listeJetons[i])){
+        for(j = 0; j < 3; j++){
+            if(jetonSelection[j] == listeJetons[i]){
+                jetonSelection[j] = nullptr;
+                listeJetons[i] -> changeAfficherCroix();
+                nbJetonSelection -= 1;
+            }
         }
     }
-    return nullptr
+    else{
+        if(nbJetonSelection < 3){
+            listeJetons[i] -> changeAfficherCroix();
+            while(jetonSelection[j] != nullptr){
+                j++;
+            }
+            jetonSelection[j] = listeJetons[i];
+            nbJetonSelection += 1;
+        }
+    }
 }
 
-void vuePlateau::remplirPlateau(){
-    plateau.remplirPlateau();
+void vuePlateau::deselectionner(){
+    for(int i = 0; i < nbJetons; i++){
+        listeJetons[i] -> enleverCroix();
+    }
+    for(int i = 0; i < 3; i++){
+        jetonSelection[i] = nullptr;
+    }
+}
+
+bool vuePlateau::estSelectionne(vueJeton* jeton){
+    for(int j = 0; j < 3; j++){
+        if(jetonSelection[j] == jeton){
+            return true;
+        }
+    }
+    return false;
+}
+
+void vuePlateau::validerJetons(){
+    info -> show();
+}
+
+void vuePlateau::cacherElements(){
+    info -> close();
+}
+
+/*vueJeton* vuePlateau::recupererBouton(Jeton* jeton){
+    for(int i = 0; i < 25; i++){
+        if(listeJetons[i]->getJeton() == jeton){
+            return listeJetons[i];
+        }
+    }
+    return nullptr;
+}*/
+
+/*void vuePlateau::remplirPlateau(){
     vueJeton* temp;
     for(int i = 0; i < 5; i++){
         for(int j = 0; j < 25; j++){
             //faire un getteur pour le plateau
             temp = recupererBouton(plateau.getJeton(i, j));
-            temp->apparaitre(position());
+            temp->apparaitre(position(i, j));
         }
     }
-}
+}*/

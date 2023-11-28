@@ -1,9 +1,9 @@
+#ifndef PAGEMENUPRINCIPAL_H
+#define PAGEMENUPRINCIPAL_H
+
 #include <QWidget>
 #include <QPushButton>
 #include <QVBoxLayout>
-
-#ifndef PAGEMENUPRINCIPAL_H
-#define PAGEMENUPRINCIPAL_H
 
 class pageMenuPrincipal : public QWidget {
     Q_OBJECT

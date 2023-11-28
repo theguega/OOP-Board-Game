@@ -1,21 +1,64 @@
+#ifndef PAGEJEU_H
+#define PAGEJEU_H
+
 #include <QWidget>
 #include <QPushButton>
 #include <QVBoxLayout>
-
-#ifndef PAGEJEU_H
-#define PAGEJEU_H
+#include <QHBoxLayout>
+#include <QScreen>
+#include <QSize>
+#include <vuePlateau.h>
+#include "vuePlateau.h"
+#include "pageJoueur.h"
+#include "popUp.h"
 
 class pageJeu : public QWidget {
     Q_OBJECT
 private:
-    QPushButton *retourMenu;
-    QVBoxLayout *coucheJ;
+    vuePlateau* vPlateau;
+    pageJoueur* joueur1;
+    pageJoueur* joueur2;
 
+    QPushButton* afficherJ1;
+    QPushButton* afficherJ2;
+
+    QHBoxLayout* partieHaute;
+    QHBoxLayout* partieBasse;
+    QVBoxLayout* layout;
+
+    QScreen* ecran;
+    QSize tailleEcran;
+
+    int tailleLargeur;
+    int tailleHauteur;
+
+    popUpValider* aSauvegarde;
+    bool quitterPage = false;
+protected:
+    void closeEvent(QCloseEvent *event) override {
+        if(!quitterPage){
+            aSauvegarde -> show();
+            event -> ignore();
+        }
+    }
+    void quitter(){
+        quitterPage = true;
+        aSauvegarde -> close();
+        this -> close();
+    }
+    void rester(){
+        aSauvegarde -> close();
+    }
 public:
     pageJeu(QWidget *parent = nullptr);
-    void ajoutWidget(QWidget *objet);
-    QPushButton* getRetourMenu(){return retourMenu;}
-    ~pageJeu();
+    ~pageJeu() = default;
+    void mousePressEvent(QMouseEvent* event) override {
+        joueur1 -> hide();
+        joueur2 -> hide();
+        vPlateau -> cacherElements();
+        aSauvegarde -> hide();
+        QWidget::mousePressEvent(event);
+    }
 };
 
 #endif // PAGEJEU_H

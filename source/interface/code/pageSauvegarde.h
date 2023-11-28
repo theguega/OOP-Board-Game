@@ -1,10 +1,10 @@
+#ifndef PAGESAUVEGARDE_H
+#define PAGESAUVEGARDE_H
+
 #include <QScrollArea>
 #include <QWidget>
 #include <QPushButton>
 #include <QVBoxLayout>
-
-#ifndef PAGESAUVEGARDE_H
-#define PAGESAUVEGARDE_H
 
 class pageSauvegarde : public QScrollArea {
     Q_OBJECT
@@ -19,6 +19,9 @@ public:
     pageSauvegarde(QWidget *parent = nullptr);
     ~pageSauvegarde();
     QPushButton* getRetourMenuSauv(){return retourMenuSauv;}
+
+public slots:
+    void demarrerSauvegarde(int idBouton);
 };
 
 #endif // PAGESAUVEGARDE_H

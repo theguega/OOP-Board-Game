@@ -1,4 +1,4 @@
-#include <QApplication>
+/*#include <QApplication>
 #include <QWidget>
 #include <QPushButton>
 #include <QVBoxLayout>
@@ -20,8 +20,8 @@ int main(int argc, char *argv[])
     //QScreen *ecran = QGuiApplication::primaryScreen();
     //QSize tailleEcran = ecran->availableGeometry().size();
 
-    /*int tailleLargeur = tailleEcran.width() / 2;
-    int tailleHauteur = tailleEcran.height() / 2;*/
+    //int tailleLargeur = tailleEcran.width() / 2;
+    //int tailleHauteur = tailleEcran.height() / 2;
 
     QWidget pagePrincipale;
     pagePrincipale.setWindowTitle("Splenduor Duel");
@@ -40,4 +40,4 @@ int main(int argc, char *argv[])
     pagePrincipale.show();
 
     return app.exec();
-}
+}*/

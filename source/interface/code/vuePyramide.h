@@ -1,0 +1,6 @@
+#ifndef VUEPYRAMIDE_H
+#define VUEPYRAMIDE_H
+
+
+
+#endif // VUEPYRAMIDE_H
