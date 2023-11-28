@@ -33,7 +33,7 @@ class Pyramide {
         const Carte& acheterCarte(unsigned int i,unsigned int j); // retourne la carte de la pyramide et la supprime + rempli la case avec une nouvelle carte de la pioche
         const Carte& ReserverCartePioche(unsigned int niveau); //retourne une carte de la pioche
         
-        size_t getNbCartesNiv(int niveau) const {return array_cartes[niveau].size(); }; // retourne le nombre de cartes d'un niveau dans la pyramide
+        size_t getNbCartesNiv(unsigned int niveau) const {return array_cartes[niveau].size(); }; // retourne le nombre de cartes d'un niveau dans la pyramide
         void afficherPyramide() const; // affiche la pyramide
         
         Pioche& getPioche1() const { return pNv1; }

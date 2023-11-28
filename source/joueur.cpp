@@ -15,7 +15,8 @@ type toType(std::string s) {
 
 // Constructeur
 Joueur::Joueur(string pseudo, type typeDeJoueur):
-               pseudo(pseudo), typeDeJoueur(typeDeJoueur), ptsPrestige(0), nbCouronnes(0) {
+                // Voir strategyyy
+               pseudo(pseudo), typeDeJoueur(typeDeJoueur), ptsPrestige(0), nbCouronnes(0), gagnant(0) {
                 //on initialise les map avec les bonnes couleurs
                 for (const auto& couleur : Couleurs) {
                     if (couleur != Couleur::INDT) {
@@ -23,6 +24,7 @@ Joueur::Joueur(string pseudo, type typeDeJoueur):
                         if (couleur != Couleur::OR) {
                             cartes[couleur];
                             cartesReservees[couleur];
+                            bonus[couleur] = 0;
                         }
                     }
                 }
@@ -226,11 +228,13 @@ void Joueur::remplirPlateau(Plateau& plateau, Sac& sac, Joueur& joueurAdverse){
 }
 
 void Joueur::recupererJetons(Plateau& plateau){
-    std::cout << "Combien de jetons souhaitez-vous recuperer ? (1 a 3)" << std::endl;
+    std::cout << "Combien de jetons souhaitez-vous recuperer ? (1 a 3) " << std::endl;
     unsigned int nbJetonsRecup;
     std::cin >> nbJetonsRecup;
-    if (nbJetonsRecup > 3 || nbJetonsRecup < 1){
-        throw JoueurException("Le nombre de jetons est impossible");
+
+    while (nbJetonsRecup > 3 || nbJetonsRecup < 1){
+        std::cout <<"Le nombre de jetons est impossible\nCombien de jetons souhaitez-vous recuperer ? (1 a 3) " << std::endl;
+        std::cin >> nbJetonsRecup;
     }
 
     std::cout << "Merci de selectionner des jetons adjacents en ligne, en colonne ou en diagonale." << std::endl;
@@ -301,17 +305,21 @@ void Joueur::orReserverCarte (Pyramide& pyramide, Plateau& plateau){
         unsigned int niveau;
         std::cin >> niveau;
         std::cout << "Tapez le numero de la carte que vous voulez réserver : " << std::endl;
-        int numCarte;
+        unsigned int numCarte;
         std::cin >> numCarte;
         // Vérifications
-        if (numCarte > pyramide.getNbCartesNiv(niveau)){
-            throw JoueurException("Le numéro de la carte est incorrect");
+        while (numCarte > pyramide.getNbCartesNiv(niveau) || numCarte < 0 || niveau >= 3 || niveau < 0 ){
+            std::cout<<"Le numéro de la carte ou son niveau est incorrect\n"<<std::endl;
+            std::cout << "Tapez le niveau de la carte que vous voulez réserver : " << std::endl;
+            std::cin >> niveau;
+            std::cout << "Tapez le numero de la carte que vous voulez réserver : " << std::endl;
+            std::cin >> numCarte;
         }
         const Carte& carte = pyramide.acheterCarte(niveau, numCarte);
         addCarteReservee(carte);
 
 
-        // Recuperation d'un jeton or
+        // Recuperation d'un jeton or Voir exception mécanique de jeu
         const Jeton& jeton = strategy->choisirJeton(plateau);
         if(jeton.getCouleur() != Couleur::OR){
             throw JoueurException("Le jeton choisi n'est pas un jeton or");
@@ -336,11 +344,34 @@ void Joueur::orReserverCarte (Pyramide& pyramide, Plateau& plateau){
 
 }
 
+void Joueur::acheterCarteNoble (Pyramide& pyramide){
+    // affichage cartes nobles
+    pyramide.afficherPyramide();
+    std::cout << "Tapez le numero de la carte noble que vous voulez acheter : " << std::endl;
+    unsigned int numCarte;
+    std::cin >> numCarte;
+    // Vérifications
+    while (numCarte > pyramide.getNbCartesNiv(4) || numCarte < 0){
+        std::cout<<"Le numéro de la carte est incorrect\n"<<std::endl;
+        std::cout << "Tapez le numero de la carte noble que vous voulez acheter : " << std::endl;
+        std::cin >> numCarte;
+    }
+    const Carte& carte = pyramide.acheterCarte(4, numCarte);
+    addCarteNoble(carte);
+}
+
+
 void Joueur::acheterCarteJoaillerie (Pyramide& pyramide){
     // Voir comment gérer les bonus
     std::cout << "Tapez 1 pour acheter une carte Réservée.\nTapez 2 pour acheter une carte du plateau." << std::endl;
     unsigned int choix;
     std::cin >> choix;
+    while ((choix != 1) && (choix !=2)){
+        std::cout<<"Le choix est incorrect\n"<<std::endl;
+        std::cout << "Tapez 1 pour acheter une carte Réservée.\nTapez 2 pour acheter une carte du plateau." << std::endl;
+        std::cin >> choix;
+    }
+
     // Achat carte reservee
     if (choix == 1){
         std::cout << "Voici les cartes réservées : " << std::endl;
@@ -357,14 +388,18 @@ void Joueur::acheterCarteJoaillerie (Pyramide& pyramide){
         Couleur couleur = Couleur::BLEU;
         std::cin >> numCarte;
         // Vérifications -> voir plus au niveau des jetons dans la main
-        if (numCarte > cartesReservees.size()){
-            throw JoueurException("Le numéro de la carte est invalide.");
+        while (numCarte > cartesReservees.size()){
+            std::cout<<"Le numéro de la carte est invalide."<<std::endl;
+            std::cout << "Tapez le numéro de la carte que vous voulez acheter : " << std::endl;
+            std::cin >> numCarte;
         }
         const Carte& carte = *cartesReservees[couleur][numCarte];
         if (carte.getNbPtsPrivilege() > ptsPrestige){
             throw JoueurException("Vous n'avez pas assez de points de prestige pour acheter cette carte...");
         }
         addCarte(carte);
+        // Rajout du bonus dans le joueur
+        bonus[carte.getBonus().getCouleur()] += carte.getBonus().getNbBonus();
         supCarteReservee(carte);
     }
     // Achat carte du plateau
@@ -381,8 +416,10 @@ void Joueur::acheterCarteJoaillerie (Pyramide& pyramide){
         std::cin >> numCarte;
 
         // Vérifications
-        if (numCarte > pyramide.getNbCartesNiv(niveau)){
-            throw JoueurException("Le numéro de la carte est incorrect");
+        while (numCarte > pyramide.getNbCartesNiv(niveau)){
+            std::cout<<"Le numéro de la carte est incorrect\n"<<std::endl;
+            std::cout << "Tapez le numero de la carte que vous voulez acheter : " << std::endl;
+            std::cin >> numCarte;
         }
 
         const Carte& carte = pyramide.acheterCarte(niveau, numCarte);
@@ -390,9 +427,11 @@ void Joueur::acheterCarteJoaillerie (Pyramide& pyramide){
             throw JoueurException("Vous n'avez pas assez de points de prestige pour acheter cette carte");
         }
         addCarte(carte);
+        // Rajout du bonus dans le joueur
+        bonus[carte.getBonus().getCouleur()] += carte.getBonus().getNbBonus();
     }
     else {
-        throw JoueurException("Le choix est incorrect");
+        std::cout<<"Le choix est incorrect\n"<<std::endl;
     }
 
 

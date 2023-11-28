@@ -7,7 +7,16 @@
 #include "carte.hpp"
 #include "strategy.hpp"
 // rajouter itération cartes + jetons + privilèges
-// Rajouter classe exception
+
+// Voir strategy pour l'IA
+// acheter carte noble acheter carte niveau 4 DONE
+// Exceptions --> gérer les exceptions DONE
+// CApa + bonus
+// Voir achat carte en fonction des gemmes
+// Choix action aléatoire
+// Voir diagonale
+// voir estGagnant DONE
+
 class JoueurException
 {
 public:
@@ -27,18 +36,21 @@ type toType(std::string s);
 
 class Joueur {
 private:
-    // Rajouter un tab static avec les deux joueurs
     static  std::vector<Joueur*> joueurs;
     const string pseudo;
     const type typeDeJoueur;
     unsigned int ptsPrestige;
     unsigned int nbCouronnes;
+    bool gagnant;
 
     std::unordered_map<Couleur, std::vector<const Carte*>> cartes;
     std::unordered_map<Couleur, std::vector<const Carte*>> cartesReservees;
     std::unordered_map<Couleur, std::vector<const Jeton*>> jetons;
     std::vector<const Carte*> cartesNobles;
     std::vector<const Privilege*> privileges;
+
+    std::unordered_map<Couleur, unsigned int> bonus;
+
     Strategy* strategy;
 public:
     // Constructeur done
@@ -49,27 +61,23 @@ public:
 
 
 
-    // Getters Done
+    // Getters
     std::string getPseudo() const { return pseudo; };
     type getTypeDeJoueur() const { return typeDeJoueur; };
     unsigned int getptsPrestige() const { return ptsPrestige; };
     unsigned int getnbCouronnes() const { return nbCouronnes; };
-    //Carte **getCartes();
     size_t getNbCartes() const;
     size_t getNbCartes(Couleur c) const { return cartes.at(c).size(); }
-    //Jetons **getJetons();
     size_t getNbCartesReservees() const;
     size_t getNbCartesNobles() const { return cartesNobles.size(); }
     size_t getNbCartesReservees(Couleur c) const { return cartesReservees.at(c).size(); }
     size_t getNbJetons() const;
     size_t getNbJetons(Couleur c) const { return jetons.at(c).size(); }
-    //Privilege **getPrivileges();
     size_t getNbPrivileges() const { return privileges.size(); }
     const Carte& getCarte(Couleur c, size_t i) const { return *cartes.at(c).at(i); }
     const Carte& getCarteReservee(Couleur c, size_t i) const { return *cartesReservees.at(c).at(i); }
     const Carte& getCarteNoble(size_t i) const { return *cartesNobles[i]; }
 
-    bool nbPtsPrestigeParCouleurSupDix() const;
 
     // Setters
     void updatePtsPrestige(int pts) { ptsPrestige += pts; };
@@ -81,13 +89,12 @@ public:
     void addJeton(const Jeton &jeton);
     void addPrivilege(const Privilege &privilege);
 
-    // Supprimer un element du vecteur --> attention il faudra voir le lien avec les autres classes DONE
-    // Si on supprime un privilège il doit revenir sur le plateau
+
     void supCarte(Carte &carte);
     void supCarteReservee(const Carte &carte);
     void supCarteNoble(const Carte& carte);
     void supJeton(Jeton *jeton);
-    const Privilege& supPrivilege(Plateau& plateau); // a voir si on retire pas juste le premier privilege
+    const Privilege& supPrivilege(Plateau& plateau);
 
     // Affichage Done
     void afficherJoueur() const;
@@ -104,12 +111,12 @@ public:
     // Actions obligatoires
     void recupererJetons(Plateau& plateau);
     void acheterCarteJoaillerie (Pyramide& pyramide);
+    void acheterCarteNoble (Pyramide& pyramide);
     void orReserverCarte (Pyramide& pyramide, Plateau& plateau);
 
-    // (J'en ai besoin pour les score comment on l'implémente) (Signe Theo) / J'ai pas tt capé mais pour moi c'est une méthode de partie ça
-    //Je pense que c'est un attribut à définir à la fin de la partie
-    //bool estGagant() const { return gagnant; };
-    bool estGagnant() const {return ptsPrestige >= 15;}; //exemple deso c degeu
+    // Sauvegarde + Gagne
+    bool nbPtsPrestigeParCouleurSupDix() const;
+    bool estGagnant() const { return gagnant;}
 
 
 };
