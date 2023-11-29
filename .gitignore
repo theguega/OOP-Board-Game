@@ -8,8 +8,10 @@
 *.Release
 .qmake.stash
 Makefile
+release/
 source/sqlite/.DS_Store
 source/.DS_Store
 uml/.DS_Store
+build-ProjetLO21-Desktop_Qt_6_6_0_MinGW_64_bit-Profile/
 build-ProjetLO21-Desktop_Qt_6_6_0_MinGW_64_bit-Debug/
 debug/
