@@ -10,6 +10,7 @@ class pageMenuPrincipal : public QWidget {
 private:
     QPushButton *boutonDemarrer;
     QPushButton *boutonSauvegarde;
+    QPushButton *boutonBibli;
     QPushButton *boutonQuitter;
 
     QVBoxLayout *coucheMP;
@@ -19,6 +20,7 @@ public:
     ~pageMenuPrincipal();
     QPushButton* getBoutonQuitter() const { return boutonQuitter; }
     QPushButton* getBoutonSauvegarde() const { return boutonSauvegarde; }
+    QPushButton* getBoutonBibli() const { return boutonBibli; }
     QPushButton* getBoutonDemarrer() const { return boutonDemarrer; }
 };
 

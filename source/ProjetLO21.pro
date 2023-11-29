@@ -4,6 +4,7 @@ CONFIG += console
 
 SOURCES += \
     main.cpp \
+    interface/code/pageBibliotheque.cpp \
     interface/code/pageCreation.cpp \
     interface/code/pageJeu.cpp \
     interface/code/pageJoueur.cpp \
@@ -26,6 +27,7 @@ SOURCES += \
     sqlite/sqlite3.c
 
 HEADERS += \
+    interface/code/pageBibliotheque.h \
     interface/code/pageCreation.h \
     interface/code/pageJeu.h \
     interface/code/pageJoueur.h \
