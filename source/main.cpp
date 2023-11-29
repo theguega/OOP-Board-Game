@@ -3,6 +3,7 @@
 #include <QApplication>
 #include <QWidget>
 #include <QDebug>
+#include <QtSql>
 #include "interface/code/vueCarte.h"
 #include "interface/code/pageCreation.h"
 #include "interface/code/vueJeton.h"
@@ -253,11 +254,10 @@ int main(void) {
 //###### Partie avec l'application Qt #####
 //#########################################
 
-/*
 
-int main(int argc, char * argv[]) {
+
+/*int main(int argc, char * argv[]) {
     QApplication a(argc, argv);
-
     vueCarte carte = vueCarte(nullptr);
     carte.show();
 
@@ -282,6 +282,6 @@ int main(int argc, char * argv[]) {
     page->show();
 
     return app.exec();
-}
+}*/
 
-*/
+
