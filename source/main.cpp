@@ -47,7 +47,7 @@ std::filesystem::path projectPath = string("\\Users\\Beziat\\Documents\\Projet_L
 //####################################
 
 
-/*int main(void) {
+int main(void) {
     Controller control;
     control.lancerPartie();
     control.getJoueurCourant().afficherJoueur();
@@ -66,7 +66,7 @@ std::filesystem::path projectPath = string("\\Users\\Beziat\\Documents\\Projet_L
         cout << control.getPartie().getJoueur2()->getPseudo() << " est gagnant;"<<std::endl;
 
     return 0;
-}*/
+}
 
 
 
@@ -256,7 +256,7 @@ int main(void) {
 
 
 
-int main(int argc, char * argv[]) {
+/*int main(int argc, char * argv[]) {
     QApplication app(argc, argv);
     /*vueCarte carte = vueCarte(nullptr);
     carte.show();
@@ -276,12 +276,12 @@ int main(int argc, char * argv[]) {
     widget->show();
 
     vuePlateau* plateau = new vuePlateau(nullptr, 500, 500);
-    plateau -> show();*/
+    plateau -> show();
 
     toutesPages* page = new toutesPages(nullptr, &app);
     page->show();
 
     return app.exec();
-}
+}*/
 
 

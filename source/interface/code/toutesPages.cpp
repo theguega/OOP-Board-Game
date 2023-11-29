@@ -8,6 +8,7 @@
 #include "pageMenuPrincipal.h"
 #include "pageJeu.h"
 #include "pageSauvegarde.h"
+#include "pageBibliotheque.h"
 #include "pageCreation.h"
 
 toutesPages::toutesPages(QWidget* parent, QApplication* app) {
