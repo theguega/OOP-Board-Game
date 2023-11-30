@@ -179,7 +179,6 @@ std::pair<unsigned int, unsigned int> StrategyHumain::choisirJeton(Plateau& plat
     return std::make_pair(i, j);
 }
 
-
 std::pair<unsigned int, unsigned int> StrategyIA::choisirJeton(Plateau& plateau){
     // Obtenez les dimensions du plateau
     size_t plateauRows = plateau.getLargeurMatrice();
@@ -197,6 +196,189 @@ std::pair<unsigned int, unsigned int> StrategyIA::choisirJeton(Plateau& plateau)
 
     // Retournez le jeton correspondant aux indices aléatoires
     return std::make_pair(i, j);
+}
+
+unsigned int StrategyHumain::choixNiveau() {
+    std::cout<<"Voulez-vous réserver une carte de la pyramide ou de la pioche de niveau i ? (0, 1, 2, 3)" << std::endl;
+    unsigned int choix;
+    std::cin >> choix;
+    return choix;
+}
+
+unsigned int StrategyIA::choixNiveau() {
+    std::cout<<"Voulez-vous réserver une carte de la pyramide ou de la pioche de niveau i ? (0, 1, 2, 3)" << std::endl;
+    // Initialiser le générateur de nombres aléatoires avec la graine actuelle du système
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    // Créer une distribution uniforme pour les entiers entre 0 et 3 inclus
+    std::uniform_int_distribution<int> distribution(0, 3);
+    // Générer un nombre aléatoire
+    int choix = distribution(gen);
+    std::cout<<"On va en "<<choix<<".\n"<<std::endl;
+    return choix;
+}
+
+unsigned int StrategyHumain::choixAchat(){
+    std::cout << "Tapez 1 pour acheter une carte Réservée.\nTapez 2 pour acheter une carte du plateau." << std::endl;
+    unsigned int choix;
+    std::cin >> choix;
+    while ((choix != 1) && (choix !=2)){
+        std::cout<<"Le choix est incorrect\n"<<std::endl;
+        std::cout << "Tapez 1 pour acheter une carte Réservée.\nTapez 2 pour acheter une carte du plateau." << std::endl;
+        std::cin >> choix;
+    }
+    return choix;
+}
+
+unsigned int StrategyIA::choixAchat(){
+    // Initialiser le générateur de nombres aléatoires avec la graine actuelle du système
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    // Créer une distribution uniforme pour les entiers entre 1 et 2 inclus
+    std::uniform_int_distribution<int> distribution(1, 2);
+    // Générer un nombre aléatoire
+    int choix = distribution(gen);
+    if (choix == 1) {
+        std::cout << "On va acheter une carte réservée." << std::endl;
+    }
+    else {
+        std::cout << "On va acheter une carte du plateau." << std::endl;
+    }
+    return choix;
+}
+
+std::pair<unsigned int, unsigned int> StrategyIA::reservationCarte(Pyramide& pyramide) {
+    // Initialiser le générateur de nombres aléatoires avec la graine actuelle du système
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    // Créer une distribution uniforme pour les entiers entre 0 et 3 inclus
+    std::uniform_int_distribution<int> distribution(0, 2);
+    // Générer un nombre aléatoire
+    int niveau = distribution(gen);
+    std::cout << "Voici les cartes de la pyramide : " << std::endl;
+    pyramide.afficherPyramide();
+
+    std::cout << "Niveau: "<< niveau << std::endl;
+
+    std::uniform_int_distribution<int> distributionNiveau(1, pyramide.getNbCartesNiv(niveau));
+    int numCarte = distributionNiveau(gen);
+    std::cout << "Niveau: "<< niveau << std::endl;
+    std::cout << "Numéro de carte: "<< numCarte << std::endl;
+
+
+    return std::make_pair(niveau, numCarte);
+}
+
+std::pair<unsigned int, unsigned int> StrategyHumain::reservationCarte(Pyramide& pyramide) {
+    std::cout << "Voici les cartes de la pyramide : " << std::endl;
+    pyramide.afficherPyramide();
+    std::cout << "Tapez le niveau de la carte que vous voulez réserver : " << std::endl;
+    unsigned int niveau;
+    std::cin >> niveau;
+    std::cout << "Tapez le numero de la carte que vous voulez réserver : " << std::endl;
+    unsigned int numCarte;
+    std::cin >> numCarte;
+    // Vérifications
+    while (numCarte > pyramide.getNbCartesNiv(niveau) || numCarte < 0 || niveau >= 3 || niveau < 0 ){
+        std::cout<<"Le numéro de la carte ou son niveau est incorrect\n"<<std::endl;
+        std::cout << "Tapez le niveau de la carte que vous voulez réserver : " << std::endl;
+        std::cin >> niveau;
+        std::cout << "Tapez le numero de la carte que vous voulez réserver : " << std::endl;
+        std::cin >> numCarte;
+    }
+
+    return std::make_pair(niveau, numCarte);
+}
+
+std::pair<unsigned int, unsigned int> StrategyHumain::achatNoble(Pyramide& pyramide) {
+    std::cout << "Tapez le numero de la carte noble que vous voulez acheter : " << std::endl;
+    unsigned int numCarte;
+    std::cin >> numCarte;
+    // Vérifications
+    while (numCarte > pyramide.getNbCartesNiv(4) || numCarte < 0){
+        std::cout<<"Le numéro de la carte est incorrect\n"<<std::endl;
+        std::cout << "Tapez le numero de la carte noble que vous voulez acheter : " << std::endl;
+        std::cin >> numCarte;
+    }
+
+    return std::make_pair(4, numCarte);
+
+}
+
+std::pair<unsigned int, unsigned int> StrategyIA::achatNoble(Pyramide& pyramide) {
+    std::cout << "Tapez le numero de la carte noble que vous voulez acheter : " << std::endl;
+    // Initialiser le générateur de nombres aléatoires avec la graine actuelle du système
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    // Créer une distribution uniforme pour les entiers entre 0 et 3 inclus
+    std::uniform_int_distribution<int> distribution(0, pyramide.getNbCartesNiv(4));
+    // Générer un nombre aléatoire
+    int numCarte = distribution(gen);
+    std::cout<<"Numéro de carte : "<<numCarte<< std::endl;
+    return std::make_pair(4, numCarte);
+
+}
+
+std::pair< Couleur, unsigned int> StrategyHumain::achatReserve(unsigned int nbCartesReservees){
+    std::cout << "Voici les cartes réservées : " << std::endl;
+    unsigned int i = 0;
+
+    std::cout << "Tapez le numéro de la carte que vous voulez acheter : " << std::endl;
+    unsigned int numCarte;
+    std::cin >> numCarte;
+    // Vérifications -> voir plus au niveau des jetons dans la main
+    while (numCarte > nbCartesReservees){
+        std::cout<<"Le numéro de la carte est invalide."<<std::endl;
+        std::cout << "Tapez le numéro de la carte que vous voulez acheter : " << std::endl;
+        std::cin >> numCarte;
+    }
+    // Vérification de la couleur de la carte réservée
+    std::vector<std::string> listeCouleurs = {"blanc", "bleu", "vert", "noir", "rouge", "perle", "or", "indt"};
+    std::cout << "Tapez la couleur de la carte que vous voulez acheter : " << std::endl;
+    string couleur;
+    std::cin >> couleur;
+    // Vérification si la chaîne est présente dans la liste
+    auto it = std::find(listeCouleurs.begin(), listeCouleurs.end(), couleur);
+    while (it != listeCouleurs.end()){
+        std::cout<<"Lea couleur est invalide"<<std::endl;
+        std::cout << "Tapez la couleur de la carte que vous voulez acheter : " << std::endl;
+        std::cin >> couleur;
+        it = std::find(listeCouleurs.begin(), listeCouleurs.end(), couleur);
+    }
+    Couleur couleur2 = StringToCouleur(couleur);
+
+    return std::make_pair(couleur2, numCarte);
+
+}
+
+std::pair< Couleur, unsigned int> StrategyIA::achatReserve(unsigned int nbCartesReservees){
+    // Initialiser le générateur de nombres aléatoires avec la graine actuelle du système
+    std::random_device rd;
+    std::mt19937 gen(rd());
+
+    std::cout << "Tapez le numéro de la carte que vous voulez acheter : " << std::endl;
+    // Vérifications -> voir plus au niveau des jetons dans la main
+    // MODIFIER NB a voir par rapport à la couleur
+    std::uniform_int_distribution<int> distribution2(0, nbCartesReservees);
+    int numCarte = distribution2(gen);
+
+
+    // Vérification de la couleur de la carte réservée
+    std::vector<std::string> listeCouleurs = {"blanc", "bleu", "vert", "noir", "rouge", "perle", "or", "indt"};
+    std::uniform_int_distribution<int> distribution(0, listeCouleurs.size() - 1);
+    // Générer un indice aléatoire
+    int indiceAleatoire = distribution(gen);
+
+    // Utiliser l'indice pour obtenir la couleur aléatoire du vecteur
+    std::string couleur = listeCouleurs[indiceAleatoire];
+
+    std::cout << "Couleur aléatoire : " << couleur << std::endl;
+
+
+    Couleur couleur2 = StringToCouleur(couleur);
+
+    return std::make_pair(couleur2, numCarte);
+
 }
 
 void StrategyHumain::remplirPlateauStrat(Plateau& plateau, Sac& sac){

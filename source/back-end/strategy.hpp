@@ -19,16 +19,18 @@ public:
     virtual void remplirPlateauStrat(Plateau& plateau, Sac& sac) = 0;
 
     virtual std::vector<const Jeton*> recupJetonStrat(Plateau& plateau) = 0;
+    virtual unsigned int choixNiveau() = 0;
+    virtual std::pair<unsigned int, unsigned int> reservationCarte(Pyramide& pyramide) = 0;
+    virtual std::pair<unsigned int, unsigned int> achatNoble(Pyramide& pyramide) = 0;
+    virtual unsigned int choixAchat() = 0;
+    virtual std::pair< Couleur, unsigned int> achatReserve(unsigned int nbCartesReservees) = 0;
 
 
-    // actions optionnelles
-    /*virtual Privilege utiliserPrivilege(const EspaceJeux& espaceJeux) = 0;
-    virtual Privilege remplirPlateau(const EspaceJeux& espaceJeux) = 0;
 
-    // actions obligatoires
-    virtual Jeton piocherJeton(const EspaceJeux& espaceJeux) = 0;
-    virtual Carte orReserverCarte(const EspaceJeux& espaceJeux) = 0;
-    virtual Carte acheterCarteJoaillerie(const EspaceJeux& espaceJeux) = 0;*/
+
+
+
+
 };
 
 
@@ -37,6 +39,14 @@ public:
     std::pair<unsigned int, unsigned int> choisirJeton(Plateau& plateau) override;
     void remplirPlateauStrat(Plateau& plateau, Sac& sac) override;
     std::vector<const Jeton*> recupJetonStrat(Plateau& plateau) override;
+    unsigned int choixNiveau() override;
+    unsigned int choixAchat() override;
+    std::pair<unsigned int, unsigned int> achatNoble(Pyramide& pyramide) override;
+
+    std::pair< Couleur, unsigned int> achatReserve(unsigned int nbCartesReservees) override;
+
+    std::pair<unsigned int, unsigned int> reservationCarte(Pyramide& pyramide) override;
+
 
 
     //Privilege utiliserPrivilege(const EspaceJeux& espaceJeux) override;
@@ -47,6 +57,16 @@ public:
     std::pair<unsigned int, unsigned int> choisirJeton(Plateau& plateau) override;
     std::vector<const Jeton*> recupJetonStrat(Plateau& plateau) override;
     void remplirPlateauStrat(Plateau& plateau, Sac& sac) override;
+    unsigned int choixNiveau() override;
+    unsigned int choixAchat() override;
+    std::pair< Couleur, unsigned int> achatReserve(unsigned int nbCartesReservees) override;
+    std::pair<unsigned int, unsigned int> achatNoble(Pyramide& pyramide) override;
+
+
+
+    std::pair<unsigned int, unsigned int> reservationCarte(Pyramide& pyramide) override;
+
+
 
 
     //Privilege utiliserPrivilege(const EspaceJeux& espaceJeux) override;
