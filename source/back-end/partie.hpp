@@ -14,7 +14,7 @@
 #include "strategy.hpp"
 #include "joueur.hpp"
 #include "espacejeux.hpp"
-#include "sqlite/sqlite3.h"
+#include "../sqlite/sqlite3.h"
 
 extern std::filesystem::path projectPath;
 

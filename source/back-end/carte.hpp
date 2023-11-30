@@ -12,7 +12,7 @@
 #include <random>
 #include <filesystem>
 
-#include "sqlite/sqlite3.h"
+#include "../sqlite/sqlite3.h"
 #include "jetons.hpp"
 using namespace std;
 extern std::filesystem::path projectPath;

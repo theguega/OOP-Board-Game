@@ -1,25 +1,27 @@
 #include "back-end/controller.hpp"
 #include <filesystem>
+/*
 #include <QApplication>
 #include <QWidget>
 #include <QDebug>
 #include <QtSql>
+
 #include "interface/code/vueCarte.h"
 #include "interface/code/pageCreation.h"
 #include "interface/code/vueJeton.h"
 #include "interface/code/vuePlateau.h"
-#include "interface/code/toutesPages.h"
+#include "interface/code/toutesPages.h"*/
 #include <iostream>
 
 //Mettez ici le chemin absolue vers le projet
 //Theo
 //std::filesystem::path projectPath = string("/Users/theoguegan/Documents/UTC/GI01/LO21/Projet_LO21");
 //Samuel B
-std::filesystem::path projectPath = string("\\Users\\Beziat\\Documents\\Projet_LO21\\source");
+//std::filesystem::path projectPath = string("\\Users\\Beziat\\Documents\\Projet_LO21\\source");
 //Robert
 //std::filesystem::path projectPath = string("/Users/robertantaluca/Desktop/Projet_LO21");
 //Samuel M
-//std::filesystem::path projectPath = string("C:/Users/samma/Documents/Programmation/LO21/Projet_LO21");
+std::filesystem::path projectPath = string("C:/Users/samma/Documents/Programmation/LO21/Projet_LO21");
 //Maxime
 
 
@@ -51,7 +53,8 @@ int main(void) {
     Controller control;
     control.lancerPartie();
     control.getJoueurCourant().afficherJoueur();
-
+    std::cout<<"\n\n\n"<<std::endl;
+    control.getJoueurAdverse().afficherJoueur();
     // simulation victoire d'un joueur
     int i = 0;
     if (i == 5)

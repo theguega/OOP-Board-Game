@@ -1,4 +1,6 @@
 #include "joueur.hpp"
+#include <algorithm>
+
 
 std::string toStringType(type t) {
     switch (t) {
@@ -242,7 +244,7 @@ void Joueur::recupererJetons(Plateau& plateau){
     std::vector<std::pair<unsigned int, unsigned int>> vecteurCoordonnees;
     std::vector<const Jeton*> jetonsRecup;
 
-
+    // Récup des coordonnées des jetons
     for (unsigned int k = 0; k < nbJetonsRecup; k++){
         unsigned int i, j;
         std::cout << "Entrez la valeur de i : ";
@@ -260,26 +262,44 @@ void Joueur::recupererJetons(Plateau& plateau){
     if (jetons.size() > 1) {
         bool result1 = true;
         bool result2 = true;
-        bool result3 = true;
+        bool result3 = false; // Diago 1
+        bool result4 = false; // Diago 2
 
+        // Verif que les jetons sont adjacents en ligne
         for (int i = 0; i < vecteurCoordonnees.size()-1; i++) {
             if (vecteurCoordonnees[i].first != vecteurCoordonnees[i + 1].first) {
                 result1 = false;
             }
         }
+        // Verif que les jetons sont adjacents en colonne
         for (int i = 0; i < vecteurCoordonnees.size()-1; i++) {
             if (vecteurCoordonnees[i].second != vecteurCoordonnees[i + 1].second) {
                 result2 = false;
             }
         }
+        // Verif que les jetons sont adjacents en diagonale
+
+        // Fonction de comparaison pour trier en fonction du premier élément de la paire
+        auto comparaison = [](const auto& a, const auto& b) {
+            return a.first < b.first;
+        };
+        std::sort(vecteurCoordonnees.begin(), vecteurCoordonnees.end(), comparaison);
+
         for (int i = 0; i < vecteurCoordonnees.size()-1; i++) {
-            // A modifier pour les diagonales
-            if (vecteurCoordonnees[i].second != vecteurCoordonnees[i + 1].second-1 ) {
-                result3 = false;
+            // première diagonale
+            if ((vecteurCoordonnees[i].first+1 == vecteurCoordonnees[i + 1].first) && (vecteurCoordonnees[i].second-1 == vecteurCoordonnees[i + 1].second)) {
+                result3 = true;
             }
         }
 
-        if (!result1 && !result2 && !result3) {
+        for (int i = 0; i < vecteurCoordonnees.size()-1; i++) {
+            // seconde diagonale
+            if ((vecteurCoordonnees[i].first+1 == vecteurCoordonnees[i + 1].first) && (vecteurCoordonnees[i].second+1 == vecteurCoordonnees[i + 1].second)) {
+                result4 = true;
+            }
+        }
+
+        if (!result1 && !result2 && !result3 && !result4) {
             throw JoueurException("Les jetons ne sont pas adjacents");
         }
 
