@@ -403,11 +403,7 @@ void Joueur::recupererJetons(Plateau& plateau){
     // Récup des coordonnées des jetons
     for (unsigned int k = 0; k < nbJetonsRecup; k++){
         unsigned int i, j;
-        std::cout << "Entrez la valeur de i : ";
-        std::cin >> i;
-        std::cout << "Entrez la valeur de j : ";
-        std::cin >> j;
-        const Jeton& jeton = plateau.recupererJeton(i, j);
+        const Jeton& jeton = strategy->choisirJeton(plateau);
         // Ajout des coordonnees
         vecteurCoordonnees.emplace_back(i, j);
         // Ajout du jeton

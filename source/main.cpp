@@ -54,7 +54,6 @@ int main(void) {
     control.lancerPartie();
     control.getJoueurCourant().afficherJoueur();
     std::cout<<"\n\n\n"<<std::endl;
-    control.getJoueurAdverse().afficherJoueur();
     // simulation victoire d'un joueur
     int i = 0;
     if (i == 5)
