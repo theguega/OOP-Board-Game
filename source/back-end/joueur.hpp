@@ -11,10 +11,12 @@
 // Voir strategy pour l'IA
 // acheter carte noble acheter carte niveau 4 DONE
 // Exceptions --> gérer les exceptions DONE
-// CApa + bonus
+// bonus DONE
+// CApa
+// voir nb couronnes
 // Voir achat carte en fonction des gemmes
 // Choix action aléatoire
-// Voir diagonale
+// Voir diagonale DONE~
 // voir estGagnant DONE
 
 class JoueurException
@@ -77,6 +79,7 @@ public:
     const Carte& getCarte(Couleur c, size_t i) const { return *cartes.at(c).at(i); }
     const Carte& getCarteReservee(Couleur c, size_t i) const { return *cartesReservees.at(c).at(i); }
     const Carte& getCarteNoble(size_t i) const { return *cartesNobles[i]; }
+    unsigned int getNbCouronnes ()const { return nbCouronnes; }
 
 
     // Setters

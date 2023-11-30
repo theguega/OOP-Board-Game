@@ -418,6 +418,8 @@ void Joueur::acheterCarteJoaillerie (Pyramide& pyramide){
             throw JoueurException("Vous n'avez pas assez de points de prestige pour acheter cette carte...");
         }
         addCarte(carte);
+        // rajout des couronnes
+        nbCouronnes += carte.getNbCouronnes();
         // Rajout du bonus dans le joueur
         bonus[carte.getBonus().getCouleur()] += carte.getBonus().getNbBonus();
         supCarteReservee(carte);
@@ -447,6 +449,8 @@ void Joueur::acheterCarteJoaillerie (Pyramide& pyramide){
             throw JoueurException("Vous n'avez pas assez de points de prestige pour acheter cette carte");
         }
         addCarte(carte);
+        // rajout des couronnes
+        nbCouronnes += carte.getNbCouronnes();
         // Rajout du bonus dans le joueur
         bonus[carte.getBonus().getCouleur()] += carte.getBonus().getNbBonus();
     }
