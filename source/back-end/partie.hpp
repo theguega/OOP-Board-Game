@@ -8,10 +8,7 @@
 #include <unordered_map>
 #include <map>
 #include <random>
-#include <filesystem>
-#include "carte.hpp"
-#include "jetons.hpp"
-#include "strategy.hpp"
+//#include <filesystem>
 #include "joueur.hpp"
 #include "espacejeux.hpp"
 #include "sqlite/sqlite3.h"

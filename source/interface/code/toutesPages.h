@@ -17,7 +17,7 @@ private:
     pageBibliotheque* bibli;
 public:
     toutesPages(QWidget* parent, QApplication* app);
-    fermerFenetre(){this -> hide();}
+    void fermerFenetre(){this -> hide();}
     ~toutesPages() = default;
 };
 

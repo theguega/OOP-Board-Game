@@ -13,9 +13,9 @@
 
 //Mettez ici le chemin absolue vers le projet
 //Theo
-//std::filesystem::path projectPath = string("/Users/theoguegan/Documents/UTC/GI01/LO21/Projet_LO21");
+//std::filesystem::path projectPath = string("/Users/theoguegan/Documents/UTC/GI01/LO21/Splendor/source");
 //Samuel B
-std::filesystem::path projectPath = string("\\Users\\Beziat\\Documents\\Projet_LO21\\source");
+//std::filesystem::path projectPath = string("\\Users\\Beziat\\Documents\\Projet_LO21\\source");
 //Robert
 //std::filesystem::path projectPath = string("/Users/robertantaluca/Desktop/Projet_LO21");
 //Samuel M
@@ -258,7 +258,7 @@ int main(void) {
 
 /*int main(int argc, char * argv[]) {
     QApplication app(argc, argv);
-    /*vueCarte carte = vueCarte(nullptr);
+    vueCarte carte = vueCarte(nullptr);
     carte.show();
 
     pageCreation page = pageCreation(nullptr);

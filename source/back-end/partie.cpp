@@ -75,12 +75,13 @@ void Partie::libererInstance() {
 void LastPartieBuilder::setJoueurs() const {
     sqlite3* db;
     sqlite3_stmt* stmt;
-    std::string relativePath = "data/save.sqlite";
-    std::filesystem::path absolutePath = projectPath / relativePath;
-    std::string absolutePathStr = absolutePath.string();
+    //std::string relativePath = "data/save.sqlite";
+    //std::filesystem::path absolutePath = projectPath / relativePath;
+    //std::string absolutePathStr = absolutePath.string();
     int i = 0;
 
-    int rc = sqlite3_open(absolutePathStr.c_str(), &db);
+    //int rc = sqlite3_open(absolutePathStr.c_str(), &db);
+    int rc = sqlite3_open("data/save.sqlite", &db);
     if (rc != SQLITE_OK) {
         std::cerr << "Impossible d'ouvrir la base de donnees 1: " << sqlite3_errmsg(db) << std::endl;
         return;
@@ -117,16 +118,16 @@ void LastPartieBuilder::setJoueurs() const {
 void LastPartieBuilder::setCartesJoueurs() const {
     sqlite3* db;
     sqlite3_stmt* stmt;
-    std::string relativePath = "data/save.sqlite";
-    std::filesystem::path absolutePath = projectPath / relativePath;
-    std::string absolutePathStr = absolutePath.string();
+    //std::string relativePath = "data/save.sqlite";
+    //std::filesystem::path absolutePath = projectPath / relativePath;
+    //std::string absolutePathStr = absolutePath.string();
     int i = 0;
     size_t nb_cartes_nv1 = partie->espaceJeux->getPyramide().getPioche1().getNbCartes();
     size_t nb_cartes_nv2 = partie->espaceJeux->getPyramide().getPioche2().getNbCartes();
     size_t nb_cartes_nv3 = partie->espaceJeux->getPyramide().getPioche3().getNbCartes();
     size_t nb_cartes_noble = partie->espaceJeux->getPyramide().getPiocheNoble().getNbCartes();
 
-    int rc = sqlite3_open(absolutePathStr.c_str(), &db);
+    int rc = sqlite3_open("data/save.sqlite", &db);
     if (rc != SQLITE_OK) {
         std::cerr << "Impossible d'ouvrir la base de donnees 2: " << sqlite3_errmsg(db) << std::endl;
         return;
@@ -196,11 +197,11 @@ void LastPartieBuilder::setJetonsJoueurs() const{
     sqlite3* db;
     sqlite3_stmt* stmt;
     sqlite3_stmt* stmt2;
-    std::string relativePath = "data/save.sqlite";
-    std::filesystem::path absolutePath = projectPath / relativePath;
-    std::string absolutePathStr = absolutePath.string();
+    //std::string relativePath = "data/save.sqlite";
+    //std::filesystem::path absolutePath = projectPath / relativePath;
+    //std::string absolutePathStr = absolutePath.string();
 
-    int rc = sqlite3_open(absolutePathStr.c_str(), &db);
+    int rc = sqlite3_open("data/save.sqlite", &db);
     if (rc != SQLITE_OK) {
         std::cerr << "Impossible d'ouvrir la base de donnees 3: " << sqlite3_errmsg(db) << std::endl;
         return;
@@ -241,11 +242,11 @@ void LastPartieBuilder::updateEspaceJeu() const{
     sqlite3* db;
     sqlite3_stmt* stmt;
     sqlite3_stmt* stmt2;
-    std::string relativePath = "data/save.sqlite";
-    std::filesystem::path absolutePath = projectPath / relativePath;
-    std::string absolutePathStr = absolutePath.string();
+    //std::string relativePath = "data/save.sqlite";
+    //std::filesystem::path absolutePath = projectPath / relativePath;
+    //std::string absolutePathStr = absolutePath.string();
 
-    int rc = sqlite3_open(absolutePathStr.c_str(), &db);
+    int rc = sqlite3_open("data/save.sqlite", &db);
     if (rc != SQLITE_OK) {
         std::cerr << "Impossible d'ouvrir la base de donnees 6: " << sqlite3_errmsg(db) << std::endl;
         return;
@@ -296,11 +297,11 @@ void LastPartieBuilder::updateEspaceJeu() const{
 void LastPartieBuilder::setInfosPartie() const {
     sqlite3* db;
     sqlite3_stmt* stmt;
-    std::string relativePath = "data/save.sqlite";
-    std::filesystem::path absolutePath = projectPath / relativePath;
-    std::string absolutePathStr = absolutePath.string();
+    //std::string relativePath = "data/save.sqlite";
+    //std::filesystem::path absolutePath = projectPath / relativePath;
+    //std::string absolutePathStr = absolutePath.string();
 
-    int rc = sqlite3_open(absolutePathStr.c_str(), &db);
+    int rc = sqlite3_open("data/save.sqlite", &db);
     if (rc != SQLITE_OK) {
         std::cerr << "Impossible d'ouvrir la base de donnees 8: " << sqlite3_errmsg(db) << std::endl;
         return;

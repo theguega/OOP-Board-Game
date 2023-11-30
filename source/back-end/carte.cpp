@@ -98,10 +98,10 @@ JeuCarte::JeuCarte(){
 
     //on ajoute le chemin relatif au chemin absolue du projet
     std::string relativePath = "data/data_carte.sqlite";
-    std::filesystem::path absolutePath = projectPath / relativePath;
-    std::string absolutePathStr = absolutePath.string();
+    //std::filesystem::path absolutePath = projectPath / relativePath;
+    //std::string absolutePathStr = absolutePath.string();
 
-    int rc = sqlite3_open("data/data_carte.sqlite", &db); //conversion en char* pour sqlite3_open
+    int rc = sqlite3_open(relativePath.c_str(), &db); //conversion en char* pour sqlite3_open
 
     if (rc != SQLITE_OK) {
         std::cerr << "Impossible d'ouvrir la base de donnees 1: " << sqlite3_errmsg(db) << std::endl;
