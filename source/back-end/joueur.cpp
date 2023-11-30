@@ -17,9 +17,10 @@ type toType(std::string s) {
 
 // Constructeur
 Joueur::Joueur(string pseudo, type typeDeJoueur):
-                // Voir strategyyy
                pseudo(pseudo), typeDeJoueur(typeDeJoueur), ptsPrestige(0), nbCouronnes(0), gagnant(0) {
                 //on initialise les map avec les bonnes couleurs
+
+
                 for (const auto& couleur : Couleurs) {
                     if (couleur != Couleur::INDT) {
                         jetons[couleur];
@@ -30,6 +31,13 @@ Joueur::Joueur(string pseudo, type typeDeJoueur):
                         }
                     }
                 }
+
+    // Créer la stratégie en fonction du type de joueur
+    if (typeDeJoueur == type::IA) {
+        strategy = new StrategyIA();  // Vous devez définir le constructeur de StrategyIA
+    } else {
+        strategy = new StrategyHumain();  // Vous devez définir le constructeur de StrategyHumain
+    }
 }
 
 // Destructeur
@@ -362,7 +370,8 @@ void Joueur::utiliserPrivilege(Plateau& plateau){
     }
     const Privilege& privilege = supPrivilege(plateau);
     plateau.poserPrivilege(privilege);
-    const Jeton& jetonSelec = strategy->choisirJeton(plateau);
+    std::pair<unsigned int, unsigned int> coordJetonSelec = strategy->choisirJeton(plateau);
+    const Jeton& jetonSelec = plateau.recupererJeton(coordJetonSelec.first, coordJetonSelec.second);
     addJeton(jetonSelec);
 
 }
@@ -386,76 +395,8 @@ void Joueur::remplirPlateau(Plateau& plateau, Sac& sac, Joueur& joueurAdverse){
 }
 
 void Joueur::recupererJetons(Plateau& plateau){
-    std::cout << "Combien de jetons souhaitez-vous recuperer ? (1 a 3) " << std::endl;
-    unsigned int nbJetonsRecup;
-    std::cin >> nbJetonsRecup;
-
-    while (nbJetonsRecup > 3 || nbJetonsRecup < 1){
-        std::cout <<"Le nombre de jetons est impossible\nCombien de jetons souhaitez-vous recuperer ? (1 a 3) " << std::endl;
-        std::cin >> nbJetonsRecup;
-    }
-
-    std::cout << "Merci de selectionner des jetons adjacents en ligne, en colonne ou en diagonale." << std::endl;
-
-    std::vector<std::pair<unsigned int, unsigned int>> vecteurCoordonnees;
-    std::vector<const Jeton*> jetonsRecup;
-
-    // Récup des coordonnées des jetons
-    for (unsigned int k = 0; k < nbJetonsRecup; k++){
-        unsigned int i, j;
-        const Jeton& jeton = strategy->choisirJeton(plateau);
-        // Ajout des coordonnees
-        vecteurCoordonnees.emplace_back(i, j);
-        // Ajout du jeton
-        jetonsRecup.push_back(&jeton);
-    }
-
-    // Verifier que les jetons sont adjacents
-    if (jetons.size() > 1) {
-        bool result1 = true;
-        bool result2 = true;
-        bool result3 = false; // Diago 1
-        bool result4 = false; // Diago 2
-
-        // Verif que les jetons sont adjacents en ligne
-        for (int i = 0; i < vecteurCoordonnees.size()-1; i++) {
-            if (vecteurCoordonnees[i].first != vecteurCoordonnees[i + 1].first) {
-                result1 = false;
-            }
-        }
-        // Verif que les jetons sont adjacents en colonne
-        for (int i = 0; i < vecteurCoordonnees.size()-1; i++) {
-            if (vecteurCoordonnees[i].second != vecteurCoordonnees[i + 1].second) {
-                result2 = false;
-            }
-        }
-        // Verif que les jetons sont adjacents en diagonale
-
-        // Fonction de comparaison pour trier en fonction du premier élément de la paire
-        auto comparaison = [](const auto& a, const auto& b) {
-            return a.first < b.first;
-        };
-        std::sort(vecteurCoordonnees.begin(), vecteurCoordonnees.end(), comparaison);
-
-        for (int i = 0; i < vecteurCoordonnees.size()-1; i++) {
-            // première diagonale
-            if ((vecteurCoordonnees[i].first+1 == vecteurCoordonnees[i + 1].first) && (vecteurCoordonnees[i].second-1 == vecteurCoordonnees[i + 1].second)) {
-                result3 = true;
-            }
-        }
-
-        for (int i = 0; i < vecteurCoordonnees.size()-1; i++) {
-            // seconde diagonale
-            if ((vecteurCoordonnees[i].first+1 == vecteurCoordonnees[i + 1].first) && (vecteurCoordonnees[i].second+1 == vecteurCoordonnees[i + 1].second)) {
-                result4 = true;
-            }
-        }
-
-        if (!result1 && !result2 && !result3 && !result4) {
-            throw JoueurException("Les jetons ne sont pas adjacents");
-        }
-
-    }
+    // Récupération des jetons 1 2 ou 3 jetons en fonction de la strategy
+    std::vector<const Jeton*> jetonsRecup = strategy->recupJetonStrat(plateau);
 
     // ajout des jetons dans la main du joueur
     for (auto & i : jetonsRecup){
@@ -465,7 +406,7 @@ void Joueur::recupererJetons(Plateau& plateau){
 }
 
 void Joueur::orReserverCarte (Pyramide& pyramide, Plateau& plateau){
-    std::cout<<"Volez-vous réserver une carte de la pyramide ou de la pioche de niveau i ? (0, 1, 2, 3)" << std::endl;
+    std::cout<<"Voulez-vous réserver une carte de la pyramide ou de la pioche de niveau i ? (0, 1, 2, 3)" << std::endl;
     unsigned int choix;
     std::cin >> choix;
 
@@ -492,7 +433,9 @@ void Joueur::orReserverCarte (Pyramide& pyramide, Plateau& plateau){
 
 
         // Recuperation d'un jeton or Voir exception mécanique de jeu
-        const Jeton& jeton = strategy->choisirJeton(plateau);
+        // Recuperation d'un jeton or
+        std::pair<unsigned int, unsigned int> coordJetonSelec = strategy->choisirJeton(plateau);
+        const Jeton& jeton = plateau.recupererJeton(coordJetonSelec.first, coordJetonSelec.second);
         if(jeton.getCouleur() != Couleur::OR){
             throw JoueurException("Le jeton choisi n'est pas un jeton or");
         }
@@ -506,7 +449,8 @@ void Joueur::orReserverCarte (Pyramide& pyramide, Plateau& plateau){
         addCarteReservee(carte);
 
         // Recuperation d'un jeton or
-        const Jeton& jeton = strategy->choisirJeton(plateau);
+        std::pair<unsigned int, unsigned int> coordJetonSelec = strategy->choisirJeton(plateau);
+        const Jeton& jeton = plateau.recupererJeton(coordJetonSelec.first, coordJetonSelec.second);
         if(jeton.getCouleur() != Couleur::OR){
             throw JoueurException("Le jeton choisi n'est pas un jeton or");
         }
