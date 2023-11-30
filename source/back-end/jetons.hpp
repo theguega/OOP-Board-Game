@@ -178,6 +178,8 @@ class Plateau {
         //Remplissage du plateau à partir du sac (on vide le sac)
         void remplirPlateau(Sac& sac);
 
+
+
         //Singleton
         //Lot de privilèges (debut de partie)
         static Plateau& getPlateau(const LotPrivileges& lotp);

@@ -8,16 +8,20 @@
 #include "strategy.hpp"
 // rajouter itération cartes + jetons + privilèges
 
-// Voir strategy pour l'IA
 // acheter carte noble acheter carte niveau 4 DONE
 // Exceptions --> gérer les exceptions DONE
 // bonus DONE
-// CApa
-// voir nb couronnes
-// Voir achat carte en fonction des gemmes
-// Choix action aléatoire
+// voir nb couronnes DONE
 // Voir diagonale DONE~
 // voir estGagnant DONE
+// couleurs pour carte reservee DONE
+
+// CApa
+// Voir achat carte en fonction des gemmes DONE
+// Choix action aléatoire
+// Voir strategy pour l'IA
+
+
 
 class JoueurException
 {
@@ -96,7 +100,8 @@ public:
     void supCarte(Carte &carte);
     void supCarteReservee(const Carte &carte);
     void supCarteNoble(const Carte& carte);
-    void supJeton(Jeton *jeton);
+    void supJeton(Jeton *jeton, EspaceJeux& espaceJeux);
+    void supJetonNb(unsigned int nb, Couleur c, EspaceJeux& espaceJeux);
     const Privilege& supPrivilege(Plateau& plateau);
 
     // Affichage Done
@@ -107,13 +112,15 @@ public:
         std::cout << "Nombre de privilèges : " << &privileges << std::endl;
     }
 
+
+    bool verifAchatCarte(const Carte& carte,  EspaceJeux& espaceJeux);
     // Actions optionnelles
     void utiliserPrivilege(Plateau& plateau);
     void remplirPlateau(Plateau& plateau, Sac& sac, Joueur& joueurAdverse);
 
     // Actions obligatoires
     void recupererJetons(Plateau& plateau);
-    void acheterCarteJoaillerie (Pyramide& pyramide);
+    void acheterCarteJoaillerie (EspaceJeux& espaceJeux);
     void acheterCarteNoble (Pyramide& pyramide);
     void orReserverCarte (Pyramide& pyramide, Plateau& plateau);
 
