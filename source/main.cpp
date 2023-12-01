@@ -1,5 +1,4 @@
 #include "back-end/controller.hpp"
-#include <filesystem>
 
 #include <QApplication>
 #include <QWidget>
@@ -12,29 +11,6 @@
 #include "interface/code/vuePlateau.h"
 #include "interface/code/toutesPages.h"
 #include <iostream>
-
-//Mettez ici le chemin absolue vers le projet
-//Theo
-//std::filesystem::path projectPath = string("/Users/theoguegan/Documents/UTC/GI01/LO21/Splendor/source");
-//Samuel B
-//std::filesystem::path projectPath = string("\\Users\\Beziat\\Documents\\Projet_LO21\\source");
-//Robert
-//std::filesystem::path projectPath = string("/Users/robertantaluca/Desktop/Projet_LO21");
-//Samuel M
-std::filesystem::path projectPath = string("C:/Users/samma/Documents/Programmation/LO21/Projet_LO21");
-//Maxime
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -53,20 +29,6 @@ int main(void) {
     Controller control;
     control.lancerPartie();
     control.getJoueurCourant().afficherJoueur();
-    std::cout<<"\n\n\n"<<std::endl;
-    // simulation victoire d'un joueur
-    int i = 5;
-    if (i == 5)
-        control.getJoueurCourant().updatePtsPrestige(16);
-    control.getJoueurCourant().afficherJoueur();
-    i++;
-    control.tour_suivant();
-
-    if (control.getPartie().getJoueur1()->estGagnant())
-        cout << control.getPartie().getJoueur1()->getPseudo() << " est gagnant;"<<std::endl;
-    else if (control.getPartie().getJoueur2()->estGagnant())
-        cout << control.getPartie().getJoueur2()->getPseudo() << " est gagnant;"<<std::endl;
-
     return 0;
 }
 
