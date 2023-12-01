@@ -104,6 +104,14 @@ void Controller::setJoueurCourant(int n) {
     }
 }
 
+void Controller::changerJoueurCourant() {
+    //changement du joueur courant
+    if (joueurCourant==partie->getJoueur1())
+        joueurCourant = partie->getJoueur2();
+    else
+        joueurCourant = partie->getJoueur1();
+}
+
 
 void Controller::lancerPartie() {
     // choix aleatoire entre 0 et 1 pour le choix du joueur qui commence
