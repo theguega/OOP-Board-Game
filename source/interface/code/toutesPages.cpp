@@ -40,7 +40,7 @@ toutesPages::toutesPages(QWidget* parent, QApplication* app) {
     connect(menuPrincipal->getBoutonBibli(), &QPushButton::clicked, [this] (){
         setCurrentIndex(3);
     });
-    connect(bibli->getRetourMenuSauv(), &QPushButton::clicked, [this](){
+    connect(bibli->getRetourMenu(), &QPushButton::clicked, [this](){
         setCurrentIndex(0); //Permet de retourner au menu principal depuis scrollSauvegardes
     });
     connect(crea, &pageCreation::fermerToutesPages, this, &toutesPages::fermerFenetre); //Connecte le signal fermerToutesPages (émit lors de la validation dans création page) vec la méthode fermer fenêtre afin de tout fermer au moment de la mise en route du jeu
