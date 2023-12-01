@@ -53,7 +53,7 @@ int main(void) {
     control.getJoueurCourant().afficherJoueur();
 
     // simulation victoire d'un joueur
-    int i = 0;
+    int i = 5;
     if (i == 5)
         control.getJoueurCourant().updatePtsPrestige(16);
     control.getJoueurCourant().afficherJoueur();
@@ -225,7 +225,7 @@ int main(void) {
 
         }
 
-        control.setJoueurCourant(i); // dommage que changerJoueurCourant() ai disparu, je trouve cette solution moins élégante
+        control.changerJoueurCourant();
     }
 
     return 0;
