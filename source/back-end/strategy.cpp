@@ -2,13 +2,6 @@
 #include <random>
 
 
-/*Privilege StrategyHumain::utiliserPrivilege(const EspaceJeux& espaceJeux) {
-    // voir si le joueur a un jeton
-    // voir si le plateau a des jetons
-    // le déplacer du joueur vers le plateau
-    // le déplacer du plateau vers le joueur
-
-}*/
 
 std::vector<const Jeton*> StrategyHumain::recupJetonStrat(Plateau& plateau){
     std::cout << "Combien de jetons souhaitez-vous recuperer ? (1 a 3) " << std::endl;

@@ -1,6 +1,6 @@
 #include "back-end/controller.hpp"
 #include <filesystem>
-/*
+
 #include <QApplication>
 #include <QWidget>
 #include <QDebug>
@@ -10,7 +10,7 @@
 #include "interface/code/pageCreation.h"
 #include "interface/code/vueJeton.h"
 #include "interface/code/vuePlateau.h"
-#include "interface/code/toutesPages.h"*/
+#include "interface/code/toutesPages.h"
 #include <iostream>
 
 //Mettez ici le chemin absolue vers le projet

@@ -19,7 +19,7 @@
 // CApa
 // Voir achat carte en fonction des gemmes DONE
 // Choix action aléatoire
-// Voir strategy pour l'IA
+// Voir strategy pour l'IA DONE
 
 
 
