@@ -15,7 +15,7 @@
 
 //Mettez ici le chemin absolue vers le projet
 //Theo
-//std::filesystem::path projectPath = string("/Users/theoguegan/Documents/UTC/GI01/LO21/Projet_LO21");
+//std::filesystem::path projectPath = string("/Users/theoguegan/Documents/UTC/GI01/LO21/Splendor/source");
 //Samuel B
 //std::filesystem::path projectPath = string("\\Users\\Beziat\\Documents\\Projet_LO21\\source");
 //Robert
@@ -55,7 +55,7 @@ int main(void) {
     control.getJoueurCourant().afficherJoueur();
     std::cout<<"\n\n\n"<<std::endl;
     // simulation victoire d'un joueur
-    int i = 0;
+    int i = 5;
     if (i == 5)
         control.getJoueurCourant().updatePtsPrestige(16);
     control.getJoueurCourant().afficherJoueur();
@@ -227,7 +227,7 @@ int main(void) {
 
         }
 
-        control.setJoueurCourant(i); // dommage que changerJoueurCourant() ai disparu, je trouve cette solution moins élégante
+        control.changerJoueurCourant();
     }
 
     return 0;
@@ -260,25 +260,25 @@ int main(void) {
 
 /*int main(int argc, char * argv[]) {
     QApplication app(argc, argv);
-    /*vueCarte carte = vueCarte(nullptr);
-    carte.show();
+//    vueCarte carte = vueCarte(nullptr);
+//    carte.show();
 
-    pageCreation page = pageCreation(nullptr);
-    page.show();
+//    pageCreation page = pageCreation(nullptr);
+//    page.show();
 
-    QWidget* widget = new QWidget;
+//    QWidget* widget = new QWidget;
 
-    vueJeton* jeton = new vueJeton(nullptr);
+//    vueJeton* jeton = new vueJeton(nullptr);
 
-    QHBoxLayout* layout = new QHBoxLayout;
-    layout->addWidget(jeton);
+//    QHBoxLayout* layout = new QHBoxLayout;
+//    layout->addWidget(jeton);
 
-    widget -> setLayout(layout);
+//    widget -> setLayout(layout);
 
-    widget->show();
+//    widget->show();
 
-    vuePlateau* plateau = new vuePlateau(nullptr, 500, 500);
-    plateau -> show();
+//    vuePlateau* plateau = new vuePlateau(nullptr, 500, 500);
+//    plateau -> show();
 
     toutesPages* page = new toutesPages(nullptr, &app);
     page->show();

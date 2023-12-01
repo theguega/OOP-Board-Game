@@ -59,11 +59,11 @@ Controller::Controller() {
         // joueurcourant
         sqlite3* db;
         sqlite3_stmt* stmt;
-        std::string relativePath = "data/save.sqlite";
-        std::filesystem::path absolutePath = projectPath / relativePath;
-        std::string absolutePathStr = absolutePath.string();
+        //std::string relativePath = "data/save.sqlite";
+        //std::filesystem::path absolutePath = projectPath / relativePath;
+        //std::string absolutePathStr = absolutePath.string();
 
-        int rc = sqlite3_open(absolutePathStr.c_str(), &db);
+        int rc = sqlite3_open("data/save.sqlite", &db);
         if (rc != SQLITE_OK) {
             std::cerr << "Impossible d'ouvrir la base de donnees 8: " << sqlite3_errmsg(db) << std::endl;
             return;
@@ -104,6 +104,14 @@ void Controller::setJoueurCourant(int n) {
     }
 }
 
+void Controller::changerJoueurCourant() {
+    //changement du joueur courant
+    if (joueurCourant==partie->getJoueur1())
+        joueurCourant = partie->getJoueur2();
+    else
+        joueurCourant = partie->getJoueur1();
+}
+
 
 void Controller::lancerPartie() {
     // choix aleatoire entre 0 et 1 pour le choix du joueur qui commence
@@ -114,11 +122,11 @@ void Controller::lancerPartie() {
     setJoueurCourant(rd_number);
     switch (rd_number) {
     case 0:
-        cout << "#### c'est " << partie->getJoueur1()->getPseudo() << " qui commence, son adversaire recoit 1 privilege ####\n";
+        cout << "#### c'est " << partie->getJoueur1()->getPseudo() << " qui commence, son adversaire recoit 1 privilege !####\n";
         partie->getJoueur2()->addPrivilege(partie->getEspaceJeux().getPlateau().recupererPrivilege());
         break;
     case 1:
-        cout << "#### c'est " << partie->getJoueur2()->getPseudo() << " qui commence, son adversaire recoit 1 privilege ####\n";
+        cout << "#### c'est " << partie->getJoueur2()->getPseudo() << " qui commence, son adversaire recoit 1 privilege !####\n";
         partie->getJoueur1()->addPrivilege(partie->getEspaceJeux().getPlateau().recupererPrivilege());
         break;
     default:
@@ -351,13 +359,14 @@ void Controller::sauvegardePartie() {
    // joueur1, joueur2, plateau, infopartie, pyramide
 
    //on ajoute le chemin relatif au chemin absolue du projet
-   std::string relativePath = "data/save.sqlite";
-   std::filesystem::path absolutePath = projectPath / relativePath;
-   std::string absolutePathStr = absolutePath.string();
+   //std::string relativePath = "data/save.sqlite";
+   //std::filesystem::path absolutePath = projectPath / relativePath;
+   //std::string absolutePathStr = absolutePath.string();
 
    //Connexion à la base de donnée
    sqlite3 *db;
-   int rc = sqlite3_open(absolutePathStr.c_str(), &db);
+   //int rc = sqlite3_open(absolutePathStr.c_str(), &db);
+   int rc = sqlite3_open("data/save.sqlite", &db);
    if (rc != SQLITE_OK) {
        std::cerr << "Erreur lors de la connexion à la base de donnée" << std::endl;
        sqlite3_close(db);
@@ -498,13 +507,13 @@ void Controller::enregisterScore() {
    //sinon on le crée et on lui ajoute une victoire ou une défaite
 
    //on ajoute le chemin relatif au chemin absolue du projet
-   std::string relativePath = "data/score.sqlite";
-   std::filesystem::path absolutePath = projectPath / relativePath;
-   std::string absolutePathStr = absolutePath.string();
+   //std::string relativePath = "data/score.sqlite";
+   //std::filesystem::path absolutePath = projectPath / relativePath;
+   //std::string absolutePathStr = absolutePath.string();
 
    //Connexion à la base de donnée
    sqlite3 *db;
-   int rc = sqlite3_open(absolutePathStr.c_str(), &db);
+   int rc = sqlite3_open("data/score.sqlite", &db);
    if (rc != SQLITE_OK) {
        std::cerr << "Erreur lors de la connexion à la base de donnée" << std::endl;
        sqlite3_close(db);

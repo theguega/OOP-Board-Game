@@ -20,9 +20,9 @@ public:
 	// actions partie
 	void lancerPartie();
 	void tour_suivant();
+    void changerJoueurCourant();
 
 	// Actions optionnelles
-
 	void utiliserPrivilege(Plateau& plateau);
 	void remplirPlateau(Plateau& plateau, Sac& sac, Joueur& joueurAdverse);
 

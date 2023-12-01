@@ -3,19 +3,15 @@
 
 #include <iostream>
 #include <string>
-
 #include <array>
 #include <vector>
 #include <unordered_map>
 #include <map>
-
 #include <random>
 #include <filesystem>
-
-#include "../sqlite/sqlite3.h"
+#include "sqlite/sqlite3.h"
 #include "jetons.hpp"
 using namespace std;
-extern std::filesystem::path projectPath;
 
 
 class CarteException{
@@ -46,6 +42,7 @@ private:
     unsigned int blanc, bleu, vert, noir, rouge, perle;
 public:
     Prix(unsigned int bla, unsigned int ble, unsigned int v, unsigned int n, unsigned int r, unsigned int p) : blanc(bla), bleu(ble), vert(v), noir(n), rouge(r), perle(p) {}
+
     unsigned int getBlanc() const { return blanc; }
     unsigned int getBleu() const { return bleu; }
     unsigned int getVert() const { return vert; }
@@ -62,7 +59,9 @@ private:
     unsigned int nbBonus;
 public:
     Bonus(Couleur c = Couleur::INDT, int n = 0) : couleur(c), nbBonus(n) {}
+
     void setCouleur(Couleur c) { couleur = c; };
+
     Couleur getCouleur() const { return couleur; }
     unsigned int getNbBonus() const { return nbBonus; }
 };
@@ -71,7 +70,6 @@ ostream& operator<<(ostream& f, const Bonus& b);
 
 class Carte {
 private:
-    // eventuel ajout d'un champ ID, peut �tre util pour les cartes nobles par exemple, savoir qui est qui
     TypeCarte type;
     Prix prix;
     Capacite capacite1;
@@ -84,6 +82,7 @@ public:
     Carte(TypeCarte t, Prix& p, Capacite c1, Capacite c2, Bonus& b, unsigned int nbC, unsigned int nbP, unsigned int id); // constructeur classique
     Carte(TypeCarte t, Capacite c, unsigned int nbP, unsigned int id); // constructeur carte noble
     ~Carte() = default;
+
     TypeCarte getType() const { return type; }
     const Prix& getPrix() const { return prix; }
     Capacite getCapacite1() const { return capacite1; }
@@ -97,7 +96,6 @@ ostream& operator<<(ostream& f, const Carte& c);
 
 class JeuCarte {
 private:
-    // appliquer le design pattern singleton plus tard
     vector<const Carte*> cartes_nv1; 
     vector<const Carte*> cartes_nv2;
     vector<const Carte*> cartes_nv3;
@@ -105,6 +103,7 @@ private:
 public:
     JeuCarte();
     ~JeuCarte();
+
     size_t getNbCartes_nv1() const { return cartes_nv1.size(); }
     size_t getNbCartes_nv2() const { return cartes_nv2.size(); }
     size_t getNbCartes_nv3() const { return cartes_nv3.size(); }
@@ -113,6 +112,8 @@ public:
     const Carte& getCarteNiv2(size_t i) const;
     const Carte& getCarteNiv3(size_t i) const;
     const Carte& getCarteNoble(size_t i) const;
+
+
     JeuCarte(const JeuCarte& j) = delete;
     JeuCarte& operator=(const JeuCarte& j) = delete;
 };
@@ -122,12 +123,15 @@ private:
     TypeCarte type_carte;
     vector<const Carte*> cartes;
 public:
-    explicit Pioche(const JeuCarte& j, TypeCarte t); // j'ai pris ca depuis le td mais a t on besoin du explicit ?
+    explicit Pioche(const JeuCarte& j, TypeCarte t);
     ~Pioche();
-    bool estVide() const { return getNbCartes() == 0; }
+
     size_t getNbCartes() const { return cartes.size(); }
+
+    bool estVide() const { return getNbCartes() == 0; }
     const Carte& piocher();
     const Carte& piocher(int id);
+
     Pioche(const Pioche& p) = delete;
     Pioche& operator=(const Pioche& p) = delete;
 };
