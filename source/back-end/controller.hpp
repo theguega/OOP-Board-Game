@@ -20,7 +20,7 @@ public:
 	// actions partie
 	void lancerPartie();
 	void tour_suivant();
-    void changerJoueurCourant()
+    void changerJoueurCourant();
 
 	// Actions optionnelles
 	void utiliserPrivilege(Plateau& plateau);
