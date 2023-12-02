@@ -22,13 +22,18 @@ public:
 	void tour_suivant();
     void changerJoueurCourant();
 
+    unsigned int choixActionsOptionelles() {return joueurCourant->strategy->choixActionsOptionelles(); };
+    unsigned int choixActionsObligatoires() {return joueurCourant->strategy->choixActionsObligatoires(); };
+
+    bool verifAchatCarte(const Carte& carte, EspaceJeux& espaceJeux);
 	// Actions optionnelles
 	void utiliserPrivilege(Plateau& plateau);
 	void remplirPlateau(Plateau& plateau, Sac& sac, Joueur& joueurAdverse);
 
 	// Actions obligatoires
 	void recupererJetons(Plateau& plateau);
-	void acheterCarteJoaillerie(Pyramide& pyramide);
+    void acheterCarteNoble (Pyramide& pyramide);
+    void acheterCarteJoaillerie(EspaceJeux& espaceJeux);
 	void orReserverCarte(Pyramide& pyramide, Plateau& plateau);
 
 	//gestion données

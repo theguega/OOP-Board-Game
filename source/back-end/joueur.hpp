@@ -65,6 +65,8 @@ public:
     // Destructeur
     ~Joueur();
 
+    friend class Controller;
+
 
 
     // Getters
@@ -113,20 +115,7 @@ public:
     }
 
 
-    bool verifAchatCarte(const Carte& carte,  EspaceJeux& espaceJeux);
 
-    unsigned int choixActionsOptionelles() {return strategy->choixActionsOptionelles(); };
-    unsigned int choixActionsObligatoires() {return strategy->choixActionsObligatoires(); };
-
-    // Actions optionnelles
-    void utiliserPrivilege(Plateau& plateau);
-    void remplirPlateau(Plateau& plateau, Sac& sac, Joueur& joueurAdverse);
-
-    // Actions obligatoires
-    void recupererJetons(Plateau& plateau);
-    void acheterCarteJoaillerie (EspaceJeux& espaceJeux);
-    void acheterCarteNoble (Pyramide& pyramide);
-    void orReserverCarte (Pyramide& pyramide, Plateau& plateau);
 
     // Sauvegarde + Gagne
     bool nbPtsPrestigeParCouleurSupDix() const;

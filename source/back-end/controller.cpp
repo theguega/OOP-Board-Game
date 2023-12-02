@@ -112,7 +112,6 @@ void Controller::changerJoueurCourant() {
         joueurCourant = partie->getJoueur1();
 }
 
-
 void Controller::lancerPartie() {
     // choix aleatoire entre 0 et 1 pour le choix du joueur qui commence
     std::random_device rd;
@@ -134,7 +133,7 @@ void Controller::lancerPartie() {
     }
     partie->setTour(0);
     partie->getEspaceJeux().getPyramide().remplirPyramide();
-    joueurCourant->remplirPlateau(partie->getEspaceJeux().getPlateau(), partie->getEspaceJeux().getSac(), this->getJoueurAdverse());
+    remplirPlateau(partie->getEspaceJeux().getPlateau(), partie->getEspaceJeux().getSac(), this->getJoueurAdverse());
     // TODO
 }
 
@@ -150,208 +149,301 @@ void Controller::tour_suivant() {
 
 ///////////////////////// Actions d'un joueur /////////////////////////
 
-void Controller::utiliserPrivilege(Plateau& plateau) {
-    //if (nbPrivileges == 0) {
-    //    throw JoueurException("Le joueur n'a pas de privil�ge");
-    //}
-    ///*if (plateau.getNbJtons()==0){
-    //    throw JoueurException("Le plateau n'a pas de jetons");
-    //}*/
-    //const Privilege& privilege = supPrivilege();
-    //plateau.poserPrivilege(privilege);
-    //const Jeton& jetonSelec = strategy->choisirJeton(plateau);
-    //addJeton(jetonSelec);
+bool Controller::verifAchatCarte(const Carte& carte, EspaceJeux& espaceJeux) {
+    // 1 recuperer les points nécessaires pour acheter la carte
+    // 2 voir le nb de jetons par couleur
+    // 3 ajouter les bonus
+    // 4 voir si le joueur a assez de points pour acheter la carte
+    // 5 si pas assez essayer avec les jetons or
+
+    // recup des points nécessaires pour acheter la carte
+    unsigned int needBlanc =  carte.getPrix().getBlanc() ;
+    unsigned int needBleu =  carte.getPrix().getBleu();
+    unsigned int needVert =  carte.getPrix().getVert();
+    unsigned int needRouge =  carte.getPrix().getRouge();
+    unsigned int needNoir =  carte.getPrix().getNoir();
+    unsigned int needPerle = carte.getPrix().getPerle();
+
+    // recup des jetons du joueur
+    // Map des bonus associés à chaque couleur
+
+// Map des bonus associés à chaque couleur
+
+
+    unsigned int nbBlanc = 0;
+    auto itBlanc = joueurCourant->jetons.find(Couleur::BLANC);
+    if (itBlanc != joueurCourant->jetons.end()) {
+        nbBlanc = itBlanc->second.size();
+
+        auto itBonusBlanc = joueurCourant->bonus.find(Couleur::BLANC);
+        if (itBonusBlanc != joueurCourant->bonus.end()) {
+            nbBlanc += itBonusBlanc->second;
+        }
+    }
+
+    unsigned int nbBleu = 0;
+    auto itBleu = joueurCourant->jetons.find(Couleur::BLEU);
+    if (itBleu != joueurCourant->jetons.end()) {
+        nbBleu = itBleu->second.size();
+
+        auto itBonusBleu = joueurCourant->bonus.find(Couleur::BLEU);
+        if (itBonusBleu != joueurCourant->bonus.end()) {
+            nbBleu += itBonusBleu->second;
+        }
+    }
+
+    unsigned int nbVert = 0;
+    auto itVert = joueurCourant->jetons.find(Couleur::VERT);
+    if (itVert != joueurCourant->jetons.end()) {
+        nbVert = itVert->second.size();
+
+        auto itBonusVert = joueurCourant->bonus.find(Couleur::VERT);
+        if (itBonusVert != joueurCourant->bonus.end()) {
+            nbVert += itBonusVert->second;
+        }
+    }
+
+    unsigned int nbRouge = 0;
+    auto itRouge = joueurCourant->jetons.find(Couleur::ROUGE);
+    if (itRouge != joueurCourant->jetons.end()) {
+        nbRouge = itRouge->second.size();
+
+        auto itBonusRouge = joueurCourant->bonus.find(Couleur::ROUGE);
+        if (itBonusRouge != joueurCourant->bonus.end()) {
+            nbRouge += itBonusRouge->second;
+        }
+    }
+
+    unsigned int nbNoir = 0;
+    auto itNoir = joueurCourant->jetons.find(Couleur::NOIR);
+    if (itNoir != joueurCourant->jetons.end()) {
+        nbNoir = itNoir->second.size();
+
+        auto itBonusNoir = joueurCourant->bonus.find(Couleur::NOIR);
+        if (itBonusNoir != joueurCourant->bonus.end()) {
+            nbNoir += itBonusNoir->second;
+        }
+    }
+
+    unsigned int nbPerle = 0;
+    auto itPerle = joueurCourant->jetons.find(Couleur::PERLE);
+    if (itPerle != joueurCourant->jetons.end()) {
+        nbPerle = itPerle->second.size();
+
+    }
+
+    unsigned int nbOr = 0;
+    auto itOr = joueurCourant->jetons.find(Couleur::OR);
+    if (itOr != joueurCourant->jetons.end()) {
+        nbOr = itOr->second.size();
+
+    }
+
+    if (nbBlanc >= needBlanc && nbBleu >= needBleu && nbVert >= needVert &&
+        nbRouge >= needRouge && nbNoir >= needNoir && nbPerle >= needPerle) {
+
+        // On supprime les jetons utilisés
+        joueurCourant->supJetonNb(needBlanc, Couleur::BLANC, espaceJeux);
+        joueurCourant->supJetonNb(needBleu, Couleur::BLEU, espaceJeux);
+        joueurCourant->supJetonNb(needVert, Couleur::VERT, espaceJeux);
+        joueurCourant->supJetonNb(needRouge, Couleur::ROUGE, espaceJeux);
+        joueurCourant->supJetonNb(needNoir, Couleur::NOIR, espaceJeux);
+        joueurCourant->supJetonNb(needPerle, Couleur::PERLE, espaceJeux);
+
+
+        return true;  // Le joueur a suffisamment de jetons pour acheter la carte
+    }
+
+    // 5. Si pas assez, essayer avec les jetons or
+    unsigned int jetonsOrUtilises = 0;
+
+    // Fonction pour ajouter des jetons or à une couleur donnée
+    auto ajouterJetonsOr = [&jetonsOrUtilises, &nbOr](unsigned int& nbCouleur, unsigned int besoin) {
+        while (nbOr > 0 && besoin > nbCouleur) {
+            // Utiliser un jeton or pour compléter le besoin
+            nbOr--;
+            nbCouleur++;
+            jetonsOrUtilises++;
+        }
+    };
+
+    ajouterJetonsOr(nbBlanc, needBlanc);
+    ajouterJetonsOr(nbBleu, needBleu);
+    ajouterJetonsOr(nbVert, needVert);
+    ajouterJetonsOr(nbRouge, needRouge);
+    ajouterJetonsOr(nbNoir, needNoir);
+    ajouterJetonsOr(nbPerle, needPerle);
+
+    // Vérifier à nouveau si le joueur a maintenant assez de points pour acheter la carte
+    if (needBlanc <= nbBlanc && needBleu <= nbBleu && needVert <= nbVert &&
+        needRouge <= nbRouge && needNoir <= nbNoir && needPerle <= nbPerle) {
+        std::cout << "Carte achetable avec " << jetonsOrUtilises << " jeton(s) or utilisé(s)." << std::endl;
+
+        joueurCourant->supJetonNb(needBlanc, Couleur::BLANC, espaceJeux);
+        joueurCourant->supJetonNb(needBleu, Couleur::BLEU, espaceJeux);
+        joueurCourant->supJetonNb(needVert, Couleur::VERT, espaceJeux);
+        joueurCourant->supJetonNb(needRouge, Couleur::ROUGE, espaceJeux);
+        joueurCourant->supJetonNb(needNoir, Couleur::NOIR, espaceJeux);
+        joueurCourant->supJetonNb(needPerle, Couleur::PERLE, espaceJeux);
+        joueurCourant->supJetonNb(jetonsOrUtilises, Couleur::OR, espaceJeux);
+
+        return true;
+    } else {
+        std::cout << "Le joueur n'a pas assez de jetons pour acheter la carte." << std::endl;
+        return false;
+    }
+}
+
+void Controller::utiliserPrivilege(Plateau& plateau){
+    if (joueurCourant->privileges.empty()) {
+        throw JoueurException("Le joueur n'a pas de privilège");
+    }
+    if (plateau.getLargeurMatrice()==0){
+        throw JoueurException("Le plateau n'a pas de jetons");
+    }
+    const Privilege& privilege = joueurCourant->supPrivilege(plateau);
+    plateau.poserPrivilege(privilege);
+    std::pair<unsigned int, unsigned int> coordJetonSelec = joueurCourant->strategy->choisirJeton(plateau);
+    const Jeton& jetonSelec = plateau.recupererJeton(coordJetonSelec.first, coordJetonSelec.second);
+    joueurCourant->addJeton(jetonSelec);
 
 }
 
-void Controller::remplirPlateau(Plateau& plateau, Sac& sac, Joueur& joueurAdverse) {
-    //strategy->remplirPlateauStrat(plateau, sac);
-    //if (nbPrivileges == 3) {
-    //    std::cout << "Vous avez deja 3 privileges. Vous n'en recupererez donc pas plus !" << std::endl;
-    //    return;
-    //}
-    //// Verifier s'il reste des privileges sur le plateau
-    //if (!plateau.pivilegeDisponible()) {
-    //    std::cout << "Il n'y a plus de privileges sur le plateau !\nLe joueur adverse perd donc un privilege..." << std::endl;
-    //    const Privilege& privilege = joueurAdverse.supPrivilege(); // recuperation du privilege du joueur adverse
-    //    addPrivilege(privilege); // ajout du privilege au joueur
-    //    return;
-    //}
-    //// Cas standard
-    //const Privilege& privilege = plateau.recupererPrivilege();
-    //addPrivilege(privilege);
+void Controller::remplirPlateau(Plateau& plateau, Sac& sac, Joueur& joueurAdverse){
+    joueurCourant->strategy->remplirPlateauStrat(plateau, sac);
+    if (joueurCourant->privileges.size() == 3){
+        std::cout<< "Vous avez deja 3 privileges. Vous n'en recupererez donc pas plus !" << std::endl;
+        return;
+    }
+    // Verifier s'il reste des privileges sur le plateau
+    if (!plateau.pivilegeDisponible()){
+        std::cout<< "Il n'y a plus de privileges sur le plateau !\nLe joueur adverse perd donc un privilege..." << std::endl;
+        const Privilege& privilege = joueurAdverse.supPrivilege(plateau); // recuperation du privilege du joueur adverse
+        joueurCourant->addPrivilege(privilege); // ajout du privilege au joueur
+        return;
+    }
+    // Cas standard
+    const Privilege& privilege = plateau.recupererPrivilege();
+    joueurCourant->addPrivilege(privilege);
 }
 
-void Controller::recupererJetons(Plateau& plateau) {
-    //std::cout << "Combien de jetons souhaitez-vous recuperer ? (1 a 3)" << std::endl;
-    //unsigned int nbJetonsRecup;
-    //std::cin >> nbJetonsRecup;
-    //if (nbJetonsRecup > 3 || nbJetonsRecup < 1) {
-    //    throw JoueurException("Le nombre de jetons est impossible");
-    //}
+void Controller::recupererJetons(Plateau& plateau){
+    // Récupération des jetons 1 2 ou 3 jetons en fonction de la strategy
+    std::vector<const Jeton*> jetonsRecup = joueurCourant->strategy->recupJetonStrat(plateau);
 
-    //std::cout << "Merci de selectionner des jetons adjacents en ligne, en colonne ou en diagonale." << std::endl;
-
-    //std::vector<std::pair<unsigned int, unsigned int>> vecteurCoordonnees;
-    //std::vector<const Jeton*> jetonsRecup;
-
-
-    //for (unsigned int k = 0; k < nbJetonsRecup; k++) {
-    //    unsigned int i, j;
-    //    std::cout << "Entrez la valeur de i : ";
-    //    std::cin >> i;
-    //    std::cout << "Entrez la valeur de j : ";
-    //    std::cin >> j;
-    //    const Jeton& jeton = plateau.recupererJeton(i, j);
-    //    // Ajout des coordonnees
-    //    vecteurCoordonnees.push_back(std::make_pair(i, j));
-    //    // Ajout du jeton
-    //    jetonsRecup.push_back(&jeton);
-    //}
-
-    //// Verifier que les jetons sont adjacents
-    //if (nbJetons > 1) {
-    //    bool result1 = true;
-    //    bool result2 = true;
-    //    bool result3 = true;
-
-    //    for (int i = 0; i < vecteurCoordonnees.size() - 1; i++) {
-    //        if (vecteurCoordonnees[i].first != vecteurCoordonnees[i + 1].first) {
-    //            result1 = false;
-    //        }
-    //    }
-    //    for (int i = 0; i < vecteurCoordonnees.size() - 1; i++) {
-    //        if (vecteurCoordonnees[i].second != vecteurCoordonnees[i + 1].second) {
-    //            result2 = false;
-    //        }
-    //    }
-    //    for (int i = 0; i < vecteurCoordonnees.size() - 1; i++) {
-    //        // A modifier pour les diagonales
-    //        if (vecteurCoordonnees[i].second != vecteurCoordonnees[i + 1].second - 1) {
-    //            result3 = false;
-    //        }
-    //    }
-
-    //    if (!result1 && !result2 && !result3) {
-    //        throw JoueurException("Les jetons ne sont pas adjacents");
-    //    }
-
-    //}
-
-    //// ajout des jetons dans la main du joueur
-    //for (int i = 0; i < jetonsRecup.size(); i++) {
-    //    addJeton(*jetonsRecup[i]);
-    //}
+    // ajout des jetons dans la main du joueur
+    for (auto & i : jetonsRecup){
+        joueurCourant->addJeton(*i);
+    }
 
 }
 
-void Controller::orReserverCarte(Pyramide& pyramide, Plateau& plateau) {
-    //std::cout << "Volez-vous r�server une carte de la pyramide ou de la pioche de niveau i ? (0, 1, 2, 3)" << std::endl;
-    //unsigned int choix;
-    //std::cin >> choix;
-
-    //if (choix == 0) {
-    //    // Reservation de la carte
-    //    std::cout << "Voici les cartes de la pyramide : " << std::endl;
-    //    pyramide.afficherPyramide();
-    //    std::cout << "Tapez le niveau de la carte que vous voulez r�server : " << std::endl;
-    //    unsigned int niveau;
-    //    std::cin >> niveau;
-    //    std::cout << "Tapez le numero de la carte que vous voulez r�server : " << std::endl;
-    //    int numCarte;
-    //    std::cin >> numCarte;
-    //    // V�rifications
-    //    if (numCarte > pyramide.getNbCartesNiv(niveau)) {
-    //        throw JoueurException("Le num�ro de la carte est incorrect");
-    //    }
-    //    const Carte& carte = pyramide.reserverCarte(niveau, numCarte);
-    //    addCarteReservee(carte);
-
-    //    //pyramide.supprimerCarte(niveau, numCarte);
-
-    //    // Recuperation d'un jeton or
-    //    const Jeton& jeton = strategy->choisirJeton(plateau);
-    //    if (jeton.getCouleur() != Couleur::OR) {
-    //        throw JoueurException("Le jeton choisi n'est pas un jeton or");
-    //    }
-    //    addJeton(jeton);
+void Controller::orReserverCarte (Pyramide& pyramide, Plateau& plateau){
+    std::cout<<"Voulez-vous réserver une carte de la pyramide ou de la pioche de niveau i ? (0, 1, 2, 3)" << std::endl;
+    unsigned int choix = joueurCourant->strategy->choixNiveau();
 
 
-    //}
-    //else if (choix == 1 || choix == 2 || choix == 3) {
-    //    // Reservation de la carte
-    //    const Carte& carte = pyramide.ReserverCartePioche(choix);
-    //    addCarteReservee(carte);
+    if (choix == 0){
+        // Reservation de la carte
+        std::pair<unsigned int, unsigned int> numNivCarteSelec = joueurCourant->strategy->reservationCarte(pyramide);
 
-    //    // Recuperation d'un jeton or
-    //    const Jeton& jeton = strategy->choisirJeton(plateau);
-    //    if (jeton.getCouleur() != Couleur::OR) {
-    //        throw JoueurException("Le jeton choisi n'est pas un jeton or");
-    //    }
-    //    addJeton(jeton);
-    //}
+        const Carte& carte = pyramide.acheterCarte(numNivCarteSelec.first, numNivCarteSelec.second);
+        joueurCourant->addCarteReservee(carte);
+
+        // Recuperation d'un jeton or Voir exception mécanique de jeu
+        // Recuperation d'un jeton or
+        std::pair<unsigned int, unsigned int> coordJetonSelec = joueurCourant->strategy->choisirJeton(plateau);
+        const Jeton& jeton = plateau.recupererJeton(coordJetonSelec.first, coordJetonSelec.second);
+        if(jeton.getCouleur() != Couleur::OR){
+            throw JoueurException("Le jeton choisi n'est pas un jeton or");
+        }
+        joueurCourant->addJeton(jeton);
+
+
+    }
+    else if (choix == 1 || choix == 2 || choix == 3){
+        // Reservation de la carte
+        const Carte& carte = pyramide.ReserverCartePioche(choix);
+        joueurCourant->addCarteReservee(carte);
+
+        // Recuperation d'un jeton or
+        std::pair<unsigned int, unsigned int> coordJetonSelec = joueurCourant->strategy->choisirJeton(plateau);
+        const Jeton& jeton = plateau.recupererJeton(coordJetonSelec.first, coordJetonSelec.second);
+        if(jeton.getCouleur() != Couleur::OR){
+            throw JoueurException("Le jeton choisi n'est pas un jeton or");
+        }
+        joueurCourant->addJeton(jeton);
+    }
 
 
 }
 
-void Controller::acheterCarteJoaillerie(Pyramide& pyramide) {
-    //// Voir comment g�rer les bonus
-    //std::cout << "Tapez 1 pour acheter une carte R�serv�e.\nTapez 2 pour acheter une carte du plateau." << std::endl;
-    //unsigned int choix;
-    //std::cin >> choix;
-    //// Achat carte reservee
-    //if (choix == 1) {
-    //    std::cout << "Voici les cartes r�serv�es : " << std::endl;
-    //    unsigned int i = 0;
-    //    // Affichage de la r�serve
-    //    for (auto& cartesReservee : cartesReservees) {
-    //        std::cout << "Num�ro " << i << " : ";
-    //        std::cout << cartesReservee;
-    //        i++;
-    //    }
-    //    std::cout << "Tapez le num�ro de la carte que vous voulez acheter : " << std::endl;
-    //    unsigned int numCarte;
-    //    std::cin >> numCarte;
-    //    // V�rifications -> voir plus au niveau des jetons dans la main
-    //    if (numCarte > cartesReservees.size()) {
-    //        throw JoueurException("Le num�ro de la carte est invalide.");
-    //    }
-    //    const Carte& carte = *cartesReservees[numCarte];
-    //    if (carte.getNbPtsPrivilege() > ptsPrestige) {
-    //        throw JoueurException("Vous n'avez pas assez de points de prestige pour acheter cette carte...");
-    //    }
-    //    addCarte(carte);
-    //    supCarteReservee(carte);
-    //}
-    //// Achat carte du plateau
-    //else if (choix == 2) {
-    //    // Affichage des cartes
-    //    std::cout << "Voici les cartes du plateau : " << std::endl;
-    //    pyramide.afficherPyramide(); //Gerer l'affichage de la pyramide
+void Controller::acheterCarteNoble (Pyramide& pyramide){
+    // affichage cartes nobles
+    pyramide.afficherPyramide();
 
-    //    std::cout << "Tapez le niveau de la carte que vous voulez acheter : " << std::endl;
-    //    unsigned int niveau;
-    //    std::cin >> niveau;
-    //    std::cout << "Tapez le numero de la carte que vous voulez acheter : " << std::endl;
-    //    int numCarte;
-    //    std::cin >> numCarte;
+    std::pair< unsigned int, unsigned int> carteDescr = joueurCourant->strategy->achatNoble(pyramide);
 
-    //    // V�rifications
-    //    if (numCarte > pyramide.getNbCartesNiv(niveau)) {
-    //        throw JoueurException("Le num�ro de la carte est incorrect");
-    //    }
-
-    //    const Carte& carte = pyramide.acheterCarte(niveau, numCarte);
-    //    if (carte.getNbPtsPrivilege() > ptsPrestige) {
-    //        throw JoueurException("Vous n'avez pas assez de points de prestige pour acheter cette carte");
-    //    }
-    //    addCarte(carte);
-    //    //pyramide.supprimerCarte(niveau, numCarte);*/
-    //}
-    //else {
-    //    throw JoueurException("Le choix est incorrect");
-    //}
+    const Carte& carte = pyramide.acheterCarte(4, carteDescr.second);
+    joueurCourant->addCarteNoble(carte);
 }
+
+void Controller::acheterCarteJoaillerie (EspaceJeux& espaceJeux){
+    unsigned int choix = joueurCourant->strategy->choixAchat();
+
+
+    // Achat carte reservee
+    if (choix == 1){
+        std::cout << "Voici les cartes réservées : " << std::endl;
+        unsigned int i = 0;
+        // Affichage de la réserve
+        for (auto & cartesReservee : joueurCourant->cartesReservees) {
+            std::cout <<"Numéro "<<i << " : ";
+            //std::cout<<cartesReservee;
+            i++;
+        }
+
+        std::pair< Couleur, unsigned int> carteDescr = joueurCourant->strategy->achatReserve(joueurCourant->cartesReservees.size());
+
+        const Carte& carte = *(joueurCourant->cartesReservees[carteDescr.first][carteDescr.second]);
+
+        if (!verifAchatCarte(carte, espaceJeux)) {
+            throw JoueurException("Vous n'avez pas assez de points pour acheter cette carte...");
+        }
+        joueurCourant->addCarte(carte);
+        // rajout des couronnes
+        joueurCourant->nbCouronnes += carte.getNbCouronnes();
+        // Rajout du bonus dans le joueur
+        joueurCourant->bonus[carte.getBonus().getCouleur()] += carte.getBonus().getNbBonus();
+        joueurCourant->supCarteReservee(carte);
+    }
+        // Achat carte du plateau
+    else if (choix == 2){
+        // Affichage des cartes
+        std::cout << "Voici les cartes du plateau : " << std::endl;
+        espaceJeux.getPyramide().afficherPyramide(); //Gerer l'affichage de la pyramide
+
+        std::pair<unsigned int, unsigned int> carteDescr = joueurCourant->strategy->reservationCarte(espaceJeux.getPyramide());
+
+        const Carte& carte = espaceJeux.getPyramide().acheterCarte(carteDescr.first, carteDescr.second);
+        if (!verifAchatCarte(carte, espaceJeux)){
+            throw JoueurException("Vous n'avez pas assez de points pour acheter cette carte");
+        }
+        joueurCourant->addCarte(carte);
+        // rajout des couronnes
+        joueurCourant->nbCouronnes += carte.getNbCouronnes();
+        // Rajout du bonus dans le joueur
+        joueurCourant->bonus[carte.getBonus().getCouleur()] += carte.getBonus().getNbBonus();
+    }
+    else {
+        std::cout<<"Le choix est incorrect\n"<<std::endl;
+    }
+
+
+}
+
+
+///////////////////////// Sauvegarde /////////////////////////
 
 void Controller::sauvegardePartie() {
    //Cette fonction aura pour objectif de push toutes les données importantes de la partie dans la base de donnée
