@@ -52,4 +52,5 @@ HEADERS += \
 DISTFILES += \
     data/data_carte.sqlite \
     data/save.sqlite \
-    data/score.sqlite
+    data/score.sqlite \
+    PROBLEMES.md
