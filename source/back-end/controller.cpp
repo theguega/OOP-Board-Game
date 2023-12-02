@@ -2,10 +2,13 @@
 
 Controller::Controller() {
     //Choix du type de partie
+    //Choix du type de partie
 	Director* director = new Director();
 	string statut_partie;
 	std::cout << "Ancienne ou nouvelle partie ? (New/Old)" << std::endl;
 	std::cin >> statut_partie;
+    //Si nouvelle partie
+
     //Si nouvelle partie
 	if (statut_partie == "New") {
 		NewPartieBuilder* builder = new NewPartieBuilder();
@@ -53,7 +56,11 @@ Controller::Controller() {
         delete director;
     
     //Si ancienne partie :
+
+        //Si ancienne partie :
 	} else if (statut_partie == "Old") {
+        //Création
+
         //Création
         LastPartieBuilder* builder = new LastPartieBuilder();
         director->set_builder(builder);
@@ -66,6 +73,9 @@ Controller::Controller() {
         //restitution
         sqlite3* db;
         sqlite3_stmt* stmt;
+        //std::string relativePath = "data/save.sqlite";
+        //std::filesystem::path absolutePath = projectPath / relativePath;
+        //std::string absolutePathStr = absolutePath.string();
 
         int rc = sqlite3_open("data/save.sqlite", &db);
         if (rc != SQLITE_OK) {
@@ -576,7 +586,7 @@ void Controller::sauvegardePartie() {
    //Sauvegarde de la pyramide
    Pyramide& pyramide = getPartie().getEspaceJeux().getPyramide();
    for (int i =0; i<4; i++) {
-        for (size_t j =0; j<pyramide.getNbCartesNiv(i); j++) {
+       for (int j =0; j<pyramide.getNbCartesNiv(i); j++) {
            const Carte* carte = pyramide.getCarte(i,j);
            sql= "INSERT INTO pyramide (i, j, id) VALUES (" + std::to_string(i) + ", " + std::to_string(j) + ", " + std::to_string(carte->getId()) + ");";
            rc = sqlite3_exec(db, sql.c_str(), NULL, NULL, NULL);

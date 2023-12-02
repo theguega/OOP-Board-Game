@@ -18,9 +18,9 @@ type toType(std::string s) {
 // Constructeur
 Joueur::Joueur(string pseudo, type typeDeJoueur):
                pseudo(pseudo), typeDeJoueur(typeDeJoueur), ptsPrestige(0), nbCouronnes(0), gagnant(0) {
+
+
                 //on initialise les map avec les bonnes couleurs
-
-
                 for (const auto& couleur : Couleurs) {
                     if (couleur != Couleur::INDT) {
                         jetons[couleur];
@@ -103,14 +103,14 @@ void Joueur::afficherJoueur() const {
 }
 
 void Joueur::afficherCartes() const {
-    for (int i = 0; i < getNbCartes(); i++) {
+    for (size_t i = 0; i < getNbCartes(); i++) {
         std::cout << "Carte " << i << " : " << std::endl;
         //cartes[i]->afficherCarte();
     }
 }
 
 void Joueur::afficherJetons() const {
-    for (int i = 0; i < getNbJetons(); i++) {
+    for (size_t i = 0; i < getNbJetons(); i++) {
         std::cout << "Jeton " << i << " : " << std::endl;
         //jetons[i]->afficherJeton();
     }
@@ -144,7 +144,7 @@ void Joueur::addPrivilege(const Privilege &privilege) {
 // Suppression des éléments
 
 void::Joueur::supCarte(Carte &carte) {
-    for (int i = 0; i < cartes[carte.getBonus().getCouleur()].size(); i++) {
+    for (size_t i = 0; i < cartes[carte.getBonus().getCouleur()].size(); i++) {
         if (cartes[carte.getBonus().getCouleur()][i] == &carte) {
             nbCouronnes -= carte.getNbCouronnes();
             ptsPrestige -= carte.getNbPtsPrivilege();
@@ -154,7 +154,7 @@ void::Joueur::supCarte(Carte &carte) {
 }
 
 void::Joueur::supCarteReservee(const Carte &carte) {
-    for (int i = 0; i < cartes[carte.getBonus().getCouleur()].size(); i++) {
+    for (size_t i = 0; i < cartes[carte.getBonus().getCouleur()].size(); i++) {
         if (cartesReservees[carte.getBonus().getCouleur()][i] == &carte) {
             cartesReservees[carte.getBonus().getCouleur()].erase(cartes[carte.getBonus().getCouleur()].begin() + i);
         }
@@ -162,7 +162,7 @@ void::Joueur::supCarteReservee(const Carte &carte) {
 }
 
 void Joueur::supCarteNoble(const Carte& carte){
-    for (int i = 0; i < cartesNobles.size(); i++) {
+    for (size_t i = 0; i < cartesNobles.size(); i++) {
         if (cartesNobles[i] == &carte) {
             cartesNobles.erase(cartesNobles.begin()+i);
         }
@@ -170,7 +170,7 @@ void Joueur::supCarteNoble(const Carte& carte){
 }
 
 void::Joueur::supJeton(Jeton *jeton, EspaceJeux& espaceJeux) {
-    for (int i = 0; i < jetons[jeton->getCouleur()].size(); i++) {
+    for (size_t i = 0; i < jetons[jeton->getCouleur()].size(); i++) {
         if (jetons[jeton->getCouleur()][i] == jeton) {
             // On rajoute le jeton dans le sac
             espaceJeux.getSac().ajouterJeton(*jetons[jeton->getCouleur()][i]);
@@ -180,7 +180,7 @@ void::Joueur::supJeton(Jeton *jeton, EspaceJeux& espaceJeux) {
 }
 
 void Joueur::supJetonNb(unsigned int nb, Couleur c, EspaceJeux& espaceJeux){
-    for (int i = 0; i < nb; i++) {
+    for (size_t i = 0; i < nb; i++) {
         // On rajoute le jeton dans le sac
         espaceJeux.getSac().ajouterJeton(*jetons[c].back());
         // On supprime le jeton du joueur

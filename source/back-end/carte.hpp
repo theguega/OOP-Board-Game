@@ -130,7 +130,7 @@ public:
 
     bool estVide() const { return getNbCartes() == 0; }
     const Carte& piocher();
-    const Carte& piocher(int id);
+    const Carte& piocher(unsigned int id);
 
     Pioche(const Pioche& p) = delete;
     Pioche& operator=(const Pioche& p) = delete;
