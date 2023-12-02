@@ -11,16 +11,8 @@
 #include <filesystem>
 #include "sqlite/sqlite3.h"
 #include "jetons.hpp"
+#include "exception.hpp"
 using namespace std;
-
-
-class CarteException{
-private:
-    string info;
-public:
-    CarteException(const string& i) : info(i) {}
-    string getInfo() const { return info; }
-};
 
 
 enum class TypeCarte { Niv1, Niv2, Niv3, Noble };

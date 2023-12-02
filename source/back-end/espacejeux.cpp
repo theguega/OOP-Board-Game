@@ -7,8 +7,8 @@ Pyramide::Pyramide(Pioche * piocheNv1, Pioche * piocheNv2, Pioche * piocheNv3, P
     array_cartes[2].resize(3); // Tableau de 3 Cartes niv3
     array_cartes[3].resize(4); // Tableau de 4 Cartes (les nobles)
 
-    for (int i = 0; i < 4; i++) {
-        for (int j = 0; j < array_cartes[i].size(); j++) {
+    for (size_t i = 0; i < 4; i++) {
+        for (size_t j = 0; j < array_cartes[i].size(); j++) {
             array_cartes[i][j] = nullptr;
         }
     }
@@ -18,7 +18,7 @@ Pyramide::Pyramide(Pioche * piocheNv1, Pioche * piocheNv2, Pioche * piocheNv3, P
 
 Pyramide::~Pyramide() {
     for (int i = 0; i < 4; i++) {
-        for (int j = 0; j < array_cartes[i].size(); j++) {
+        for (size_t j = 0; j < array_cartes[i].size(); j++) {
             array_cartes[i][j] = nullptr;
         }
     }
@@ -29,8 +29,8 @@ Pyramide::~Pyramide() {
 void Pyramide::remplirPyramide() {
     const Carte * ma_carte = nullptr;
 
-    for (int i = 0; i < array_cartes.size(); i++) {
-        for (int j = 0; j < array_cartes[i].size(); j++) {
+    for (size_t i = 0; i < array_cartes.size(); i++) {
+        for (size_t j = 0; j < array_cartes[i].size(); j++) {
             if (array_cartes[i][j] == nullptr) {
                 switch (i) {
                 case 0:
@@ -98,8 +98,8 @@ void Pyramide::remplircasePyramide(unsigned int i, unsigned int j) {
 }
 
 bool Pyramide::estVide() const {
-    for (int i = 0; i < array_cartes.size(); i++) {
-        for (int j = 0; j < array_cartes[i].size(); j++) {
+    for (size_t i = 0; i < array_cartes.size(); i++) {
+        for (size_t j = 0; j < array_cartes[i].size(); j++) {
             if (array_cartes[i][j] != nullptr) {
                 return false;
             }
@@ -177,10 +177,10 @@ const Carte & Pyramide::ReserverCartePioche(unsigned int niveau) {
 
 void Pyramide::afficherPyramide() const {
     std::cout << "Pyramide : " << std::endl;
-    for (int i = 0; i < array_cartes.size() - 1; i++) {
+    for (size_t i = 0; i < array_cartes.size() - 1; i++) {
         std::cout << "Niveau " << i + 1 << " : " << std::endl;
 
-        for (int j = 0; j < array_cartes[i].size(); j++) {
+        for (size_t j = 0; j < array_cartes[i].size(); j++) {
             if (array_cartes[i][j] != nullptr) {
                 std::cout << "Carte " << i << " " << j << " : " << std::endl << * array_cartes[i][j] << std::endl;
             }

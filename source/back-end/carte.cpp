@@ -28,7 +28,7 @@ string TypeCartetoString(TypeCarte t) {
     case TypeCarte::Noble:
         return "Noble";
     default:
-        throw CarteException("Type inconnue");
+        throw SplendorException("Type inconnue");
     }
 }
 ostream & operator << (ostream & f, TypeCarte t) {
@@ -51,7 +51,7 @@ string CapacitetoString(Capacite c) {
     case Capacite::None:
         return "None";
     default:
-        throw CarteException("Capacite inconnue");
+        throw SplendorException("Capacite inconnue");
     }
 }
 ostream & operator << (ostream & f, Capacite c) {
@@ -111,12 +111,12 @@ ostream & operator << (ostream & f,
 
 Carte::Carte(TypeCarte t, Prix & p, Capacite c1, Capacite c2, Bonus & b, unsigned int nbC, unsigned int nbP, unsigned int id): type(t), prix(p), capacite1(c1), capacite2(c2), bonus(b), nbCouronnes(nbC), nbPtsPrivilege(nbP), id(id) {
     if (t == TypeCarte::Noble)
-        throw CarteException("Veuillez utiliser le constructeur approprie");
+        throw SplendorException("Veuillez utiliser le constructeur approprie");
 }
 
 Carte::Carte(TypeCarte t, Capacite c, unsigned int nbP, unsigned int id): type(t), prix(0, 0, 0, 0, 0, 0), capacite1(c), capacite2(Capacite::None), bonus(), nbCouronnes(0), nbPtsPrivilege(nbP), id(id) {
     if (t != TypeCarte::Noble)
-        throw CarteException("Veuillez utiliser le constructeur approprie");
+        throw SplendorException("Veuillez utiliser le constructeur approprie");
 }
 
 ostream & operator << (ostream & f,
@@ -179,7 +179,7 @@ JeuCarte::JeuCarte() {
         } else if (type == "Niv3") {
             cartes_nv3.push_back(new Carte(TypeCarte::Niv3, p, StringToCapacite(capacite1), StringToCapacite(capacite2), b, nb_couronnes, nb_pts_privileges, id));
         } else {
-            throw CarteException("Erreur de construction, le type de carte ne convient pas ici");
+            throw SplendorException("Erreur de construction, le type de carte ne convient pas ici");
         }
     }
     rc = sqlite3_prepare_v2(db, "SELECT * FROM 'carte_noble'", -1, & stmt2, nullptr);
@@ -217,25 +217,25 @@ JeuCarte::~JeuCarte() {
 
 const Carte & JeuCarte::getCarteNiv1(size_t i) const {
     if (i >= getNbCartes_nv1())
-        throw CarteException("Il n'y a que 30 cartes de niveau 1");
+        throw SplendorException("Il n'y a que 30 cartes de niveau 1");
     return * cartes_nv1[i];
 }
 
 const Carte & JeuCarte::getCarteNiv2(size_t i) const {
     if (i >= getNbCartes_nv2())
-        throw CarteException("Il n'y a que 24 cartes de niveau 2");
+        throw SplendorException("Il n'y a que 24 cartes de niveau 2");
     return * cartes_nv2[i];
 }
 
 const Carte & JeuCarte::getCarteNiv3(size_t i) const {
     if (i >= getNbCartes_nv2())
-        throw CarteException("Il n'y a que 13 cartes de niveau 3");
+        throw SplendorException("Il n'y a que 13 cartes de niveau 3");
     return * cartes_nv3[i];
 }
 
 const Carte & JeuCarte::getCarteNoble(size_t i) const {
     if (i >= getNbCartes_nobles())
-        throw CarteException("Il n'y a que 4 cartes nobles");
+        throw SplendorException("Il n'y a que 4 cartes nobles");
     return * cartes_nobles[i];
 }
 
@@ -253,7 +253,7 @@ Pioche::Pioche(const JeuCarte & j, TypeCarte t): type_carte(t) {
         for (size_t i = 0; i < j.getNbCartes_nobles(); i++)
             cartes.push_back( & j.getCarteNoble(i));
     } else {
-        throw CarteException("Type de cartes inconnu");
+        throw SplendorException("Type de cartes inconnu");
     }
 }
 
@@ -264,7 +264,7 @@ Pioche::~Pioche() {
 
 const Carte & Pioche::piocher() {
     if (estVide())
-        throw CarteException("Plus de cartes dans cette pioche");
+        throw SplendorException("Plus de cartes dans cette pioche");
 
     //génération d'un indice aléatoire
     std::random_device rd;
@@ -280,7 +280,7 @@ const Carte & Pioche::piocher() {
 
 const Carte & Pioche::piocher(unsigned int id) {
     if (estVide())
-        throw CarteException("Plus de cartes dans cette pioche");
+        throw SplendorException("Plus de cartes dans cette pioche");
 
     auto it = std::find_if(cartes.begin(), cartes.end(), [id](const Carte * carte) {
         return carte -> getId() == id;
@@ -291,5 +291,5 @@ const Carte & Pioche::piocher(unsigned int id) {
         cartes.erase(it);
         return * carteTrouvee;
     } else
-        throw CarteException("Aucune carte avec l'ID spécifié n'a été trouvée dans cette pioche");
+        throw SplendorException("Aucune carte avec l'ID spécifié n'a été trouvée dans cette pioche");
 }

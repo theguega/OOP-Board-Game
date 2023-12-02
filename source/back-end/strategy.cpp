@@ -68,7 +68,7 @@ std::vector<const Jeton*> StrategyHumain::recupJetonStrat(Plateau& plateau){
         }
 
         if (!result1 && !result2 && !result3 && !result4) {
-            throw StrategyException("Les jetons ne sont pas adjacents");
+            throw SplendorException("Les jetons ne sont pas adjacents");
         }
 
     }

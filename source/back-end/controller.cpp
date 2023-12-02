@@ -50,7 +50,7 @@ Controller::Controller() {
             break;
         }
         default:
-            throw PartieException("veuillez entrer un nombre valide");
+            throw SplendorException("veuillez entrer un nombre valide");
             break;
         }
         delete director;
@@ -100,7 +100,7 @@ Controller::Controller() {
         sqlite3_finalize(stmt);
         sqlite3_close(db);
     } else {
-        throw PartieException("Veuillez entrer un statut valide (New ou Old)");
+        throw SplendorException("Veuillez entrer un statut valide (New ou Old)");
     }
 }
 
@@ -322,10 +322,10 @@ void Controller::utiliserPrivilege(Plateau& plateau){
     std::cout<<"Utiliser un privilege permet de recup un jeton de couleur ou perle de votre choix (i,j):\n";
     std::cout<<plateau;
     if (joueurCourant->privileges.empty()) {
-        throw JoueurException("Le joueur n'a pas de privilège");
+        throw SplendorException("Le joueur n'a pas de privilège");
     }
     if (plateau.estVide()){
-        throw JoueurException("Le plateau n'a pas de jetons");
+        throw SplendorException("Le plateau n'a pas de jetons");
     }
     const Privilege& privilege = joueurCourant->supPrivilege(plateau);
     plateau.poserPrivilege(privilege);
@@ -383,7 +383,7 @@ void Controller::orReserverCarte (Pyramide& pyramide, Plateau& plateau){
         std::pair<unsigned int, unsigned int> coordJetonSelec = strategy_courante->choisirJeton(plateau);
         const Jeton& jeton = plateau.recupererJeton(coordJetonSelec.first, coordJetonSelec.second);
         if(jeton.getCouleur() != Couleur::OR){
-            throw JoueurException("Le jeton choisi n'est pas un jeton or");
+            throw SplendorException("Le jeton choisi n'est pas un jeton or");
         }
         joueurCourant->addJeton(jeton);
 
@@ -398,7 +398,7 @@ void Controller::orReserverCarte (Pyramide& pyramide, Plateau& plateau){
         std::pair<unsigned int, unsigned int> coordJetonSelec = strategy_courante->choisirJeton(plateau);
         const Jeton& jeton = plateau.recupererJeton(coordJetonSelec.first, coordJetonSelec.second);
         if(jeton.getCouleur() != Couleur::OR){
-            throw JoueurException("Le jeton choisi n'est pas un jeton or");
+            throw SplendorException("Le jeton choisi n'est pas un jeton or");
         }
         joueurCourant->addJeton(jeton);
     }
@@ -436,7 +436,7 @@ void Controller::acheterCarteJoaillerie (EspaceJeux& espaceJeux){
         const Carte& carte = *(joueurCourant->cartesReservees[carteDescr.first][carteDescr.second]);
 
         if (!verifAchatCarte(carte, espaceJeux)) {
-            throw JoueurException("Vous n'avez pas assez de points pour acheter cette carte...");
+            throw SplendorException("Vous n'avez pas assez de points pour acheter cette carte...");
         }
         joueurCourant->addCarte(carte);
         // rajout des couronnes
@@ -455,7 +455,7 @@ void Controller::acheterCarteJoaillerie (EspaceJeux& espaceJeux){
 
         const Carte& carte = espaceJeux.getPyramide().acheterCarte(carteDescr.first, carteDescr.second);
         if (!verifAchatCarte(carte, espaceJeux)){
-            throw JoueurException("Vous n'avez pas assez de points pour acheter cette carte");
+            throw SplendorException("Vous n'avez pas assez de points pour acheter cette carte");
         }
         joueurCourant->addCarte(carte);
         // rajout des couronnes

@@ -23,17 +23,6 @@
 
 
 
-class JoueurException
-{
-public:
-    JoueurException(const std::string& i) :info(i) {}
-    std::string getInfo() const { return info; }
-private:
-    std::string info;
-};
-
-
-
 enum class type { IA, HUMAIN };
 std::string toStringType(type t);
 type toType(std::string s);

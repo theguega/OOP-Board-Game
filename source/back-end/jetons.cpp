@@ -24,7 +24,7 @@ std::string toStringCouleur(Couleur c) {
     case Couleur::PERLE: return "🟣";
     case Couleur::OR: return "🟡";
     case Couleur::INDT: return "Indt";
-    default: throw JetonException("Couleur inconnue");
+    default: throw SplendorException("Couleur inconnue");
     }
 }
 
@@ -69,25 +69,25 @@ std::ostream& operator<< (std::ostream& f, const Jeton* jeton) {
 //recuperation d'un jeton à partir de son indice
 const Jeton& LotDeJetons::getJetons(size_t i) const {   
     if (i >= jetons.size())
-        throw JetonException("Indice de jeton incorrect");
+        throw SplendorException("Indice de jeton incorrect");
     return *jetons[i];
 }
 
 LotDeJetons::LotDeJetons() { 
     //création de tous les jetons
-    for (int i = 0; i < max_or; i++)
+    for (size_t i = 0; i < max_or; i++)
         jetons.push_back(new Jeton(Couleur::OR));
-    for (int i = 0; i < max_perle; i++)
+    for (size_t i = 0; i < max_perle; i++)
         jetons.push_back(new Jeton(Couleur::PERLE));
-    for (int i = 0; i < max_blanc; i++)
+    for (size_t i = 0; i < max_blanc; i++)
         jetons.push_back(new Jeton(Couleur::BLANC));
-    for (int i = 0; i < max_noir; i++)
+    for (size_t i = 0; i < max_noir; i++)
         jetons.push_back(new Jeton(Couleur::NOIR));
-    for (int i = 0; i < max_rouge; i++)
+    for (size_t i = 0; i < max_rouge; i++)
         jetons.push_back(new Jeton(Couleur::ROUGE));
-    for (int i = 0; i < max_bleu; i++)
+    for (size_t i = 0; i < max_bleu; i++)
         jetons.push_back(new Jeton(Couleur::BLEU));
-    for (int i = 0; i < max_vert; i++)
+    for (size_t i = 0; i < max_vert; i++)
         jetons.push_back(new Jeton(Couleur::VERT));
 }
 
@@ -111,7 +111,7 @@ std::ostream& operator<< (std::ostream& f, const Privilege& privilege) {
 
 const Privilege& LotPrivileges::getPrivilege(size_t i) const {
     if (i >= privileges.size())
-        throw JetonException("Indice de privilege incorrect");
+        throw SplendorException("Indice de privilege incorrect");
     return *privileges[i];
 }
 
@@ -141,7 +141,7 @@ const Jeton& Sac::piocherJeton(Couleur c) {
             jetons.erase(jetons.begin()+i);
             return *jt;
         }
-    throw JetonException("Couleur de jeton incorrecte");
+    throw SplendorException("Couleur de jeton incorrecte");
 }
 
 Sac::Sac(const LotDeJetons& lot) {
@@ -155,7 +155,7 @@ void Sac::ajouterJeton(const Jeton& j) {
 
 const Jeton& Sac::piocherJeton() {
     if (estVide())
-        throw JetonException("Le sac est vide");
+        throw SplendorException("Le sac est vide, vous ne pouvez pas recuperer de Jetons");
 
     //génération d'un indice aléatoire
     std::random_device rd;
@@ -202,9 +202,9 @@ Plateau::Plateau(const LotPrivileges& lotp) {
 
 const Jeton& Plateau::recupererJeton(const size_t i, const size_t j) {
     if (i >= 5 || j >= 5)
-        throw JetonException("Indice de jeton incorrect");
+        throw SplendorException("Indice de jeton incorrect");
     if (jetons[i][j] == nullptr)
-        throw JetonException("Pas de jeton à cet emplacement");
+        throw SplendorException("Pas de jeton à cet emplacement");
     
     //recuperation du jeton
     const Jeton& jeton = *jetons[i][j];
@@ -214,7 +214,7 @@ const Jeton& Plateau::recupererJeton(const size_t i, const size_t j) {
 
 const Privilege& Plateau::recupererPrivilege() {
     if (privileges.empty())
-        throw JetonException("Pas de privilège à récupérer");
+        throw SplendorException("Pas de privilège à récupérer");
     
     //on recup le dernier privilège
     const Privilege& privilege = *privileges.back();
@@ -276,13 +276,13 @@ void Plateau::positionerJeton(const Jeton& jeton) {
     if (i <= jetons.size()-1 && j <= jetons.size()-1) {
         jetons[i][j] = &jeton;
     } else {
-        throw JetonException("Le plateau est déjà plein");
+        throw SplendorException("Le plateau est déjà plein");
     }
 }
 
 void Plateau::remplirPlateau(Sac& sac) {
     if(sac.estVide())
-        throw JetonException("Le sac est vide");
+        throw SplendorException("Le sac est vide");
     while(!sac.estVide()) {
         positionerJeton(sac.piocherJeton());
     }

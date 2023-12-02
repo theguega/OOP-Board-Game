@@ -13,14 +13,6 @@
 #include "../sqlite/sqlite3.h"
 
 
-class PartieException {
-    private: string info;
-    public: PartieException(const string & i): info(i) {}
-    string getInfo() const {
-        return info;
-    }
-};
-
 //Implémentation de la partie
 //La classe partie sert a contenir tous les éléments du jeu, a savoir les joueurs, et l'espace de jeu contenant le plateau et la pyramide de carte
 class Partie {
@@ -131,7 +123,7 @@ class LastPartieBuilder: public PartieBuilder {
         this -> partie = new Partie();
     }
 
-    virtual void setJoueurs(string pseudo1, type t1, string pseudo2, type t2) const {};
+    virtual void setJoueurs(string pseudo1, type t1, string pseudo2, type t2) const override {};
     virtual void setJoueurs() const override;
     virtual void setCartesJoueurs() const override;
     virtual void setJetonsJoueurs() const override;

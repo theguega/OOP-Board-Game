@@ -5,6 +5,8 @@
 #include <QDebug>
 #include <QtSql>
 
+#include "back-end/exception.hpp"
+
 #include "interface/code/vueCarte.h"
 #include "interface/code/pageCreation.h"
 #include "interface/code/vueJeton.h"
@@ -70,33 +72,7 @@ int main(void) {
                                 //utilisation d'un privilege
                                 control.utiliserPrivilege(control.getPartie().getEspaceJeux().getPlateau());
                             }
-                            catch(JoueurException& e)
-                            {
-                                std::cout << e.getInfo() << '\n';
-                                etat_action = 0;
-                            }
-                            catch(JetonException& e)
-                            {
-                                std::cout << e.getInfo() << '\n';
-                                etat_action = 0;
-                            }
-
-                            catch(PartieException& e)
-                            {
-                                std::cout << e.getInfo() << '\n';
-                                etat_action = 0;
-                            }
-                            catch (const std::exception& e) {
-                                std::cout << e.what() << '\n';
-                                etat_action = 0;
-                            }
-
-                            catch(...)
-                            {
-
-                                etat_action = 0;
-                            }
-
+                            catch(SplendorException& e) { std::cout << e.getInfo() << '\n'; etat_action = 0; }
                             break;
                             }
                         case 2:{
@@ -106,33 +82,9 @@ int main(void) {
                                 control.remplirPlateau(control.getPartie().getEspaceJeux().getPlateau(), control.getPartie().getEspaceJeux().getSac(), control.getJoueurAdverse());
                                 etat_action = 0;
                             }
-                            catch(JoueurException& e)
-                            {
-                                std::cout << e.getInfo() << '\n';
-                                etat_action = 0;
-                            }
-                            catch(JetonException& e)
-                            {
-                                std::cout << e.getInfo() << '\n';
-                                etat_action = 0;
-                            }
-                            catch(PartieException& e)
-                            {
-                                std::cout << e.getInfo() << '\n';
-                                etat_action = 0;
-                            }
-                            catch (const std::exception& e) {
-                                std::cout << e.what()<< '\n';
-                                etat_action = 0;
-                            }
-                            catch(...)
-                            {
-
-                                etat_action = 0;
-                            }
-
-                            break;}
-
+                            catch(SplendorException& e) { std::cout << e.getInfo() << '\n'; etat_action = 0; }
+                            break;
+                        }
                         case 3:{
 
                             etat_tour = 1;
@@ -168,31 +120,7 @@ int main(void) {
                                 cout << control.getPartie().getEspaceJeux().getPlateau();
                                 control.getJoueurCourant().afficherJoueur();
                             }
-                            catch(JoueurException& e)
-                            {
-                                std::cout << e.getInfo() << '\n';
-                                etat_action = 0;
-                            }
-                            catch(JetonException& e)
-                            {
-                                std::cout << e.getInfo() << '\n';
-                                etat_action = 0;
-                            }
-                            catch(PartieException& e)
-                            {
-                                std::cout << e.getInfo() << '\n';
-                                etat_action = 0;
-                            }
-                            catch (const std::exception& e) {
-                                std::cout << e.what() << '\n';
-                                etat_action = 0;
-                            }
-                            catch(...)
-                            {
-
-                                etat_action = 0;
-                            }
-
+                            catch(SplendorException& e) { std::cout << e.getInfo() << '\n'; etat_action = 0; }
                             break;
                         case 2:
                             try
@@ -200,31 +128,7 @@ int main(void) {
                                 control.acheterCarteJoaillerie(control.getPartie().getEspaceJeux());
                                 etat_action = 4;
                             }
-                            catch(JoueurException& e)
-                            {
-                                std::cout << e.getInfo() << '\n';
-                                etat_action = 0;
-                            }
-                            catch(JetonException& e)
-                            {
-                                std::cout << e.getInfo() << '\n';
-                                etat_action = 0;
-                            }
-                            catch(PartieException& e)
-                            {
-                                std::cout << e.getInfo() << '\n';
-                                etat_action = 0;
-                            }
-                            catch (const std::exception& e) {
-                                std::cout << e.what() << '\n';
-                                etat_action = 0;
-                            }
-                            catch(...)
-                            {
-
-                                etat_action = 0;
-                            }
-
+                            catch(SplendorException& e) { std::cout << e.getInfo() << '\n'; etat_action = 0; }
                             break;
                         case 3:
                             try
@@ -232,31 +136,7 @@ int main(void) {
                                 control.orReserverCarte(control.getPartie().getEspaceJeux().getPyramide(), control.getPartie().getEspaceJeux().getPlateau());
                                 etat_action = 4;
                             }
-                            catch(JoueurException& e)
-                            {
-                                std::cout << e.getInfo() << '\n';
-                                etat_action = 0;
-                            }
-                            catch(JetonException& e)
-                            {
-                                std::cout << e.getInfo() << '\n';
-                                etat_action = 0;
-                            }
-                            catch(PartieException& e)
-                            {
-                                std::cout << e.getInfo() << '\n';
-                                etat_action = 0;
-                            }
-                            catch (const std::exception& e) {
-                                std::cout << e.what() << '\n';
-                                etat_action = 0;
-                            }
-                            catch(...)
-                            {
-
-                                etat_action = 0;
-                            }
-
+                            catch(SplendorException& e) { std::cout << e.getInfo() << '\n'; etat_action = 0; }
                             break;
                         default:
                             break;

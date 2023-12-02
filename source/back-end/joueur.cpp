@@ -7,7 +7,7 @@ std::string toStringType(type t) {
         case type::IA: return "IA";
         case type::HUMAIN: return "HUMAIN";
     }
-    throw JoueurException("Type inconnu");
+    throw SplendorException("Type inconnu");
 }
 
 type toType(std::string s) {

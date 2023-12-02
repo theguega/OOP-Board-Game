@@ -7,39 +7,9 @@
 #include <unordered_map>
 #include <map>
 #include <string>
+#include "back-end/exception.hpp"
 
 using namespace std;
-
-//Gestion des jetons et des privileges pour splendor duel
-
-//Gestion des exceptions liées aux jetons
-class JetonException
-{
-public:
-    JetonException(const std::string& i) :info(i) {}
-    std::string getInfo() const { return info; }
-private:
-    std::string info;
-};
-
-//Gestion des exceptions liées aux privilèges
-class PrivilegeException
-{
-public:
-    PrivilegeException(const std::string& i) :info(i) {}
-    std::string getInfo() const { return info; }
-private:
-    std::string info;
-};
-
-class CouleurException
-{
-public:
-    CouleurException(const std::string& i) :info(i) {}
-    std::string getInfo() const { return info; }
-private:
-    std::string info;
-};
 
 //Enum pour les couleurs : initialiser, to string, affichage, string to couleur.
 enum class Couleur { BLANC, BLEU, VERT, ROUGE, NOIR, PERLE, OR, INDT};
