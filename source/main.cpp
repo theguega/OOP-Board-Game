@@ -74,6 +74,19 @@ int main(void) {
                                 std::cout << e.getInfo() << '\n';
                                 etat_action = 0;
                             }
+
+                            catch(PartieException& e)
+                            {
+                                std::cout << e.getInfo() << '\n';
+                                etat_action = 0;
+                            }
+
+                            catch(...)
+                            {
+
+                                etat_action = 0;
+                            }
+
                             break;
                             }
                         case 2:{
@@ -92,6 +105,18 @@ int main(void) {
                                 std::cout << e.getInfo() << '\n';
                                 etat_action = 0;
                             }
+                            catch(PartieException& e)
+                            {
+                                std::cout << e.getInfo() << '\n';
+                                etat_action = 0;
+                            }
+
+                            catch(...)
+                            {
+
+                                etat_action = 0;
+                            }
+
                             break;}
 
                         case 3:{
@@ -138,6 +163,18 @@ int main(void) {
                                 std::cout << e.getInfo() << '\n';
                                 etat_action = 0;
                             }
+                            catch(PartieException& e)
+                            {
+                                std::cout << e.getInfo() << '\n';
+                                etat_action = 0;
+                            }
+
+                            catch(...)
+                            {
+
+                                etat_action = 0;
+                            }
+
                             break;
                         case 2:
                             try
@@ -155,6 +192,18 @@ int main(void) {
                                 std::cout << e.getInfo() << '\n';
                                 etat_action = 0;
                             }
+                            catch(PartieException& e)
+                            {
+                                std::cout << e.getInfo() << '\n';
+                                etat_action = 0;
+                            }
+
+                            catch(...)
+                            {
+
+                                etat_action = 0;
+                            }
+
                             break;
                         case 3:
                             try
@@ -172,6 +221,18 @@ int main(void) {
                                 std::cout << e.getInfo() << '\n';
                                 etat_action = 0;
                             }
+                            catch(PartieException& e)
+                            {
+                                std::cout << e.getInfo() << '\n';
+                                etat_action = 0;
+                            }
+
+                            catch(...)
+                            {
+
+                                etat_action = 0;
+                            }
+
                             break;
                         default:
                             break;
@@ -194,11 +255,11 @@ int main(void) {
 
                     if (control.getJoueurCourant().getptsPrestige() >= 15) {
                         std::cout << "Joueur " << control.getJoueurCourant().getPseudo() << " a gagné la partie" << std::endl;
-                        etat_tour = 4;
+                        etat_tour = 3;
                         break;
                     }
 
-                    etat_tour = 3;
+                    etat_tour = 4;
                     break;
                 }
 
