@@ -218,7 +218,8 @@ unsigned int StrategyHumain::choixActionsOptionelles() {
     std::cout << "1. Utiliser un privilège" << endl;
     std:: cout << "2. Remplir le plateau" << endl;
     std::cout << "3. Ne plus faire d'actions optionnelles" << endl;
-    std::cout << "Votre choix (1/2/3):" << std::endl;
+    std::cout << "9. Quitter le jeu" << endl;
+    std::cout << "Votre choix (1/2/3/9):" << std::endl;
     cin >> choix;
     return choix;
 }
@@ -242,7 +243,8 @@ unsigned int StrategyHumain::choixActionsObligatoires() {
     std::cout << "1. Récupérer des jetons" << endl;
     std:: cout << "2. Acheter une carte joaillerie" << endl;
     std::cout << "3. Réserver une carte" << endl;
-    std::cout << "Votre choix (1/2/3):" << std::endl;
+    std::cout << "9. Quitter le jeu" << endl;
+    std::cout << "Votre choix (1/2/3/9):" << std::endl;
     cin >> choix;
     return choix;
 }

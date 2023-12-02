@@ -92,6 +92,12 @@ int main(void) {
                             break;
                         }
 
+                        case 9:{
+
+                            return 0;
+
+                        }
+
                         default:{
                             break;}
                         }
@@ -172,6 +178,13 @@ int main(void) {
                     std::cout << "Fin de partie";
                     etat_tour = 4;
                     break;
+                }
+
+
+                case 9:{
+
+                    return 0;
+
                 }
 
 
