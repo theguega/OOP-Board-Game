@@ -275,7 +275,8 @@ int main(void) {
                         break;
                     }
 
-                    etat_tour = 4;
+                    etat_tour = 0;
+                    control.changerJoueurCourant();
                     break;
                 }
 
@@ -294,7 +295,7 @@ int main(void) {
 
         }
 
-        control.changerJoueurCourant();
+
     }
 
     return 0;
