@@ -40,6 +40,11 @@ int main(void) {
         // TODO
 
         // tour pour chacun des joueurs
+        std::cout<<"--------------------------------------------------------------------------------------------------------------------------------------------";
+        std::cout<<endl<<endl<<endl<<endl;
+        std::cout<<"C'est à "<<control.getJoueurCourant().getPseudo()<<" de jouer : "<<endl;
+        control.getJoueurCourant().afficherJoueur();
+        std::cout<<endl;
         for (unsigned int i = 0; i < 2; i++) {
             ///control.getJoueurCourant().afficherJoueur();
 
@@ -54,7 +59,7 @@ int main(void) {
                         switch (etat_action)
                         {
                         case 0:{
-
+                            //appel du menu de choix des actions
                             etat_action = control.choixActionsOptionelles();
                             std::cout << endl;
                             break;}
@@ -62,6 +67,7 @@ int main(void) {
                         case 1:{
                             try
                             {
+                                //utilisation d'un privilege
                                 control.utiliserPrivilege(control.getPartie().getEspaceJeux().getPlateau());
                             }
                             catch(JoueurException& e)
@@ -96,6 +102,7 @@ int main(void) {
                         case 2:{
                             try
                             {
+                                //replissage du plateau
                                 control.remplirPlateau(control.getPartie().getEspaceJeux().getPlateau(), control.getPartie().getEspaceJeux().getSac(), control.getJoueurAdverse());
                                 etat_action = 0;
                             }
@@ -140,7 +147,7 @@ int main(void) {
                     }
                     break;}
 
-
+                //actions obligatoires :
                 case 1:{
                     unsigned int etat_action = 0;
 
@@ -149,6 +156,7 @@ int main(void) {
                         switch (etat_action)
                         {
                         case 0:
+                            //menu de choix des actions obligatoires
                             etat_action = control.choixActionsObligatoires();
                             break;
                         case 1:
