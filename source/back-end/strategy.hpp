@@ -24,12 +24,8 @@ public:
     virtual std::pair<unsigned int, unsigned int> achatNoble(Pyramide& pyramide) = 0;
     virtual unsigned int choixAchat() = 0;
     virtual std::pair< Couleur, unsigned int> achatReserve(unsigned int nbCartesReservees) = 0;
-
-
-
-
-
-
+    virtual unsigned int choixActionsOptionelles() = 0;
+    virtual unsigned int choixActionsObligatoires() = 0;
 
 };
 
@@ -47,7 +43,8 @@ public:
 
     std::pair<unsigned int, unsigned int> reservationCarte(Pyramide& pyramide) override;
 
-
+    virtual unsigned int choixActionsOptionelles() override;
+    virtual unsigned int choixActionsObligatoires() override;
 
     //Privilege utiliserPrivilege(const EspaceJeux& espaceJeux) override;
 };
@@ -63,10 +60,10 @@ public:
     std::pair<unsigned int, unsigned int> achatNoble(Pyramide& pyramide) override;
 
 
-
     std::pair<unsigned int, unsigned int> reservationCarte(Pyramide& pyramide) override;
 
-
+    virtual unsigned int choixActionsOptionelles() override;
+    virtual unsigned int choixActionsObligatoires() override;
 
 
     //Privilege utiliserPrivilege(const EspaceJeux& espaceJeux) override;

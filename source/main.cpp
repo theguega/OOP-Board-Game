@@ -15,15 +15,10 @@
 
 
 
-
-
-
-
-
 //####################################
 //###### Partie en mode Terminal #####
 //####################################
-
+/*
 
 int main(void) {
     Controller control;
@@ -32,27 +27,13 @@ int main(void) {
     return 0;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
+*/
 
 
 //avec boucle de jeux
-
-/*
-
 int main(void) {
     Controller control;
-    control.getJoueurCourant().afficherJoueur();
+
     control.lancerPartie();
 
     while (control.getPartie().getJoueur1()->estGagnant() == false && control.getPartie().getJoueur2()->estGagnant() == false) {
@@ -60,112 +41,105 @@ int main(void) {
 
         // tour pour chacun des joueurs
         for (unsigned int i = 0; i < 2; i++) {
-            control.getJoueurCourant().afficherJoueur();
+            ///control.getJoueurCourant().afficherJoueur();
 
             unsigned int etat_tour = 0;
             while (etat_tour != 4) {
+
                 // actions optionelles
                 switch (etat_tour) {
-                case 0:
+                case 0: {
                     unsigned int etat_action = 0;
                     while (etat_action != 4) {
                         switch (etat_action)
                         {
-                        case 0:
-                            std::cout << "Actions optionnelles: " << endl;
-                            std::cout << "1. Utiliser un privilège" << endl;
-                                    std:: cout << "2. Remplir le plateau" << endl;
-                            std::cout << "3. Ne plus faire d'actions optionnelles" << endl;
-                            std::cout << "Votre choix (1/2/3): ";
-                            cin >> etat_action;
+                        case 0:{
+
+                            etat_action = control.getJoueurCourant().choixActionsOptionelles();
                             std::cout << endl;
-                            break;
+                            break;}
 
-                        case 1:
+                        case 1:{
                             try
                             {
-                                control.utiliserPrivilege(control.getPartie().getEspaceJeux().getPlateau());
-                                etat_action = 0;
+                                control.getJoueurCourant().utiliserPrivilege(control.getPartie().getEspaceJeux().getPlateau());
                             }
-                            catch(const std::exception& e)
-                            {
-                                std::cout << e.what() << '\n';
+                            catch (JoueurException) {
+                                std::cout << "erreur oups" << '\n';
                                 etat_action = 0;
                             }
                             break;
-                        case 2:
+                            }
+                        case 2:{
                             try
                             {
-                                control.remplirPlateau(control.getPartie().getEspaceJeux().getPlateau(), control.getPartie().getEspaceJeux().getSac(), control.getJoueurAdverse());
+                                control.getJoueurCourant().remplirPlateau(control.getPartie().getEspaceJeux().getPlateau(), control.getPartie().getEspaceJeux().getSac(), control.getJoueurAdverse());
                                 etat_action = 0;
                             }
-                            catch(const std::exception& e)
+                            catch(JoueurException)
                             {
-                                std::cout << e.what() << '\n';
+                                std::cout << "erreur oups" << '\n';
                                 etat_action = 0;
                             }
-                            break;
+                            break;}
 
-                        case 3:
+                        case 3:{
 
                             etat_tour = 1;
                             etat_action = 4;
                             break;
+                        }
 
-                        default:
-                            break;
+                        default:{
+                            break;}
                         }
 
                     }
-                    break;
+                    break;}
 
 
-                case 1:
-                    etat_action = 0;
+                case 1:{
+                    unsigned int etat_action = 0;
+
                     while (etat_action != 4) {
+
                         switch (etat_action)
                         {
                         case 0:
-                            std::cout << "Actions obligatoires: " << endl;
-                            std::cout << "1. Récupérer des jetons" << endl;
-                                    std:: cout << "2. Acheter une carte joaillerie" << endl;
-                            std::cout << "3. Réserver une carte" << endl;
-                                        cin >> etat_action;
-                            std::cout << endl;
+                            etat_action = control.getJoueurCourant().choixActionsObligatoires();
                             break;
                         case 1:
                             try
                             {
-                                control.recupererJetons(control.getPartie().getEspaceJeux().getPlateau());
+                                control.getJoueurCourant().acheterCarteJoaillerie(control.getPartie().getEspaceJeux());
                                 etat_action = 4;
                             }
-                            catch(const std::exception& e)
+                            catch(JoueurException)
                             {
-                                std::cout << e.what() << '\n';
+                                std::cout << "erreur oups" << '\n';
                                 etat_action = 0;
                             }
                             break;
                         case 2:
                             try
                             {
-                                control.acheterCarteJoaillerie(control.getPartie().getEspaceJeux().getPyramide());
+                                control.getJoueurCourant().acheterCarteJoaillerie(control.getPartie().getEspaceJeux());
                                 etat_action = 4;
                             }
-                            catch(const std::exception& e)
-                            {
-                                std::cout << e.what() << '\n';
+                            catch(JoueurException) {
+                                std::cout << "erreur oups" << '\n';
                                 etat_action = 0;
                             }
                             break;
                         case 3:
                             try
                             {
-                                control.orReserverCarte(control.getPartie().getEspaceJeux().getPyramide(), control.getPartie().getEspaceJeux().getPlateau());
+                                control.getJoueurCourant().orReserverCarte(control.getPartie().getEspaceJeux().getPyramide(), control.getPartie().getEspaceJeux().getPlateau());
                                 etat_action = 4;
                             }
-                            catch(const std::exception& e)
+                            catch(JoueurException)
                             {
-                                std::cout << e.what() << '\n';
+                                std::cout << "erreur oups" << '\n';
                                 etat_action = 0;
                             }
                             break;
@@ -176,12 +150,36 @@ int main(void) {
 
                     }
                     break;
-                case 2:
-                    //verif de fin de tout
+                }
+
+
+                case 2:{
+                    std::cout << "verification fin de partie";
+
+                    if (control.getJoueurCourant().getptsPrestige() >= 3 or control.getJoueurCourant().getptsPrestige() >= 6) {
+                        control.getJoueurCourant().acheterCarteNoble(control.getPartie().getEspaceJeux().getPyramide());
+                    }
+
+                    // rajoute verification >10 jetons
+
+                    if (control.getJoueurCourant().getptsPrestige() >= 15) {
+                        std::cout << "Joueur " << control.getJoueurCourant().getPseudo() << " a gagné la partie" << std::endl;
+                        etat_tour = 4;
+                        break;
+                    }
+
+                    etat_tour = 3;
                     break;
+                }
+
+                case 3:{
+                    std::cout << "Fin de partie";
+                    etat_tour = 4;
+                    break;
+                }
 
 
-                default:
+                default:{
                     break;
                 }
             }
@@ -194,24 +192,7 @@ int main(void) {
 
     return 0;
 }
-
-*/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+}
 
 
 //#########################################
@@ -247,5 +228,3 @@ int main(void) {
 
     return app.exec();
 }*/
-
-

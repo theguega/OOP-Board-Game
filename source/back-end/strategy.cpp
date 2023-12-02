@@ -211,6 +211,54 @@ unsigned int StrategyIA::choixNiveau() {
     return choix;
 }
 
+
+unsigned int StrategyHumain::choixActionsOptionelles() {
+    unsigned int choix;
+    std::cout << "Actions optionnelles: " << endl;
+    std::cout << "1. Utiliser un privilège" << endl;
+    std:: cout << "2. Remplir le plateau" << endl;
+    std::cout << "3. Ne plus faire d'actions optionnelles" << endl;
+    std::cout << "Votre choix (1/2/3):" << std::endl;
+    cin >> choix;
+    return choix;
+}
+
+unsigned int StrategyIA::choixActionsOptionelles() {
+    std::cout << "L'IA choisit entre: utiliser un privilège, remplir le plateau, ne rien faire (1/2/3): " << endl;
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    // Créer une distribution uniforme pour les entiers entre 0 et 3 inclus
+    std::uniform_int_distribution<int> distribution(1, 3);
+    // Générer un nombre aléatoire
+    unsigned int choix = distribution(gen);
+    std::cout<<"Elle a choisit"<<choix<<".\n"<<std::endl;
+    return choix;
+}
+
+
+unsigned int StrategyHumain::choixActionsObligatoires() {
+    unsigned int choix;
+    std::cout << "Actions obligatoires: " << endl;
+    std::cout << "1. Récupérer des jetons" << endl;
+    std:: cout << "2. Acheter une carte joaillerie" << endl;
+    std::cout << "3. Réserver une carte" << endl;
+    std::cout << "Votre choix (1/2/3):" << std::endl;
+    cin >> choix;
+    return choix;
+}
+
+unsigned int StrategyIA::choixActionsObligatoires() {
+    std::cout << "L'IA choisit entre: Récupérer des jetons, Acheter une carte joaillerie, Réserver une carte (1/2/3): " << endl;
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    // Créer une distribution uniforme pour les entiers entre 0 et 3 inclus
+    std::uniform_int_distribution<int> distribution(1, 3);
+    // Générer un nombre aléatoire
+    unsigned int choix = distribution(gen);
+    std::cout<<"Elle a choisit"<<choix<<".\n"<<std::endl;
+    return choix;
+}
+
 unsigned int StrategyHumain::choixAchat(){
     std::cout << "Tapez 1 pour acheter une carte Réservée.\nTapez 2 pour acheter une carte du plateau." << std::endl;
     unsigned int choix;

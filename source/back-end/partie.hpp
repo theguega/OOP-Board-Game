@@ -44,6 +44,10 @@ class Partie {
     EspaceJeux & getEspaceJeux() const {
         return * espaceJeux;
     }
+
+    Joueur * getJoueurs() const {
+        return * joueurs;
+    }
     Joueur * getJoueur(size_t i) const {
         return joueurs[i];
     }
