@@ -80,6 +80,10 @@ int main(void) {
                                 std::cout << e.getInfo() << '\n';
                                 etat_action = 0;
                             }
+                            catch (const std::exception& e) {
+                                std::cout << e.what() << '\n';
+                                etat_action = 0;
+                            }
 
                             catch(...)
                             {
@@ -110,7 +114,10 @@ int main(void) {
                                 std::cout << e.getInfo() << '\n';
                                 etat_action = 0;
                             }
-
+                            catch (const std::exception& e) {
+                                std::cout << e.what()<< '\n';
+                                etat_action = 0;
+                            }
                             catch(...)
                             {
 
@@ -168,7 +175,10 @@ int main(void) {
                                 std::cout << e.getInfo() << '\n';
                                 etat_action = 0;
                             }
-
+                            catch (const std::exception& e) {
+                                std::cout << e.what() << '\n';
+                                etat_action = 0;
+                            }
                             catch(...)
                             {
 
@@ -197,7 +207,10 @@ int main(void) {
                                 std::cout << e.getInfo() << '\n';
                                 etat_action = 0;
                             }
-
+                            catch (const std::exception& e) {
+                                std::cout << e.what() << '\n';
+                                etat_action = 0;
+                            }
                             catch(...)
                             {
 
@@ -226,7 +239,10 @@ int main(void) {
                                 std::cout << e.getInfo() << '\n';
                                 etat_action = 0;
                             }
-
+                            catch (const std::exception& e) {
+                                std::cout << e.what() << '\n';
+                                etat_action = 0;
+                            }
                             catch(...)
                             {
 
