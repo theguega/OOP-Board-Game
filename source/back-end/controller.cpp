@@ -1,10 +1,12 @@
 #include "controller.hpp"
 
 Controller::Controller() {
+    //Choix du type de partie
 	Director* director = new Director();
 	string statut_partie;
 	std::cout << "Ancienne ou nouvelle partie ? (New/Old)" << std::endl;
 	std::cin >> statut_partie;
+    //Si nouvelle partie
 	if (statut_partie == "New") {
 		NewPartieBuilder* builder = new NewPartieBuilder();
 		director->set_builder(builder);
@@ -49,19 +51,21 @@ Controller::Controller() {
             break;
         }
         delete director;
+    
+    //Si ancienne partie :
 	} else if (statut_partie == "Old") {
+        //Création
         LastPartieBuilder* builder = new LastPartieBuilder();
         director->set_builder(builder);
         director->BuildLastPartie();
         Partie* p = builder->GetProduct();
         partie = p;
         delete director;
-        // joueurcourant
+        
+        
+        //restitution
         sqlite3* db;
         sqlite3_stmt* stmt;
-        //std::string relativePath = "data/save.sqlite";
-        //std::filesystem::path absolutePath = projectPath / relativePath;
-        //std::string absolutePathStr = absolutePath.string();
 
         int rc = sqlite3_open("data/save.sqlite", &db);
         if (rc != SQLITE_OK) {
@@ -102,14 +106,24 @@ void Controller::setJoueurCourant(int n) {
     default:
         break;
     }
+
+    if (joueurCourant->getTypeDeJoueur() == type::IA) 
+        strategy_courante = &strategy_IA;
+    else 
+        strategy_courante = &strategy_Humain;
 }
 
 void Controller::changerJoueurCourant() {
     //changement du joueur courant
-    if (joueurCourant==partie->getJoueur1())
+    if (joueurCourant == partie->getJoueur1())
         joueurCourant = partie->getJoueur2();
     else
         joueurCourant = partie->getJoueur1();
+
+    if (joueurCourant->getTypeDeJoueur() == type::IA) 
+        strategy_courante = &strategy_IA;
+    else 
+        strategy_courante = &strategy_Humain;
 }
 
 void Controller::lancerPartie() {
@@ -303,14 +317,14 @@ void Controller::utiliserPrivilege(Plateau& plateau){
     }
     const Privilege& privilege = joueurCourant->supPrivilege(plateau);
     plateau.poserPrivilege(privilege);
-    std::pair<unsigned int, unsigned int> coordJetonSelec = joueurCourant->strategy->choisirJeton(plateau);
+    std::pair<unsigned int, unsigned int> coordJetonSelec = strategy_courante->choisirJeton(plateau);
     const Jeton& jetonSelec = plateau.recupererJeton(coordJetonSelec.first, coordJetonSelec.second);
     joueurCourant->addJeton(jetonSelec);
 
 }
 
 void Controller::remplirPlateau(Plateau& plateau, Sac& sac, Joueur& joueurAdverse){
-    joueurCourant->strategy->remplirPlateauStrat(plateau, sac);
+    strategy_courante->remplirPlateauStrat(plateau, sac);
     if (joueurCourant->privileges.size() == 3){
         std::cout<< "Vous avez deja 3 privileges. Vous n'en recupererez donc pas plus !" << std::endl;
         return;
@@ -329,7 +343,7 @@ void Controller::remplirPlateau(Plateau& plateau, Sac& sac, Joueur& joueurAdvers
 
 void Controller::recupererJetons(Plateau& plateau){
     // Récupération des jetons 1 2 ou 3 jetons en fonction de la strategy
-    std::vector<const Jeton*> jetonsRecup = joueurCourant->strategy->recupJetonStrat(plateau);
+    std::vector<const Jeton*> jetonsRecup = strategy_courante->recupJetonStrat(plateau);
 
     // ajout des jetons dans la main du joueur
     for (auto & i : jetonsRecup){
@@ -340,19 +354,19 @@ void Controller::recupererJetons(Plateau& plateau){
 
 void Controller::orReserverCarte (Pyramide& pyramide, Plateau& plateau){
     std::cout<<"Voulez-vous réserver une carte de la pyramide ou de la pioche de niveau i ? (0, 1, 2, 3)" << std::endl;
-    unsigned int choix = joueurCourant->strategy->choixNiveau();
+    unsigned int choix = strategy_courante->choixNiveau();
 
 
     if (choix == 0){
         // Reservation de la carte
-        std::pair<unsigned int, unsigned int> numNivCarteSelec = joueurCourant->strategy->reservationCarte(pyramide);
+        std::pair<unsigned int, unsigned int> numNivCarteSelec = strategy_courante->reservationCarte(pyramide);
 
         const Carte& carte = pyramide.acheterCarte(numNivCarteSelec.first, numNivCarteSelec.second);
         joueurCourant->addCarteReservee(carte);
 
         // Recuperation d'un jeton or Voir exception mécanique de jeu
         // Recuperation d'un jeton or
-        std::pair<unsigned int, unsigned int> coordJetonSelec = joueurCourant->strategy->choisirJeton(plateau);
+        std::pair<unsigned int, unsigned int> coordJetonSelec = strategy_courante->choisirJeton(plateau);
         const Jeton& jeton = plateau.recupererJeton(coordJetonSelec.first, coordJetonSelec.second);
         if(jeton.getCouleur() != Couleur::OR){
             throw JoueurException("Le jeton choisi n'est pas un jeton or");
@@ -367,7 +381,7 @@ void Controller::orReserverCarte (Pyramide& pyramide, Plateau& plateau){
         joueurCourant->addCarteReservee(carte);
 
         // Recuperation d'un jeton or
-        std::pair<unsigned int, unsigned int> coordJetonSelec = joueurCourant->strategy->choisirJeton(plateau);
+        std::pair<unsigned int, unsigned int> coordJetonSelec = strategy_courante->choisirJeton(plateau);
         const Jeton& jeton = plateau.recupererJeton(coordJetonSelec.first, coordJetonSelec.second);
         if(jeton.getCouleur() != Couleur::OR){
             throw JoueurException("Le jeton choisi n'est pas un jeton or");
@@ -382,14 +396,14 @@ void Controller::acheterCarteNoble (Pyramide& pyramide){
     // affichage cartes nobles
     pyramide.afficherPyramide();
 
-    std::pair< unsigned int, unsigned int> carteDescr = joueurCourant->strategy->achatNoble(pyramide);
+    std::pair< unsigned int, unsigned int> carteDescr = strategy_courante->achatNoble(pyramide);
 
     const Carte& carte = pyramide.acheterCarte(4, carteDescr.second);
     joueurCourant->addCarteNoble(carte);
 }
 
 void Controller::acheterCarteJoaillerie (EspaceJeux& espaceJeux){
-    unsigned int choix = joueurCourant->strategy->choixAchat();
+    unsigned int choix = strategy_courante->choixAchat();
 
 
     // Achat carte reservee
@@ -403,7 +417,7 @@ void Controller::acheterCarteJoaillerie (EspaceJeux& espaceJeux){
             i++;
         }
 
-        std::pair< Couleur, unsigned int> carteDescr = joueurCourant->strategy->achatReserve(joueurCourant->cartesReservees.size());
+        std::pair< Couleur, unsigned int> carteDescr = strategy_courante->achatReserve(joueurCourant->cartesReservees.size());
 
         const Carte& carte = *(joueurCourant->cartesReservees[carteDescr.first][carteDescr.second]);
 
@@ -423,7 +437,7 @@ void Controller::acheterCarteJoaillerie (EspaceJeux& espaceJeux){
         std::cout << "Voici les cartes du plateau : " << std::endl;
         espaceJeux.getPyramide().afficherPyramide(); //Gerer l'affichage de la pyramide
 
-        std::pair<unsigned int, unsigned int> carteDescr = joueurCourant->strategy->reservationCarte(espaceJeux.getPyramide());
+        std::pair<unsigned int, unsigned int> carteDescr = strategy_courante->reservationCarte(espaceJeux.getPyramide());
 
         const Carte& carte = espaceJeux.getPyramide().acheterCarte(carteDescr.first, carteDescr.second);
         if (!verifAchatCarte(carte, espaceJeux)){
@@ -562,7 +576,7 @@ void Controller::sauvegardePartie() {
    //Sauvegarde de la pyramide
    Pyramide& pyramide = getPartie().getEspaceJeux().getPyramide();
    for (int i =0; i<4; i++) {
-       for (int j =0; j<pyramide.getNbCartesNiv(i); j++) {
+        for (size_t j =0; j<pyramide.getNbCartesNiv(i); j++) {
            const Carte* carte = pyramide.getCarte(i,j);
            sql= "INSERT INTO pyramide (i, j, id) VALUES (" + std::to_string(i) + ", " + std::to_string(j) + ", " + std::to_string(carte->getId()) + ");";
            rc = sqlite3_exec(db, sql.c_str(), NULL, NULL, NULL);

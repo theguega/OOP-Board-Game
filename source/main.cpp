@@ -55,17 +55,23 @@ int main(void) {
                         {
                         case 0:{
 
-                            etat_action = control.getJoueurCourant().choixActionsOptionelles();
+                            etat_action = control.choixActionsOptionelles();
                             std::cout << endl;
                             break;}
 
                         case 1:{
                             try
                             {
-                                control.getJoueurCourant().utiliserPrivilege(control.getPartie().getEspaceJeux().getPlateau());
+                                control.utiliserPrivilege(control.getPartie().getEspaceJeux().getPlateau());
                             }
-                            catch (JoueurException) {
-                                std::cout << "erreur oups" << '\n';
+                            catch(JoueurException& e)
+                            {
+                                std::cout << e.getInfo() << '\n';
+                                etat_action = 0;
+                            }
+                            catch(JetonException& e)
+                            {
+                                std::cout << e.getInfo() << '\n';
                                 etat_action = 0;
                             }
                             break;
@@ -73,7 +79,7 @@ int main(void) {
                         case 2:{
                             try
                             {
-                                control.getJoueurCourant().remplirPlateau(control.getPartie().getEspaceJeux().getPlateau(), control.getPartie().getEspaceJeux().getSac(), control.getJoueurAdverse());
+                                control.remplirPlateau(control.getPartie().getEspaceJeux().getPlateau(), control.getPartie().getEspaceJeux().getSac(), control.getJoueurAdverse());
                                 etat_action = 0;
                             }
                             catch(JoueurException& e)
@@ -111,13 +117,13 @@ int main(void) {
                         switch (etat_action)
                         {
                         case 0:
-                            etat_action = control.getJoueurCourant().choixActionsObligatoires();
+                            etat_action = control.choixActionsObligatoires();
                             break;
                         case 1:
                             try
                             {
                                 cout << control.getPartie().getEspaceJeux().getPlateau();
-                                control.getJoueurCourant().recupererJetons(control.getPartie().getEspaceJeux().getPlateau());
+                                control.recupererJetons(control.getPartie().getEspaceJeux().getPlateau());
                                 etat_action = 4;
                                 cout << control.getPartie().getEspaceJeux().getPlateau();
                                 control.getJoueurCourant().afficherJoueur();
@@ -136,23 +142,34 @@ int main(void) {
                         case 2:
                             try
                             {
-                                control.getJoueurCourant().acheterCarteJoaillerie(control.getPartie().getEspaceJeux());
+                                control.acheterCarteJoaillerie(control.getPartie().getEspaceJeux());
                                 etat_action = 4;
                             }
-                            catch(JoueurException) {
-                                std::cout << "erreur oups" << '\n';
+                            catch(JoueurException& e)
+                            {
+                                std::cout << e.getInfo() << '\n';
+                                etat_action = 0;
+                            }
+                            catch(JetonException& e)
+                            {
+                                std::cout << e.getInfo() << '\n';
                                 etat_action = 0;
                             }
                             break;
                         case 3:
                             try
                             {
-                                control.getJoueurCourant().orReserverCarte(control.getPartie().getEspaceJeux().getPyramide(), control.getPartie().getEspaceJeux().getPlateau());
+                                control.orReserverCarte(control.getPartie().getEspaceJeux().getPyramide(), control.getPartie().getEspaceJeux().getPlateau());
                                 etat_action = 4;
                             }
-                            catch(JoueurException)
+                            catch(JoueurException& e)
                             {
-                                std::cout << "erreur oups" << '\n';
+                                std::cout << e.getInfo() << '\n';
+                                etat_action = 0;
+                            }
+                            catch(JetonException& e)
+                            {
+                                std::cout << e.getInfo() << '\n';
                                 etat_action = 0;
                             }
                             break;
@@ -170,7 +187,7 @@ int main(void) {
                     std::cout << "verification fin de partie";
 
                     if (control.getJoueurCourant().getptsPrestige() >= 3 or control.getJoueurCourant().getptsPrestige() >= 6) {
-                        control.getJoueurCourant().acheterCarteNoble(control.getPartie().getEspaceJeux().getPyramide());
+                        control.acheterCarteNoble(control.getPartie().getEspaceJeux().getPyramide());
                     }
 
                     // rajoute verification >10 jetons

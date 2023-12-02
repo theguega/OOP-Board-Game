@@ -8,6 +8,12 @@ class Controller {
 private:
 	Partie* partie;
 	Joueur* joueurCourant = nullptr;
+	
+	StrategyHumain strategy_Humain;
+	StrategyIA strategy_IA;
+
+	Strategy * strategy_courante  = nullptr;
+	
 public:
 	Controller();
 	~Controller() { delete partie; }
@@ -22,8 +28,8 @@ public:
 	void tour_suivant();
     void changerJoueurCourant();
 
-    unsigned int choixActionsOptionelles() {return joueurCourant->strategy->choixActionsOptionelles(); };
-    unsigned int choixActionsObligatoires() {return joueurCourant->strategy->choixActionsObligatoires(); };
+    unsigned int choixActionsOptionelles() {return strategy_courante->choixActionsOptionelles(); };
+    unsigned int choixActionsObligatoires() {return strategy_courante->choixActionsObligatoires(); };
 
     bool verifAchatCarte(const Carte& carte, EspaceJeux& espaceJeux);
 	// Actions optionnelles
