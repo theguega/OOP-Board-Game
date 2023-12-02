@@ -111,7 +111,7 @@ int main(void) {
                         case 1:
                             try
                             {
-                                control.getJoueurCourant().acheterCarteJoaillerie(control.getPartie().getEspaceJeux());
+                                control.getJoueurCourant().recupererJetons(control.getPartie().getEspaceJeux().getPlateau());
                                 etat_action = 4;
                             }
                             catch(JoueurException)
