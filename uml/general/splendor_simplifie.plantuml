@@ -1,0 +1,56 @@
+@startuml splendor
+
+class Jeton {
+  - couleur: CouleurJeton
+}
+
+class LotDeJetons {
+  - jetons: vector<const Jeton*>
+}
+
+class Privilege {
+}
+
+class LotPrivileges {
+  - privileges: vector<const Privilege*>
+}
+
+class Sac {
+  - jetons: vector<const Jeton*>
+}
+
+class Plateau {
+  - jetons: array<array<const Jeton*, 5>, 5>
+  - privileges: vector<const Privilege*>
+  - liste_pos: array<tuple<size_t, size_t>, 25>
+  - max_privileges : size_t
+}
+
+Jeton "25"-* LotDeJetons
+Privilege "3"-* LotPrivileges
+
+Plateau "0..1" o-- "0..25" Jeton
+Plateau "0..1" o-- "0..3" Privilege
+Sac "0..1" o- "0..25" Jeton
+
+class Carte{
+    - type : enum
+    - prix : Prix
+    - bonus : Bonus
+    - capacite : enum
+    - nbCouronnes : unsigned int
+    - nbPtsPrivilege : unsigned int
+    - id : unsigned int
+}
+
+class JeuCarte {
+    - cartes_nv1 : vector<const Carte*>
+    - cartes_nv2 : vector<const Carte*>
+    - cartes_nv3 : vector<const Carte*>
+    - cartes_nobles : vector<const Carte*>
+}
+
+JeuCarte "0..1" *- "67" Carte
+
+@enduml
+```

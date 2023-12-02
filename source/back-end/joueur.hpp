@@ -35,10 +35,11 @@ private:
 
 
 enum class type { IA, HUMAIN };
-
 std::string toStringType(type t);
-
 type toType(std::string s);
+
+
+
 
 class Joueur {
 private:
