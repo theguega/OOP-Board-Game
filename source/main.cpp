@@ -76,9 +76,14 @@ int main(void) {
                                 control.getJoueurCourant().remplirPlateau(control.getPartie().getEspaceJeux().getPlateau(), control.getPartie().getEspaceJeux().getSac(), control.getJoueurAdverse());
                                 etat_action = 0;
                             }
-                            catch(JoueurException)
+                            catch(JoueurException& e)
                             {
-                                std::cout << "erreur oups" << '\n';
+                                std::cout << e.getInfo() << '\n';
+                                etat_action = 0;
+                            }
+                            catch(JetonException& e)
+                            {
+                                std::cout << e.getInfo() << '\n';
                                 etat_action = 0;
                             }
                             break;}
@@ -111,12 +116,20 @@ int main(void) {
                         case 1:
                             try
                             {
+                                cout << control.getPartie().getEspaceJeux().getPlateau();
                                 control.getJoueurCourant().recupererJetons(control.getPartie().getEspaceJeux().getPlateau());
                                 etat_action = 4;
+                                cout << control.getPartie().getEspaceJeux().getPlateau();
+                                control.getJoueurCourant().afficherJoueur();
                             }
-                            catch(JoueurException)
+                            catch(JoueurException& e)
                             {
-                                std::cout << "erreur oups" << '\n';
+                                std::cout << e.getInfo() << '\n';
+                                etat_action = 0;
+                            }
+                            catch(JetonException& e)
+                            {
+                                std::cout << e.getInfo() << '\n';
                                 etat_action = 0;
                             }
                             break;

@@ -134,6 +134,7 @@ void Controller::lancerPartie() {
     }
     partie->setTour(0);
     partie->getEspaceJeux().getPyramide().remplirPyramide();
+    joueurCourant->remplirPlateau(partie->getEspaceJeux().getPlateau(), partie->getEspaceJeux().getSac(), this->getJoueurAdverse());
     // TODO
 }
 
