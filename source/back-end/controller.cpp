@@ -282,12 +282,13 @@ bool Controller::verifAchatCarte(const Carte& carte, EspaceJeux& espaceJeux) {
     unsigned int jetonsOrUtilises = 0;
 
     // Fonction pour ajouter des jetons or à une couleur donnée
-    auto ajouterJetonsOr = [&jetonsOrUtilises, &nbOr](unsigned int& nbCouleur, unsigned int besoin) {
+    auto ajouterJetonsOr = [&jetonsOrUtilises, &nbOr](unsigned int& nbCouleur, unsigned int& besoin) {
         while (nbOr > 0 && besoin > nbCouleur) {
             // Utiliser un jeton or pour compléter le besoin
             nbOr--;
-            nbCouleur++;
+            //nbCouleur++;
             jetonsOrUtilises++;
+            besoin--;
         }
     };
 
@@ -431,7 +432,7 @@ void Controller::acheterCarteJoaillerie (EspaceJeux& espaceJeux){
         }
 
         std::pair< Couleur, unsigned int> carteDescr = strategy_courante->achatReserve(joueurCourant->cartesReservees.size());
-        if(carteDescr.second > joueurCourant->cartesReservees[carteDescr.first].size() || joueurCourant->cartesReservees[carteDescr.first].size()==0)
+        if(carteDescr.second >= joueurCourant->cartesReservees[carteDescr.first].size() || joueurCourant->cartesReservees[carteDescr.first].size()==0)
             throw SplendorException("vous n'avez pas cette carte dans votre reserve ou la reserve est vide");
         else{
             const Carte& carte = *(joueurCourant->cartesReservees[carteDescr.first][carteDescr.second]);
