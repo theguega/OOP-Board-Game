@@ -20,31 +20,17 @@
 //####################################
 //###### Partie en mode Terminal #####
 //####################################
-/*
-
-int main(void) {
-    Controller control;
-    control.lancerPartie();
-    control.getJoueurCourant().afficherJoueur();
-    return 0;
-}
-
-*/
-
-
 //avec boucle de jeux
+
 int main(void) {
     Controller control;
-
     control.lancerPartie();
 
     while (control.getPartie().getJoueur1()->estGagnant() == false && control.getPartie().getJoueur2()->estGagnant() == false) {
-        // TODO
-
         // tour pour chacun des joueurs
         std::cout<<"--------------------------------------------------------------------------------------------------------------------------------------------";
         std::cout<<endl<<endl<<endl<<endl;
-        std::cout<<"C'est à "<<control.getJoueurCourant().getPseudo()<<" de jouer : "<<endl;
+        std::cout<<"C'est a "<<control.getJoueurCourant().getPseudo()<<" de jouer : "<<endl;
         control.getJoueurCourant().afficherJoueur();
         std::cout<<endl;
         for (unsigned int i = 0; i < 2; i++) {
@@ -155,7 +141,7 @@ int main(void) {
 
 
                 case 2:{
-                    std::cout << "verification fin de partie";
+                    std::cout << "verification fin de partie" << std::endl << std::endl;
 
                     if (control.getJoueurCourant().getptsPrestige() >= 3 or control.getJoueurCourant().getptsPrestige() >= 6) {
                         control.acheterCarteNoble(control.getPartie().getEspaceJeux().getPyramide());

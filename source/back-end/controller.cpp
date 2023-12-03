@@ -157,7 +157,7 @@ void Controller::lancerPartie() {
     }
     partie->setTour(0);
     partie->getEspaceJeux().getPyramide().remplirPyramide();
-    remplirPlateau(partie->getEspaceJeux().getPlateau(), partie->getEspaceJeux().getSac(), this->getJoueurAdverse());
+    partie->getEspaceJeux().getPlateau().remplirPlateau(partie->getEspaceJeux().getSac());
     // TODO
 }
 
@@ -301,7 +301,7 @@ bool Controller::verifAchatCarte(const Carte& carte, EspaceJeux& espaceJeux) {
     // Vérifier à nouveau si le joueur a maintenant assez de points pour acheter la carte
     if (needBlanc <= nbBlanc && needBleu <= nbBleu && needVert <= nbVert &&
         needRouge <= nbRouge && needNoir <= nbNoir && needPerle <= nbPerle) {
-        std::cout << "Carte achetable avec " << jetonsOrUtilises << " jeton(s) or utilisé(s)." << std::endl;
+        std::cout << "Carte achetable avec " << jetonsOrUtilises << " jeton(s) or utilise(s)." << std::endl;
 
         joueurCourant->supJetonNb(needBlanc, Couleur::BLANC, espaceJeux);
         joueurCourant->supJetonNb(needBleu, Couleur::BLEU, espaceJeux);
@@ -322,7 +322,7 @@ void Controller::utiliserPrivilege(Plateau& plateau){
     std::cout<<"Utiliser un privilege permet de recup un jeton de couleur ou perle de votre choix (i,j):\n";
     std::cout<<plateau;
     if (joueurCourant->privileges.empty()) {
-        throw SplendorException("Le joueur n'a pas de privilège");
+        throw SplendorException("Le joueur n'a pas de privilege");
     }
     if (plateau.estVide()){
         throw SplendorException("Le plateau n'a pas de jetons");
@@ -367,7 +367,6 @@ void Controller::recupererJetons(Plateau& plateau){
 }
 
 void Controller::orReserverCarte (Pyramide& pyramide, Plateau& plateau){
-    std::cout<<"Voulez-vous réserver une carte de la pyramide ou de la pioche de niveau i ? (0, 1, 2, 3)" << std::endl;
     unsigned int choix = strategy_courante->choixNiveau();
 
 
@@ -422,28 +421,31 @@ void Controller::acheterCarteJoaillerie (EspaceJeux& espaceJeux){
 
     // Achat carte reservee
     if (choix == 1){
-        std::cout << "Voici les cartes réservées : " << std::endl;
+        std::cout << "Voici les cartes reservees : " << std::endl;
         unsigned int i = 0;
         // Affichage de la réserve
         for (auto & cartesReservee : joueurCourant->cartesReservees) {
-            std::cout <<"Numéro "<<i << " : ";
+            std::cout <<"Numero "<<i << " : " << std::endl;
             //std::cout<<cartesReservee;
             i++;
         }
 
         std::pair< Couleur, unsigned int> carteDescr = strategy_courante->achatReserve(joueurCourant->cartesReservees.size());
+        if(carteDescr.second > joueurCourant->cartesReservees[carteDescr.first].size() || joueurCourant->cartesReservees[carteDescr.first].size()==0)
+            throw SplendorException("vous n'avez pas cette carte dans votre reserve ou la reserve est vide");
+        else{
+            const Carte& carte = *(joueurCourant->cartesReservees[carteDescr.first][carteDescr.second]);
 
-        const Carte& carte = *(joueurCourant->cartesReservees[carteDescr.first][carteDescr.second]);
-
-        if (!verifAchatCarte(carte, espaceJeux)) {
-            throw SplendorException("Vous n'avez pas assez de points pour acheter cette carte...");
+            if (!verifAchatCarte(carte, espaceJeux)) {
+                throw SplendorException("Vous n'avez pas assez de points pour acheter cette carte...");
+            }
+            joueurCourant->addCarte(carte);
+            // rajout des couronnes
+            joueurCourant->nbCouronnes += carte.getNbCouronnes();
+            // Rajout du bonus dans le joueur
+            joueurCourant->bonus[carte.getBonus().getCouleur()] += carte.getBonus().getNbBonus();
+            joueurCourant->supCarteReservee(carte);
         }
-        joueurCourant->addCarte(carte);
-        // rajout des couronnes
-        joueurCourant->nbCouronnes += carte.getNbCouronnes();
-        // Rajout du bonus dans le joueur
-        joueurCourant->bonus[carte.getBonus().getCouleur()] += carte.getBonus().getNbBonus();
-        joueurCourant->supCarteReservee(carte);
     }
         // Achat carte du plateau
     else if (choix == 2){

@@ -112,27 +112,27 @@ bool Pyramide::estVide() const {
 
 const Carte & Pyramide::reserverCarte(int niveau, int numero) {
     niveau--;
-    numero++; // pour que l'utilisateur rentre les coordonnées de 1 à 5
+    numero--; // pour que l'utilisateur rentre les coordonnées de 1 à 5
     if (array_cartes[niveau][numero] != nullptr) {
         const Carte & ma_carte = * array_cartes[niveau][numero];
         array_cartes[niveau][numero] = nullptr;
         this -> remplircasePyramide(niveau, numero);
         return ma_carte;
     } else {
-        throw "Pas de carte à cette emplacement";
+        throw SplendorException("Pas de carte à cette emplacement");
     }
 }
 
 const Carte & Pyramide::acheterCarte(unsigned int niveau, unsigned int numero) {
     niveau--;
-    numero++; // pour que l'utilisateur rentre les coordonnées de 1 à 5
+    numero--; // pour que l'utilisateur rentre les coordonnées de 1 à 5
     if (array_cartes[niveau][numero] != nullptr) {
         const Carte & ma_carte = * array_cartes[niveau][numero];
         array_cartes[niveau][numero] = nullptr;
         this -> remplircasePyramide(niveau, numero);
         return ma_carte;
     } else {
-        throw "Pas de carte à cette emplacement";
+        throw SplendorException("Pas de carte à cette emplacement");
     }
 
 }
@@ -145,7 +145,7 @@ const Carte & Pyramide::ReserverCartePioche(unsigned int niveau) {
             return pNv1.piocher();; // piocher/tirer des cartes de niveau 3
             break;
         } else {
-            throw "Pioche vide";
+            throw SplendorException("Pioche vide");
         }
 
     case 1:
@@ -153,24 +153,24 @@ const Carte & Pyramide::ReserverCartePioche(unsigned int niveau) {
             return pNv2.piocher(); // piocher des cartes de niveau 2
             break;
         } else {
-            throw "Pioche vide";
+            throw SplendorException("Pioche vide");
         }
     case 2:
         if (not(pNv3.estVide())) {
             return pNv3.piocher(); // piocher des cartes de niveau 1
             break;
         } else {
-            throw "Pioche vide";
+            throw SplendorException("Pioche vide");
         }
     case 3:
         if (not(pNoble.estVide())) {
             return pNoble.piocher(); // piocher des cartes nobles
             break;
         } else {
-            throw "Pioche vide";
+            throw SplendorException("Pioche vide");
         }
     default:
-        throw "Indice de pioche invalide";
+        throw SplendorException("Indice de pioche invalide");
         break;
     }
 }

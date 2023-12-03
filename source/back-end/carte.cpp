@@ -97,9 +97,9 @@ Capacite StringToCapacite(const std::string & capaciteStr) {
 
 ostream & operator << (ostream & f,
     const Prix & p) {
-    f << "🤍 : " << p.getBlanc() << "    " << "🔵 :  " << p.getBleu() << "\n";
-    f << "🟢 : " << p.getVert() << "    " << "🖤 :  " << p.getNoir() << "\n";
-    f << "🔴 : " << p.getRouge() << "    " <<"🟣 : " << p.getPerle() << "\n";
+    f << "Blanc : " << p.getBlanc() << "    " << "Bleu  :  " << p.getBleu() << "\n";
+    f << "Vert  : " << p.getVert() << "    " << "Noir  :  " << p.getNoir() << "\n";
+    f << "Rouge : " << p.getRouge() << "    " <<"Perle : " << p.getPerle() << "\n";
     return f;
 }
 

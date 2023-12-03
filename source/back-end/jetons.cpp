@@ -16,13 +16,13 @@ std::initializer_list<Couleur> Couleurs = {
 std::string toStringCouleur(Couleur c) {
     switch (c)
     {
-    case Couleur::BLANC: return "🤍";
-    case Couleur::BLEU: return "🔵";
-    case Couleur::VERT: return "🟢";
-    case Couleur::ROUGE: return "🔴";
-    case Couleur::NOIR: return "🖤";
-    case Couleur::PERLE: return "🟣";
-    case Couleur::OR: return "🟡";
+    case Couleur::BLANC: return "Blanc";
+    case Couleur::BLEU: return "Bleu";
+    case Couleur::VERT: return "Vert";
+    case Couleur::ROUGE: return "Rouge";
+    case Couleur::NOIR: return "Noir";
+    case Couleur::PERLE: return "Perle";
+    case Couleur::OR: return "Or";
     case Couleur::INDT: return "Indt";
     default: throw SplendorException("Couleur inconnue");
     }

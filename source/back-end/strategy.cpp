@@ -34,13 +34,13 @@ std::vector<const Jeton*> StrategyHumain::recupJetonStrat(Plateau& plateau){
         bool result4 = false; // Diago 2
 
         // Verif que les jetons sont adjacents en ligne
-        for (int i = 0; i < vecteurCoordonnees.size()-1; i++) {
+        for (unsigned int i = 0; i < vecteurCoordonnees.size()-1; i++) {
             if (vecteurCoordonnees[i].first != vecteurCoordonnees[i + 1].first) {
                 result1 = false;
             }
         }
         // Verif que les jetons sont adjacents en colonne
-        for (int i = 0; i < vecteurCoordonnees.size()-1; i++) {
+        for (unsigned int i = 0; i < vecteurCoordonnees.size()-1; i++) {
             if (vecteurCoordonnees[i].second != vecteurCoordonnees[i + 1].second) {
                 result2 = false;
             }
@@ -53,14 +53,14 @@ std::vector<const Jeton*> StrategyHumain::recupJetonStrat(Plateau& plateau){
         };
         std::sort(vecteurCoordonnees.begin(), vecteurCoordonnees.end(), comparaison);
 
-        for (int i = 0; i < vecteurCoordonnees.size()-1; i++) {
+        for (unsigned int i = 0; i < vecteurCoordonnees.size()-1; i++) {
             // première diagonale
             if ((vecteurCoordonnees[i].first+1 == vecteurCoordonnees[i + 1].first) && (vecteurCoordonnees[i].second-1 == vecteurCoordonnees[i + 1].second)) {
                 result3 = true;
             }
         }
 
-        for (int i = 0; i < vecteurCoordonnees.size()-1; i++) {
+        for (unsigned int i = 0; i < vecteurCoordonnees.size()-1; i++) {
             // seconde diagonale
             if ((vecteurCoordonnees[i].first+1 == vecteurCoordonnees[i + 1].first) && (vecteurCoordonnees[i].second+1 == vecteurCoordonnees[i + 1].second)) {
                 result4 = true;
@@ -192,14 +192,14 @@ std::pair<unsigned int, unsigned int> StrategyIA::choisirJeton(Plateau& plateau)
 }
 
 unsigned int StrategyHumain::choixNiveau() {
-    std::cout<<"Voulez-vous réserver une carte de la pyramide ou de la pioche de niveau i ? (0, 1, 2, 3)" << std::endl;
+    std::cout<<"Voulez-vous reserver une carte de la pyramide ou de la pioche de niveau i ? (0, 1, 2, 3)" << std::endl;
     unsigned int choix;
     std::cin >> choix;
     return choix;
 }
 
 unsigned int StrategyIA::choixNiveau() {
-    std::cout<<"Voulez-vous réserver une carte de la pyramide ou de la pioche de niveau i ? (0, 1, 2, 3)" << std::endl;
+    std::cout<<"Voulez-vous reserver une carte de la pyramide ou de la pioche de niveau i ? (0, 1, 2, 3)" << std::endl;
     // Initialiser le générateur de nombres aléatoires avec la graine actuelle du système
     std::random_device rd;
     std::mt19937 gen(rd());
@@ -215,7 +215,7 @@ unsigned int StrategyIA::choixNiveau() {
 unsigned int StrategyHumain::choixActionsOptionelles() {
     unsigned int choix;
     std::cout << "Actions optionnelles: " << endl;
-    std::cout << "1. Utiliser un privilège" << endl;
+    std::cout << "1. Utiliser un privilege" << endl;
     std:: cout << "2. Remplir le plateau" << endl;
     std::cout << "3. Ne plus faire d'actions optionnelles" << endl;
     std::cout << "9. Quitter le jeu" << endl;
@@ -225,14 +225,14 @@ unsigned int StrategyHumain::choixActionsOptionelles() {
 }
 
 unsigned int StrategyIA::choixActionsOptionelles() {
-    std::cout << "L'IA choisit entre: utiliser un privilège, remplir le plateau, ne rien faire (1/2/3): " << endl;
+    std::cout << "L'IA choisi entre: utiliser un privilege, remplir le plateau, ne rien faire (1/2/3): " << endl;
     std::random_device rd;
     std::mt19937 gen(rd());
     // Créer une distribution uniforme pour les entiers entre 0 et 3 inclus
     std::uniform_int_distribution<int> distribution(1, 3);
     // Générer un nombre aléatoire
     unsigned int choix = distribution(gen);
-    std::cout<<"Elle a choisit"<<choix<<".\n"<<std::endl;
+    std::cout<<"Elle a choisi "<<choix<<".\n"<<std::endl;
     return choix;
 }
 
@@ -240,9 +240,9 @@ unsigned int StrategyIA::choixActionsOptionelles() {
 unsigned int StrategyHumain::choixActionsObligatoires() {
     unsigned int choix;
     std::cout << "Actions obligatoires: " << endl;
-    std::cout << "1. Récupérer des jetons" << endl;
+    std::cout << "1. Recuperer des jetons" << endl;
     std:: cout << "2. Acheter une carte joaillerie" << endl;
-    std::cout << "3. Réserver une carte" << endl;
+    std::cout << "3. Reserver une carte" << endl;
     std::cout << "9. Quitter le jeu" << endl;
     std::cout << "Votre choix (1/2/3/9):" << std::endl;
     cin >> choix;
@@ -250,7 +250,7 @@ unsigned int StrategyHumain::choixActionsObligatoires() {
 }
 
 unsigned int StrategyIA::choixActionsObligatoires() {
-    std::cout << "L'IA choisit entre: Récupérer des jetons, Acheter une carte joaillerie, Réserver une carte (1/2/3): " << endl;
+    std::cout << "L'IA choisi entre: Recuperer des jetons, Acheter une carte joaillerie, Reserver une carte (1/2/3): " << endl;
     std::random_device rd;
     std::mt19937 gen(rd());
     // Créer une distribution uniforme pour les entiers entre 0 et 3 inclus
@@ -282,7 +282,7 @@ unsigned int StrategyIA::choixAchat(){
     // Générer un nombre aléatoire
     int choix = distribution(gen);
     if (choix == 1) {
-        std::cout << "On va acheter une carte réservée." << std::endl;
+        std::cout << "On va acheter une carte reservee." << std::endl;
     }
     else {
         std::cout << "On va acheter une carte du plateau." << std::endl;
@@ -294,18 +294,18 @@ std::pair<unsigned int, unsigned int> StrategyIA::reservationCarte(Pyramide& pyr
     // Initialiser le générateur de nombres aléatoires avec la graine actuelle du système
     std::random_device rd;
     std::mt19937 gen(rd());
+
+    std::random_device rd1;
+    std::mt19937 gen1(rd1());
     // Créer une distribution uniforme pour les entiers entre 0 et 3 inclus
-    std::uniform_int_distribution<int> distribution(0, 2);
+    std::uniform_int_distribution<int> distribution(1, 3);
     // Générer un nombre aléatoire
     int niveau = distribution(gen);
-    std::cout << "Voici les cartes de la pyramide : " << std::endl;
-    pyramide.afficherPyramide();
 
     std::cout << "Niveau: "<< niveau << std::endl;
 
-    std::uniform_int_distribution<int> distributionNiveau(1, pyramide.getNbCartesNiv(niveau));
-    int numCarte = distributionNiveau(gen);
-    std::cout << "Niveau: "<< niveau << std::endl;
+    std::uniform_int_distribution<int> distributionNiveau(1, pyramide.getNbCartesNiv(niveau-1));
+    int numCarte = distributionNiveau(gen1);
     std::cout << "Numéro de carte: "<< numCarte << std::endl;
 
 
@@ -313,8 +313,6 @@ std::pair<unsigned int, unsigned int> StrategyIA::reservationCarte(Pyramide& pyr
 }
 
 std::pair<unsigned int, unsigned int> StrategyHumain::reservationCarte(Pyramide& pyramide) {
-    std::cout << "Voici les cartes de la pyramide : " << std::endl;
-    pyramide.afficherPyramide();
     std::cout << "Tapez le niveau de la carte que vous voulez réserver : " << std::endl;
     unsigned int niveau;
     std::cin >> niveau;
@@ -322,8 +320,8 @@ std::pair<unsigned int, unsigned int> StrategyHumain::reservationCarte(Pyramide&
     unsigned int numCarte;
     std::cin >> numCarte;
     // Vérifications
-    while (numCarte > pyramide.getNbCartesNiv(niveau) || numCarte < 0 || niveau >= 3 || niveau < 0 ){
-        std::cout<<"Le numéro de la carte ou son niveau est incorrect\n"<<std::endl;
+    while (numCarte > pyramide.getNbCartesNiv(niveau) || niveau <= 0 || niveau >= 3 || numCarte <= 0){
+        std::cout<<"Le numero de la carte ou son niveau est incorrect\n"<<std::endl;
         std::cout << "Tapez le niveau de la carte que vous voulez réserver : " << std::endl;
         std::cin >> niveau;
         std::cout << "Tapez le numero de la carte que vous voulez réserver : " << std::endl;
@@ -363,10 +361,10 @@ std::pair<unsigned int, unsigned int> StrategyIA::achatNoble(Pyramide& pyramide)
 }
 
 std::pair< Couleur, unsigned int> StrategyHumain::achatReserve(unsigned int nbCartesReservees){
-    std::cout << "Voici les cartes réservées : " << std::endl;
+    std::cout << "Voici les cartes reservees : " << std::endl;
     unsigned int i = 0;
 
-    std::cout << "Tapez le numéro de la carte que vous voulez acheter : " << std::endl;
+    std::cout << "Tapez le numero de la carte que vous voulez acheter : " << std::endl;
     unsigned int numCarte;
     std::cin >> numCarte;
     // Vérifications -> voir plus au niveau des jetons dans la main
@@ -382,8 +380,8 @@ std::pair< Couleur, unsigned int> StrategyHumain::achatReserve(unsigned int nbCa
     std::cin >> couleur;
     // Vérification si la chaîne est présente dans la liste
     auto it = std::find(listeCouleurs.begin(), listeCouleurs.end(), couleur);
-    while (it != listeCouleurs.end()){
-        std::cout<<"Lea couleur est invalide"<<std::endl;
+    while (it == listeCouleurs.end()){
+        std::cout<<"La couleur est invalide"<<std::endl;
         std::cout << "Tapez la couleur de la carte que vous voulez acheter : " << std::endl;
         std::cin >> couleur;
         it = std::find(listeCouleurs.begin(), listeCouleurs.end(), couleur);

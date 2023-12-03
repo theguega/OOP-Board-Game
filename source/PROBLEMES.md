@@ -3,7 +3,6 @@
 
 ## main :
 * pas de possibilités de quitter + sauvegarde en meme temps
-* don du privilege de debut de partie mal gérer
 * reserver carte -> double affichage de reseerver une carte...
 * espacer un peu le cartes dans l'affichage
 
@@ -16,4 +15,6 @@
 
 ## Crash (IA)
 * l'IA choisit d'acheter une carte reserver (alors qu'elle na pas reserver de carte)
+* L'IA bute lorsqu'elle veut acheter ses acrtes reservées, qq problèmes réglés mais il y en a d'autres apparemment
+* l'IA bute après "carte achetable avec X jetons utilisés"
 * l'IA va dans la pyramide/pioche 3
