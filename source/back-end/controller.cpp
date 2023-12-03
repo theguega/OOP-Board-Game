@@ -320,11 +320,13 @@ void Controller::utiliserPrivilege(Plateau& plateau){
     for (size_t i=0; i<priv;i++) {
         std::cout<<"Utiliser un privilege permet de recup un jeton de couleur ou perle de votre choix (i,j):\n";
         std::cout<<plateau<<endl;
-        const Privilege& privilege = joueurCourant->supPrivilege(plateau);
-        plateau.poserPrivilege(privilege);
         std::pair<unsigned int, unsigned int> coordJetonSelec = strategy_courante->choisirJeton(plateau);
+        if(plateau.caseOr(coordJetonSelec.first, coordJetonSelec.second))
+            throw SplendorException("Vous ne pouvez pas prendre de jeton Or avec un privilege");
         const Jeton& jetonSelec = plateau.recupererJeton(coordJetonSelec.first, coordJetonSelec.second);
         joueurCourant->addJeton(jetonSelec);
+        const Privilege& privilege = joueurCourant->supPrivilege(plateau);
+        plateau.poserPrivilege(privilege);
     }
 }
 
