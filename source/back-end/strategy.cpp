@@ -85,7 +85,7 @@ std::vector<const Jeton*> StrategyHumain::recupJetonStrat(Plateau& plateau){
 
 std::vector<const Jeton*> StrategyIA::recupJetonStrat(Plateau& plateau){
     std::cout << "Combien de jetons souhaitez-vous recuperer ? (1 a 3) " << std::endl;
-    // Initialiser le générateur de nombres aléatoires avec la graine actuelle du système
+
     std::random_device rd;
     std::mt19937 gen(rd());
     // Créer une distribution uniforme pour les entiers entre 1 et 3 inclus
