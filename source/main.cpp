@@ -169,11 +169,13 @@ int main(void) {
                     }
 
                     //simulation de victoire
+                    /*
                     if (control.getJoueurCourant().getNbJetons() >= 2) {
                         std::cout << "Joueur " << control.getJoueurCourant().getPseudo() << " a gagné la partie" << std::endl;
                                 etat_tour = 3;
                         break;
                     }
+                    */
 
                     //fin du tour du joueur, on passe au joueur suivant
                     control.changerJoueurCourant();
