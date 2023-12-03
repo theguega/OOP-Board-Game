@@ -2,12 +2,9 @@
 
 
 ## main :
-* pas de possibilités de quitter + sauvegarde en meme temps
-* reserver carte -> double affichage de reseerver une carte...
-* espacer un peu le cartes dans l'affichage
+* proposer de sauvegarder quand on quitte
 
 ## controller :
-* pas de switch de joueur apparement
 * remplir plateau : c l'inverse pour la gestion des privileges : relire le doc de regle
 
 ## plateau
