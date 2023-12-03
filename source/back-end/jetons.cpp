@@ -31,23 +31,38 @@ std::string toStringCouleur(Couleur c) {
 
 //🔵🟢🔴🟡🟣🖤🤍
 
+std::string toEmojiCouleur(Couleur c) {
+    switch (c)
+    {
+    case Couleur::BLANC: return "\033[1;37m O \033[0m"; // Blanc
+    case Couleur::BLEU: return "\033[1;34m O \033[0m";  // Bleu
+    case Couleur::VERT: return "\033[1;32m O \033[0m";  // Vert
+    case Couleur::ROUGE: return "\033[1;31m O \033[0m"; // Rouge
+    case Couleur::NOIR: return "\033[1;90m O \033[0m";  // Noir
+    case Couleur::PERLE: return "\033[1;35m O \033[0m"; // Perle (rose)
+    case Couleur::OR: return "\033[1;33m O \033[0m";    // Or (jaune)
+    case Couleur::INDT: return "Indt";
+    default: throw SplendorException("Couleur inconnue");
+    }
+}
+
 std::string toStringCouleur(Couleur c) {
     switch (c)
     {
-    case Couleur::BLANC: return "\033[1;37m●\033[0m"; // Blanc
-    case Couleur::BLEU: return "\033[1;34m●\033[0m";  // Bleu
-    case Couleur::VERT: return "\033[1;32m●\033[0m";  // Vert
-    case Couleur::ROUGE: return "\033[1;31m●\033[0m"; // Rouge
-    case Couleur::NOIR: return "\033[1;30m●\033[0m";  // Noir
-    case Couleur::PERLE: return "\033[1;35m●\033[0m"; // Perle (rose)
-    case Couleur::OR: return "\033[1;33m●\033[0m";    // Or (jaune)
+    case Couleur::BLANC: return "Blanc"; // Blanc
+    case Couleur::BLEU: return "Bleu";  // Bleu
+    case Couleur::VERT: return "Vert";  // Vert
+    case Couleur::ROUGE: return "Rouge"; // Rouge
+    case Couleur::NOIR: return "Noir";  // Noir
+    case Couleur::PERLE: return "Perle"; // Perle (rose)
+    case Couleur::OR: return "Or";    // Or (jaune)
     case Couleur::INDT: return "Indt";
     default: throw SplendorException("Couleur inconnue");
     }
 }
 
 std::ostream& operator<<(std::ostream& f, Couleur c) {
-    return f << toStringCouleur(c);
+    return f << toEmojiCouleur(c);
 }
 
 std::map<std::string, Couleur> stringToCouleurMap = {
@@ -325,6 +340,7 @@ bool Plateau::caseOr(unsigned int i, unsigned int j) const{
         return true;
     return false;
 };
+
 //Singleton
 //Avec sac et lot de privileges (debut de partie)
 Plateau& Plateau::getPlateau(const LotPrivileges& lotp) {
@@ -334,17 +350,17 @@ Plateau& Plateau::getPlateau(const LotPrivileges& lotp) {
 
 std::ostream& operator<< (std::ostream& f, const Plateau& plateau) {
     //On affiche une matrice avec dans chaque case la lettre correpondant au jetons
-    f<<"-----------"<<std::endl;
+    f<<"---------------------"<<std::endl;
     for (size_t i = 0; i < plateau.getLargeurMatrice(); i++) {
         f << "|";
         for (size_t j = 0; j < plateau.getLargeurMatrice(); j++) {
             if (plateau.getJeton(i,j) == nullptr)
-                f << " ";
+                f << "   ";
             else
                 f << plateau.getJeton(i, j);
             f << "|";
         };
-        f << "\n" << "-----------" << std::endl;
+        f << "\n" << "---------------------" << std::endl;
     }
     return f;
 }

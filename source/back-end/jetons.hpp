@@ -14,6 +14,7 @@ using namespace std;
 //Enum pour les couleurs : initialiser, to string, affichage, string to couleur.
 enum class Couleur { BLANC, BLEU, VERT, ROUGE, NOIR, PERLE, OR, INDT};
 std::string toStringCouleur(Couleur c);
+std::string toEmojiCouleur(Couleur c);
 std::ostream& operator<<(std::ostream& f, Couleur c);
 extern std::initializer_list<Couleur> Couleurs;
 extern std::map<string, Couleur> stringToCouleurMap;

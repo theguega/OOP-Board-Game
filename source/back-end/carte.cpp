@@ -97,9 +97,9 @@ Capacite StringToCapacite(const std::string & capaciteStr) {
 
 ostream & operator << (ostream & f,
     const Prix & p) {
-    f << "Blanc : " << p.getBlanc() << "    " << "Bleu  :  " << p.getBleu() << "\n";
-    f << "Vert  : " << p.getVert() << "    " << "Noir  :  " << p.getNoir() << "\n";
-    f << "Rouge : " << p.getRouge() << "    " <<"Perle : " << p.getPerle() << "\n";
+    f << toEmojiCouleur(Couleur::BLANC) << " : " << p.getBlanc() << "    " << toEmojiCouleur(Couleur::BLEU) << " : " << p.getBleu() << "\n";
+    f << toEmojiCouleur(Couleur::VERT) << " : " << p.getVert() << "    " << toEmojiCouleur(Couleur::NOIR) << " : " << p.getNoir() << "\n";
+    f << toEmojiCouleur(Couleur::ROUGE) << " : " << p.getRouge() << "    " << toEmojiCouleur(Couleur::PERLE) << " : " << p.getPerle() << "\n";
     return f;
 }
 
@@ -121,15 +121,15 @@ Carte::Carte(TypeCarte t, Capacite c, unsigned int nbP, unsigned int id): type(t
 
 ostream & operator << (ostream & f,
     const Carte & c) {
-    f << "-------------------------------------\n";
-    f << c.getType() << "        " << "Bonus : " << c.getBonus() << "\n";
-    f << "-------------------------------------\n";
+    f << "------------------------------\n";
+    f << c.getType() << "   " << "Bonus : " << c.getBonus() << "\n";
+    f << "------------------------------\n";
     f << "Capacite : " << c.getCapacite1() << ", " << c.getCapacite2() << "\n";
-    f << "-------------------------------------\n";
+    f << "------------------------------\n";
     f << "Prix :\n" << c.getPrix();
-    f << "-------------------------------------\n";
-    f << "Privileges : " << c.getNbPtsPrivilege() << "        " << "Couronnes : " << c.getNbCouronnes() << "\n";
-    f << "-------------------------------------\n";
+    f << "------------------------------\n";
+    f << "Privileges : " << c.getNbPtsPrivilege() << "   " << "Couronnes : " << c.getNbCouronnes() << "\n";
+    f << "------------------------------\n";
     return f;
 }
 

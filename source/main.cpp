@@ -61,7 +61,7 @@ int main(void) {
                             {
                                 //utilisation d'un privilege
                                 if (a_deja_utilise_privilege)
-                                    throw SplendorException("Vous avez deja utilisé cette action");
+                                    throw SplendorException("Vous avez deja utilise cette action");
                                 control.verifPrivileges();
                                 control.utiliserPrivilege(control.getPartie().getEspaceJeux().getPlateau());
                                 etat_action = 0;
@@ -78,7 +78,7 @@ int main(void) {
                             {
                                 //replissage du plateau
                                 if (a_deja_rempli_plateau)
-                                    throw SplendorException("Vous avez deja utilisé cette action");
+                                    throw SplendorException("Vous avez deja utilise cette action");
                                 control.verifSacvide();
                                 control.remplirPlateau(control.getPartie().getEspaceJeux().getPlateau(), control.getPartie().getEspaceJeux().getSac(), control.getJoueurAdverse());
                                 etat_action = 0;
