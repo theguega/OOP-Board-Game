@@ -32,7 +32,7 @@ int main(void) {
         std::cout<<endl<<endl<<endl<<endl;
         std::cout<<"Tour n°"<<control.getPartie().getTour()+1<<endl;
 
-        for (unsigned int i = 0; i < 2; i++) {
+            for (unsigned int i = 0; i < 2; i++) {
             std::cout<<"--------------------------------------------------------------------------------------------------------------------------------------------\n";
             std::cout<<"C'est a "<<control.getJoueurCourant().getPseudo()<<" de jouer : "<<endl;
             control.getJoueurCourant().afficherJoueur();
@@ -62,7 +62,7 @@ int main(void) {
                             }
                             catch(SplendorException& e) { std::cerr << "\033[1;31m" << e.getInfo() << "\033[0m" << endl << endl;; etat_action = 0; }
                             break;
-                            }
+                        }
                         case 2:{
                             try
                             {
@@ -93,7 +93,7 @@ int main(void) {
                     }
                     break;}
 
-                //actions obligatoires :
+                    //actions obligatoires :
                 case 1:{
                     unsigned int etat_action = 0;
 
@@ -164,7 +164,7 @@ int main(void) {
                     //verif si un joueur à gagner
                     if (control.getJoueurCourant().getptsPrestige() >= 15) {
                         std::cout << "Joueur " << control.getJoueurCourant().getPseudo() << " a gagné la partie" << std::endl;
-                        etat_tour = 3;
+                                etat_tour = 3;
                         break;
                     }
 
@@ -199,13 +199,13 @@ int main(void) {
                 default:{
                     break;
                 }
+                }
+
+
             }
 
-
-        }
-
-        //fin du tour :
-        control.getPartie().incrementeTour();
+            //fin du tour :
+            control.getPartie().incrementeTour();
         }
 
     }
