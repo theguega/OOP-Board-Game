@@ -44,6 +44,8 @@ int main(void) {
                 // actions optionelles
                 switch (etat_tour) {
                 case 0: {
+                    bool a_deja_utilise_privilege = false;
+                    bool a_deja_rempli_plateau = false;
                     unsigned int etat_action = 0;
                     while (etat_action != 4) {
                         switch (etat_action)
@@ -58,9 +60,16 @@ int main(void) {
                             try
                             {
                                 //utilisation d'un privilege
+                                if (a_deja_utilise_privilege)
+                                    throw SplendorException("Vous avez deja utilise un privilege");
                                 control.verifPrivileges();
                                 control.verifPlateauvide();
                                 control.utiliserPrivilege(control.getPartie().getEspaceJeux().getPlateau());
+                                etat_action = 0;
+                                a_deja_utilise_privilege = true;
+                                cout << "\nNouveau plateau : \n"<<control.getPartie().getEspaceJeux().getPlateau()<<endl;
+                                cout<< "Etat du joueur apres recuperation :\n";
+                                control.getJoueurCourant().afficherJoueur();
                             }
                             catch(SplendorException& e) { std::cerr << "\033[1;31m" << e.getInfo() << "\033[0m" << endl << endl;; etat_action = 0; }
                             break;
@@ -69,8 +78,11 @@ int main(void) {
                             try
                             {
                                 //replissage du plateau
+                                if (a_deja_rempli_plateau)
+                                    throw SplendorException("Vous avez deja utilise un privilege");
                                 control.remplirPlateau(control.getPartie().getEspaceJeux().getPlateau(), control.getPartie().getEspaceJeux().getSac(), control.getJoueurAdverse());
                                 etat_action = 0;
+                                a_deja_rempli_plateau = true;
                             }
                             catch(SplendorException& e) { std::cerr << "\033[1;31m" << e.getInfo() << "\033[0m" << endl << endl;; etat_action = 0; }
                             break;

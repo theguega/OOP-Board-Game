@@ -75,8 +75,8 @@ std::vector<const Jeton*> StrategyHumain::recupJetonStrat(Plateau& plateau){
     // Recup des jetons
     std::vector<const Jeton*> jetonsRecup;
     for (unsigned int k = 0; k < nbJetonsRecup; k++){
-        if (plateau.caseVide(vecteurCoordonnees[k].first, vecteurCoordonnees[k].second))
-            throw SplendorException("Il y a une case vide dans votre selection");
+        if (plateau.caseVide(vecteurCoordonnees[k].first, vecteurCoordonnees[k].second) || plateau.caseOr(vecteurCoordonnees[k].first, vecteurCoordonnees[k].second))
+            throw SplendorException("Il y a une case vide ou un jeton Or dans votre selection");
     }
     for (unsigned int k = 0; k < nbJetonsRecup; k++){
         jetonsRecup.push_back(&plateau.recupererJeton(vecteurCoordonnees[k].first, vecteurCoordonnees[k].second));
@@ -152,15 +152,16 @@ std::vector<const Jeton*> StrategyIA::recupJetonStrat(Plateau& plateau){
         }
     }
 
-
     // Recup des jetons
     std::vector<const Jeton*> jetonsRecup;
     for (unsigned int k = 0; k < nbJetonsRecup; k++){
-        jetonsRecup.push_back(&plateau.recupererJeton(coordonneesAdjacentes[k].first, coordonneesAdjacentes[k].second));
+        if (plateau.caseVide(vecteurCoordonnees[k].first, vecteurCoordonnees[k].second) || plateau.caseOr(vecteurCoordonnees[k].first, vecteurCoordonnees[k].second))
+            throw SplendorException("Il y a une case vide ou un jeton Or dans votre selection");
     }
-
+    for (unsigned int k = 0; k < nbJetonsRecup; k++){
+        jetonsRecup.push_back(&plateau.recupererJeton(vecteurCoordonnees[k].first, vecteurCoordonnees[k].second));
+    }
     return jetonsRecup;
-
 }
 
 std::pair<unsigned int, unsigned int> StrategyHumain::choisirJeton(Plateau& plateau){
@@ -170,6 +171,8 @@ std::pair<unsigned int, unsigned int> StrategyHumain::choisirJeton(Plateau& plat
     std::cout << "Entrez la valeur de j (1,2,3,4,5) : ";
     std::cin >> j;
 
+    if((i > 5) || (i < 0) || (j > 5) || (j < 0))
+        throw SplendorException("Indice de jeton incorrect");
     // Retourner la paire d'entiers
     return std::make_pair(i-1, j-1);
 }
@@ -182,13 +185,16 @@ std::pair<unsigned int, unsigned int> StrategyIA::choisirJeton(Plateau& plateau)
     // distribution uniforme pour generer des indices aleatoires
     std::random_device rd;
     std::mt19937 gen(rd());
+    std::random_device rd1;
+    std::mt19937 gen1(rd1());
     std::uniform_int_distribution<int> distributionRow(0, plateauRows - 1);
     std::uniform_int_distribution<int> distributionCol(0, plateauCols - 1);
 
     // Genere des valeurs aleatoires pour i et j
     int i = distributionRow(gen);
-    int j = distributionCol(gen);
-
+    int j = distributionCol(gen1);
+    if((i > 5) || (i < 0) || (j > 5) || (j < 0))
+        throw SplendorException("Indice de jeton incorrect");
     // Retournez le jeton correspondant aux indices aleatoires
     return std::make_pair(i, j);
 }

@@ -320,6 +320,11 @@ bool Plateau::caseVide(unsigned int i, unsigned int j) const{
     return false;
 }
 
+bool Plateau::caseOr(unsigned int i, unsigned int j) const{
+    if(jetons[i][j]->getCouleur() == Couleur::OR)
+        return true;
+    return false;
+};
 //Singleton
 //Avec sac et lot de privileges (debut de partie)
 Plateau& Plateau::getPlateau(const LotPrivileges& lotp) {

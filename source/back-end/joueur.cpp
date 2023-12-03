@@ -193,7 +193,7 @@ const Privilege&::Joueur::supPrivilege(Plateau& plateau) {
     const Privilege& sup = *privileges[0];
     privileges.erase(privileges.begin());
     // rajout du privilege sur le plateau
-    plateau.poserPrivilege(sup);
+   //plateau.poserPrivilege(sup); deja fait dans une autre methode
 
     return  sup;
 }
