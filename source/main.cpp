@@ -58,7 +58,7 @@ int main(void) {
                                 //utilisation d'un privilege
                                 control.utiliserPrivilege(control.getPartie().getEspaceJeux().getPlateau());
                             }
-                            catch(SplendorException& e) { std::cout << e.getInfo() << '\n'; etat_action = 0; }
+                            catch(SplendorException& e) { std::cerr << "\033[1;31m" << e.getInfo() << "\033[0m" << endl << endl;; etat_action = 0; }
                             break;
                             }
                         case 2:{
@@ -68,7 +68,7 @@ int main(void) {
                                 control.remplirPlateau(control.getPartie().getEspaceJeux().getPlateau(), control.getPartie().getEspaceJeux().getSac(), control.getJoueurAdverse());
                                 etat_action = 0;
                             }
-                            catch(SplendorException& e) { std::cout << e.getInfo() << '\n'; etat_action = 0; }
+                            catch(SplendorException& e) { std::cerr << "\033[1;31m" << e.getInfo() << "\033[0m" << endl << endl;; etat_action = 0; }
                             break;
                         }
                         case 3:{
@@ -103,16 +103,19 @@ int main(void) {
                             //menu de choix des actions obligatoires
                             etat_action = control.choixActionsObligatoires();
                             break;
+                            //
                         case 1:
                             try
                             {
-                                cout << control.getPartie().getEspaceJeux().getPlateau();
+                                //recuperation de jetons
+                                cout << control.getPartie().getEspaceJeux().getPlateau()<<endl;
                                 control.recupererJetons(control.getPartie().getEspaceJeux().getPlateau());
                                 etat_action = 4;
-                                cout << control.getPartie().getEspaceJeux().getPlateau();
+                                cout << "\nNouveau plateau : \n"<<control.getPartie().getEspaceJeux().getPlateau()<<endl;
+                                cout<< "Etat du joueur après recupération :\n";
                                 control.getJoueurCourant().afficherJoueur();
                             }
-                            catch(SplendorException& e) { std::cout << e.getInfo() << '\n'; etat_action = 0; }
+                            catch(SplendorException& e) { std::cerr << "\033[1;31m" << e.getInfo() << "\033[0m" << endl << endl;; etat_action = 0; }
                             break;
                         case 2:
                             try
@@ -120,7 +123,7 @@ int main(void) {
                                 control.acheterCarteJoaillerie(control.getPartie().getEspaceJeux());
                                 etat_action = 4;
                             }
-                            catch(SplendorException& e) { std::cout << e.getInfo() << '\n'; etat_action = 0; }
+                            catch(SplendorException& e) { std::cerr << "\033[1;31m" << e.getInfo() << "\033[0m" << endl << endl;; etat_action = 0; }
                             break;
                         case 3:
                             try
@@ -128,8 +131,14 @@ int main(void) {
                                 control.orReserverCarte(control.getPartie().getEspaceJeux().getPyramide(), control.getPartie().getEspaceJeux().getPlateau());
                                 etat_action = 4;
                             }
-                            catch(SplendorException& e) { std::cout << e.getInfo() << '\n'; etat_action = 0; }
+                            catch(SplendorException& e) { std::cerr << "\033[1;31m" << e.getInfo() << "\033[0m" << endl << endl;; etat_action = 0; }
                             break;
+
+                        case 9:{
+
+                            return 0;
+
+                        }
                         default:
                             break;
                         }

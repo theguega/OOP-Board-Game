@@ -320,7 +320,7 @@ bool Controller::verifAchatCarte(const Carte& carte, EspaceJeux& espaceJeux) {
 
 void Controller::utiliserPrivilege(Plateau& plateau){
     std::cout<<"Utiliser un privilege permet de recup un jeton de couleur ou perle de votre choix (i,j):\n";
-    std::cout<<plateau;
+    std::cout<<plateau<<endl;
     if (joueurCourant->privileges.empty()) {
         throw SplendorException("Le joueur n'a pas de privilege");
     }
@@ -336,7 +336,7 @@ void Controller::utiliserPrivilege(Plateau& plateau){
 }
 
 void Controller::remplirPlateau(Plateau& plateau, Sac& sac, Joueur& joueurAdverse){
-    std::cout<<"Le joueur rempli le plateau :\n"<<plateau;
+    std::cout<<"Le joueur rempli le plateau :\n"<<plateau<<endl;
     strategy_courante->remplirPlateauStrat(plateau, sac);
     if (joueurCourant->privileges.size() == 3){
         std::cout<< "Vous avez deja 3 privileges. Vous n'en recupererez donc pas plus !" << std::endl;

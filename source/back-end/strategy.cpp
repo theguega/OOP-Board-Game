@@ -13,7 +13,7 @@ std::vector<const Jeton*> StrategyHumain::recupJetonStrat(Plateau& plateau){
         std::cin >> nbJetonsRecup;
     }
 
-    std::cout << "Merci de selectionner des jetons adjacents en ligne, en colonne ou en diagonale." << std::endl;
+    std::cout << "Merci de selectionner des jetons adjacents en ligne, en colonne ou en diagonale." << std::endl << endl;
 
     std::vector<std::pair<unsigned int, unsigned int>> vecteurCoordonnees;
 
@@ -21,6 +21,7 @@ std::vector<const Jeton*> StrategyHumain::recupJetonStrat(Plateau& plateau){
     for (unsigned int k = 0; k < nbJetonsRecup; k++){
 
         // Ajout des coordonnees
+        std::cout<<"Jetons n°"<<k<<" : \n\n";
         vecteurCoordonnees.emplace_back(choisirJeton(plateau));
         // Ajout du jeton
         //jetonsRecup.push_back(&jeton);
@@ -68,7 +69,7 @@ std::vector<const Jeton*> StrategyHumain::recupJetonStrat(Plateau& plateau){
         }
 
         if (!result1 && !result2 && !result3 && !result4) {
-            throw SplendorException("Les jetons ne sont pas adjacents");
+            throw SplendorException("\nLes jetons ne sont pas adjacents");
         }
 
     }
@@ -163,13 +164,13 @@ std::vector<const Jeton*> StrategyIA::recupJetonStrat(Plateau& plateau){
 
 std::pair<unsigned int, unsigned int> StrategyHumain::choisirJeton(Plateau& plateau){
     unsigned int i, j;
-    std::cout << "Entrez la valeur de i : ";
+    std::cout << "Entrez la valeur de i (1,2,3,4,5) : ";
     std::cin >> i;
-    std::cout << "Entrez la valeur de j : ";
+    std::cout << "Entrez la valeur de j (1,2,3,4,5) : ";
     std::cin >> j;
 
     // Retourner la paire d'entiers
-    return std::make_pair(i, j);
+    return std::make_pair(i-1, j-1);
 }
 
 std::pair<unsigned int, unsigned int> StrategyIA::choisirJeton(Plateau& plateau){
