@@ -20,7 +20,14 @@ public:
 	// getters
 	Partie& getPartie() { return *partie; };
     Joueur& getJoueurCourant() { return *joueurCourant; }
-    Joueur& getJoueurAdverse() {for (int i = 0; i < 2; i++) { if (partie->getJoueur(i) != joueurCourant) { return *partie->getJoueur(i); } }; }
+    Joueur& getJoueurAdverse() {
+        for (int i = 0; i < 2; i++) {
+            if (partie->getJoueur(i) != joueurCourant) {
+                return *partie->getJoueur(i);
+            }
+        }
+        throw SplendorException("pas de d'adverssaire trouvé..\n");
+    };
 	// setters
 	void setJoueurCourant(int n);
 	// actions partie
@@ -49,6 +56,7 @@ public:
 	// verifications
     void verifPrivileges();
     void verifPlateauvide();
+    void verifSacvide();
 };
 
 

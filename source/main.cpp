@@ -61,9 +61,8 @@ int main(void) {
                             {
                                 //utilisation d'un privilege
                                 if (a_deja_utilise_privilege)
-                                    throw SplendorException("Vous avez deja utilise un privilege");
+                                    throw SplendorException("Vous avez deja utilisé cette action");
                                 control.verifPrivileges();
-                                control.verifPlateauvide();
                                 control.utiliserPrivilege(control.getPartie().getEspaceJeux().getPlateau());
                                 etat_action = 0;
                                 a_deja_utilise_privilege = true;
@@ -79,7 +78,8 @@ int main(void) {
                             {
                                 //replissage du plateau
                                 if (a_deja_rempli_plateau)
-                                    throw SplendorException("Vous avez deja utilise un privilege");
+                                    throw SplendorException("Vous avez deja utilisé cette action");
+                                control.verifSacvide();
                                 control.remplirPlateau(control.getPartie().getEspaceJeux().getPlateau(), control.getPartie().getEspaceJeux().getSac(), control.getJoueurAdverse());
                                 etat_action = 0;
                                 a_deja_rempli_plateau = true;
@@ -95,9 +95,15 @@ int main(void) {
                         }
 
                         case 9:{
-
+                            std::string sauvegarde;
+                            std::cout<<"Vous avez decider de quitter la partie\n";
+                            std::cout<<"Voulez vous la sauvegarde ? (Oui, Non)\n";
+                            std::cin>>sauvegarde;
+                            if (sauvegarde=="OUI"||sauvegarde=="oui"||sauvegarde=="Oui")
+                                control.sauvegardePartie();
+                            else
+                                std::cout<<"tant pis...\n";
                             return 0;
-
                         }
 
                         default:{
@@ -136,6 +142,7 @@ int main(void) {
                         case 2:
                             try
                             {
+                                //achat carte joaillerie
                                 control.acheterCarteJoaillerie(control.getPartie().getEspaceJeux());
                                 etat_action = 4;
                             }
@@ -151,7 +158,14 @@ int main(void) {
                             break;
 
                         case 9:{
+                            std::string sauvegarde;
                             std::cout<<"Vous avez decider de quitter la partie\n";
+                            std::cout<<"Voulez vous la sauvegarde ? (Oui, Non)\n";
+                            std::cin>>sauvegarde;
+                            if (sauvegarde=="OUI"||sauvegarde=="oui"||sauvegarde=="Oui")
+                                control.sauvegardePartie();
+                            else
+                                std::cout<<"tant pis...\n";
                             return 0;
 
                         }
@@ -207,7 +221,14 @@ int main(void) {
 
 
                 case 9 : {
+                    std::string sauvegarde;
                     std::cout<<"Vous avez decider de quitter la partie\n";
+                    std::cout<<"Voulez vous la sauvegarde ? (Oui, Non)\n";
+                    std::cin>>sauvegarde;
+                    if (sauvegarde=="OUI"||sauvegarde=="oui"||sauvegarde=="Oui")
+                        control.sauvegardePartie();
+                    else
+                        std::cout<<"tant pis...\n";
                     return 0;
                 }
                 default:{
@@ -224,6 +245,7 @@ int main(void) {
 
     }
     //fin d'une partie
+    std::cout<<"le jeu n'est pas censer arriver la";
     return 0;
 }
 

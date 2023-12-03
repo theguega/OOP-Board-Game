@@ -311,14 +311,21 @@ bool Controller::verifAchatCarte(const Carte& carte, EspaceJeux& espaceJeux) {
 }
 
 void Controller::utiliserPrivilege(Plateau& plateau){
-    std::cout<<"Utiliser un privilege permet de recup un jeton de couleur ou perle de votre choix (i,j):\n";
-    std::cout<<plateau<<endl;
-    const Privilege& privilege = joueurCourant->supPrivilege(plateau);
-    plateau.poserPrivilege(privilege);
-    std::pair<unsigned int, unsigned int> coordJetonSelec = strategy_courante->choisirJeton(plateau);
-    const Jeton& jetonSelec = plateau.recupererJeton(coordJetonSelec.first, coordJetonSelec.second);
-    joueurCourant->addJeton(jetonSelec);
+    size_t priv;
+    std::cout<<"Combien de privilege voulez vous utiliser pour recup des jetons ? (1,2,3)\n";
+    std::cin>>priv;
+    if (priv>joueurCourant->getNbPrivileges())
+        throw SplendorException("Vous n'avez pas assez de privilege");
 
+    for (size_t i=0; i<priv;i++) {
+        std::cout<<"Utiliser un privilege permet de recup un jeton de couleur ou perle de votre choix (i,j):\n";
+        std::cout<<plateau<<endl;
+        const Privilege& privilege = joueurCourant->supPrivilege(plateau);
+        plateau.poserPrivilege(privilege);
+        std::pair<unsigned int, unsigned int> coordJetonSelec = strategy_courante->choisirJeton(plateau);
+        const Jeton& jetonSelec = plateau.recupererJeton(coordJetonSelec.first, coordJetonSelec.second);
+        joueurCourant->addJeton(jetonSelec);
+    }
 }
 
 void Controller::remplirPlateau(Plateau& plateau, Sac& sac, Joueur& joueurAdverse){
@@ -410,10 +417,11 @@ void Controller::acheterCarteJoaillerie (EspaceJeux& espaceJeux){
         std::cout << "Voici les cartes reservees : " << std::endl;
         unsigned int i = 0;
         // Affichage de la reserve
-        for (auto & cartesReservee : joueurCourant->cartesReservees) {
-            std::cout <<"Numero "<<i << " : " << std::endl;
-            //std::cout<<cartesReservee;
-            i++;
+        for (const auto& couleurEtCartes : joueurCourant->cartesReservees) {
+            const std::vector<const Carte*>& cartes = couleurEtCartes.second;
+            for (const Carte* carte : cartes) {
+                std::cout << "Numero "<<++i<<" : \n"<< *carte << std::endl;
+            }
         }
 
         std::pair< Couleur, unsigned int> carteDescr = strategy_courante->achatReserve(joueurCourant->cartesReservees.size());
@@ -468,6 +476,12 @@ void Controller::verifPrivileges(){
 void Controller::verifPlateauvide(){
     if (partie->getEspaceJeux().getPlateau().estVide()){
         throw SplendorException("Il n'y a aucun jeton a recuperer sur le plateau");
+    }
+}
+
+void Controller::verifSacvide(){
+    if (partie->getEspaceJeux().getSac().estVide()){
+        throw SplendorException("Le sac de jetons est vide");
     }
 }
 

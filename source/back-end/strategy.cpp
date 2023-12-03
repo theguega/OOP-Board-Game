@@ -92,7 +92,7 @@ std::vector<const Jeton*> StrategyIA::recupJetonStrat(Plateau& plateau){
     // Creer une distribution uniforme pour les entiers entre 1 et 3 inclus
     std::uniform_int_distribution<int> distribution(1, 3);
     // Generer un nombre aleatoire
-    int nbJetonsRecup = distribution(gen);
+    unsigned int nbJetonsRecup = distribution(gen);
     std::cout<<"On recupere "<<nbJetonsRecup<<" jetons"<<std::endl;
 
     std::cout << "Merci de selectionner des jetons adjacents en ligne, en colonne ou en diagonale." << std::endl;
@@ -383,7 +383,7 @@ std::pair< Couleur, unsigned int> StrategyHumain::achatReserve(unsigned int nbCa
     }
     // Verification de la couleur de la carte reservee
     std::vector<std::string> listeCouleurs = {"blanc", "bleu", "vert", "noir", "rouge", "perle", "or", "indt"};
-    std::cout << "Tapez la couleur de la carte que vous voulez acheter : " << std::endl;
+    std::cout << "Tapez la couleur de la carte que vous voulez acheter : (blanc, bleu, vert, perle, or, indt) " << std::endl;
     string couleur;
     std::cin >> couleur;
     // Verification si la chaîne est presente dans la liste
