@@ -59,9 +59,9 @@ Controller::Controller() {
 
         //Si ancienne partie :
 	} else if (statut_partie == "Old") {
-        //Création
+        //Creation
 
-        //Création
+        //Creation
         LastPartieBuilder* builder = new LastPartieBuilder();
         director->set_builder(builder);
         director->BuildLastPartie();
@@ -134,7 +134,6 @@ void Controller::changerJoueurCourant() {
         strategy_courante = &strategy_IA;
     else 
         strategy_courante = &strategy_Humain;
-    std::cout << "c'est a " << joueurCourant->getPseudo() << " de jouer" << std::endl;
 }
 
 void Controller::lancerPartie() {
@@ -166,13 +165,13 @@ void Controller::lancerPartie() {
 ///////////////////////// Actions d'un joueur /////////////////////////
 
 bool Controller::verifAchatCarte(const Carte& carte, EspaceJeux& espaceJeux) {
-    // 1 recuperer les points nécessaires pour acheter la carte
+    // 1 recuperer les points necessaires pour acheter la carte
     // 2 voir le nb de jetons par couleur
     // 3 ajouter les bonus
     // 4 voir si le joueur a assez de points pour acheter la carte
     // 5 si pas assez essayer avec les jetons or
 
-    // recup des points nécessaires pour acheter la carte
+    // recup des points necessaires pour acheter la carte
     unsigned int needBlanc =  carte.getPrix().getBlanc() ;
     unsigned int needBleu =  carte.getPrix().getBleu();
     unsigned int needVert =  carte.getPrix().getVert();
@@ -181,9 +180,9 @@ bool Controller::verifAchatCarte(const Carte& carte, EspaceJeux& espaceJeux) {
     unsigned int needPerle = carte.getPrix().getPerle();
 
     // recup des jetons du joueur
-    // Map des bonus associés à chaque couleur
+    // Map des bonus associes a chaque couleur
 
-// Map des bonus associés à chaque couleur
+// Map des bonus associes a chaque couleur
 
 
     unsigned int nbBlanc = 0;
@@ -258,7 +257,7 @@ bool Controller::verifAchatCarte(const Carte& carte, EspaceJeux& espaceJeux) {
     if (nbBlanc >= needBlanc && nbBleu >= needBleu && nbVert >= needVert &&
         nbRouge >= needRouge && nbNoir >= needNoir && nbPerle >= needPerle) {
 
-        // On supprime les jetons utilisés
+        // On supprime les jetons utilises
         joueurCourant->supJetonNb(needBlanc, Couleur::BLANC, espaceJeux);
         joueurCourant->supJetonNb(needBleu, Couleur::BLEU, espaceJeux);
         joueurCourant->supJetonNb(needVert, Couleur::VERT, espaceJeux);
@@ -273,10 +272,10 @@ bool Controller::verifAchatCarte(const Carte& carte, EspaceJeux& espaceJeux) {
     // 5. Si pas assez, essayer avec les jetons or
     unsigned int jetonsOrUtilises = 0;
 
-    // Fonction pour ajouter des jetons or à une couleur donnée
+    // Fonction pour ajouter des jetons or a une couleur donnee
     auto ajouterJetonsOr = [&jetonsOrUtilises, &nbOr](unsigned int& nbCouleur, unsigned int& besoin) {
         while (nbOr > 0 && besoin > nbCouleur) {
-            // Utiliser un jeton or pour compléter le besoin
+            // Utiliser un jeton or pour completer le besoin
             nbOr--;
             //nbCouleur++;
             jetonsOrUtilises++;
@@ -291,7 +290,7 @@ bool Controller::verifAchatCarte(const Carte& carte, EspaceJeux& espaceJeux) {
     ajouterJetonsOr(nbNoir, needNoir);
     ajouterJetonsOr(nbPerle, needPerle);
 
-    // Vérifier à nouveau si le joueur a maintenant assez de points pour acheter la carte
+    // Verifier a nouveau si le joueur a maintenant assez de points pour acheter la carte
     if (needBlanc <= nbBlanc && needBleu <= nbBleu && needVert <= nbVert &&
         needRouge <= nbRouge && needNoir <= nbNoir && needPerle <= nbPerle) {
         std::cout << "Carte achetable avec " << jetonsOrUtilises << " jeton(s) or utilise(s)." << std::endl;
@@ -314,12 +313,6 @@ bool Controller::verifAchatCarte(const Carte& carte, EspaceJeux& espaceJeux) {
 void Controller::utiliserPrivilege(Plateau& plateau){
     std::cout<<"Utiliser un privilege permet de recup un jeton de couleur ou perle de votre choix (i,j):\n";
     std::cout<<plateau<<endl;
-    if (joueurCourant->privileges.empty()) {
-        throw SplendorException("Le joueur n'a pas de privilege");
-    }
-    if (plateau.estVide()){
-        throw SplendorException("Le plateau n'a pas de jetons");
-    }
     const Privilege& privilege = joueurCourant->supPrivilege(plateau);
     plateau.poserPrivilege(privilege);
     std::pair<unsigned int, unsigned int> coordJetonSelec = strategy_courante->choisirJeton(plateau);
@@ -349,7 +342,7 @@ void Controller::remplirPlateau(Plateau& plateau, Sac& sac, Joueur& joueurAdvers
 }
 
 void Controller::recupererJetons(Plateau& plateau){
-    // Récupération des jetons 1 2 ou 3 jetons en fonction de la strategy
+    // Recuperation des jetons 1 2 ou 3 jetons en fonction de la strategy
     std::vector<const Jeton*> jetonsRecup = strategy_courante->recupJetonStrat(plateau);
 
     // ajout des jetons dans la main du joueur
@@ -370,7 +363,7 @@ void Controller::orReserverCarte (Pyramide& pyramide, Plateau& plateau){
         const Carte& carte = pyramide.acheterCarte(numNivCarteSelec.first, numNivCarteSelec.second);
         joueurCourant->addCarteReservee(carte);
 
-        // Recuperation d'un jeton or Voir exception mécanique de jeu
+        // Recuperation d'un jeton or Voir exception mecanique de jeu
         // Recuperation d'un jeton or
         std::pair<unsigned int, unsigned int> coordJetonSelec = strategy_courante->choisirJeton(plateau);
         const Jeton& jeton = plateau.recupererJeton(coordJetonSelec.first, coordJetonSelec.second);
@@ -416,7 +409,7 @@ void Controller::acheterCarteJoaillerie (EspaceJeux& espaceJeux){
     if (choix == 1){
         std::cout << "Voici les cartes reservees : " << std::endl;
         unsigned int i = 0;
-        // Affichage de la réserve
+        // Affichage de la reserve
         for (auto & cartesReservee : joueurCourant->cartesReservees) {
             std::cout <<"Numero "<<i << " : " << std::endl;
             //std::cout<<cartesReservee;
@@ -430,7 +423,7 @@ void Controller::acheterCarteJoaillerie (EspaceJeux& espaceJeux){
             const Carte& carte = *(joueurCourant->cartesReservees[carteDescr.first][carteDescr.second]);
 
             if (!verifAchatCarte(carte, espaceJeux)) {
-                throw SplendorException("Vous n'avez pas assez de points pour acheter cette carte...");
+                throw SplendorException("Vous n'avez pas assez de gemmes pour acheter cette carte...");
             }
             joueurCourant->addCarte(carte);
             // rajout des couronnes
@@ -450,7 +443,7 @@ void Controller::acheterCarteJoaillerie (EspaceJeux& espaceJeux){
 
         const Carte& carte = espaceJeux.getPyramide().acheterCarte(carteDescr.first, carteDescr.second);
         if (!verifAchatCarte(carte, espaceJeux)){
-            throw SplendorException("Vous n'avez pas assez de points pour acheter cette carte");
+            throw SplendorException("Vous n'avez pas assez de gemmes pour acheter cette carte");
         }
         joueurCourant->addCarte(carte);
         // rajout des couronnes
@@ -465,13 +458,25 @@ void Controller::acheterCarteJoaillerie (EspaceJeux& espaceJeux){
 
 }
 
+///////////////////////// Verifications /////////////////////////
+
+void Controller::verifPrivileges(){
+    if (joueurCourant->privileges.empty())
+        throw SplendorException("le joueur courant n'a pas de privileges");
+}
+
+void Controller::verifPlateauvide(){
+    if (partie->getEspaceJeux().getPlateau().estVide()){
+        throw SplendorException("Il n'y a aucun jeton a recuperer sur le plateau");
+    }
+}
 
 ///////////////////////// Sauvegarde /////////////////////////
 
 void Controller::sauvegardePartie() {
-   //Cette fonction aura pour objectif de push toutes les données importantes de la partie dans la base de donnée
+   //Cette fonction aura pour objectif de push toutes les donnees importantes de la partie dans la base de donnee
    //Afin de pouvoir reprendre la partie plus tard
-   //Pour cela, il faudra créer une base de donnée avec les tables suivantes :
+   //Pour cela, il faudra creer une base de donnee avec les tables suivantes :
    // joueur1, joueur2, plateau, infopartie, pyramide
 
    //on ajoute le chemin relatif au chemin absolue du projet
@@ -479,12 +484,12 @@ void Controller::sauvegardePartie() {
    //std::filesystem::path absolutePath = projectPath / relativePath;
    //std::string absolutePathStr = absolutePath.string();
 
-   //Connexion à la base de donnée
+   //Connexion a la base de donnee
    sqlite3 *db;
    //int rc = sqlite3_open(absolutePathStr.c_str(), &db);
    int rc = sqlite3_open("data/save.sqlite", &db);
    if (rc != SQLITE_OK) {
-       std::cerr << "Erreur lors de la connexion à la base de donnée" << std::endl;
+       std::cerr << "Erreur lors de la connexion a la base de donnee" << std::endl;
        sqlite3_close(db);
        return;
    }
@@ -493,7 +498,7 @@ void Controller::sauvegardePartie() {
    string sql = "DELETE FROM joueur; DELETE FROM plateau; DELETE FROM infopartie; DELETE FROM pyramide;";
    rc = sqlite3_exec(db, sql.c_str(), NULL, NULL, NULL);
    if (rc != SQLITE_OK) {
-       std::cerr << "Erreur lors du nettoyage de la base de donnée" << std::endl;
+       std::cerr << "Erreur lors du nettoyage de la base de donnee" << std::endl;
        sqlite3_close(db);
        return;
    }
@@ -612,64 +617,64 @@ void Controller::sauvegardePartie() {
        return;
    } 
 
-   //Fermeture de la base de donnée
+   //Fermeture de la base de donnee
    sqlite3_close(db);
 }
 
-//sauvegarde du score des joueurs à la fin de la partie
+//sauvegarde du score des joueurs a la fin de la partie
 void Controller::enregisterScore() {
-   //a la fin d'une partie il faut enregistrer le score des joueurs dans la base de donnée
-   //on regarde si il existe déjà et on lui ajoute une victoire ou une défaite
-   //sinon on le crée et on lui ajoute une victoire ou une défaite
+   //a la fin d'une partie il faut enregistrer le score des joueurs dans la base de donnee
+   //on regarde si il existe deja et on lui ajoute une victoire ou une defaite
+   //sinon on le cree et on lui ajoute une victoire ou une defaite
 
    //on ajoute le chemin relatif au chemin absolue du projet
    //std::string relativePath = "data/score.sqlite";
    //std::filesystem::path absolutePath = projectPath / relativePath;
    //std::string absolutePathStr = absolutePath.string();
 
-   //Connexion à la base de donnée
+   //Connexion a la base de donnee
    sqlite3 *db;
    int rc = sqlite3_open("data/score.sqlite", &db);
    if (rc != SQLITE_OK) {
-       std::cerr << "Erreur lors de la connexion à la base de donnée" << std::endl;
+       std::cerr << "Erreur lors de la connexion a la base de donnee" << std::endl;
        sqlite3_close(db);
        return;
    }
 
    for (int i = 0; i<2; i++) {
-       //on regarde si le joueur existe déjà
+       //on regarde si le joueur existe deja
        string sql = "SELECT * FROM score WHERE pseudo = '" + getPartie().getJoueur(i)->getPseudo() + "';";
        sqlite3_stmt *stmt;
        rc = sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, NULL);
        if (rc != SQLITE_OK) {
-           std::cerr << "Erreur lors de la recherche du joueur dans la base de donnée" << std::endl;
+           std::cerr << "Erreur lors de la recherche du joueur dans la base de donnee" << std::endl;
            sqlite3_close(db);
            return;
        }
 
        rc = sqlite3_step(stmt);
        if (rc == SQLITE_ROW) {
-           //le joueur existe déjà
-           //on récupère son nombre de victoire et de défaite
+           //le joueur existe deja
+           //on recupère son nombre de victoire et de defaite
            int nbVictoire = sqlite3_column_int(stmt, 2);
            int nbDefaite = sqlite3_column_int(stmt, 3);
-           //on met à jour son nombre de victoire ou de défaite
+           //on met a jour son nombre de victoire ou de defaite
            if (getPartie().getJoueur(i)->estGagnant()) {
                nbVictoire++;
            }
            else {
                nbDefaite++;
            }
-           //on met à jour le score du joueur
+           //on met a jour le score du joueur
            sql = "UPDATE score SET nbVictoire = " + std::to_string(nbVictoire) + ", nbDefaite = " + std::to_string(nbDefaite) + " WHERE pseudo = '" + getPartie().getJoueur(i)->getPseudo() + "';";
            std::cout<<sql<<std::endl;
            rc = sqlite3_exec(db, sql.c_str(), NULL, NULL, NULL);
            if (rc != SQLITE_OK) {
-               std::cerr << "Erreur lors de la mise à jour du score du joueur" << std::endl;
+               std::cerr << "Erreur lors de la mise a jour du score du joueur" << std::endl;
                 sqlite3_close(db);
            }
        } else {
-        //sinon on ajoute le joueur dans la base de donnée avec le bon score
+        //sinon on ajoute le joueur dans la base de donnee avec le bon score
         int nbVictoire = 0;
         int nbDefaite = 0;
         if (getPartie().getJoueur(i)->estGagnant()) {
@@ -683,12 +688,12 @@ void Controller::enregisterScore() {
         std::cout<<sql<<std::endl;
         rc = sqlite3_exec(db, sql.c_str(), NULL, NULL, NULL);
         if (rc != SQLITE_OK) {
-            std::cerr << "Erreur lors de l'ajout du joueur dans la base de donnée" << std::endl;
+            std::cerr << "Erreur lors de l'ajout du joueur dans la base de donnee" << std::endl;
             sqlite3_close(db);
             }
        }
    }
 
-   //Fermeture de la base de donnée
+   //Fermeture de la base de donnee
    sqlite3_close(db);
 }

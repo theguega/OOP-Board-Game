@@ -24,7 +24,7 @@ Pyramide::~Pyramide() {
     }
 };
 
-// Obtenir une référence temporaire
+// Obtenir une reference temporaire
 
 void Pyramide::remplirPyramide() {
     const Carte * ma_carte = nullptr;
@@ -108,31 +108,31 @@ bool Pyramide::estVide() const {
     return true;
 }
 
-//2 fois la meme fonction à ameliorer
+//2 fois la meme fonction a ameliorer
 
 const Carte & Pyramide::reserverCarte(int niveau, int numero) {
     niveau--;
-    numero--; // pour que l'utilisateur rentre les coordonnées de 1 à 5
+    numero--; // pour que l'utilisateur rentre les coordonnees de 1 a 5
     if (array_cartes[niveau][numero] != nullptr) {
         const Carte & ma_carte = * array_cartes[niveau][numero];
         array_cartes[niveau][numero] = nullptr;
         this -> remplircasePyramide(niveau, numero);
         return ma_carte;
     } else {
-        throw SplendorException("Pas de carte à cette emplacement");
+        throw SplendorException("Pas de carte a cette emplacement");
     }
 }
 
 const Carte & Pyramide::acheterCarte(unsigned int niveau, unsigned int numero) {
     niveau--;
-    numero--; // pour que l'utilisateur rentre les coordonnées de 1 à 5
+    numero--; // pour que l'utilisateur rentre les coordonnees de 1 a 5
     if (array_cartes[niveau][numero] != nullptr) {
         const Carte & ma_carte = * array_cartes[niveau][numero];
         array_cartes[niveau][numero] = nullptr;
         this -> remplircasePyramide(niveau, numero);
         return ma_carte;
     } else {
-        throw SplendorException("Pas de carte à cette emplacement");
+        throw SplendorException("Pas de carte a cette emplacement");
     }
 
 }

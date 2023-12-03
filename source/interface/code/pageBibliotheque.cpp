@@ -18,7 +18,7 @@ pageBibliotheque::pageBibliotheque(QWidget *parent) : QScrollArea(parent){
     db.setDatabaseName("data/score.sqlite");
 
     if (!db.open()) {
-        qDebug() << "Erreur lors de l'ouverture de la base de données";
+        qDebug() << "Erreur lors de l'ouverture de la base de donnees";
             return;
     }
 

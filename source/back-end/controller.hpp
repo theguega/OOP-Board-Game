@@ -47,7 +47,8 @@ public:
 	void enregisterScore();
 
 	// verifications
-
+    void verifPrivileges();
+    void verifPlateauvide();
 };
 
 

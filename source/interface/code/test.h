@@ -9,18 +9,18 @@
 class carteTest : public QWidget {
 public:
     carteTest(QWidget *parent = nullptr) : QWidget(parent) {
-        setMouseTracking(true); // Activer le suivi de la souris pour détecter les mouvements même sans clic
+        setMouseTracking(true); // Activer le suivi de la souris pour detecter les mouvements même sans clic
     }
 
 protected:
     void enterEvent(QEvent *event){
         Q_UNUSED(event);
-        qDebug() << "La souris est entrée dans le widget.";
+        qDebug() << "La souris est entree dans le widget.";
     }
 
     void leaveEvent(QEvent *event){
         Q_UNUSED(event);
-        qDebug() << "La souris a quitté le widget.";
+        qDebug() << "La souris a quitte le widget.";
     }
 };
 

@@ -2,7 +2,7 @@
 
 pageMenuPrincipal::pageMenuPrincipal(QWidget *parent) : QWidget(parent) {
     boutonDemarrer = new QPushButton("Commencer une nouvelle partie");
-    boutonSauvegarde = new QPushButton("Démarrer une partie sauvegardée");
+    boutonSauvegarde = new QPushButton("Demarrer une partie sauvegardee");
     boutonBibli = new QPushButton("Scores");
     boutonQuitter = new QPushButton("Quitter");
 

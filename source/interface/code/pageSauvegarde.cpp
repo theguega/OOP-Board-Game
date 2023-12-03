@@ -23,6 +23,6 @@ pageSauvegarde::~pageSauvegarde() {
 }
 
 void pageSauvegarde::demarrerSauvegarde(int idBouton){
-    qDebug()<<"Le bouton cliqué est "<<idBouton;
+    qDebug()<<"Le bouton clique est "<<idBouton;
     return;
 }

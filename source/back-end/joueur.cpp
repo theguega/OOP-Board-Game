@@ -32,11 +32,11 @@ Joueur::Joueur(string pseudo, type typeDeJoueur):
                     }
                 }
 
-    // Créer la stratégie en fonction du type de joueur
+    // Creer la strategie en fonction du type de joueur
     if (typeDeJoueur == type::IA) {
-        strategy = new StrategyIA();  // Vous devez définir le constructeur de StrategyIA
+        strategy = new StrategyIA();  // Vous devez definir le constructeur de StrategyIA
     } else {
-        strategy = new StrategyHumain();  // Vous devez définir le constructeur de StrategyHumain
+        strategy = new StrategyHumain();  // Vous devez definir le constructeur de StrategyHumain
     }
 }
 
@@ -116,7 +116,7 @@ void Joueur::afficherJetons() const {
     }
 }
 
-// Ajout des éléments
+// Ajout des elements
 
 void Joueur::addCarte(const Carte &carte) {
     cartes[carte.getBonus().getCouleur()].push_back(&carte);
@@ -141,7 +141,7 @@ void Joueur::addPrivilege(const Privilege &privilege) {
 }
 
 
-// Suppression des éléments
+// Suppression des elements
 
 void::Joueur::supCarte(Carte &carte) {
     for (size_t i = 0; i < cartes[carte.getBonus().getCouleur()].size(); i++) {
@@ -192,7 +192,7 @@ void Joueur::supJetonNb(unsigned int nb, Couleur c, EspaceJeux& espaceJeux){
 const Privilege&::Joueur::supPrivilege(Plateau& plateau) {
     const Privilege& sup = *privileges[0];
     privileges.erase(privileges.begin());
-    // rajout du privilège sur le plateau
+    // rajout du privilege sur le plateau
     plateau.poserPrivilege(sup);
 
     return  sup;
@@ -201,7 +201,7 @@ const Privilege&::Joueur::supPrivilege(Plateau& plateau) {
 
 
 bool Joueur::nbPtsPrestigeParCouleurSupDix() const{
-    // Itère sur toutes les couleurs
+    // Itere sur toutes les couleurs
     for (const auto& pair : cartes) {
         const std::vector<const Carte*>& tab = pair.second;
         unsigned int somme = 0;

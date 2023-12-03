@@ -44,12 +44,12 @@ vueJeton::vueJeton(QWidget* parent, int rad) : QPushButton(parent){
                          "color: white; " // Couleur du texte
                           "}"
                           ).arg(rad));
-    /*"QPushButton:pressed { " // Style lorsqu'il est enfoncé
+    /*"QPushButton:pressed { " // Style lorsqu'il est enfonce
     "background-color: %3; " // Couleur sombre pour effet d'enfoncement
     "}"  */
     //Def le style du bouton (plus tard switch selon la couleur du jeton)
 
-    afficherCroix = false; //afficherCroix est un booléen pour savoir si on montre la croix de sélection (false d'origine)
+    afficherCroix = false; //afficherCroix est un booleen pour savoir si on montre la croix de selection (false d'origine)
 }
 
 void vueJeton::apparaitre(){ //Fait apparaitre le jeton (utile quand on voudra les remettre sur le plateau)
@@ -60,7 +60,7 @@ void vueJeton::disparaitre(){ //Fait dispparaitre le jeton (utile quand on voudr
     hide();
 }
 
-bool vueJeton::getEstVisible(){ //Je sais plus à quoi ça sert (surement inutile)
+bool vueJeton::getEstVisible(){ //Je sais plus a quoi ça sert (surement inutile)
     return estVisible;
 }
 

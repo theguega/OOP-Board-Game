@@ -266,7 +266,7 @@ const Carte & Pioche::piocher() {
     if (estVide())
         throw SplendorException("Plus de cartes dans cette pioche");
 
-    //génération d'un indice aléatoire
+    //generation d'un indice aleatoire
     std::random_device rd;
     std::mt19937 gen(rd());
     std::uniform_int_distribution < > distrib(0, static_cast < int > (cartes.size()) - 1);
@@ -291,5 +291,5 @@ const Carte & Pioche::piocher(unsigned int id) {
         cartes.erase(it);
         return * carteTrouvee;
     } else
-        throw SplendorException("Aucune carte avec l'ID spécifié n'a été trouvée dans cette pioche");
+        throw SplendorException("Aucune carte avec l'ID specifie n'a ete trouvee dans cette pioche");
 }

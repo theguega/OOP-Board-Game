@@ -30,7 +30,7 @@ int main(void) {
         // tour pour chacun des joueurs
         std::cout<<endl<<endl<<endl<<endl;
         std::cout<<endl<<endl<<endl<<endl;
-        std::cout<<"Tour n°"<<control.getPartie().getTour()+1<<endl;
+        std::cout<<"Tour numero"<<control.getPartie().getTour()+1<<endl;
 
             for (unsigned int i = 0; i < 2; i++) {
             std::cout<<"--------------------------------------------------------------------------------------------------------------------------------------------\n";
@@ -58,6 +58,8 @@ int main(void) {
                             try
                             {
                                 //utilisation d'un privilege
+                                control.verifPrivileges();
+                                control.verifPlateauvide();
                                 control.utiliserPrivilege(control.getPartie().getEspaceJeux().getPlateau());
                             }
                             catch(SplendorException& e) { std::cerr << "\033[1;31m" << e.getInfo() << "\033[0m" << endl << endl;; etat_action = 0; }
@@ -114,7 +116,7 @@ int main(void) {
                                 control.recupererJetons(control.getPartie().getEspaceJeux().getPlateau());
                                 etat_action = 4;
                                 cout << "\nNouveau plateau : \n"<<control.getPartie().getEspaceJeux().getPlateau()<<endl;
-                                cout<< "Etat du joueur après recupération :\n";
+                                cout<< "Etat du joueur apres recuperation :\n";
                                 control.getJoueurCourant().afficherJoueur();
                             }
                             catch(SplendorException& e) { std::cerr << "\033[1;31m" << e.getInfo() << "\033[0m" << endl << endl;; etat_action = 0; }
@@ -154,16 +156,16 @@ int main(void) {
                 case 2:{
                     //verification des conditions de victoires...
 
-                    //si le joueur a assez de pts de prestige, il est obligés d'acheter une carte
+                    //si le joueur a assez de pts de prestige, il est obliges d'acheter une carte
                     if (control.getJoueurCourant().getptsPrestige() >= 3 or control.getJoueurCourant().getptsPrestige() >= 6) {
                         control.acheterCarteNoble(control.getPartie().getEspaceJeux().getPyramide());
                     }
 
                     // rajoute verification >10 jetons
 
-                    //verif si un joueur à gagner
+                    //verif si un joueur a gagner
                     if (control.getJoueurCourant().getptsPrestige() >= 15) {
-                        std::cout << "Joueur " << control.getJoueurCourant().getPseudo() << " a gagné la partie" << std::endl;
+                        std::cout << "Joueur " << control.getJoueurCourant().getPseudo() << " a gagne la partie" << std::endl;
                                 etat_tour = 3;
                         break;
                     }
@@ -171,7 +173,7 @@ int main(void) {
                     //simulation de victoire
                     /*
                     if (control.getJoueurCourant().getNbJetons() >= 2) {
-                        std::cout << "Joueur " << control.getJoueurCourant().getPseudo() << " a gagné la partie" << std::endl;
+                        std::cout << "Joueur " << control.getJoueurCourant().getPseudo() << " a gagne la partie" << std::endl;
                                 etat_tour = 3;
                         break;
                     }
@@ -185,7 +187,7 @@ int main(void) {
                 }
 
                 case 3:{
-                    std::cout << "Fin de la partie !\nMerci d'avoir joué à Splendor Duel !\n";
+                    std::cout << "Fin de la partie !\nMerci d'avoir joue a Splendor Duel !\n";
                     //arret de l'application
                     return 0;
                     break;

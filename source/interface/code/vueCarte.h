@@ -61,7 +61,7 @@ protected:
             return true; // Événement traité
         }
 
-        // Appel à la méthode parent pour gérer d'autres types d'événements
+        // Appel a la méthode parent pour gérer d'autres types d'événements
         return QWidget::event(event);
     }
 

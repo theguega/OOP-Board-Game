@@ -132,6 +132,7 @@ class Plateau {
         Plateau& operator=(const Plateau&) = delete;
     public :
         bool estVide() const;
+        bool caseVide(unsigned int i, unsigned int j) const;
         size_t getLargeurMatrice() const { return jetons.size(); }
 
         const Jeton& recupererJeton(const size_t i, const size_t j);
