@@ -161,15 +161,6 @@ void Controller::lancerPartie() {
     // TODO
 }
 
-void Controller::tour_suivant() {
-    // verifs
-    if (joueurCourant == partie->getJoueur2())
-        joueurCourant = partie->getJoueur1();
-    else
-        joueurCourant = partie->getJoueur2();
-    partie->incrementeTour();
-}
-
 
 ///////////////////////// Actions d'un joueur /////////////////////////
 

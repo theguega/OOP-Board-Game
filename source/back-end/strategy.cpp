@@ -21,7 +21,7 @@ std::vector<const Jeton*> StrategyHumain::recupJetonStrat(Plateau& plateau){
     for (unsigned int k = 0; k < nbJetonsRecup; k++){
 
         // Ajout des coordonnees
-        std::cout<<"Jetons n°"<<k<<" : \n\n";
+        std::cout<<"Jetons n°"<<k+1<<" : \n";
         vecteurCoordonnees.emplace_back(choisirJeton(plateau));
         // Ajout du jeton
         //jetonsRecup.push_back(&jeton);
@@ -215,7 +215,7 @@ unsigned int StrategyIA::choixNiveau() {
 
 unsigned int StrategyHumain::choixActionsOptionelles() {
     unsigned int choix;
-    std::cout << "Actions optionnelles: " << endl;
+    std::cout << "\033[1mActions optionnelles:\033[0m" << std::endl;
     std::cout << "1. Utiliser un privilege" << endl;
     std:: cout << "2. Remplir le plateau" << endl;
     std::cout << "3. Ne plus faire d'actions optionnelles" << endl;
@@ -240,7 +240,7 @@ unsigned int StrategyIA::choixActionsOptionelles() {
 
 unsigned int StrategyHumain::choixActionsObligatoires() {
     unsigned int choix;
-    std::cout << "Actions obligatoires: " << endl;
+    std::cout << "\033[1mActions obligatoires:\033[0m" << std::endl;
     std::cout << "1. Recuperer des jetons" << endl;
     std:: cout << "2. Acheter une carte joaillerie" << endl;
     std::cout << "3. Reserver une carte" << endl;

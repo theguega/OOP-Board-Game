@@ -26,15 +26,17 @@ int main(void) {
     Controller control;
     control.lancerPartie();
 
-    while (control.getPartie().getJoueur1()->estGagnant() == false && control.getPartie().getJoueur2()->estGagnant() == false) {
+    while (1) {
         // tour pour chacun des joueurs
-        std::cout<<"--------------------------------------------------------------------------------------------------------------------------------------------";
         std::cout<<endl<<endl<<endl<<endl;
-        std::cout<<"C'est a "<<control.getJoueurCourant().getPseudo()<<" de jouer : "<<endl;
-        control.getJoueurCourant().afficherJoueur();
-        std::cout<<endl;
+        std::cout<<endl<<endl<<endl<<endl;
+        std::cout<<"Tour n°"<<control.getPartie().getTour()+1<<endl;
+
         for (unsigned int i = 0; i < 2; i++) {
-            ///control.getJoueurCourant().afficherJoueur();
+            std::cout<<"--------------------------------------------------------------------------------------------------------------------------------------------\n";
+            std::cout<<"C'est a "<<control.getJoueurCourant().getPseudo()<<" de jouer : "<<endl;
+            control.getJoueurCourant().afficherJoueur();
+            std::cout<<endl;
 
             unsigned int etat_tour = 0;
             while (etat_tour != 4) {
@@ -135,7 +137,7 @@ int main(void) {
                             break;
 
                         case 9:{
-
+                            std::cout<<"Vous avez decider de quitter la partie\n";
                             return 0;
 
                         }
@@ -150,39 +152,48 @@ int main(void) {
 
 
                 case 2:{
-                    std::cout << "verification fin de partie" << std::endl << std::endl;
+                    //verification des conditions de victoires...
 
+                    //si le joueur a assez de pts de prestige, il est obligés d'acheter une carte
                     if (control.getJoueurCourant().getptsPrestige() >= 3 or control.getJoueurCourant().getptsPrestige() >= 6) {
                         control.acheterCarteNoble(control.getPartie().getEspaceJeux().getPyramide());
                     }
 
                     // rajoute verification >10 jetons
 
+                    //verif si un joueur à gagner
                     if (control.getJoueurCourant().getptsPrestige() >= 15) {
                         std::cout << "Joueur " << control.getJoueurCourant().getPseudo() << " a gagné la partie" << std::endl;
                         etat_tour = 3;
                         break;
                     }
 
-                    etat_tour = 0;
-                    control.changerJoueurCourant();
-                    break;
-                }
+                    //simulation de victoire
+                    if (control.getJoueurCourant().getNbJetons() >= 2) {
+                        std::cout << "Joueur " << control.getJoueurCourant().getPseudo() << " a gagné la partie" << std::endl;
+                                etat_tour = 3;
+                        break;
+                    }
 
-                case 3:{
-                    std::cout << "Fin de partie";
+                    //fin du tour du joueur, on passe au joueur suivant
+                    control.changerJoueurCourant();
+                    //on sort du case
                     etat_tour = 4;
                     break;
                 }
 
-
-                case 9:{
-
+                case 3:{
+                    std::cout << "Fin de la partie !\nMerci d'avoir joué à Splendor Duel !\n";
+                    //arret de l'application
                     return 0;
-
+                    break;
                 }
 
 
+                case 9 : {
+                    std::cout<<"Vous avez decider de quitter la partie\n";
+                    return 0;
+                }
                 default:{
                     break;
                 }
@@ -191,11 +202,13 @@ int main(void) {
 
         }
 
+        //fin du tour :
+        control.getPartie().incrementeTour();
+        }
 
     }
-
+    //fin d'une partie
     return 0;
-}
 }
 
 
