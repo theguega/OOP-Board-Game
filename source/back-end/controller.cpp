@@ -134,6 +134,7 @@ void Controller::changerJoueurCourant() {
         strategy_courante = &strategy_IA;
     else 
         strategy_courante = &strategy_Humain;
+    std::cout << "c'est a " << joueurCourant->getPseudo() << " de jouer" << std::endl;
 }
 
 void Controller::lancerPartie() {
