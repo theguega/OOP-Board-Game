@@ -15,6 +15,7 @@
 
 ## recuperration de jeton :
 * si le joueur recup 3 jetons mm couleur ou 2 jetons perle -> son adv recup un privilege
+* la méthode ne verifiat pas si les jetons étaient à cote, même s'ils etaient alignes. Problème corrigé pour ligne et colonne, pas diago
 
 ## Crash (IA)
 * l'IA choisit d'acheter une carte reserver (alors qu'elle na pas reserver de carte)
