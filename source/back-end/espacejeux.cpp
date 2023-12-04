@@ -149,21 +149,21 @@ const Carte & Pyramide::ReserverCartePioche(unsigned int niveau) {
         }
 
     case 1:
-        if (not(pNv2.estVide())) {
+        if (!pNv2.estVide()) {
             return pNv2.piocher(); // piocher des cartes de niveau 2
             break;
         } else {
             throw SplendorException("Pioche vide");
         }
     case 2:
-        if (not(pNv3.estVide())) {
+        if (!pNv3.estVide()) {
             return pNv3.piocher(); // piocher des cartes de niveau 1
             break;
         } else {
             throw SplendorException("Pioche vide");
         }
     case 3:
-        if (not(pNoble.estVide())) {
+        if (!pNoble.estVide()) {
             return pNoble.piocher(); // piocher des cartes nobles
             break;
         } else {
