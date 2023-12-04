@@ -23,8 +23,7 @@ SOURCES += \
     back-end/jetons.cpp \
     back-end/joueur.cpp \
     back-end/partie.cpp \
-    back-end/strategy.cpp \
-    sqlite/sqlite3.c
+    back-end/strategy.cpp
 
 HEADERS += \
     interface/code/pageBibliotheque.h \
@@ -47,8 +46,7 @@ HEADERS += \
     back-end/joueur.hpp \
     back-end/partie.hpp \
     back-end/strategy.hpp \
-    back-end/exception.hpp \
-    sqlite/sqlite3.h
+    back-end/exception.hpp
 
 DISTFILES += \
     data/data_carte.sqlite \
