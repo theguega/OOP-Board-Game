@@ -3,6 +3,7 @@
 
 #include <random>
 #include "partie.hpp"
+#include <cstdlib>
 
 class Controller {
 private:

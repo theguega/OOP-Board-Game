@@ -421,6 +421,8 @@ void Controller::utiliserPrivilege(Plateau& plateau){
 }
 
 
+
+
 // Recuperer des jetons
 void Controller::recupererJetons(){
     std::cout<<"Vous avez decider de recuperer des jetons sur le plateau :\n"<<getPlateau();
@@ -436,7 +438,7 @@ void Controller::recupererJetons(){
 
     std::cout << "Merci de selectionner des jetons adjacents en ligne, en colonne ou en diagonale." << std::endl << endl;
 
-    std::vector<std::pair<unsigned int, unsigned int>> vecteurCoordonnees;
+    std::vector<std::pair<int, int>> vecteurCoordonnees;
     std::cout<<"Vous allez rentrer les coordonnees des jetons : \n";
     // Recup des coordonnees des jetons
     for (unsigned int k = 0; k < nbJetons; k++){
@@ -467,7 +469,7 @@ void Controller::recupererJetons(){
         // verif qu'ils ne sont pas distants de + d'une case
         if(result1){
             for (unsigned int i = 0; i < vecteurCoordonnees.size()-1; i++) {
-                if (vecteurCoordonnees[i].second - vecteurCoordonnees[i + 1].second != 1)
+                if (abs(vecteurCoordonnees[i].second - vecteurCoordonnees[i + 1].second) != 1)
                     result1 = false;
             }
         }
@@ -480,7 +482,7 @@ void Controller::recupererJetons(){
         // verif qu'ils ne sont pas distants de + d'une case
         if(result2){
             for (unsigned int i = 0; i < vecteurCoordonnees.size()-1; i++) {
-                if (vecteurCoordonnees[i].first - vecteurCoordonnees[i + 1].first != 1)
+                if (abs(vecteurCoordonnees[i].first - vecteurCoordonnees[i + 1].first) != 1)
                     result2 = false;
             }
         }

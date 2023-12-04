@@ -2,7 +2,7 @@
 #include <random>
 
 unsigned int StrategyHumain::choix_min_max(unsigned int min, unsigned int max) {
-    unsigned int choix;
+    int choix;
     std::cout << "Choisissez un entier entre " << min << " et " << max <<" :"<<std::endl;
     std::cin>>choix;
     while(choix<min || choix>max) {
@@ -20,7 +20,7 @@ unsigned int StrategyIA::choix_min_max(unsigned int min, unsigned int max) {
     std::random_device rd;
     std::mt19937 gen(rd());
     std::uniform_int_distribution<int> distribution(min, max);
-    unsigned int choix = distribution(gen);
+    int choix = distribution(gen);
 
     std::cout << "l'IA a choisit : " << choix << "\n";
     std::cout<<"postgen\n";
@@ -30,7 +30,7 @@ unsigned int StrategyIA::choix_min_max(unsigned int min, unsigned int max) {
 unsigned int StrategyHumain::choixMenu() {
     unsigned int choix;
     std::cin>>choix;
-    while((choix<1) || (choix>3)) {
+    while(((choix<1) || (choix>3)) && (choix != 9)) {
         std::cout<< "Votre choix ne rentre pas dans l'intervalle, veuillez recommencer : " << std::endl;
         std::cin>>choix;
     }
@@ -69,11 +69,45 @@ unsigned int StrategyIA::choixMenu() {
 
 
 
+// ces méthodes là sont encore utiles pour récupérer un jeton or et reserver une carte mais sinon pour recupd es jetons c'est plus utilisé
+std::pair<unsigned int, unsigned int> StrategyHumain::choisirJeton(Plateau& plateau){
+    unsigned int i, j;
+    std::cout << "Entrez la valeur de i (1,2,3,4,5) : ";
+    std::cin >> i;
+    std::cout << "Entrez la valeur de j (1,2,3,4,5) : ";
+    std::cin >> j;
 
+    if((i > 5) || (i < 0) || (j > 5) || (j < 0))
+        throw SplendorException("Indice de jeton incorrect");
+    // Retourner la paire d'entiers
+    return std::make_pair(i-1, j-1);
+}
 
+std::pair<unsigned int, unsigned int> StrategyIA::choisirJeton(Plateau& plateau){
+    // Obtenez les dimensions du plateau
+    size_t plateauRows = plateau.getLargeurMatrice();
+    size_t plateauCols = plateau.getLargeurMatrice();
 
+    // distribution uniforme pour generer des indices aleatoires
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::random_device rd1;
+    std::mt19937 gen1(rd1());
+    std::uniform_int_distribution<int> distributionRow(0, plateauRows - 1);
+    std::uniform_int_distribution<int> distributionCol(0, plateauCols - 1);
 
-std::vector<const Jeton*> StrategyHumain::recupJetonStrat(Plateau& plateau){
+    // Genere des valeurs aleatoires pour i et j
+    int i = distributionRow(gen);
+    int j = distributionCol(gen1);
+    if((i > 5) || (i < 0) || (j > 5) || (j < 0))
+        throw SplendorException("Indice de jeton incorrect");
+    // Retournez le jeton correspondant aux indices aleatoires
+    std::cout<<"l'IA choisit de recup le jetons : ("<<i+1<<","<<j+1<<")\n";
+    return std::make_pair(i, j);
+}
+
+// les méthodes pour recup des jetons ont été bougées dans le controller
+/*std::vector<const Jeton*> StrategyHumain::recupJetonStrat(Plateau& plateau){
     std::cout << "Combien de jetons souhaitez-vous recuperer ? (1 a 3) " << std::endl;
     unsigned int nbJetonsRecup;
     std::cin >> nbJetonsRecup;
@@ -231,7 +265,7 @@ std::vector<const Jeton*> StrategyIA::recupJetonStrat(Plateau& plateau){
         jetonsRecup.push_back(&plateau.recupererJeton(vecteurCoordonnees[k].first, vecteurCoordonnees[k].second));
     }
     return jetonsRecup;
-}
+}*/
 
 unsigned int StrategyHumain::utiliserPrivilege() {
     unsigned int choix;
@@ -252,42 +286,6 @@ unsigned int StrategyIA::utiliserPrivilege() {
     unsigned int choix = distribution(gen);
     std::cout<<"l'IA utilise "<<choix<<" privilege\n"<<std::endl;
     return choix;
-}
-
-std::pair<unsigned int, unsigned int> StrategyHumain::choisirJeton(Plateau& plateau){
-    unsigned int i, j;
-    std::cout << "Entrez la valeur de i (1,2,3,4,5) : ";
-    std::cin >> i;
-    std::cout << "Entrez la valeur de j (1,2,3,4,5) : ";
-    std::cin >> j;
-
-    if((i > 5) || (i < 0) || (j > 5) || (j < 0))
-        throw SplendorException("Indice de jeton incorrect");
-    // Retourner la paire d'entiers
-    return std::make_pair(i-1, j-1);
-}
-
-std::pair<unsigned int, unsigned int> StrategyIA::choisirJeton(Plateau& plateau){
-    // Obtenez les dimensions du plateau
-    size_t plateauRows = plateau.getLargeurMatrice();
-    size_t plateauCols = plateau.getLargeurMatrice();
-
-    // distribution uniforme pour generer des indices aleatoires
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::random_device rd1;
-    std::mt19937 gen1(rd1());
-    std::uniform_int_distribution<int> distributionRow(0, plateauRows - 1);
-    std::uniform_int_distribution<int> distributionCol(0, plateauCols - 1);
-
-    // Genere des valeurs aleatoires pour i et j
-    int i = distributionRow(gen);
-    int j = distributionCol(gen1);
-    if((i > 5) || (i < 0) || (j > 5) || (j < 0))
-        throw SplendorException("Indice de jeton incorrect");
-    // Retournez le jeton correspondant aux indices aleatoires
-    std::cout<<"l'IA choisit de recup le jetons : ("<<i+1<<","<<j+1<<")\n";
-    return std::make_pair(i, j);
 }
 
 unsigned int StrategyHumain::choixNiveau() {
