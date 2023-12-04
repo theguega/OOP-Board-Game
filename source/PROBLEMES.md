@@ -24,6 +24,8 @@
 * verification et methode de fin de tour : si le joeur a 10 jetons
 * ajouter la verif et la methode pour reposer des jetons
 
+## Pioche : 
+* pioche vide en IA IA sur la reservation DONE normalement 
 
 ## restitution :
 * instant crash
