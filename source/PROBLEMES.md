@@ -1,7 +1,8 @@
 # Problemes Splendor Duel
 
-## controller :
-* remplir plateau : c l'inverse pour la gestion des privileges : relire le doc de regle
+## remplir plateau :
+*  attribution du privilege au joueur adverse à gérer
+
 
 ## reserver carte (tout a revoir en gros mdr):
 * lors de la reserevation d'un carte, il faut faire recuperer un jeton or (donc afficher plateau et recup d'abord)

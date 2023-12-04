@@ -92,14 +92,14 @@ size_t Joueur::getNbJetons() const {
 // Affichages
 
 void Joueur::afficherJoueur() const {
-    std::cout << "Pseudo : " << pseudo << std::endl;
-    std::cout << "Type de joueur : " << toStringType(typeDeJoueur) << std::endl;
-    std::cout << "Points de prestiges : " << ptsPrestige << std::endl;
-    std::cout << "Nombre de couronnes : " << nbCouronnes << std::endl;
-    std::cout << "Nombre de cartes : " << getNbCartes() << std::endl;
-    std::cout << "Nombre de cartes reservees : " << getNbCartesReservees() << std::endl;
-    std::cout << "Nombre de jetons : " << getNbJetons() << std::endl;
-    std::cout << "Nombre de privileges : " << getNbPrivileges() << std::endl;
+    std::cout << "Pseudo : " << pseudo;
+    std::cout << "\nType de joueur : " << toStringType(typeDeJoueur);
+    std::cout << "\nPoints de prestiges : " << ptsPrestige;
+    std::cout << "\nNombre de couronnes : " << nbCouronnes;
+    std::cout << "\nNombre de cartes : " << getNbCartes();
+    std::cout << "\nNombre de cartes reservees : " << getNbCartesReservees();
+    std::cout << "\nNombre de jetons : " << getNbJetons();
+    std::cout << "\nNombre de privileges : " << getNbPrivileges() << "\n\n";
 }
 
 void Joueur::afficherCartes() const {

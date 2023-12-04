@@ -1,6 +1,51 @@
 #include "strategy.hpp"
 #include <random>
 
+unsigned int StrategyHumain::choix_min_max(unsigned int min, unsigned int max) {
+    unsigned int choix;
+    std::cout << "Choisissez un entier entre " << min << " et " << max <<" :"<<std::endl;
+    std::cin>>choix;
+    while(choix<min || choix>max) {
+        std::cout<< "Votre choix ne rentre pas dans l'intervalle, veuillez recommencer : " << std::endl;
+        std::cin>>choix;
+    }
+    return choix;
+}
+
+unsigned int StrategyIA::choix_min_max(unsigned int min, unsigned int max) {
+    std::cout << "l'IA choisit entre " << min << " et " << max <<" :"<<std::endl;
+
+    //generation d'un entier aleatoire entre min et max
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<int> distribution(min, max);
+    unsigned int choix = distribution(gen);
+
+    std::cout << "l'IA a choisit : \n" << choix;
+    return choix;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 std::vector<const Jeton*> StrategyHumain::recupJetonStrat(Plateau& plateau){
@@ -449,12 +494,4 @@ std::pair< Couleur, unsigned int> StrategyIA::achatReserve(unsigned int nbCartes
 
     return std::make_pair(couleur2, numCarte);
 
-}
-
-void StrategyHumain::remplirPlateauStrat(Plateau& plateau, Sac& sac){
-    plateau.remplirPlateau(sac);
-}
-
-void StrategyIA::remplirPlateauStrat(Plateau& plateau, Sac& sac){
-    plateau.remplirPlateau(sac);
 }

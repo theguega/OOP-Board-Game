@@ -5,20 +5,19 @@ Controller::Controller() {
     //Choix du type de partie
 	Director* director = new Director();
 	string statut_partie;
-	std::cout << "Ancienne ou nouvelle partie ? (New/Old)" << std::endl;
+    std::cout << "\033[1;33mAncienne ou nouvelle partie ? (New/Old)\033[0m" << std::endl;
 	std::cin >> statut_partie;
-    //Si nouvelle partie
 
     //Si nouvelle partie
 	if (statut_partie == "New") {
 		NewPartieBuilder* builder = new NewPartieBuilder();
 		director->set_builder(builder);
-		cout << "Combien de joueur voulez vous jouer ? (0,1,2)" << std::endl;
+        std::cout << "\033[1;33mA combien de joueurs voulez-vous jouer ? (0, 1, 2)\033[0m" << std::endl;
 		int nbJoueur;
 		cin >> nbJoueur;
         switch (nbJoueur) {
         case 0:
-        {   cout << "IA vs IA" << std::endl;
+        {   cout << "\nIA vs IA\n\n";
             director->BuildNewPartie("Alain Telligence", type::IA, "Al Gorythme", type::IA);
             Partie* p = builder->GetProduct();
             partie = p;
@@ -26,8 +25,8 @@ Controller::Controller() {
         }
         case 1:
         {
-            cout<<"IA vs HUMAIN"<<std::endl;
-            cout<<"Veuillez saisir le pseudo du joueur"<<std::endl;
+            cout<<"\nIA vs HUMAIN\n\n";
+            std::cout << "\033[1;33mVeuillez saisir le pseudo du joueur\033[0m" << std::endl;
             string pseudo;
             std::cin>>pseudo;
             director->BuildNewPartie(pseudo, type::HUMAIN, "Al Gorythme", type::IA);
@@ -37,11 +36,11 @@ Controller::Controller() {
         }
         case 2:
         {
-            cout<<"HUMAIN vs HUMAIN"<<std::endl;
-            cout<<"Veuillez saisir le pseudo du joueur 1"<<std::endl;
+            cout<<"\nHUMAIN vs HUMAIN\n\n";
+            std::cout << "\033[1;33mVeuillez saisir le pseudo du joueur 1\033[0m" << std::endl;
             string pseudo1;
             cin>>pseudo1;
-            std::cout<<"Veuillez saisir le pseudo du joueur 2"<<std::endl;
+            std::cout << "\033[1;33mVeuillez saisir le pseudo du joueur 2\033[0m" << std::endl;
             string pseudo2;
             cin>>pseudo2;
             director->BuildNewPartie(pseudo1, type::HUMAIN, pseudo2, type::HUMAIN);
@@ -105,6 +104,14 @@ Controller::Controller() {
 }
 
 
+
+
+
+
+
+
+
+
 void Controller::setJoueurCourant(int n) {
     switch (n) {
     case 0:
@@ -136,6 +143,13 @@ void Controller::changerJoueurCourant() {
         strategy_courante = &strategy_Humain;
 }
 
+
+
+
+
+
+
+
 void Controller::lancerPartie() {
     // choix aleatoire entre 0 et 1 pour le choix du joueur qui commence
     std::random_device rd;
@@ -145,11 +159,11 @@ void Controller::lancerPartie() {
     setJoueurCourant(rd_number);
     switch (rd_number) {
     case 0:
-        cout << "#### c'est " << partie->getJoueur1()->getPseudo() << " qui commence, son adversaire recoit 1 privilege !####\n";
+        std::cout << "\033[1;36mC'est " << partie->getJoueur1()->getPseudo() << " qui commence, son adversaire reçoit donc 1 privilège.\033[0m\n";
         partie->getJoueur2()->addPrivilege(partie->getEspaceJeux().getPlateau().recupererPrivilege());
         break;
     case 1:
-        cout << "#### c'est " << partie->getJoueur2()->getPseudo() << " qui commence, son adversaire recoit 1 privilege !####\n";
+        std::cout << "\033[1;36mC'est " << partie->getJoueur2()->getPseudo() << " qui commence, son adversaire reçoit donc 1 privilège.\033[0m\n";
         partie->getJoueur1()->addPrivilege(partie->getEspaceJeux().getPlateau().recupererPrivilege());
         break;
     default:
@@ -162,7 +176,131 @@ void Controller::lancerPartie() {
 }
 
 
+
+
+
+
+void Controller::quitter() {
+    std::string sauvegarde;
+    std::cout<<"Vous avez decider de quitter la partie\n";
+    std::cout<<"Voulez vous la sauvegarde ? (Oui, Non)\n";
+    std::cin>>sauvegarde;
+    if (sauvegarde=="OUI"||sauvegarde=="oui"||sauvegarde=="Oui")
+        sauvegardePartie();
+    else
+        std::cout<<"tant pis...\n";
+    return;
+}
+
+
 ///////////////////////// Actions d'un joueur /////////////////////////
+
+
+//Menu choix des actions
+unsigned int Controller::choixActionsObligatoires() {
+    std::cout << "\033[1mActions obligatoires:\033[0m\n";
+    std::cout << "1. Recuperer des jetons\n";
+    std:: cout << "2. Acheter une carte joaillerie\n";
+    std::cout << "3. Reserver une carte\n";
+    std::cout << "9. Quitter le jeu\n";
+    std::cout << "Votre choix (1/2/3/9):" << std::endl;
+
+    return strategy_courante->choix_min_max(1,9);;
+}
+
+unsigned int Controller::choixActionsOptionelles() {
+    std::cout << "\033[1mActions optionnelles:\033[0m\n";
+    std::cout << "1. Utiliser un privilege\n";
+    std:: cout << "2. Remplir le plateau\n";
+    std::cout << "3. Ne plus faire d'actions optionnelles\n";
+    std::cout << "9. Quitter le jeu\n";
+    std::cout << "Votre choix (1/2/3/9):" << std::endl;
+
+    return strategy_courante->choix_min_max(1,9);;
+}
+
+void Controller::utiliserPrivilege(Plateau& plateau){
+    //on verifie d'abord si le joueur à un/des privilege
+    verifPrivileges();
+
+    std::cout << "Combien de privileges voulez vous utiliser ?\n";
+    unsigned int priv = strategy_courante->choix_min_max(1,3);
+    if (priv>joueurCourant->getNbPrivileges())
+        throw SplendorException("Vous n'avez pas assez de privilege");
+
+    //on recupere autant de jetons que de privilege
+    for (size_t k=0; k<priv;k++) {
+        std::cout<<"Utiliser un privilege permet de recup un jeton de couleur ou perle de votre choix (i,j):\n";
+        std::cout<<plateau<<"\n";
+
+        unsigned int i = strategy_courante->choix_min_max(1,5)-1;
+        unsigned int j = strategy_courante->choix_min_max(1,5)-1;
+
+        if(plateau.caseOr(i, j))
+            throw SplendorException("Vous ne pouvez pas prendre de jeton Or avec un privilege");
+
+        const Jeton& jetonSelec = plateau.recupererJeton(i, j);
+        joueurCourant->addJeton(jetonSelec);
+        const Privilege& privilege = joueurCourant->supPrivilege(plateau);
+        plateau.poserPrivilege(privilege);
+    }
+
+    std::cout << "Voici le nouveau plateau (après récupération) \n" << getPartie().getEspaceJeux().getPlateau();
+                     joueurCourant->afficherJoueur();
+    return;
+}
+
+
+
+void Controller::orReserverCarte (Pyramide& pyramide, Plateau& plateau){
+    unsigned int choix = strategy_courante->choixNiveau();
+
+
+    if (choix == 0){
+        // Reservation de la carte
+        std::pair<unsigned int, unsigned int> numNivCarteSelec = strategy_courante->reservationCarte(pyramide);
+
+        const Carte& carte = pyramide.acheterCarte(numNivCarteSelec.first, numNivCarteSelec.second);
+        joueurCourant->addCarteReservee(carte);
+
+        // Recuperation d'un jeton or Voir exception mecanique de jeu
+        // Recuperation d'un jeton or
+        std::pair<unsigned int, unsigned int> coordJetonSelec = strategy_courante->choisirJeton(plateau);
+        const Jeton& jeton = plateau.recupererJeton(coordJetonSelec.first, coordJetonSelec.second);
+        if(jeton.getCouleur() != Couleur::OR){
+            throw SplendorException("Le jeton choisi n'est pas un jeton or");
+        }
+        joueurCourant->addJeton(jeton);
+
+
+    }
+    else if (choix == 1 || choix == 2 || choix == 3){
+        // Reservation de la carte
+        const Carte& carte = pyramide.ReserverCartePioche(choix);
+        joueurCourant->addCarteReservee(carte);
+
+        // Recuperation d'un jeton or
+        std::pair<unsigned int, unsigned int> coordJetonSelec = strategy_courante->choisirJeton(plateau);
+        const Jeton& jeton = plateau.recupererJeton(coordJetonSelec.first, coordJetonSelec.second);
+        if(jeton.getCouleur() != Couleur::OR){
+            throw SplendorException("Le jeton choisi n'est pas un jeton or");
+        }
+        joueurCourant->addJeton(jeton);
+    }
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
 
 bool Controller::verifAchatCarte(const Carte& carte, EspaceJeux& espaceJeux) {
     // 1 recuperer les points necessaires pour acheter la carte
@@ -310,27 +448,13 @@ bool Controller::verifAchatCarte(const Carte& carte, EspaceJeux& espaceJeux) {
     }
 }
 
-void Controller::utiliserPrivilege(Plateau& plateau){
-    unsigned int priv = strategy_courante->utiliserPrivilege();
-    if (priv>joueurCourant->getNbPrivileges())
-        throw SplendorException("Vous n'avez pas assez de privilege");
+void Controller::remplirPlateau(Plateau& plateau, Sac& sac){
+    verifSacvide();
 
-    for (size_t i=0; i<priv;i++) {
-        std::cout<<"Utiliser un privilege permet de recup un jeton de couleur ou perle de votre choix (i,j):\n";
-        std::cout<<plateau<<endl;
-        std::pair<unsigned int, unsigned int> coordJetonSelec = strategy_courante->choisirJeton(plateau);
-        if(plateau.caseOr(coordJetonSelec.first, coordJetonSelec.second))
-            throw SplendorException("Vous ne pouvez pas prendre de jeton Or avec un privilege");
-        const Jeton& jetonSelec = plateau.recupererJeton(coordJetonSelec.first, coordJetonSelec.second);
-        joueurCourant->addJeton(jetonSelec);
-        const Privilege& privilege = joueurCourant->supPrivilege(plateau);
-        plateau.poserPrivilege(privilege);
-    }
-}
-
-void Controller::remplirPlateau(Plateau& plateau, Sac& sac, Joueur& joueurAdverse){
     std::cout<<"Le joueur rempli le plateau :\n"<<plateau<<endl;
-    strategy_courante->remplirPlateauStrat(plateau, sac);
+
+    //Attribution du privilege à revoir
+    /*
     if (joueurCourant->privileges.size() == 3){
         std::cout<< "Vous avez deja 3 privileges. Vous n'en recupererez donc pas plus !" << std::endl;
         return;
@@ -341,14 +465,22 @@ void Controller::remplirPlateau(Plateau& plateau, Sac& sac, Joueur& joueurAdvers
         const Privilege& privilege = joueurAdverse.supPrivilege(plateau); // recuperation du privilege du joueur adverse
         joueurCourant->addPrivilege(privilege); // ajout du privilege au joueur
         return;
-    }
+
     // Cas standard
     const Privilege& privilege = plateau.recupererPrivilege();
     joueurCourant->addPrivilege(privilege);
+    }
+    */
+
+    plateau.remplirPlateau(sac);
     std::cout<<"Nouveau plateau : \n"<<plateau;
+
+    return;
 }
 
 void Controller::recupererJetons(Plateau& plateau){
+    std::cout<<"Vous avez décider de récupérer des jetons sur le plateau :\n"<<plateau;
+
     // Recuperation des jetons 1 2 ou 3 jetons en fonction de la strategy
     std::vector<const Jeton*> jetonsRecup = strategy_courante->recupJetonStrat(plateau);
 
@@ -357,46 +489,13 @@ void Controller::recupererJetons(Plateau& plateau){
         joueurCourant->addJeton(*i);
     }
 
+    std::cout<<"Voici le nouveau plateau (après récupération) \n" << plateau;
+    std::cout<<"Voici l'etat du joueur après récupération :\n" ;
+    joueurCourant->afficherJoueur();
+    return;
 }
 
-void Controller::orReserverCarte (Pyramide& pyramide, Plateau& plateau){
-    unsigned int choix = strategy_courante->choixNiveau();
 
-
-    if (choix == 0){
-        // Reservation de la carte
-        std::pair<unsigned int, unsigned int> numNivCarteSelec = strategy_courante->reservationCarte(pyramide);
-
-        const Carte& carte = pyramide.acheterCarte(numNivCarteSelec.first, numNivCarteSelec.second);
-        joueurCourant->addCarteReservee(carte);
-
-        // Recuperation d'un jeton or Voir exception mecanique de jeu
-        // Recuperation d'un jeton or
-        std::pair<unsigned int, unsigned int> coordJetonSelec = strategy_courante->choisirJeton(plateau);
-        const Jeton& jeton = plateau.recupererJeton(coordJetonSelec.first, coordJetonSelec.second);
-        if(jeton.getCouleur() != Couleur::OR){
-            throw SplendorException("Le jeton choisi n'est pas un jeton or");
-        }
-        joueurCourant->addJeton(jeton);
-
-
-    }
-    else if (choix == 1 || choix == 2 || choix == 3){
-        // Reservation de la carte
-        const Carte& carte = pyramide.ReserverCartePioche(choix);
-        joueurCourant->addCarteReservee(carte);
-
-        // Recuperation d'un jeton or
-        std::pair<unsigned int, unsigned int> coordJetonSelec = strategy_courante->choisirJeton(plateau);
-        const Jeton& jeton = plateau.recupererJeton(coordJetonSelec.first, coordJetonSelec.second);
-        if(jeton.getCouleur() != Couleur::OR){
-            throw SplendorException("Le jeton choisi n'est pas un jeton or");
-        }
-        joueurCourant->addJeton(jeton);
-    }
-
-
-}
 
 void Controller::acheterCarteNoble (Pyramide& pyramide){
     // affichage cartes nobles
@@ -470,18 +569,18 @@ void Controller::acheterCarteJoaillerie (EspaceJeux& espaceJeux){
 
 void Controller::verifPrivileges(){
     if (joueurCourant->privileges.empty())
-        throw SplendorException("le joueur courant n'a pas de privileges");
+        throw SplendorException("\nLe joueur courant n'a pas de privileges");
 }
 
 void Controller::verifPlateauvide(){
     if (partie->getEspaceJeux().getPlateau().estVide()){
-        throw SplendorException("Il n'y a aucun jeton a recuperer sur le plateau");
+        throw SplendorException("\nIl n'y a aucun jeton a recuperer sur le plateau");
     }
 }
 
 void Controller::verifSacvide(){
     if (partie->getEspaceJeux().getSac().estVide()){
-        throw SplendorException("Le sac de jetons est vide");
+        throw SplendorException("\nLe sac de jetons est vide");
     }
 }
 
@@ -603,8 +702,8 @@ void Controller::sauvegardePartie() {
 
    //Sauvegarde de la pyramide
    Pyramide& pyramide = getPartie().getEspaceJeux().getPyramide();
-   for (int i =0; i<4; i++) {
-       for (int j =0; j<pyramide.getNbCartesNiv(i); j++) {
+   for (size_t i =0; i<4; i++) {
+       for (size_t j =0; j<pyramide.getNbCartesNiv(i); j++) {
            const Carte* carte = pyramide.getCarte(i,j);
            sql= "INSERT INTO pyramide (i, j, id) VALUES (" + std::to_string(i) + ", " + std::to_string(j) + ", " + std::to_string(carte->getId()) + ");";
            rc = sqlite3_exec(db, sql.c_str(), NULL, NULL, NULL);
