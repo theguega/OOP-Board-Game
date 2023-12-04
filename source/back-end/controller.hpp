@@ -15,6 +15,7 @@ private:
 	StrategyIA strategy_IA;
 public:
 	Controller();
+    Controller(QString statut_partie, QString pseudo_j_1, type type_j_1, QString pseudo_j_2, type type_j_2);
 	~Controller() { delete partie; }
 
 	// getters

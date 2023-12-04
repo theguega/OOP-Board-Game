@@ -91,7 +91,55 @@ Controller::Controller() {
     }
 }
 
+//surcharge du constructeur du controller pour la partie graphique
+Controller::Controller(QString statut_partie, QString pseudo_j_1, type type_j_1, QString pseudo_j_2, type type_j_2){
+    Director* director = new Director();
 
+    //Si nouvelle partie
+    if (statut_partie == "New") {
+        NewPartieBuilder* builder = new NewPartieBuilder();
+        director->set_builder(builder);
+        director->BuildNewPartie(pseudo_j_1.toStdString(), type_j_1, pseudo_j_2.toStdString(), type_j_2);
+        Partie* p = builder->GetProduct();
+        partie = p;
+        delete director;
+
+    } else if (statut_partie == "Old") {
+        LastPartieBuilder* builder = new LastPartieBuilder();
+        director->set_builder(builder);
+        director->BuildLastPartie();
+        Partie* p = builder->GetProduct();
+        partie = p;
+        delete director;
+
+        // restitution
+        QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE", "conn3");
+        db.setDatabaseName("data/save.sqlite");
+        if (!db.open()) {
+            std::cerr << "Impossible d'ouvrir la base de donnees 8: " << db.lastError().text().toStdString() << std::endl;
+            return;
+        }
+        QSqlQuery query(db);
+        if (!query.exec("SELECT * FROM infopartie")) {
+            std::cerr << "Erreur de preparation de la requete 9: " << query.lastError().text().toStdString() << std::endl;
+            db.close();
+            return;
+        }
+
+        if (query.next()) {
+            int joueur_c = query.value(1).toInt();
+            if (joueur_c == 0)
+                joueurCourant = partie->getJoueur1();
+            else if (joueur_c == 1)
+                joueurCourant = partie->getJoueur2();
+            partie->setTour(query.value(2).toInt());
+        }
+
+        db.close();
+    } else {
+        throw SplendorException("Statut invalide");
+    }
+}
 
 
 
