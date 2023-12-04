@@ -2,12 +2,16 @@
 
 using namespace std;
 
+
+
 std::initializer_list < TypeCarte > TypesCarte = {
     TypeCarte::Niv1,
     TypeCarte::Niv2,
     TypeCarte::Niv3,
     TypeCarte::Noble
 };
+
+
 std::initializer_list < Capacite > Capacites = {
     Capacite::NewTurn,
     Capacite::TakePrivilege,
@@ -16,6 +20,7 @@ std::initializer_list < Capacite > Capacites = {
     Capacite::AssociationBonus,
     Capacite::None
 };
+
 
 string TypeCartetoString(TypeCarte t) {
     switch (t) {
@@ -31,10 +36,12 @@ string TypeCartetoString(TypeCarte t) {
         throw SplendorException("Type inconnue");
     }
 }
+
 ostream & operator << (ostream & f, TypeCarte t) {
     f << TypeCartetoString(t);
     return f;
 }
+
 
 string CapacitetoString(Capacite c) {
     switch (c) {
@@ -54,10 +61,12 @@ string CapacitetoString(Capacite c) {
         throw SplendorException("Capacite inconnue");
     }
 }
+
 ostream & operator << (ostream & f, Capacite c) {
     f << CapacitetoString(c);
     return f;
 }
+
 
 std::map < std::string, Capacite > stringToCapaciteMap = {
     {
@@ -86,6 +95,7 @@ std::map < std::string, Capacite > stringToCapaciteMap = {
     }
 };
 
+
 Capacite StringToCapacite(const std::string & capaciteStr) {
     auto tmp = stringToCapaciteMap.find(capaciteStr);
     if (tmp != stringToCapaciteMap.end()) {
@@ -95,6 +105,7 @@ Capacite StringToCapacite(const std::string & capaciteStr) {
     }
 }
 
+
 ostream & operator << (ostream & f,
     const Prix & p) {
     f << toEmojiCouleur(Couleur::BLANC) << " : " << p.getBlanc() << "    " << toEmojiCouleur(Couleur::BLEU) << " : " << p.getBleu() << "\n";
@@ -103,21 +114,25 @@ ostream & operator << (ostream & f,
     return f;
 }
 
+
 ostream & operator << (ostream & f,
     const Bonus & b) {
     f << b.getNbBonus() << " " << b.getCouleur();
     return f;
 }
 
+
 Carte::Carte(TypeCarte t, Prix & p, Capacite c1, Capacite c2, Bonus & b, unsigned int nbC, unsigned int nbP, unsigned int id): type(t), prix(p), capacite1(c1), capacite2(c2), bonus(b), nbCouronnes(nbC), nbPtsPrivilege(nbP), id(id) {
     if (t == TypeCarte::Noble)
         throw SplendorException("Veuillez utiliser le constructeur approprie");
 }
 
+
 Carte::Carte(TypeCarte t, Capacite c, unsigned int nbP, unsigned int id): type(t), prix(0, 0, 0, 0, 0, 0), capacite1(c), capacite2(Capacite::None), bonus(), nbCouronnes(0), nbPtsPrivilege(nbP), id(id) {
     if (t != TypeCarte::Noble)
         throw SplendorException("Veuillez utiliser le constructeur approprie");
 }
+
 
 ostream & operator << (ostream & f,
     const Carte & c) {
@@ -133,45 +148,40 @@ ostream & operator << (ostream & f,
     return f;
 }
 
+
 JeuCarte::JeuCarte() {
-    sqlite3 * db;
-    sqlite3_stmt * stmt;
-    sqlite3_stmt * stmt2;
-
-    int rc = sqlite3_open("data/data_carte.sqlite", & db); //conversion en char* pour sqlite3_open
-
-    if (rc != SQLITE_OK) {
-        std::cerr << "Impossible d'ouvrir la base de donnees 1: " << sqlite3_errmsg(db) << std::endl;
+    QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE", "conn2");
+    db.setDatabaseName("data/data_carte.sqlite");
+    if (!db.open()) {
+        std::cerr << "Impossible d'ouvrir la base de donnees 1: " << db.lastError().text().toStdString() << std::endl;
         return;
     }
-    rc = sqlite3_prepare_v2(db, "SELECT * FROM 'carte'", -1, & stmt, nullptr);
-    if (rc != SQLITE_OK) {
-        std::cerr << "Erreur de preparation de la requete : " << sqlite3_errmsg(db) << std::endl;
-        sqlite3_close(db);
+    // cartes joaillerie
+    QSqlQuery query(db);
+    if (!query.exec("SELECT * FROM carte")) {
+        std::cerr << "Erreur de preparation de la requete : " << query.lastError().text().toStdString() << std::endl;
+        db.close();
         return;
     }
-    while (sqlite3_step(stmt) == SQLITE_ROW) {
-        unsigned int id = sqlite3_column_int(stmt, 0);
-        string type = reinterpret_cast <
-            const char * > (sqlite3_column_text(stmt, 1));
-        unsigned int p_blanc = sqlite3_column_int(stmt, 2);
-        unsigned int p_bleu = sqlite3_column_int(stmt, 3);
-        unsigned int p_vert = sqlite3_column_int(stmt, 4);
-        unsigned int p_noir = sqlite3_column_int(stmt, 5);
-        unsigned int p_rouge = sqlite3_column_int(stmt, 6);
-        unsigned int p_perle = sqlite3_column_int(stmt, 7);
-        string capacite1 = reinterpret_cast <
-            const char * > (sqlite3_column_text(stmt, 8));
-        string capacite2 = reinterpret_cast <
-            const char * > (sqlite3_column_text(stmt, 9));
-        string couleur_bonus = reinterpret_cast <
-            const char * > (sqlite3_column_text(stmt, 10));
-        unsigned int bonus = sqlite3_column_int(stmt, 11);
-        unsigned int nb_couronnes = sqlite3_column_int(stmt, 12);
-        unsigned int nb_pts_privileges = sqlite3_column_int(stmt, 13);
+    while (query.next()) {
+        unsigned int id = query.value(0).toUInt();
+        string type = query.value(1).toString().toStdString();
+        unsigned int p_blanc = query.value(2).toUInt();
+        unsigned int p_bleu = query.value(3).toUInt();
+        unsigned int p_vert = query.value(4).toUInt();
+        unsigned int p_noir = query.value(5).toUInt();
+        unsigned int p_rouge = query.value(6).toUInt();
+        unsigned int p_perle = query.value(7).toUInt();
+        string capacite1 = query.value(8).toString().toStdString();
+        string capacite2 = query.value(9).toString().toStdString();
+        string couleur_bonus = query.value(10).toString().toStdString();
+        unsigned int bonus = query.value(11).toUInt();
+        unsigned int nb_couronnes = query.value(12).toUInt();
+        unsigned int nb_pts_privileges = query.value(13).toUInt();
 
         Prix p(p_blanc, p_bleu, p_vert, p_noir, p_rouge, p_perle);
         Bonus b(StringToCouleur(couleur_bonus), bonus);
+
         if (type == "Niv1") {
             cartes_nv1.push_back(new Carte(TypeCarte::Niv1, p, StringToCapacite(capacite1), StringToCapacite(capacite2), b, nb_couronnes, nb_pts_privileges, id));
         } else if (type == "Niv2") {
@@ -182,23 +192,24 @@ JeuCarte::JeuCarte() {
             throw SplendorException("Erreur de construction, le type de carte ne convient pas ici");
         }
     }
-    rc = sqlite3_prepare_v2(db, "SELECT * FROM 'carte_noble'", -1, & stmt2, nullptr);
-    if (rc != SQLITE_OK) {
-        std::cerr << "Erreur de preparation de la requete : " << sqlite3_errmsg(db) << std::endl;
-        sqlite3_close(db);
+    // cartes nobles
+    QSqlQuery query2(db);
+    if (!query2.exec("SELECT * FROM carte_noble")) {
+        std::cerr << "Erreur de preparation de la requete : " << query2.lastError().text().toStdString() << std::endl;
+        db.close();
         return;
     }
-    while (sqlite3_step(stmt2) == SQLITE_ROW) {
-        string capacite = reinterpret_cast <
-            const char * > (sqlite3_column_text(stmt2, 1));
-        unsigned int nb_pts_privileges = sqlite3_column_int(stmt2, 2);
-        unsigned int id = sqlite3_column_int(stmt2, 3);
+
+    while (query2.next()) {
+        std::string capacite = query2.value(1).toString().toStdString();
+        unsigned int nb_pts_privileges = query2.value(2).toUInt();
+        unsigned int id = query2.value(3).toUInt();
         cartes_nobles.push_back(new Carte(TypeCarte::Noble, StringToCapacite(capacite), nb_pts_privileges, id));
     }
-    sqlite3_finalize(stmt);
-    sqlite3_finalize(stmt2);
-    sqlite3_close(db);
+
+    db.close();
 }
+
 
 JeuCarte::~JeuCarte() {
     for (size_t i = 0; i < getNbCartes_nv1(); ++i) {
@@ -215,11 +226,13 @@ JeuCarte::~JeuCarte() {
     }
 }
 
+
 const Carte & JeuCarte::getCarteNiv1(size_t i) const {
     if (i >= getNbCartes_nv1())
         throw SplendorException("Il n'y a que 30 cartes de niveau 1");
     return * cartes_nv1[i];
 }
+
 
 const Carte & JeuCarte::getCarteNiv2(size_t i) const {
     if (i >= getNbCartes_nv2())
@@ -227,11 +240,13 @@ const Carte & JeuCarte::getCarteNiv2(size_t i) const {
     return * cartes_nv2[i];
 }
 
+
 const Carte & JeuCarte::getCarteNiv3(size_t i) const {
     if (i >= getNbCartes_nv2())
         throw SplendorException("Il n'y a que 13 cartes de niveau 3");
     return * cartes_nv3[i];
 }
+
 
 const Carte & JeuCarte::getCarteNoble(size_t i) const {
     if (i >= getNbCartes_nobles())
@@ -239,6 +254,8 @@ const Carte & JeuCarte::getCarteNoble(size_t i) const {
     return * cartes_nobles[i];
 }
 
+
+// constructeur pioche
 Pioche::Pioche(const JeuCarte & j, TypeCarte t): type_carte(t) {
     if (t == TypeCarte::Niv1) {
         for (size_t i = 0; i < j.getNbCartes_nv1(); i++)
@@ -257,11 +274,15 @@ Pioche::Pioche(const JeuCarte & j, TypeCarte t): type_carte(t) {
     }
 }
 
+
+// destructeur pioche
 Pioche::~Pioche() {
     for (size_t i = 0; i < getNbCartes(); i++)
         cartes[i] = nullptr;
 }
 
+
+// méthode piocher
 const Carte & Pioche::piocher() {
     if (estVide())
         throw SplendorException("Plus de cartes dans cette pioche");
@@ -278,6 +299,8 @@ const Carte & Pioche::piocher() {
     return * c;
 }
 
+
+// méthode picoher
 const Carte & Pioche::piocher(unsigned int id) {
     if (estVide())
         throw SplendorException("Plus de cartes dans cette pioche");

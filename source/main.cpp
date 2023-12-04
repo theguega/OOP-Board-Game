@@ -22,7 +22,8 @@
 //####################################
 //avec boucle de jeux
 
-int main(void) {
+int main(int argc, char * argv[]) {
+    QApplication app(argc, argv);
     Controller control;
     control.lancerPartie();
 
@@ -104,6 +105,7 @@ int main(void) {
                             else
                                 std::cout<<"tant pis...\n";
                             return 0;
+                            return app.exec();
                         }
 
                         default:{
@@ -167,6 +169,7 @@ int main(void) {
                             else
                                 std::cout<<"tant pis...\n";
                             return 0;
+                            return app.exec();
 
                         }
                         default:
@@ -216,6 +219,7 @@ int main(void) {
                     std::cout << "Fin de la partie !\nMerci d'avoir joue a Splendor Duel !\n";
                     //arret de l'application
                     return 0;
+                    return app.exec();
                     break;
                 }
 
@@ -230,6 +234,7 @@ int main(void) {
                     else
                         std::cout<<"tant pis...\n";
                     return 0;
+                    return app.exec();
                 }
                 default:{
                     break;
@@ -247,6 +252,7 @@ int main(void) {
     //fin d'une partie
     std::cout<<"le jeu n'est pas censer arriver la";
     return 0;
+    return app.exec();
 }
 
 
