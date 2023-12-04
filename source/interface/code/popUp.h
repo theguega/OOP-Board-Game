@@ -16,10 +16,10 @@ private:
     std::string texte1 = "Voulez-vous ";
     std::string texte3 = " ?";
 
-    QLabel* info;
+    QLabel* info; //Récupère les infos à donner dans la question
 
-    QHBoxLayout* boutonLayout;
-    QVBoxLayout* layout;
+    QHBoxLayout* boutonLayout; //Layout avec les boutons
+    QVBoxLayout* layout; //Layout principal
 public:
     popUpValider(QWidget* parent, std::string info);
     QPushButton* getBoutonOui(){return oui;}

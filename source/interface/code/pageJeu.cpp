@@ -15,6 +15,7 @@ pageJeu::pageJeu(QWidget *parent) : QWidget(parent) {
     vPlateau = new vuePlateau(nullptr, tailleHauteur - 100, tailleLargeur / 2);
     joueur1 = new pageJoueur(nullptr);
     joueur2 = new pageJoueur(nullptr);
+    vPyramide = new vuePyramide(nullptr, tailleHauteur - 100, tailleLargeur / 2);
 
     afficherJ1 = new QPushButton("Afficher Joueur 1");
     afficherJ2 = new QPushButton("Afficher Joueur 1");
@@ -31,6 +32,7 @@ pageJeu::pageJeu(QWidget *parent) : QWidget(parent) {
     layout = new QVBoxLayout;
 
     partieHaute -> addWidget(vPlateau);
+    partieHaute -> addWidget(vPyramide);
 
     partieBasse -> addWidget(afficherJ1);
     partieBasse -> addWidget(afficherJ2);
