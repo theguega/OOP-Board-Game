@@ -35,6 +35,7 @@ public:
 	// actions partie
 	void lancerPartie();
     void changerJoueurCourant();
+    void jouer();
     void quitter();
 
     //Choix de l'action
