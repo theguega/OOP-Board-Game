@@ -28,6 +28,7 @@ public:
         }
         throw SplendorException("pas de d'adverssaire trouvé..\n");
     };
+    Plateau& getPlateau() const {return partie->getEspaceJeux().getPlateau();}
 
 	// setters
 	void setJoueurCourant(int n);
@@ -47,7 +48,7 @@ public:
     void remplirPlateau(Plateau& plateau, Sac& sac);
 
 	// Actions obligatoires
-	void recupererJetons(Plateau& plateau);
+    void recupererJetons();
     void acheterCarteJoaillerie(EspaceJeux& espaceJeux);
 	void orReserverCarte(Pyramide& pyramide, Plateau& plateau);
 

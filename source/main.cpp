@@ -20,7 +20,7 @@
 //####################################
 //avec boucle de jeux
 
-/*int main(int argc, char * argv[]) {
+int main(int argc, char * argv[]) {
     QApplication app(argc, argv);
     Controller control;
     control.lancerPartie();
@@ -29,7 +29,7 @@
 
     return 0;
     return app.exec();
-}*/
+}
 
 
 //#########################################
@@ -38,7 +38,7 @@
 
 
 
-int main(int argc, char * argv[]) {
+/*int main(int argc, char * argv[]) {
     QApplication app(argc, argv);
 //    vueCarte carte = vueCarte(nullptr);
 //    carte.show();
@@ -64,4 +64,4 @@ int main(int argc, char * argv[]) {
     page->show();
 
     return app.exec();
-}
+}*/

@@ -147,11 +147,11 @@ void Controller::lancerPartie() {
     setJoueurCourant(rd_number);
     switch (rd_number) {
     case 0:
-        std::cout << "\033[1;36mC'est " << partie->getJoueur1()->getPseudo() << " qui commence, son adversaire reçoit donc 1 privilège.\033[0m\n";
+        std::cout << "\033[1;36mC'est " << partie->getJoueur1()->getPseudo() << " qui commence, son adversaire recoit donc 1 privilege.\033[0m\n";
         partie->getJoueur2()->addPrivilege(partie->getEspaceJeux().getPlateau().recupererPrivilege());
         break;
     case 1:
-        std::cout << "\033[1;36mC'est " << partie->getJoueur2()->getPseudo() << " qui commence, son adversaire reçoit donc 1 privilège.\033[0m\n";
+        std::cout << "\033[1;36mC'est " << partie->getJoueur2()->getPseudo() << " qui commence, son adversaire recoit donc 1 privilege.\033[0m\n";
         partie->getJoueur1()->addPrivilege(partie->getEspaceJeux().getPlateau().recupererPrivilege());
         break;
     default:
@@ -268,7 +268,7 @@ void Controller::jouer() {
                             try
                             {
                                 //recuperation de jetons
-                                recupererJetons(getPartie().getEspaceJeux().getPlateau());
+                                recupererJetons();
                                 etat_action = 10;
                             }
                             catch(SplendorException& e) { std::cerr << "\033[1;31m" << e.getInfo() << "\033[0m" << endl << endl;; etat_action = 0; }
@@ -323,14 +323,14 @@ void Controller::jouer() {
                         const std::string message = "Le Joueur " + getJoueurCourant().getPseudo() +" a gagne !";
                         for (size_t j = 0; j<250; j++) {
                             for (std::size_t i = 0; i < message.size(); ++i) {
-                                // Utilisation des codes ANSI pour le texte en gras et avec différentes couleurs
+                                // Utilisation des codes ANSI pour le texte en gras et avec differentes couleurs
                                 std::cout << "\033[1;3" << (i % 7) + 1 << "m" << message[i];
                             }
                             std::cout<<"\n";
                             for (std::size_t l = 0; l < j; ++l)
                                 std::cout<<" ";
                         };
-                        // Réinitialisation du style après la dernière lettre
+                        // Reinitialisation du style apres la derniere lettre
                         std::cout << "\033[0m\n";
 
                         etat_tour = 3;
@@ -385,8 +385,10 @@ unsigned int Controller::choixActionsOptionelles() {
     return strategy_courante->choixMenu();;
 }
 
+
+// Utiliser un privilege
 void Controller::utiliserPrivilege(Plateau& plateau){
-    //on verifie d'abord si le joueur à un/des privilege
+    //on verifie d'abord si le joueur a un/des privilege
     verifPrivileges();
 
     std::cout << "Combien de privileges voulez vous utiliser ?\n";
@@ -402,6 +404,8 @@ void Controller::utiliserPrivilege(Plateau& plateau){
         unsigned int i = strategy_courante->choix_min_max(1,5)-1;
         unsigned int j = strategy_courante->choix_min_max(1,5)-1;
 
+        if(plateau.caseVide(i, j))
+            throw SplendorException("La case est vide");
         if(plateau.caseOr(i, j))
             throw SplendorException("Vous ne pouvez pas prendre de jeton Or avec un privilege");
 
@@ -411,8 +415,120 @@ void Controller::utiliserPrivilege(Plateau& plateau){
         plateau.poserPrivilege(privilege);
     }
 
-    std::cout << "Voici le nouveau plateau (après récupération) \n" << getPartie().getEspaceJeux().getPlateau();
+    std::cout << "Voici le nouveau plateau (apres recuperation) \n" << getPartie().getEspaceJeux().getPlateau();
                      joueurCourant->afficherJoueur();
+    return;
+}
+
+
+// Recuperer des jetons
+void Controller::recupererJetons(){
+    std::cout<<"Vous avez decider de recuperer des jetons sur le plateau :\n"<<getPlateau();
+
+    // Recuperation des jetons 1 2 ou 3 jetons en fonction de la strategy
+
+    std::cout << "Combien de jetons souhaitez-vous recuperer ? (1 a 3) " << std::endl;
+    unsigned int nbJetons = strategy_courante->choix_min_max(1,3);
+
+    while (nbJetons > 3 || nbJetons < 1){
+        nbJetons = strategy_courante->choix_min_max(1,3);
+    }
+
+    std::cout << "Merci de selectionner des jetons adjacents en ligne, en colonne ou en diagonale." << std::endl << endl;
+
+    std::vector<std::pair<unsigned int, unsigned int>> vecteurCoordonnees;
+    std::cout<<"Vous allez rentrer les coordonnees des jetons : \n";
+    // Recup des coordonnees des jetons
+    for (unsigned int k = 0; k < nbJetons; k++){
+
+        // Ajout des coordonnees
+        std::cout<<"Jetons numero "<<k+1<<" : \n";
+
+        std::cout << "numero de ligne : \n";
+        int indice_i = strategy_courante->choix_min_max(1, 5);
+        std::cout << "numero de colonne : \n";
+        int indice_j = strategy_courante->choix_min_max(1, 5);
+        vecteurCoordonnees.emplace_back(std::make_pair(indice_i-1, indice_j-1));
+    }
+
+    // Verifier que les jetons sont adjacents
+    if (nbJetons > 1) {
+        bool result1 = true;
+        bool result2 = true;
+        bool result3 = false; // Diago 1
+        bool result4 = false; // Diago 2
+
+        // Verif que les jetons sont adjacents en ligne
+        for (unsigned int i = 0; i < vecteurCoordonnees.size()-1; i++) {
+            if (vecteurCoordonnees[i].first != vecteurCoordonnees[i + 1].first) {
+                result1 = false;
+            }
+        }
+        // verif qu'ils ne sont pas distants de + d'une case
+        if(result1){
+            for (unsigned int i = 0; i < vecteurCoordonnees.size()-1; i++) {
+                if (vecteurCoordonnees[i].second - vecteurCoordonnees[i + 1].second != 1)
+                    result1 = false;
+            }
+        }
+        // Verif que les jetons sont adjacents en colonne
+        for (unsigned int i = 0; i < vecteurCoordonnees.size()-1; i++) {
+            if (vecteurCoordonnees[i].second != vecteurCoordonnees[i + 1].second) {
+                result2 = false;
+            }
+        }
+        // verif qu'ils ne sont pas distants de + d'une case
+        if(result2){
+            for (unsigned int i = 0; i < vecteurCoordonnees.size()-1; i++) {
+                if (vecteurCoordonnees[i].first - vecteurCoordonnees[i + 1].first != 1)
+                    result2 = false;
+            }
+        }
+        // Verif que les jetons sont adjacents en diagonale
+
+        // Fonction de comparaison pour trier en fonction du premier element de la paire
+        auto comparaison = [](const auto& a, const auto& b) {
+            return a.first < b.first;
+        };
+        std::sort(vecteurCoordonnees.begin(), vecteurCoordonnees.end(), comparaison);
+
+
+        // il manque la verification que les jetons ne sont pas distants de + d'une case
+        for (unsigned int i = 0; i < vecteurCoordonnees.size()-1; i++) {
+            // premiere diagonale
+            if ((vecteurCoordonnees[i].first+1 == vecteurCoordonnees[i + 1].first) && (vecteurCoordonnees[i].second-1 == vecteurCoordonnees[i + 1].second)) {
+                result3 = true;
+            }
+        }
+        for (unsigned int i = 0; i < vecteurCoordonnees.size()-1; i++) {
+            // seconde diagonale
+            if ((vecteurCoordonnees[i].first+1 == vecteurCoordonnees[i + 1].first) && (vecteurCoordonnees[i].second+1 == vecteurCoordonnees[i + 1].second)) {
+                result4 = true;
+            }
+        }
+
+        if (!result1 && !result2 && !result3 && !result4) {
+            throw SplendorException("\nLes jetons ne sont pas adjacents");
+        }
+    }
+    // Recup des jetons
+    std::vector<const Jeton*> jetonsRecup;
+    for (unsigned int k = 0; k < nbJetons; k++){
+        if (getPlateau().caseVide(vecteurCoordonnees[k].first, vecteurCoordonnees[k].second) || getPlateau().caseOr(vecteurCoordonnees[k].first, vecteurCoordonnees[k].second))
+            throw SplendorException("Il y a une case vide ou un jeton Or dans votre selection");
+    }
+    for (unsigned int k = 0; k < nbJetons; k++){
+        jetonsRecup.push_back(&getPlateau().recupererJeton(vecteurCoordonnees[k].first, vecteurCoordonnees[k].second));
+    }
+
+    // ajout des jetons dans la main du joueur
+    for (auto & i : jetonsRecup){
+        joueurCourant->addJeton(*i);
+    }
+
+    std::cout<<"Voici le nouveau plateau (apres recuperation) \n" << getPlateau();
+    std::cout<<"Voici l'etat du joueur apres recuperation :\n" ;
+    joueurCourant->afficherJoueur();
     return;
 }
 
@@ -436,10 +552,10 @@ void Controller::orReserverCarte (Pyramide& pyramide, Plateau& plateau){
         // Recuperation d'un jeton or Voir exception mecanique de jeu
         // Recuperation d'un jeton or
         std::pair<unsigned int, unsigned int> coordJetonSelec = strategy_courante->choisirJeton(plateau);
-        const Jeton& jeton = plateau.recupererJeton(coordJetonSelec.first, coordJetonSelec.second);
-        if(jeton.getCouleur() != Couleur::OR){
+        if(getPlateau().getJeton(coordJetonSelec.first, coordJetonSelec.second)->getCouleur() != Couleur::OR){
             throw SplendorException("Le jeton choisi n'est pas un jeton or");
         }
+        const Jeton& jeton = plateau.recupererJeton(coordJetonSelec.first, coordJetonSelec.second);
         joueurCourant->addJeton(jeton);
 
 
@@ -451,10 +567,10 @@ void Controller::orReserverCarte (Pyramide& pyramide, Plateau& plateau){
 
         // Recuperation d'un jeton or
         std::pair<unsigned int, unsigned int> coordJetonSelec = strategy_courante->choisirJeton(plateau);
-        const Jeton& jeton = plateau.recupererJeton(coordJetonSelec.first, coordJetonSelec.second);
-        if(jeton.getCouleur() != Couleur::OR){
+        if(getPlateau().getJeton(coordJetonSelec.first, coordJetonSelec.second)->getCouleur() != Couleur::OR){
             throw SplendorException("Le jeton choisi n'est pas un jeton or");
         }
+        const Jeton& jeton = plateau.recupererJeton(coordJetonSelec.first, coordJetonSelec.second);
         joueurCourant->addJeton(jeton);
     }
 
@@ -623,7 +739,7 @@ void Controller::remplirPlateau(Plateau& plateau, Sac& sac){
 
     std::cout<<"Le joueur rempli le plateau :\n"<<plateau<<endl;
 
-    //Attribution du privilege à revoir
+    //Attribution du privilege a revoir
     /*
     if (joueurCourant->privileges.size() == 3){
         std::cout<< "Vous avez deja 3 privileges. Vous n'en recupererez donc pas plus !" << std::endl;
@@ -648,22 +764,7 @@ void Controller::remplirPlateau(Plateau& plateau, Sac& sac){
     return;
 }
 
-void Controller::recupererJetons(Plateau& plateau){
-    std::cout<<"Vous avez décider de récupérer des jetons sur le plateau :\n"<<plateau;
 
-    // Recuperation des jetons 1 2 ou 3 jetons en fonction de la strategy
-    std::vector<const Jeton*> jetonsRecup = strategy_courante->recupJetonStrat(plateau);
-
-    // ajout des jetons dans la main du joueur
-    for (auto & i : jetonsRecup){
-        joueurCourant->addJeton(*i);
-    }
-
-    std::cout<<"Voici le nouveau plateau (après récupération) \n" << plateau;
-    std::cout<<"Voici l'etat du joueur après récupération :\n" ;
-    joueurCourant->afficherJoueur();
-    return;
-}
 
 
 
@@ -775,7 +876,7 @@ void Controller::sauvegardePartie() {
     QStringList tables = db.tables();
     foreach (const QString &table, tables) {
             if (!query.exec("DELETE FROM " + table)) {
-                qWarning() << "Échec de la suppression des données de la table " << table << " : " << query.lastError().text();
+                qWarning() << "echec de la suppression des donnees de la table " << table << " : " << query.lastError().text();
             }
         }
 
@@ -855,7 +956,7 @@ void Controller::sauvegardePartie() {
    // Sauvegarde de la pyramide
     Pyramide& pyramide = getPartie().getEspaceJeux().getPyramide();
     for (int i = 0; i < 4; i++) {
-        for (int j = 0; j < pyramide.getNbCartesNiv(i); j++) {
+        for (unsigned int j = 0; j < pyramide.getNbCartesNiv(i); j++) {
             const Carte* carte = pyramide.getCarte(i, j);
             QString sql = "INSERT INTO pyramide (i, j, id) VALUES (" + QString::number(i) + ", " + QString::number(j) + ", " + QString::number(carte->getId()) + ");";
             if (!query.exec(sql)) {
@@ -901,7 +1002,7 @@ void Controller::enregisterScore() {
 
     QSqlQuery query(db);
     for (int i = 0; i < 2; i++) {
-        // On regarde si le joueur existe déjà
+        // On regarde si le joueur existe deja
         QString sql = "SELECT * FROM score WHERE pseudo = '" + QString::fromStdString(getPartie().getJoueur(i)->getPseudo()) + "';";
         if (!query.exec(sql)) {
             std::cerr << "Erreur lors de la recherche du joueur dans la base de donnee" << std::endl;
@@ -910,17 +1011,17 @@ void Controller::enregisterScore() {
         }
 
         if (query.next()) {
-            // Le joueur existe déjà
-            // On récupère son nombre de victoires et de défaites
+            // Le joueur existe deja
+            // On recupere son nombre de victoires et de defaites
             int nbVictoire = query.value(2).toInt();
             int nbDefaite = query.value(3).toInt();
-            // On met à jour son nombre de victoires ou de défaites
+            // On met a jour son nombre de victoires ou de defaites
             if (getPartie().getJoueur(i)->estGagnant()) {
                 nbVictoire++;
             } else {
                 nbDefaite++;
             }
-            // On met à jour le score du joueur
+            // On met a jour le score du joueur
             sql = "UPDATE score SET nbVictoire = " + QString::number(nbVictoire) + ", nbDefaite = " + QString::number(nbDefaite) + " WHERE pseudo = '" + QString::fromStdString(getPartie().getJoueur(i)->getPseudo()) + "';";
             std::cout << sql.toStdString() << std::endl;
             if (!query.exec(sql)) {

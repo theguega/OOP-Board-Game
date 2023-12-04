@@ -16,7 +16,7 @@ private:
     std::string texte1 = "Voulez-vous ";
     std::string texte3 = " ?";
 
-    QLabel* info; //Récupère les infos à donner dans la question
+    QLabel* info; //Recupere les infos a donner dans la question
 
     QHBoxLayout* boutonLayout; //Layout avec les boutons
     QVBoxLayout* layout; //Layout principal

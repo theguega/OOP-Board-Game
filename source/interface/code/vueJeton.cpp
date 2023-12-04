@@ -58,9 +58,9 @@ vueJeton::vueJeton(QWidget* parent, int rad, Couleur couleur) : QPushButton(pare
 
     setFixedSize(rad*2, rad*2); //Fixe la taille et qui permet d'avoir une taille de 2x le rad pour avoir pile la taille du bouton
 
-    afficherCroix = false; //afficherCroix est un booléen pour savoir si on montre la croix de sélection (false d'origine)
+    afficherCroix = false; //afficherCroix est un booleen pour savoir si on montre la croix de selection (false d'origine)
     setFlat(true);
-    setStyleSheet("QPushButton:pressed { border: none; }"); // Annule le style du contour quand le bouton est pressé
+    setStyleSheet("QPushButton:pressed { border: none; }"); // Annule le style du contour quand le bouton est presse
 
 }
 
@@ -72,7 +72,7 @@ void vueJeton::disparaitre(){ //Fait dispparaitre le jeton (utile quand on voudr
     hide();
 }
 
-bool vueJeton::getEstVisible(){ //Je sais plus à quoi ça sert (surement inutile)
+bool vueJeton::getEstVisible(){ //Je sais plus a quoi ca sert (surement inutile)
     return estVisible;
 }
 
@@ -87,12 +87,12 @@ void vueJeton::enleverCroix(){ //Enleve la croix du jeton (utilse quand on voudr
 }
 
 void vueJeton::paintEvent(QPaintEvent *event) {
-    QPushButton::paintEvent(event); // Appel à la méthode paintEvent de la classe de base
+    QPushButton::paintEvent(event); // Appel a la methode paintEvent de la classe de base
 
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing); // Pour des bords plus lisses
 
-    int side = qMin(width(), height()); // Taille minimale entre largeur et hauteur pour un carré
+    int side = qMin(width(), height()); // Taille minimale entre largeur et hauteur pour un carre
     QPoint center = rect().center(); // Centre du bouton
 
     if(afficherCroix){
@@ -104,18 +104,18 @@ void vueJeton::paintEvent(QPaintEvent *event) {
     }
 
     // Dessin du cercle au centre du bouton
-    int circleRadius = side / 2; // Rayon du cercle pour qu'il soit centré
-    painter.setBrush(QBrush(QcouleurClair)); // Utilisation de la couleur définie
+    int circleRadius = side / 2; // Rayon du cercle pour qu'il soit centre
+    painter.setBrush(QBrush(QcouleurClair)); // Utilisation de la couleur definie
     painter.drawEllipse(center, circleRadius - 3, circleRadius - 3);
 
-    // Définition des points pour créer le grand losange
+    // Definition des points pour creer le grand losange
     QVector<QPoint> bigDiamondShape;
     const int bigWidth = side * 2 / 3;
     const int bigHeight = side * 3 / 4;
 
-    bigDiamondShape << QPoint(center.x(), center.y() - bigHeight / 2); // Point supérieur
+    bigDiamondShape << QPoint(center.x(), center.y() - bigHeight / 2); // Point superieur
     bigDiamondShape << QPoint(center.x() + bigWidth / 2, center.y()); // Point droit
-    bigDiamondShape << QPoint(center.x(), center.y() + bigHeight / 2); // Point inférieur
+    bigDiamondShape << QPoint(center.x(), center.y() + bigHeight / 2); // Point inferieur
     bigDiamondShape << QPoint(center.x() - bigWidth / 2, center.y()); // Point gauche
 
     // Dessin du grand losange
@@ -123,21 +123,21 @@ void vueJeton::paintEvent(QPaintEvent *event) {
     painter.setBrush(Qcouleur); // Couleur bleue pour le grand losange
     painter.drawPolygon(bigDiamondShape);
 
-    // Définition des points pour créer le petit losange (effet 3D)
+    // Definition des points pour creer le petit losange (effet 3D)
     QVector<QPoint> smallDiamondShape;
     const int smallWidth = side / 4;
     const int smallHeight = side / 3;
 
-    smallDiamondShape << QPoint(center.x(), center.y() - smallHeight / 2); // Point supérieur
+    smallDiamondShape << QPoint(center.x(), center.y() - smallHeight / 2); // Point superieur
     smallDiamondShape << QPoint(center.x() + smallWidth / 2, center.y()); // Point droit
-    smallDiamondShape << QPoint(center.x(), center.y() + smallHeight / 2); // Point inférieur
+    smallDiamondShape << QPoint(center.x(), center.y() + smallHeight / 2); // Point inferieur
     smallDiamondShape << QPoint(center.x() - smallWidth / 2, center.y()); // Point gauche
 
     // Dessin du petit losange (effet 3D)
     QRadialGradient gradient(center, side / 4, center); // Gradient radial pour l'effet 3D
     gradient.setColorAt(0, QColor(255, 255, 255, 0)); // Couleur transparente au centre
     gradient.setColorAt(0.5, QColor(255, 255, 255, 60)); // Couleur semi-opaque au milieu
-    gradient.setColorAt(1, QColor(255, 255, 255, 120)); // Couleur plus opaque à l'extérieur
+    gradient.setColorAt(1, QColor(255, 255, 255, 120)); // Couleur plus opaque a l'exterieur
 
     painter.setBrush(gradient);
     painter.setPen(Qt::NoPen);
@@ -156,7 +156,7 @@ void vueJeton::paintEvent(QPaintEvent *event) {
 
     // Effet lorsqu'on clique sur le bouton (pressed)
     if (this->isDown()) {
-        painter.setBrush(QColor(0, 0, 0, 30)); // Couleur sombre pour simuler un effet enfoncé
+        painter.setBrush(QColor(0, 0, 0, 30)); // Couleur sombre pour simuler un effet enfonce
         painter.setPen(Qt::NoPen);
         painter.drawPolygon(bigDiamondShape);
         painter.drawEllipse(center, circleRadius, circleRadius);
@@ -172,12 +172,12 @@ void vueJeton::paintEvent(QPaintEvent *event) {
             painter.setPen(Qt::black);
         }
 
-        // Dessiner une croix qui prend tout le cercle et est centrée avec une rotation de 45 degrés
-        painter.save(); // Sauvegarder l'état actuel du QPainter
+        // Dessiner une croix qui prend tout le cercle et est centree avec une rotation de 45 degres
+        painter.save(); // Sauvegarder l'etat actuel du QPainter
         painter.translate(width() / 2, height() / 2); // Translation pour le centre du bouton
-        painter.rotate(45); // Rotation de 45 degrés
+        painter.rotate(45); // Rotation de 45 degres
         painter.drawLine(-width() / 2, 0, width() / 2, 0); // Horizontal
         painter.drawLine(0, -height() / 2, 0, height() / 2); // Vertical
-        painter.restore(); // Restaurer l'état précédent du QPainter
+        painter.restore(); // Restaurer l'etat precedent du QPainter
     }*/
 }

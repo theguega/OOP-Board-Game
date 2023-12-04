@@ -282,7 +282,7 @@ Pioche::~Pioche() {
 }
 
 
-// méthode piocher
+// methode piocher
 const Carte & Pioche::piocher() {
     if (estVide())
         throw SplendorException("Plus de cartes dans cette pioche");
@@ -300,7 +300,7 @@ const Carte & Pioche::piocher() {
 }
 
 
-// méthode picoher
+// methode picoher
 const Carte & Pioche::piocher(unsigned int id) {
     if (estVide())
         throw SplendorException("Plus de cartes dans cette pioche");

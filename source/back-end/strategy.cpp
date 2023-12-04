@@ -30,7 +30,7 @@ unsigned int StrategyIA::choix_min_max(unsigned int min, unsigned int max) {
 unsigned int StrategyHumain::choixMenu() {
     unsigned int choix;
     std::cin>>choix;
-    while(choix<1 || choix>3) {
+    while((choix<1) || (choix>3)) {
         std::cout<< "Votre choix ne rentre pas dans l'intervalle, veuillez recommencer : " << std::endl;
         std::cin>>choix;
     }

@@ -24,20 +24,20 @@ private:
     QPushButton* afficherJ1; //Bouton pour afficher la page du joueur1
     QPushButton* afficherJ2; //Bouton pour afficher la page du joueur2
 
-    QHBoxLayout* partieHaute; //Partie Haute à ranger (pyramide et plateau)
-    QHBoxLayout* partieBasse; //Partie Basse à ranger (boutons)
+    QHBoxLayout* partieHaute; //Partie Haute a ranger (pyramide et plateau)
+    QHBoxLayout* partieBasse; //Partie Basse a ranger (boutons)
     QVBoxLayout* layout;//Layout principal
 
-    QScreen* ecran; //Récupère l'écran de l'utilisateur
-    QSize tailleEcran; //Récupère la taille de l'écran
+    QScreen* ecran; //Recupere l'ecran de l'utilisateur
+    QSize tailleEcran; //Recupere la taille de l'ecran
 
-    int tailleLargeur; //Utile pour définir les tailles de sous objets
-    int tailleHauteur; //Utile pour définir les tailles de sous objets
+    int tailleLargeur; //Utile pour definir les tailles de sous objets
+    int tailleHauteur; //Utile pour definir les tailles de sous objets
 
     popUpValider* aSauvegarde; //PopUp pour sauvegarder la partie
-    bool quitterPage = false; //Utile pour la redéfinission de closeEvent
+    bool quitterPage = false; //Utile pour la redefinission de closeEvent
 protected:
-    void closeEvent(QCloseEvent *event) override { //Redéfinition de la méthode closeEvent
+    void closeEvent(QCloseEvent *event) override { //Redefinition de la methode closeEvent
         if(!quitterPage){
             aSauvegarde -> show();
             event -> ignore();

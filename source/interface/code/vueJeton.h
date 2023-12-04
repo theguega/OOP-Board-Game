@@ -19,7 +19,7 @@ public:
 class vueJeton : public QPushButton{
     Q_OBJECT
 private:
-    //récupère l'adresse du jeton auquel vueJeton est reliée
+    //recupere l'adresse du jeton auquel vueJeton est reliee
     //Jeton* jeton;
     bool estVisible;
     int rad;

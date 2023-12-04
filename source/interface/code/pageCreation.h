@@ -17,19 +17,19 @@ private:
     QComboBox* choixPossibles1; //Liste de choix de joueurs possibles
     QComboBox* choixPossibles2; //Liste de choix de joueurs possibles
 
-    QStringList choix1; //Liste de QString avec les différents choix possbiles
-    QStringList choix2; //Liste de QString avec les différents choix possbiles
+    QStringList choix1; //Liste de QString avec les differents choix possbiles
+    QStringList choix2; //Liste de QString avec les differents choix possbiles
 
     QLineEdit* nom1Edit; //Ligne permettant de rentrer les pseudos
     QLineEdit* nom2Edit; //Ligne permettant de rentrer les pseudos
 
-    QString nom1; //Récupération des chaines des QLineEdit
-    QString nom2; //Récupération des chaines des QLineEdit
+    QString nom1; //Recuperation des chaines des QLineEdit
+    QString nom2; //Recuperation des chaines des QLineEdit
 
     int index1; //Index du QComboBox (savoir quand on ajoute une personne)
     int index2;//Index du QComboBox (savoir quand on ajoute une personne)
 
-    QPushButton* boutonValider; //Permet la validation du choix de création de la partie
+    QPushButton* boutonValider; //Permet la validation du choix de creation de la partie
 
     QVBoxLayout* layout; //Layout pour bien tout ranger
     QPushButton *retourMenu; //Bouton pour retourner au Menu Principal
@@ -38,7 +38,7 @@ private:
 
     pageJeu* jeu; //Future page de Jeu
 protected:
-    void comboBox1Active(int index){ //Affichage de la récupération du nom pour le joueur
+    void comboBox1Active(int index){ //Affichage de la recuperation du nom pour le joueur
         if (index != 0){
             nom1Edit -> hide();
         }
@@ -47,7 +47,7 @@ protected:
         }
         index1 = index;
     }
-    void comboBox2Active(int index){ //Affichage de la récupération du nom pour le joueur
+    void comboBox2Active(int index){ //Affichage de la recuperation du nom pour le joueur
         if (index != 0){
             nom2Edit -> hide();
         }
@@ -56,7 +56,7 @@ protected:
         }
         index2 = index;
     }
-    void valider(){ //Fonction quand le bouton valider est appuyé
+    void valider(){ //Fonction quand le bouton valider est appuye
         pop -> show();
     }
     void boutonOuiPresse(){ //Connecte le bouton oui du PopUpValider

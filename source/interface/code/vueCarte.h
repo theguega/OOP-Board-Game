@@ -12,7 +12,7 @@
 #include <QStackedWidget>
 #include "vueJeton.h"
 
-class carteVisuel : public QWidget{ //Gère le visuel de la carte
+class carteVisuel : public QWidget{ //Gere le visuel de la carte
     Q_OBJECT
 private:
     //Carte* carte;
@@ -26,7 +26,7 @@ public:
     carteVisuel(QWidget* parent = nullptr, int hauteur = 0, int largeur = 0, QColor couleur = Qt::blue);
 };
 
-class carteInfo : public QLabel{ //Gère les infos de la carte
+class carteInfo : public QLabel{ //Gere les infos de la carte
     Q_OBJECT
 private:
     int h;
@@ -36,7 +36,7 @@ public:
     carteInfo(QWidget* parent, int hauteur, int largeur, std::string texte);
 };
 
-class vueCarte : public QStackedWidget{ //Gère la carte elle même
+class vueCarte : public QStackedWidget{ //Gere la carte elle même
     Q_OBJECT
 private:
     //Carte* carte;
@@ -53,25 +53,25 @@ private:
 protected:
     bool event(QEvent *event) override {
         if (event->type() == QEvent::Enter) {
-            qDebug() << "C'est un événement d'entrée (Enter Event).";
+            qDebug() << "C'est un evenement d'entree (Enter Event).";
             setCurrentIndex(1);
-            return true; // Événement traité
+            return true; // evenement traite
         }
         else if (event->type() == QEvent::Leave){
-            qDebug() << "C'est un événement de sorti (Leave Event).";
+            qDebug() << "C'est un evenement de sorti (Leave Event).";
             setCurrentIndex(0);
-            return true; // Événement traité
+            return true; // evenement traite
         }
 
-        // Appel à la méthode parent pour gérer d'autres types d'événements
+        // Appel a la methode parent pour gerer d'autres types d'evenements
         return QWidget::event(event);
     }
 
     void mousePressEvent(QMouseEvent *event) override {
         if (event->button() == Qt::LeftButton) {
-            qDebug() << "Clic gauche détecté sur le widget.";
+            qDebug() << "Clic gauche detecte sur le widget.";
         } else if (event->button() == Qt::RightButton) {
-            qDebug() << "Clic droit détecté sur le widget.";
+            qDebug() << "Clic droit detecte sur le widget.";
         }
     }
 public:
