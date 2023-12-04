@@ -1,0 +1,64 @@
+@startuml
+class Partie {
+  - espaceJeux: EspaceJeux*
+  - joueurs: Joueur*[2]
+  - tour: int
+  + getTour(): int
+  + getJoueur1() : Joueur*
+  + getJoueur2() : Joueur*
+  + getEspaceJeux() : Espacejeux&
+  + IncrementerTour(): void
+  - Partie()
+  - ~Partie(): void
+  - Partie(const Partie&): delete
+  - operator=(const Partie&): delete
+}
+
+class Director{
+  - PartieBuilder* builder
+  + setBuilder(PartieBuilder * builder)
++ void BuildNewPartie(pseudo1, pseudo2)
++ void BuildLastPartie()
+
+}
+class PartieBuilder{
+    + ~PartieBuilder()
+    + setJoueurs(string pseudo1, type t1, string pseudo2, type t2) const = 0
+    + setJoueurs() const = 0
+    + setCartesJoueurs() const = 0
+    + setJetonsJoueurs() const = 0
+    + updateEspaceJeu() const = 0
+    + setInfosPartie() const = 0
+}
+class NewPartieBuilder{
+    + setJoueurs(string pseudo1, type t1, string pseudo2, type t2)
+    + setJoueurs()
+    + setCartesJoueurs()
+    + setJetonsJoueurs()
+    + updateEspaceJeu()
+    + setInfosPartie()
+    + GetProduct() : Partie*
+}
+class LastPartieBuilder{
+    + setJoueurs(string pseudo1, type t1, string pseudo2, type t2)
+    + setJoueurs()
+    + setCartesJoueurs()
+    + setJetonsJoueurs()
+    + updateEspaceJeu()
+    + setInfosPartie()
+    + GetProduct() : Partie*
+}
+
+object Nouvelle_partie
+object Ancienne_partie
+
+Director --> PartieBuilder
+NewPartieBuilder --|> PartieBuilder
+LastPartieBuilder --|> PartieBuilder
+
+NewPartieBuilder --> Nouvelle_partie
+LastPartieBuilder --> Ancienne_partie
+
+Nouvelle_partie --> Partie : instance_de
+Ancienne_partie --> Partie : instance_de
+@enduml

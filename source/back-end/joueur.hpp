@@ -8,31 +8,27 @@
 #include "strategy.hpp"
 // rajouter itération cartes + jetons + privilèges
 
-// Voir strategy pour l'IA
 // acheter carte noble acheter carte niveau 4 DONE
 // Exceptions --> gérer les exceptions DONE
-// CApa + bonus
-// Voir achat carte en fonction des gemmes
-// Choix action aléatoire
-// Voir diagonale
+// bonus DONE
+// voir nb couronnes DONE
+// Voir diagonale DONE~
 // voir estGagnant DONE
+// couleurs pour carte reservee DONE
 
-class JoueurException
-{
-public:
-    JoueurException(const std::string& i) :info(i) {}
-    std::string getInfo() const { return info; }
-private:
-    std::string info;
-};
+// CApa
+// Voir achat carte en fonction des gemmes DONE
+// Choix action aléatoire
+// Voir strategy pour l'IA DONE
 
 
 
 enum class type { IA, HUMAIN };
-
 std::string toStringType(type t);
-
 type toType(std::string s);
+
+
+
 
 class Joueur {
 private:
@@ -59,6 +55,8 @@ public:
     // Destructeur
     ~Joueur();
 
+    friend class Controller;
+
 
 
     // Getters
@@ -77,6 +75,7 @@ public:
     const Carte& getCarte(Couleur c, size_t i) const { return *cartes.at(c).at(i); }
     const Carte& getCarteReservee(Couleur c, size_t i) const { return *cartesReservees.at(c).at(i); }
     const Carte& getCarteNoble(size_t i) const { return *cartesNobles[i]; }
+    unsigned int getNbCouronnes ()const { return nbCouronnes; }
 
 
     // Setters
@@ -93,7 +92,8 @@ public:
     void supCarte(Carte &carte);
     void supCarteReservee(const Carte &carte);
     void supCarteNoble(const Carte& carte);
-    void supJeton(Jeton *jeton);
+    void supJeton(Jeton *jeton, EspaceJeux& espaceJeux);
+    void supJetonNb(unsigned int nb, Couleur c, EspaceJeux& espaceJeux);
     const Privilege& supPrivilege(Plateau& plateau);
 
     // Affichage Done
@@ -104,15 +104,8 @@ public:
         std::cout << "Nombre de privilèges : " << &privileges << std::endl;
     }
 
-    // Actions optionnelles
-    void utiliserPrivilege(Plateau& plateau);
-    void remplirPlateau(Plateau& plateau, Sac& sac, Joueur& joueurAdverse);
 
-    // Actions obligatoires
-    void recupererJetons(Plateau& plateau);
-    void acheterCarteJoaillerie (Pyramide& pyramide);
-    void acheterCarteNoble (Pyramide& pyramide);
-    void orReserverCarte (Pyramide& pyramide, Plateau& plateau);
+
 
     // Sauvegarde + Gagne
     bool nbPtsPrestigeParCouleurSupDix() const;

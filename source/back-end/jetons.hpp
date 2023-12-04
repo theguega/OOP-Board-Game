@@ -7,43 +7,14 @@
 #include <unordered_map>
 #include <map>
 #include <string>
+#include "back-end/exception.hpp"
 
 using namespace std;
-
-//Gestion des jetons et des privileges pour splendor duel
-
-//Gestion des exceptions liées aux jetons
-class JetonException
-{
-public:
-    JetonException(const std::string& i) :info(i) {}
-    std::string getInfo() const { return info; }
-private:
-    std::string info;
-};
-
-//Gestion des exceptions liées aux privilèges
-class PrivilegeException
-{
-public:
-    PrivilegeException(const std::string& i) :info(i) {}
-    std::string getInfo() const { return info; }
-private:
-    std::string info;
-};
-
-class CouleurException
-{
-public:
-    CouleurException(const std::string& i) :info(i) {}
-    std::string getInfo() const { return info; }
-private:
-    std::string info;
-};
 
 //Enum pour les couleurs : initialiser, to string, affichage, string to couleur.
 enum class Couleur { BLANC, BLEU, VERT, ROUGE, NOIR, PERLE, OR, INDT};
 std::string toStringCouleur(Couleur c);
+std::string toEmojiCouleur(Couleur c);
 std::ostream& operator<<(std::ostream& f, Couleur c);
 extern std::initializer_list<Couleur> Couleurs;
 extern std::map<string, Couleur> stringToCouleurMap;
@@ -162,6 +133,8 @@ class Plateau {
         Plateau& operator=(const Plateau&) = delete;
     public :
         bool estVide() const;
+        bool caseVide(unsigned int i, unsigned int j) const;
+        bool caseOr(unsigned int i, unsigned int j) const;
         size_t getLargeurMatrice() const { return jetons.size(); }
 
         const Jeton& recupererJeton(const size_t i, const size_t j);
@@ -177,6 +150,8 @@ class Plateau {
         void positionerJeton(const Jeton& jeton, const size_t i, const size_t j); //TODO
         //Remplissage du plateau à partir du sac (on vide le sac)
         void remplirPlateau(Sac& sac);
+
+
 
         //Singleton
         //Lot de privilèges (debut de partie)

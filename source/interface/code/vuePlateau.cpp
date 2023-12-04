@@ -9,22 +9,22 @@ vuePlateau::vuePlateau(QWidget* parent, int hauteur, int largeur) : QWidget(pare
     h = hauteur; //Def la hateur du plateau
     l = largeur; //Def la largeur du plateau
 
-    nbJetons = 25; //Nombre de jetons sur la plateau (sera récupérer depuis le back après)
+    nbJetons = 25; //Nombre de jetons sur la plateau (sera recuperer depuis le back apres)
     setFixedSize(l, h); //Fixe la taille du plateau
     //sac = plateau->getSac();
     for(int i = 0; i < nbJetons; i++){
-        //Créer un getteur pour les Jetons
+        //Creer un getteur pour les Jetons
         listeJetons[i] = new vueJeton(nullptr, (h - 100)/(2*sqrt(nbJetons)));
         layoutJetons -> addWidget(listeJetons[i], i / 5, i % 5);
         QObject::connect(listeJetons[i], &vueJeton::clicked, [this, i]() {
-            boutonClique(i); //Permet d'appeler la fonction boutonClique(int i) lorsque le bouton i est cliqué
+            boutonClique(i); //Permet d'appeler la fonction boutonClique(int i) lorsque le bouton i est clique
         });
     }
     for(int i = 0; i < 3; i++){
         jetonSelection[i] = nullptr; //Initialise jetonSelection avec nullptr
     }
 
-    boutonValider = new QPushButton("Valider le choix des jetons"); //Créer le bouton valider (pour la selection des jetons)
+    boutonValider = new QPushButton("Valider le choix des jetons"); //Creer le bouton valider (pour la selection des jetons)
 
     layout = new QVBoxLayout; //Layout pour mettre le Grid + les boutons en dessous
 
@@ -35,7 +35,7 @@ vuePlateau::vuePlateau(QWidget* parent, int hauteur, int largeur) : QWidget(pare
 
     connect(boutonValider, &QPushButton::clicked, this, &vuePlateau::validerJetons); //connect boutonValider avec valliderJetons
 
-    info = new popUpInfo(nullptr, "Vos jetons ont bien été ajouté");
+    info = new popUpInfo(nullptr, "Vos jetons ont bien ete ajoute");
 }
 
 void vuePlateau::boutonClique(int i){

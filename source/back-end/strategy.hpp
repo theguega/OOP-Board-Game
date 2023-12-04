@@ -6,31 +6,60 @@
 class Strategy {
 public:
     virtual ~Strategy() = default;
-    virtual const Jeton& choisirJeton(Plateau& plateau) = 0;
+    virtual std::pair<unsigned int, unsigned int> choisirJeton(Plateau& plateau) = 0;
     virtual void remplirPlateauStrat(Plateau& plateau, Sac& sac) = 0;
 
-    // actions optionnelles
-    /*virtual Privilege utiliserPrivilege(const EspaceJeux& espaceJeux) = 0;
-    virtual Privilege remplirPlateau(const EspaceJeux& espaceJeux) = 0;
+    virtual std::vector<const Jeton*> recupJetonStrat(Plateau& plateau) = 0;
+    virtual unsigned int choixNiveau() = 0;
+    virtual std::pair<unsigned int, unsigned int> reservationCarte(Pyramide& pyramide) = 0;
+    virtual std::pair<unsigned int, unsigned int> achatNoble(Pyramide& pyramide) = 0;
+    virtual unsigned int choixAchat() = 0;
+    virtual std::pair< Couleur, unsigned int> achatReserve(unsigned int nbCartesReservees) = 0;
+    virtual unsigned int utiliserPrivilege() = 0;
 
-    // actions obligatoires
-    virtual Jeton piocherJeton(const EspaceJeux& espaceJeux) = 0;
-    virtual Carte orReserverCarte(const EspaceJeux& espaceJeux) = 0;
-    virtual Carte acheterCarteJoaillerie(const EspaceJeux& espaceJeux) = 0;*/
+    //choix de l'action
+    virtual unsigned int choixActionsOptionelles() = 0;
+    virtual unsigned int choixActionsObligatoires() = 0;
+
 };
 
 
 class StrategyHumain : public Strategy {
 public:
-    const Jeton& choisirJeton(Plateau& plateau) override;
+    std::pair<unsigned int, unsigned int> choisirJeton(Plateau& plateau) override;
     void remplirPlateauStrat(Plateau& plateau, Sac& sac) override;
+    std::vector<const Jeton*> recupJetonStrat(Plateau& plateau) override;
+    unsigned int choixNiveau() override;
+    unsigned int choixAchat() override;
+    std::pair<unsigned int, unsigned int> achatNoble(Pyramide& pyramide) override;
 
-    //Privilege utiliserPrivilege(const EspaceJeux& espaceJeux) override;
+    std::pair< Couleur, unsigned int> achatReserve(unsigned int nbCartesReservees) override;
+
+    std::pair<unsigned int, unsigned int> reservationCarte(Pyramide& pyramide) override;
+
+    virtual unsigned int choixActionsOptionelles() override;
+    virtual unsigned int choixActionsObligatoires() override;
+
+    virtual unsigned int utiliserPrivilege() override;
 };
 
 class StrategyIA : public Strategy {
 public:
-    //Privilege utiliserPrivilege(const EspaceJeux& espaceJeux) override;
+    std::pair<unsigned int, unsigned int> choisirJeton(Plateau& plateau) override;
+    std::vector<const Jeton*> recupJetonStrat(Plateau& plateau) override;
+    void remplirPlateauStrat(Plateau& plateau, Sac& sac) override;
+    unsigned int choixNiveau() override;
+    unsigned int choixAchat() override;
+    std::pair< Couleur, unsigned int> achatReserve(unsigned int nbCartesReservees) override;
+    std::pair<unsigned int, unsigned int> achatNoble(Pyramide& pyramide) override;
+
+
+    std::pair<unsigned int, unsigned int> reservationCarte(Pyramide& pyramide) override;
+
+    virtual unsigned int choixActionsOptionelles() override;
+    virtual unsigned int choixActionsObligatoires() override;
+
+    virtual unsigned int utiliserPrivilege() override;
 };
 
 

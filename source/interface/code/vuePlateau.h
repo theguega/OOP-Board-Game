@@ -13,7 +13,7 @@
 class vuePlateau : public QWidget{
     Q_OBJECT
 private:
-    //Choix entre pointeur et référence ?
+    //Choix entre pointeur et reference ?
     //Sac* sac;
     //Plateau* plateau;
     std::array<vueJeton*, 25> listeJetons;

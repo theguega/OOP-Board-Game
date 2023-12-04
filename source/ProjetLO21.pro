@@ -47,9 +47,11 @@ HEADERS += \
     back-end/joueur.hpp \
     back-end/partie.hpp \
     back-end/strategy.hpp \
+    back-end/exception.hpp \
     sqlite/sqlite3.h
 
 DISTFILES += \
     data/data_carte.sqlite \
     data/save.sqlite \
-    data/score.sqlite
+    data/score.sqlite \
+    PROBLEMES.md

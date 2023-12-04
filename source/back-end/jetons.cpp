@@ -13,23 +13,56 @@ std::initializer_list<Couleur> Couleurs = {
     Couleur::BLANC, Couleur::BLEU, Couleur::VERT, Couleur::ROUGE, Couleur::NOIR, Couleur::PERLE, Couleur::OR, Couleur::INDT
 };
 
+/*
 std::string toStringCouleur(Couleur c) {
     switch (c)
     {
-    case Couleur::BLANC: return "W";
-    case Couleur::BLEU: return "B";
-    case Couleur::VERT: return "G";
-    case Couleur::ROUGE: return "R";
-    case Couleur::NOIR: return "B";
-    case Couleur::PERLE: return "P";
-    case Couleur::OR: return "G";
-    case Couleur::INDT: return "I";
-    default: throw JetonException("Couleur inconnue");
+    case Couleur::BLANC: return "Blanc";
+    case Couleur::BLEU: return "Bleu";
+    case Couleur::VERT: return "Vert";
+    case Couleur::ROUGE: return "Rouge";
+    case Couleur::NOIR: return "Noir";
+    case Couleur::PERLE: return "Perle";
+    case Couleur::OR: return "Or";
+    case Couleur::INDT: return "Indt";
+    default: throw SplendorException("Couleur inconnue");
+    }
+}*/
+
+//🔵🟢🔴🟡🟣🖤🤍
+
+std::string toEmojiCouleur(Couleur c) {
+    switch (c)
+    {
+    case Couleur::BLANC: return "\033[1;37m O \033[0m"; // Blanc
+    case Couleur::BLEU: return "\033[1;34m O \033[0m";  // Bleu
+    case Couleur::VERT: return "\033[1;32m O \033[0m";  // Vert
+    case Couleur::ROUGE: return "\033[1;31m O \033[0m"; // Rouge
+    case Couleur::NOIR: return "\033[1;90m O \033[0m";  // Noir
+    case Couleur::PERLE: return "\033[1;35m O \033[0m"; // Perle (rose)
+    case Couleur::OR: return "\033[1;33m O \033[0m";    // Or (jaune)
+    case Couleur::INDT: return "Indt";
+    default: throw SplendorException("Couleur inconnue");
+    }
+}
+
+std::string toStringCouleur(Couleur c) {
+    switch (c)
+    {
+    case Couleur::BLANC: return "Blanc"; // Blanc
+    case Couleur::BLEU: return "Bleu";  // Bleu
+    case Couleur::VERT: return "Vert";  // Vert
+    case Couleur::ROUGE: return "Rouge"; // Rouge
+    case Couleur::NOIR: return "Noir";  // Noir
+    case Couleur::PERLE: return "Perle"; // Perle (rose)
+    case Couleur::OR: return "Or";    // Or (jaune)
+    case Couleur::INDT: return "Indt";
+    default: throw SplendorException("Couleur inconnue");
     }
 }
 
 std::ostream& operator<<(std::ostream& f, Couleur c) {
-    return f << toStringCouleur(c);
+    return f << toEmojiCouleur(c);
 }
 
 std::map<std::string, Couleur> stringToCouleurMap = {
@@ -66,28 +99,28 @@ std::ostream& operator<< (std::ostream& f, const Jeton* jeton) {
 
 //------------------------------------------------- Classe LotDeJetons
 
-//recuperation d'un jeton à partir de son indice
+//recuperation d'un jeton a partir de son indice
 const Jeton& LotDeJetons::getJetons(size_t i) const {   
     if (i >= jetons.size())
-        throw JetonException("Indice de jeton incorrect");
+        throw SplendorException("Indice de jeton incorrect");
     return *jetons[i];
 }
 
 LotDeJetons::LotDeJetons() { 
-    //création de tous les jetons
-    for (int i = 0; i < max_or; i++)
+    //creation de tous les jetons
+    for (size_t i = 0; i < max_or; i++)
         jetons.push_back(new Jeton(Couleur::OR));
-    for (int i = 0; i < max_perle; i++)
+    for (size_t i = 0; i < max_perle; i++)
         jetons.push_back(new Jeton(Couleur::PERLE));
-    for (int i = 0; i < max_blanc; i++)
+    for (size_t i = 0; i < max_blanc; i++)
         jetons.push_back(new Jeton(Couleur::BLANC));
-    for (int i = 0; i < max_noir; i++)
+    for (size_t i = 0; i < max_noir; i++)
         jetons.push_back(new Jeton(Couleur::NOIR));
-    for (int i = 0; i < max_rouge; i++)
+    for (size_t i = 0; i < max_rouge; i++)
         jetons.push_back(new Jeton(Couleur::ROUGE));
-    for (int i = 0; i < max_bleu; i++)
+    for (size_t i = 0; i < max_bleu; i++)
         jetons.push_back(new Jeton(Couleur::BLEU));
-    for (int i = 0; i < max_vert; i++)
+    for (size_t i = 0; i < max_vert; i++)
         jetons.push_back(new Jeton(Couleur::VERT));
 }
 
@@ -104,14 +137,14 @@ const LotDeJetons& LotDeJetons::getLotDeJetons() {
 
 //------------------------------------------------- Classe LotPrivilege
 
-std::ostream& operator<< (std::ostream& f, const Privilege& privilege) {
+std::ostream& operator<< (std::ostream& f,[[maybe_unused]]const Privilege& privilege) {
     f << "Privilege" << std::endl;
     return f;
 }
 
 const Privilege& LotPrivileges::getPrivilege(size_t i) const {
     if (i >= privileges.size())
-        throw JetonException("Indice de privilege incorrect");
+        throw SplendorException("Indice de privilege incorrect");
     return *privileges[i];
 }
 
@@ -141,7 +174,7 @@ const Jeton& Sac::piocherJeton(Couleur c) {
             jetons.erase(jetons.begin()+i);
             return *jt;
         }
-    throw JetonException("Couleur de jeton incorrecte");
+    throw SplendorException("Couleur de jeton incorrecte");
 }
 
 Sac::Sac(const LotDeJetons& lot) {
@@ -155,9 +188,9 @@ void Sac::ajouterJeton(const Jeton& j) {
 
 const Jeton& Sac::piocherJeton() {
     if (estVide())
-        throw JetonException("Le sac est vide");
+        throw SplendorException("Le sac est vide, vous ne pouvez pas recuperer de Jetons");
 
-    //génération d'un indice aléatoire
+    //generation d'un indice aleatoire
     std::random_device rd;
     std::mt19937 gen(rd());
     std::uniform_int_distribution<> distrib(0, static_cast<int>(jetons.size()) - 1);
@@ -190,7 +223,7 @@ void Plateau::positionerJeton(const Jeton& jeton, const size_t i, const size_t j
 }
 
 Plateau::Plateau(const LotPrivileges& lotp) {
-    //initialisation des privilèges
+    //initialisation des privileges
     for (size_t i = 0; i < lotp.getNbPrivileges(); i++)
         poserPrivilege(lotp.getPrivilege(i));
 
@@ -202,9 +235,9 @@ Plateau::Plateau(const LotPrivileges& lotp) {
 
 const Jeton& Plateau::recupererJeton(const size_t i, const size_t j) {
     if (i >= 5 || j >= 5)
-        throw JetonException("Indice de jeton incorrect");
+        throw SplendorException("Indice de jeton incorrect");
     if (jetons[i][j] == nullptr)
-        throw JetonException("Pas de jeton à cet emplacement");
+        throw SplendorException("Pas de jeton a cet emplacement");
     
     //recuperation du jeton
     const Jeton& jeton = *jetons[i][j];
@@ -214,9 +247,9 @@ const Jeton& Plateau::recupererJeton(const size_t i, const size_t j) {
 
 const Privilege& Plateau::recupererPrivilege() {
     if (privileges.empty())
-        throw JetonException("Pas de privilège à récupérer");
+        throw SplendorException("Pas de privilege a recuperer");
     
-    //on recup le dernier privilège
+    //on recup le dernier privilege
     const Privilege& privilege = *privileges.back();
     privileges.pop_back();
     return privilege;
@@ -272,17 +305,17 @@ void Plateau::positionerJeton(const Jeton& jeton) {
         }
     }
 
-    //si on est arrivés au bout de la liste et que aucune case n'etait vide
+    //si on est arrives au bout de la liste et que aucune case n'etait vide
     if (i <= jetons.size()-1 && j <= jetons.size()-1) {
         jetons[i][j] = &jeton;
     } else {
-        throw JetonException("Le plateau est déjà plein");
+        throw SplendorException("Le plateau est deja plein");
     }
 }
 
 void Plateau::remplirPlateau(Sac& sac) {
     if(sac.estVide())
-        throw JetonException("Le sac est vide");
+        throw SplendorException("Le sac est vide");
     while(!sac.estVide()) {
         positionerJeton(sac.piocherJeton());
     }
@@ -296,8 +329,20 @@ bool Plateau::estVide() const {
     return true;
 }
 
+bool Plateau::caseVide(unsigned int i, unsigned int j) const{
+    if (jetons[i][j] == nullptr)
+        return true;
+    return false;
+}
+
+bool Plateau::caseOr(unsigned int i, unsigned int j) const{
+    if(jetons[i][j]->getCouleur() == Couleur::OR)
+        return true;
+    return false;
+};
+
 //Singleton
-//Avec sac et lot de privilèges (debut de partie)
+//Avec sac et lot de privileges (debut de partie)
 Plateau& Plateau::getPlateau(const LotPrivileges& lotp) {
     static Plateau instance(lotp);
     return instance;
@@ -305,17 +350,17 @@ Plateau& Plateau::getPlateau(const LotPrivileges& lotp) {
 
 std::ostream& operator<< (std::ostream& f, const Plateau& plateau) {
     //On affiche une matrice avec dans chaque case la lettre correpondant au jetons
-    f<<"-------------------------------"<<std::endl;
+    f<<"---------------------"<<std::endl;
     for (size_t i = 0; i < plateau.getLargeurMatrice(); i++) {
         f << "|";
         for (size_t j = 0; j < plateau.getLargeurMatrice(); j++) {
             if (plateau.getJeton(i,j) == nullptr)
-                f << " ";
+                f << "   ";
             else
                 f << plateau.getJeton(i, j);
             f << "|";
         };
-        f << "\n" << "-------------------------------" << std::endl;
+        f << "\n" << "---------------------" << std::endl;
     }
     return f;
 }

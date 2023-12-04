@@ -1,9 +1,12 @@
 #include "back-end/controller.hpp"
-#include <filesystem>
+
 #include <QApplication>
 #include <QWidget>
 #include <QDebug>
 #include <QtSql>
+
+#include "back-end/exception.hpp"
+
 #include "interface/code/vueCarte.h"
 #include "interface/code/pageCreation.h"
 #include "interface/code/vueJeton.h"
@@ -11,187 +14,139 @@
 #include "interface/code/toutesPages.h"
 #include <iostream>
 
-//Mettez ici le chemin absolue vers le projet
-//Theo
-//std::filesystem::path projectPath = string("/Users/theoguegan/Documents/UTC/GI01/LO21/Splendor/source");
-//Samuel B
-//std::filesystem::path projectPath = string("\\Users\\Beziat\\Documents\\Projet_LO21\\source");
-//Robert
-//std::filesystem::path projectPath = string("/Users/robertantaluca/Desktop/Projet_LO21");
-//Samuel M
-//std::filesystem::path projectPath = string("C:/Users/samma/Documents/Programmation/LO21/Projet_LO21");
-//Maxime
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
 //####################################
 //###### Partie en mode Terminal #####
 //####################################
-
-
-int main(void) {
-    Controller control;
-    control.lancerPartie();
-    control.getJoueurCourant().afficherJoueur();
-
-    // simulation victoire d'un joueur
-    int i = 5;
-    if (i == 5)
-        control.getJoueurCourant().updatePtsPrestige(16);
-    control.getJoueurCourant().afficherJoueur();
-    i++;
-    control.tour_suivant();
-
-    if (control.getPartie().getJoueur1()->estGagnant())
-        cout << control.getPartie().getJoueur1()->getPseudo() << " est gagnant;"<<std::endl;
-    else if (control.getPartie().getJoueur2()->estGagnant())
-        cout << control.getPartie().getJoueur2()->getPseudo() << " est gagnant;"<<std::endl;
-
-    return 0;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 //avec boucle de jeux
 
-/*
-
 int main(void) {
     Controller control;
-    control.getJoueurCourant().afficherJoueur();
     control.lancerPartie();
 
-    while (control.getPartie().getJoueur1()->estGagnant() == false && control.getPartie().getJoueur2()->estGagnant() == false) {
-        // TODO
-
+    while (1) {
         // tour pour chacun des joueurs
-        for (unsigned int i = 0; i < 2; i++) {
+        std::cout<<endl<<endl<<endl<<endl;
+        std::cout<<endl<<endl<<endl<<endl;
+        std::cout<<"Tour numero"<<control.getPartie().getTour()+1<<endl;
+
+            for (unsigned int i = 0; i < 2; i++) {
+            std::cout<<"--------------------------------------------------------------------------------------------------------------------------------------------\n";
+            std::cout<<"C'est a "<<control.getJoueurCourant().getPseudo()<<" de jouer : "<<endl;
             control.getJoueurCourant().afficherJoueur();
+            std::cout<<endl;
 
             unsigned int etat_tour = 0;
             while (etat_tour != 4) {
+
                 // actions optionelles
                 switch (etat_tour) {
-                case 0:
+                case 0: {
+                    bool a_deja_utilise_privilege = false;
+                    bool a_deja_rempli_plateau = false;
                     unsigned int etat_action = 0;
                     while (etat_action != 4) {
                         switch (etat_action)
                         {
-                        case 0:
-                            std::cout << "Actions optionnelles: " << endl;
-                            std::cout << "1. Utiliser un privilège" << endl;
-                                    std:: cout << "2. Remplir le plateau" << endl;
-                            std::cout << "3. Ne plus faire d'actions optionnelles" << endl;
-                            std::cout << "Votre choix (1/2/3): ";
-                            cin >> etat_action;
+                        case 0:{
+                            //appel du menu de choix des actions
+                            etat_action = control.choixActionsOptionelles();
                             std::cout << endl;
-                            break;
+                            break;}
 
-                        case 1:
+                        case 1:{
                             try
                             {
+                                //utilisation d'un privilege
+                                if (a_deja_utilise_privilege)
+                                    throw SplendorException("Vous avez deja utilise cette action");
+                                control.verifPrivileges();
                                 control.utiliserPrivilege(control.getPartie().getEspaceJeux().getPlateau());
                                 etat_action = 0;
+                                a_deja_utilise_privilege = true;
+                                cout << "\nNouveau plateau : \n"<<control.getPartie().getEspaceJeux().getPlateau()<<endl;
+                                cout<< "Etat du joueur apres recuperation :\n";
+                                control.getJoueurCourant().afficherJoueur();
                             }
-                            catch(const std::exception& e)
-                            {
-                                std::cout << e.what() << '\n';
-                                etat_action = 0;
-                            }
+                            catch(SplendorException& e) { std::cerr << "\033[1;31m" << e.getInfo() << "\033[0m" << endl << endl;; etat_action = 0; }
                             break;
-                        case 2:
+                        }
+                        case 2:{
                             try
                             {
+                                //replissage du plateau
+                                if (a_deja_rempli_plateau)
+                                    throw SplendorException("Vous avez deja utilise cette action");
+                                control.verifSacvide();
                                 control.remplirPlateau(control.getPartie().getEspaceJeux().getPlateau(), control.getPartie().getEspaceJeux().getSac(), control.getJoueurAdverse());
                                 etat_action = 0;
+                                a_deja_rempli_plateau = true;
                             }
-                            catch(const std::exception& e)
-                            {
-                                std::cout << e.what() << '\n';
-                                etat_action = 0;
-                            }
+                            catch(SplendorException& e) { std::cerr << "\033[1;31m" << e.getInfo() << "\033[0m" << endl << endl;; etat_action = 0; }
                             break;
-
-                        case 3:
+                        }
+                        case 3:{
 
                             etat_tour = 1;
                             etat_action = 4;
                             break;
+                        }
 
-                        default:
-                            break;
+                        case 9:{
+                            std::string sauvegarde;
+                            std::cout<<"Vous avez decider de quitter la partie\n";
+                            std::cout<<"Voulez vous la sauvegarde ? (Oui, Non)\n";
+                            std::cin>>sauvegarde;
+                            if (sauvegarde=="OUI"||sauvegarde=="oui"||sauvegarde=="Oui")
+                                control.sauvegardePartie();
+                            else
+                                std::cout<<"tant pis...\n";
+                            return 0;
+                        }
+
+                        default:{
+                            break;}
                         }
 
                     }
-                    break;
+                    break;}
 
+                    //actions obligatoires :
+                case 1:{
+                    unsigned int etat_action = 0;
 
-                case 1:
-                    etat_action = 0;
                     while (etat_action != 4) {
+
                         switch (etat_action)
                         {
                         case 0:
-                            std::cout << "Actions obligatoires: " << endl;
-                            std::cout << "1. Récupérer des jetons" << endl;
-                                    std:: cout << "2. Acheter une carte joaillerie" << endl;
-                            std::cout << "3. Réserver une carte" << endl;
-                                        cin >> etat_action;
-                            std::cout << endl;
+                            //menu de choix des actions obligatoires
+                            etat_action = control.choixActionsObligatoires();
                             break;
+                            //
                         case 1:
                             try
                             {
+                                //recuperation de jetons
+                                cout << control.getPartie().getEspaceJeux().getPlateau()<<endl;
                                 control.recupererJetons(control.getPartie().getEspaceJeux().getPlateau());
                                 etat_action = 4;
+                                cout << "\nNouveau plateau : \n"<<control.getPartie().getEspaceJeux().getPlateau()<<endl;
+                                cout<< "Etat du joueur apres recuperation :\n";
+                                control.getJoueurCourant().afficherJoueur();
                             }
-                            catch(const std::exception& e)
-                            {
-                                std::cout << e.what() << '\n';
-                                etat_action = 0;
-                            }
+                            catch(SplendorException& e) { std::cerr << "\033[1;31m" << e.getInfo() << "\033[0m" << endl << endl;; etat_action = 0; }
                             break;
                         case 2:
                             try
                             {
-                                control.acheterCarteJoaillerie(control.getPartie().getEspaceJeux().getPyramide());
+                                //achat carte joaillerie
+                                control.acheterCarteJoaillerie(control.getPartie().getEspaceJeux());
                                 etat_action = 4;
                             }
-                            catch(const std::exception& e)
-                            {
-                                std::cout << e.what() << '\n';
-                                etat_action = 0;
-                            }
+                            catch(SplendorException& e) { std::cerr << "\033[1;31m" << e.getInfo() << "\033[0m" << endl << endl;; etat_action = 0; }
                             break;
                         case 3:
                             try
@@ -199,12 +154,21 @@ int main(void) {
                                 control.orReserverCarte(control.getPartie().getEspaceJeux().getPyramide(), control.getPartie().getEspaceJeux().getPlateau());
                                 etat_action = 4;
                             }
-                            catch(const std::exception& e)
-                            {
-                                std::cout << e.what() << '\n';
-                                etat_action = 0;
-                            }
+                            catch(SplendorException& e) { std::cerr << "\033[1;31m" << e.getInfo() << "\033[0m" << endl << endl;; etat_action = 0; }
                             break;
+
+                        case 9:{
+                            std::string sauvegarde;
+                            std::cout<<"Vous avez decider de quitter la partie\n";
+                            std::cout<<"Voulez vous la sauvegarde ? (Oui, Non)\n";
+                            std::cin>>sauvegarde;
+                            if (sauvegarde=="OUI"||sauvegarde=="oui"||sauvegarde=="Oui")
+                                control.sauvegardePartie();
+                            else
+                                std::cout<<"tant pis...\n";
+                            return 0;
+
+                        }
                         default:
                             break;
                         }
@@ -212,42 +176,78 @@ int main(void) {
 
                     }
                     break;
-                case 2:
-                    //verif de fin de tout
-                    break;
+                }
 
 
-                default:
+                case 2:{
+                    //verification des conditions de victoires...
+
+                    //si le joueur a assez de pts de prestige, il est obliges d'acheter une carte
+                    if (control.getJoueurCourant().getptsPrestige() >= 3 or control.getJoueurCourant().getptsPrestige() >= 6) {
+                        control.acheterCarteNoble(control.getPartie().getEspaceJeux().getPyramide());
+                    }
+
+                    // rajoute verification >10 jetons
+
+                    //verif si un joueur a gagner
+                    if (control.getJoueurCourant().getptsPrestige() >= 15) {
+                        std::cout << "Joueur " << control.getJoueurCourant().getPseudo() << " a gagne la partie" << std::endl;
+                                etat_tour = 3;
+                        break;
+                    }
+
+                    //simulation de victoire
+                    /*
+                    if (control.getJoueurCourant().getNbJetons() >= 2) {
+                        std::cout << "Joueur " << control.getJoueurCourant().getPseudo() << " a gagne la partie" << std::endl;
+                                etat_tour = 3;
+                        break;
+                    }
+                    */
+
+                    //fin du tour du joueur, on passe au joueur suivant
+                    control.changerJoueurCourant();
+                    //on sort du case
+                    etat_tour = 4;
                     break;
                 }
+
+                case 3:{
+                    std::cout << "Fin de la partie !\nMerci d'avoir joue a Splendor Duel !\n";
+                    //arret de l'application
+                    return 0;
+                    break;
+                }
+
+
+                case 9 : {
+                    std::string sauvegarde;
+                    std::cout<<"Vous avez decider de quitter la partie\n";
+                    std::cout<<"Voulez vous la sauvegarde ? (Oui, Non)\n";
+                    std::cin>>sauvegarde;
+                    if (sauvegarde=="OUI"||sauvegarde=="oui"||sauvegarde=="Oui")
+                        control.sauvegardePartie();
+                    else
+                        std::cout<<"tant pis...\n";
+                    return 0;
+                }
+                default:{
+                    break;
+                }
+                }
+
+
             }
 
-
+            //fin du tour :
+            control.getPartie().incrementeTour();
         }
 
-        control.changerJoueurCourant();
     }
-
+    //fin d'une partie
+    std::cout<<"le jeu n'est pas censer arriver la";
     return 0;
 }
-
-*/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 //#########################################
@@ -283,5 +283,3 @@ int main(void) {
 
     return app.exec();
 }*/
-
-
