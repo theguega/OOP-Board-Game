@@ -10,7 +10,10 @@
 #include <random>
 #include "joueur.hpp"
 #include "espacejeux.hpp"
-#include "../sqlite/sqlite3.h"
+#include <QtSql>
+#include <QSqlDatabase>
+#include <QSqlQuery>
+#include <QString>
 
 
 //Implémentation de la partie
@@ -24,8 +27,8 @@ class Partie {
     Joueur * joueurs[2];
     int tour;
     public:
-        //Constructeur/destructeur
-        Partie();
+    //Constructeur/destructeur
+    Partie();
     ~Partie() {
         delete espaceJeux;
         delete joueurs[0];

@@ -8,10 +8,12 @@
 #include <unordered_map>
 #include <map>
 #include <random>
-#include <filesystem>
-#include "sqlite/sqlite3.h"
 #include "jetons.hpp"
 #include "exception.hpp"
+#include <QtSql>
+#include <QSqlDatabase>
+#include <QSqlQuery>
+
 using namespace std;
 
 
@@ -52,7 +54,7 @@ private:
 public:
     Bonus(Couleur c = Couleur::INDT, int n = 0) : couleur(c), nbBonus(n) {}
 
-    void setCouleur(Couleur c) { couleur = c; };
+    void setCouleur(Couleur c) { couleur = c; }
 
     Couleur getCouleur() const { return couleur; }
     unsigned int getNbBonus() const { return nbBonus; }
@@ -86,6 +88,7 @@ public:
 };
 ostream& operator<<(ostream& f, const Carte& c);
 
+
 class JeuCarte {
 private:
     vector<const Carte*> cartes_nv1; 
@@ -109,6 +112,7 @@ public:
     JeuCarte(const JeuCarte& j) = delete;
     JeuCarte& operator=(const JeuCarte& j) = delete;
 };
+
 
 class Pioche{
 private:

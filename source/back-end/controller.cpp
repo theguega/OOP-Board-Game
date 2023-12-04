@@ -53,51 +53,39 @@ Controller::Controller() {
             break;
         }
         delete director;
-    
-    //Si ancienne partie :
 
-        //Si ancienne partie :
 	} else if (statut_partie == "Old") {
-        //Creation
-
-        //Creation
         LastPartieBuilder* builder = new LastPartieBuilder();
         director->set_builder(builder);
         director->BuildLastPartie();
         Partie* p = builder->GetProduct();
         partie = p;
         delete director;
-        
-        
-        //restitution
-        sqlite3* db;
-        sqlite3_stmt* stmt;
-        //std::string relativePath = "data/save.sqlite";
-        //std::filesystem::path absolutePath = projectPath / relativePath;
-        //std::string absolutePathStr = absolutePath.string();
 
-        int rc = sqlite3_open("data/save.sqlite", &db);
-        if (rc != SQLITE_OK) {
-            std::cerr << "Impossible d'ouvrir la base de donnees 8: " << sqlite3_errmsg(db) << std::endl;
+        // restitution
+        QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE", "conn3");
+        db.setDatabaseName("data/save.sqlite");
+        if (!db.open()) {
+            std::cerr << "Impossible d'ouvrir la base de donnees 8: " << db.lastError().text().toStdString() << std::endl;
             return;
         }
-        rc = sqlite3_prepare_v2(db, "SELECT * FROM 'infopartie'", -1, &stmt, nullptr);
-        if (rc != SQLITE_OK) {
-            std::cerr << "Erreur de preparation de la requete 9: " << sqlite3_errmsg(db) << std::endl;
-            sqlite3_close(db);
+        QSqlQuery query(db);
+        if (!query.exec("SELECT * FROM infopartie")) {
+            std::cerr << "Erreur de preparation de la requete 9: " << query.lastError().text().toStdString() << std::endl;
+            db.close();
             return;
         }
-        if (sqlite3_step(stmt) == SQLITE_ROW) {
-            int joueur_c = sqlite3_column_int(stmt, 1);
-            if (joueur_c == 0) {
+
+        if (query.next()) {
+            int joueur_c = query.value(1).toInt();
+            if (joueur_c == 0)
                 joueurCourant = partie->getJoueur1();
-            }
-            else if (joueur_c == 1) {
+            else if (joueur_c == 1)
                 joueurCourant = partie->getJoueur2();
-            }
+            partie->setTour(query.value(2).toInt());
         }
-        sqlite3_finalize(stmt);
-        sqlite3_close(db);
+
+        db.close();
     } else {
         throw SplendorException("Veuillez entrer un statut valide (New ou Old)");
     }
@@ -584,6 +572,7 @@ void Controller::verifSacvide(){
     }
 }
 
+
 ///////////////////////// Sauvegarde /////////////////////////
 
 void Controller::sauvegardePartie() {
@@ -592,147 +581,127 @@ void Controller::sauvegardePartie() {
    //Pour cela, il faudra creer une base de donnee avec les tables suivantes :
    // joueur1, joueur2, plateau, infopartie, pyramide
 
-   //on ajoute le chemin relatif au chemin absolue du projet
-   //std::string relativePath = "data/save.sqlite";
-   //std::filesystem::path absolutePath = projectPath / relativePath;
-   //std::string absolutePathStr = absolutePath.string();
+    QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE", "conn1");
+    db.setDatabaseName("data/save.sqlite");
+    if (!db.open()) {
+        std::cerr << "Erreur lors de la connexion a la base de donnee" << std::endl;
+        return;
+    }
 
-   //Connexion a la base de donnee
-   sqlite3 *db;
-   //int rc = sqlite3_open(absolutePathStr.c_str(), &db);
-   int rc = sqlite3_open("data/save.sqlite", &db);
-   if (rc != SQLITE_OK) {
-       std::cerr << "Erreur lors de la connexion a la base de donnee" << std::endl;
-       sqlite3_close(db);
-       return;
-   }
+    // Nettoyage de l'ancienne sauvegarde
+    QSqlQuery query(db);
+    if (!query.exec("DELETE FROM joueur; DELETE FROM plateau; DELETE FROM infopartie; DELETE FROM pyramide;")) {
+        std::cerr << "Erreur lors du nettoyage de la base de donnee" << std::endl;
+        db.close();
+        return;
+    }
 
-   //Nettoyage de l'ancienne sauvegarde
-   string sql = "DELETE FROM joueur; DELETE FROM plateau; DELETE FROM infopartie; DELETE FROM pyramide;";
-   rc = sqlite3_exec(db, sql.c_str(), NULL, NULL, NULL);
-   if (rc != SQLITE_OK) {
-       std::cerr << "Erreur lors du nettoyage de la base de donnee" << std::endl;
-       sqlite3_close(db);
-       return;
-   }
-
-   //Sauvegarde joueurs
-   for(size_t i = 0; i<2; i++) {
-       //infos du joueur
-       sql = "INSERT INTO joueur (id, pseudo, type_joueur, privileges) VALUES (" + std::to_string(i+1) + ", '" + getPartie().getJoueur(i)->getPseudo() + "', '" + toStringType(getPartie().getJoueur(i)->getTypeDeJoueur()) + "', " +std::to_string(getPartie().getJoueur(i)->getNbPrivileges()) + ");";
-       rc = sqlite3_exec(db, sql.c_str(), NULL, NULL, NULL);
-       if (rc != SQLITE_OK) {
-           std::cerr << "Erreur lors de la sauvegarde du joueur " << std::endl;
-           sqlite3_close(db);
-           return;
-       }
-       
-       //jetons (toutes les couleurs sauf indt)
-       for (Couleur c : Couleurs){
-            if (c!=Couleur::INDT) {
-                for (size_t j = 0; j<getPartie().getJoueur(i)->getNbJetons(c); j++) {
-                    sql = "INSERT INTO jeton (id_joueur, couleur) VALUES (" + std::to_string(i+1) + ", '" + toStringCouleur(c) + "');";
-                    rc = sqlite3_exec(db, sql.c_str(), NULL, NULL, NULL);
-                    if (rc != SQLITE_OK) {
+    for (size_t i = 0; i < 2; i++) {
+        // Infos du joueur
+        QString sql = "INSERT INTO joueur (id, pseudo, type_joueur, privileges) VALUES (" + QString::number(i + 1) + ", '" + QString::fromStdString(getPartie().getJoueur(i)->getPseudo()) + "', '" + QString::fromStdString(toStringType(getPartie().getJoueur(i)->getTypeDeJoueur())) + "', " + QString::number(getPartie().getJoueur(i)->getNbPrivileges()) + ");";
+        if (!query.exec(sql)) {
+            std::cerr << "Erreur lors de la sauvegarde du joueur " << std::endl;
+            db.close();
+            return;
+        }
+        // Jetons (toutes les couleurs sauf indt)
+        for (Couleur c : Couleurs) {
+            if (c != Couleur::INDT) {
+                for (size_t j = 0; j < getPartie().getJoueur(i)->getNbJetons(c); j++) {
+                    sql = "INSERT INTO jeton (id_joueur, couleur) VALUES (" + QString::number(i + 1) + ", '" + QString::fromStdString(toStringCouleur(c)) + "');";
+                    if (!query.exec(sql)) {
                         std::cerr << "Erreur lors de la sauvegarde du jeton " << std::endl;
-                        sqlite3_close(db);
+                        db.close();
                         return;
                     }
                 }
             }
-       }
-
-       //cartes (toutes les couleurs sauf ind et or)
-         for (Couleur c : Couleurs){
-                if (c!=Couleur::INDT && c!=Couleur::OR) {
-                 for (size_t j = 0; j<getPartie().getJoueur(i)->getNbCartes(c); j++) {
-                      sql = "INSERT INTO carte (id_joueur, id_carte, noble, reservee) VALUES (" + std::to_string(i+1) + ", " + std::to_string(getPartie().getJoueur(i)->getCarte(c,j).getId()) + ",0,0);";
-                      rc = sqlite3_exec(db, sql.c_str(), NULL, NULL, NULL);
-                      if (rc != SQLITE_OK) {
-                            std::cerr << "Erreur lors de la sauvegarde de la carte " << std::endl;
-                            sqlite3_close(db);
-                            return;
-                      }
-                 }
+        }
+        // Cartes (toutes les couleurs sauf ind et or)
+        for (Couleur c : Couleurs) {
+            if (c != Couleur::INDT && c != Couleur::OR) {
+                for (size_t j = 0; j < getPartie().getJoueur(i)->getNbCartes(c); j++) {
+                    sql = "INSERT INTO carte (id_joueur, id_carte, noble, reservee) VALUES (" + QString::number(i + 1) + ", " + QString::number(getPartie().getJoueur(i)->getCarte(c, j).getId()) + ",0,0);";
+                    if (!query.exec(sql)) {
+                        std::cerr << "Erreur lors de la sauvegarde de la carte " << std::endl;
+                        db.close();
+                        return;
+                    }
                 }
-         }
+            }
+        }
+        // Cartes nobles
+        for (size_t j = 0; j < getPartie().getJoueur(i)->getNbCartesNobles(); j++) {
+            sql = "INSERT INTO carte (id_joueur, id_carte, noble, reservee) VALUES (" + QString::number(i + 1) + ", " + QString::number(getPartie().getJoueur(i)->getCarteNoble(j).getId()) + ",1,0);";
+            if (!query.exec(sql)) {
+                std::cerr << "Erreur lors de la sauvegarde de la carte" << std::endl;
+                db.close();
+                return;
+            }
+        }
+        // Cartes reservees (toutes les couleurs sauf ind et or)
+        for (Couleur c : Couleurs) {
+            if (c != Couleur::INDT && c != Couleur::OR) {
+                for (size_t j = 0; j < getPartie().getJoueur(i)->getNbCartesReservees(c); j++) {
+                    sql = "INSERT INTO carte (id_joueur, id_carte, noble, reservee) VALUES (" + QString::number(i + 1) + ", " + QString::number(getPartie().getJoueur(i)->getCarteReservee(c, j).getId()) + ", " + QString::fromStdString(TypeCartetoString(getPartie().getJoueur(i)->getCarteReservee(c, j).getType())) + ",1);";
+                    if (!query.exec(sql)) {
+                        std::cerr << "Erreur lors de la sauvegarde de la carte " << std::endl;
+                        db.close();
+                        return;
+                    }
+                }
+            }
+        }
+    }
 
-         //cartes nobles
-            for (size_t j = 0; j<getPartie().getJoueur(i)->getNbCartesNobles(); j++) {
-                sql = "INSERT INTO carte (id_joueur, id_carte, noble, reservee) VALUES (" + std::to_string(i+1) + ", " + std::to_string(getPartie().getJoueur(i)->getCarteNoble(j).getId()) + ",1,0);";
-                rc = sqlite3_exec(db, sql.c_str(), NULL, NULL, NULL);
-                if (rc != SQLITE_OK) {
-                    std::cerr << "Erreur lors de la sauvegarde de la carte" << std::endl;
-                    sqlite3_close(db);
+    // Sauvegarde plateau
+    Plateau& plateau = getPartie().getEspaceJeux().getPlateau();
+    for (size_t i = 0; i < plateau.getLargeurMatrice(); i++) {
+        for (size_t j = 0; j < plateau.getLargeurMatrice(); j++) {
+            if (plateau.getJeton(i, j) != nullptr) {
+                QString sql = "INSERT INTO plateau (i, j, couleur) VALUES (" + QString::number(i) + ", " + QString::number(j) + ", '" + QString::fromStdString(toStringCouleur(plateau.getJeton(i, j)->getCouleur())) + "');";
+                if (!query.exec(sql)) {
+                    std::cerr << "Erreur lors de la sauvegarde du plateau" << std::endl;
+                    db.close();
                     return;
                 }
             }
+        }
+    }
 
-         //cartes reservees (toutes les couleurs sauf ind et or)
-         for (Couleur c : Couleurs){
-                if (c!=Couleur::INDT && c!=Couleur::OR) {
-                 for (size_t j = 0; j<getPartie().getJoueur(i)->getNbCartesReservees(c); j++) {
-                      sql = "INSERT INTO carte (id_joueur, id_carte, noble, reservee) VALUES (" + std::to_string(i+1) + ", " + std::to_string(getPartie().getJoueur(i)->getCarteReservee(c,j).getId()) + ", " + TypeCartetoString(getPartie().getJoueur(i)->getCarteReservee(c,j).getType()) + ",1);";
-                      rc = sqlite3_exec(db, sql.c_str(), NULL, NULL, NULL);
-                      if (rc != SQLITE_OK) {
-                            std::cerr << "Erreur lors de la sauvegarde de la carte " << std::endl;
-                            sqlite3_close(db);
-                            return;
-                      }
-                 }
-                }
-         }
-   }
+   // Sauvegarde de la pyramide
+    Pyramide& pyramide = getPartie().getEspaceJeux().getPyramide();
+    for (int i = 0; i < 4; i++) {
+        for (int j = 0; j < pyramide.getNbCartesNiv(i); j++) {
+            const Carte* carte = pyramide.getCarte(i, j);
+            QString sql = "INSERT INTO pyramide (i, j, id) VALUES (" + QString::number(i) + ", " + QString::number(j) + ", " + QString::number(carte->getId()) + ");";
+            if (!query.exec(sql)) {
+                std::cerr << "Erreur lors de la sauvegarde de la pyramide" << std::endl;
+                db.close();
+                return;
+            }
+        }
+    }
 
-   //Sauvegarde plateau
-   Plateau& plateau = getPartie().getEspaceJeux().getPlateau();
-   for (size_t i =0; i<plateau.getLargeurMatrice(); i++) {
-       for (size_t j =0; j<plateau.getLargeurMatrice(); j++) {
-           if (plateau.getJeton(i,j) != nullptr) {
-               sql = "INSERT INTO plateau (i, j, couleur) VALUES (" + std::to_string(i) + ", " + std::to_string(j) + ", '" + toStringCouleur(plateau.getJeton(i,j)->getCouleur()) + "');";
-               rc = sqlite3_exec(db, sql.c_str(), NULL, NULL, NULL);
-               if (rc != SQLITE_OK) {
-                   std::cerr << "Erreur lors de la sauvegarde du plateau" << std::endl;
-                   sqlite3_close(db);
-                   return;
-               }
-           }
-       }
-   }
 
-   //Sauvegarde de la pyramide
-   Pyramide& pyramide = getPartie().getEspaceJeux().getPyramide();
-   for (size_t i =0; i<4; i++) {
-       for (size_t j =0; j<pyramide.getNbCartesNiv(i); j++) {
-           const Carte* carte = pyramide.getCarte(i,j);
-           sql= "INSERT INTO pyramide (i, j, id) VALUES (" + std::to_string(i) + ", " + std::to_string(j) + ", " + std::to_string(carte->getId()) + ");";
-           rc = sqlite3_exec(db, sql.c_str(), NULL, NULL, NULL);
-           if (rc != SQLITE_OK) {
-               std::cerr << "Erreur lors de la sauvegarde de la pyramide" << std::endl;
-               sqlite3_close(db);
-               return;
-           }
-       }
-   }
 
    //Sauvegarde des infos de la partie
-   //recuperation du joueur courant :
     int joueurCourant = 0;
-    if (getPartie().getJoueur2() == this->joueurCourant ){
+    if (getPartie().getJoueur2() == this->joueurCourant) {
         joueurCourant = 1;
     }
     int tour = getPartie().getTour();
-   sql = "INSERT INTO infopartie (tour, joueurCourant) VALUES (" + std::to_string(tour) + ", " + std::to_string(joueurCourant) + ");";
-   rc = sqlite3_exec(db, sql.c_str(), NULL, NULL, NULL);
-   if (rc != SQLITE_OK) {
-       std::cerr << "Erreur lors de la sauvegarde des infos de la partie" << std::endl;
-       sqlite3_close(db);
-       return;
-   } 
+    QString sql = "INSERT INTO infopartie (tour, joueurCourant) VALUES (" + QString::number(tour) + ", " + QString::number(joueurCourant) + ");";
+    if (!query.exec(sql)) {
+        std::cerr << "Erreur lors de la sauvegarde des infos de la partie" << std::endl;
+        db.close();
+        return;
+    }
 
-   //Fermeture de la base de donnee
-   sqlite3_close(db);
+    // Fermeture de la base de donnee
+    db.close();
 }
+
 
 //sauvegarde du score des joueurs a la fin de la partie
 void Controller::enregisterScore() {
@@ -740,73 +709,58 @@ void Controller::enregisterScore() {
    //on regarde si il existe deja et on lui ajoute une victoire ou une defaite
    //sinon on le cree et on lui ajoute une victoire ou une defaite
 
-   //on ajoute le chemin relatif au chemin absolue du projet
-   //std::string relativePath = "data/score.sqlite";
-   //std::filesystem::path absolutePath = projectPath / relativePath;
-   //std::string absolutePathStr = absolutePath.string();
+    QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE", "conn4");
+    db.setDatabaseName("data/score.sqlite");
+    if (!db.open()) {
+        std::cerr << "Erreur lors de la connexion a la base de donnee" << std::endl;
+        return;
+    }
 
-   //Connexion a la base de donnee
-   sqlite3 *db;
-   int rc = sqlite3_open("data/score.sqlite", &db);
-   if (rc != SQLITE_OK) {
-       std::cerr << "Erreur lors de la connexion a la base de donnee" << std::endl;
-       sqlite3_close(db);
-       return;
-   }
-
-   for (int i = 0; i<2; i++) {
-       //on regarde si le joueur existe deja
-       string sql = "SELECT * FROM score WHERE pseudo = '" + getPartie().getJoueur(i)->getPseudo() + "';";
-       sqlite3_stmt *stmt;
-       rc = sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, NULL);
-       if (rc != SQLITE_OK) {
-           std::cerr << "Erreur lors de la recherche du joueur dans la base de donnee" << std::endl;
-           sqlite3_close(db);
-           return;
-       }
-
-       rc = sqlite3_step(stmt);
-       if (rc == SQLITE_ROW) {
-           //le joueur existe deja
-           //on recupère son nombre de victoire et de defaite
-           int nbVictoire = sqlite3_column_int(stmt, 2);
-           int nbDefaite = sqlite3_column_int(stmt, 3);
-           //on met a jour son nombre de victoire ou de defaite
-           if (getPartie().getJoueur(i)->estGagnant()) {
-               nbVictoire++;
-           }
-           else {
-               nbDefaite++;
-           }
-           //on met a jour le score du joueur
-           sql = "UPDATE score SET nbVictoire = " + std::to_string(nbVictoire) + ", nbDefaite = " + std::to_string(nbDefaite) + " WHERE pseudo = '" + getPartie().getJoueur(i)->getPseudo() + "';";
-           std::cout<<sql<<std::endl;
-           rc = sqlite3_exec(db, sql.c_str(), NULL, NULL, NULL);
-           if (rc != SQLITE_OK) {
-               std::cerr << "Erreur lors de la mise a jour du score du joueur" << std::endl;
-                sqlite3_close(db);
-           }
-       } else {
-        //sinon on ajoute le joueur dans la base de donnee avec le bon score
-        int nbVictoire = 0;
-        int nbDefaite = 0;
-        if (getPartie().getJoueur(i)->estGagnant()) {
-            nbVictoire++;
-        }
-        else {
-            nbDefaite++;
+    QSqlQuery query(db);
+    for (int i = 0; i < 2; i++) {
+        // On regarde si le joueur existe déjà
+        QString sql = "SELECT * FROM score WHERE pseudo = '" + QString::fromStdString(getPartie().getJoueur(i)->getPseudo()) + "';";
+        if (!query.exec(sql)) {
+            std::cerr << "Erreur lors de la recherche du joueur dans la base de donnee" << std::endl;
+            db.close();
+            return;
         }
 
-        sql = "INSERT INTO score (pseudo, nbVictoire, nbDefaite) VALUES ('" + getPartie().getJoueur(i)->getPseudo() + "', " + std::to_string(nbVictoire) + ", " + std::to_string(nbDefaite) + ");";
-        std::cout<<sql<<std::endl;
-        rc = sqlite3_exec(db, sql.c_str(), NULL, NULL, NULL);
-        if (rc != SQLITE_OK) {
-            std::cerr << "Erreur lors de l'ajout du joueur dans la base de donnee" << std::endl;
-            sqlite3_close(db);
+        if (query.next()) {
+            // Le joueur existe déjà
+            // On récupère son nombre de victoires et de défaites
+            int nbVictoire = query.value(2).toInt();
+            int nbDefaite = query.value(3).toInt();
+            // On met à jour son nombre de victoires ou de défaites
+            if (getPartie().getJoueur(i)->estGagnant()) {
+                nbVictoire++;
+            } else {
+                nbDefaite++;
             }
-       }
-   }
+            // On met à jour le score du joueur
+            sql = "UPDATE score SET nbVictoire = " + QString::number(nbVictoire) + ", nbDefaite = " + QString::number(nbDefaite) + " WHERE pseudo = '" + QString::fromStdString(getPartie().getJoueur(i)->getPseudo()) + "';";
+            std::cout << sql.toStdString() << std::endl;
+            if (!query.exec(sql)) {
+                std::cerr << "Erreur lors de la mise a jour du score du joueur" << std::endl;
+                db.close();
+            }
+        } else {
+            // Sinon, on ajoute le joueur dans la base de donnee avec le bon score
+            int nbVictoire = 0;
+            int nbDefaite = 0;
+            if (getPartie().getJoueur(i)->estGagnant()) {
+                nbVictoire++;
+            } else {
+                nbDefaite++;
+            }
+            sql = "INSERT INTO score (pseudo, nbVictoire, nbDefaite) VALUES ('" + QString::fromStdString(getPartie().getJoueur(i)->getPseudo()) + "', " + QString::number(nbVictoire) + ", " + QString::number(nbDefaite) + ");";
+            std::cout << sql.toStdString() << std::endl;
+            if (!query.exec(sql)) {
+                std::cerr << "Erreur lors de l'ajout du joueur dans la base de donnee" << std::endl;
+                db.close();
+            }
+        }
+    }
 
-   //Fermeture de la base de donnee
-   sqlite3_close(db);
+    db.close();
 }
