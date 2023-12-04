@@ -37,7 +37,7 @@ void pageJoueur::ajouterJeton(vueJeton* jeton){
 }
 
 void pageJoueur::retirerJeton(vueJeton* jeton){
-   //A faire
+    //A faire
 }
 
 void pageJoueur::afficher(bool tourJoueur){

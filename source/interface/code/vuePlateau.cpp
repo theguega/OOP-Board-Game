@@ -9,22 +9,33 @@ vuePlateau::vuePlateau(QWidget* parent, int hauteur, int largeur) : QWidget(pare
     h = hauteur; //Def la hateur du plateau
     l = largeur; //Def la largeur du plateau
 
-    nbJetons = 25; //Nombre de jetons sur la plateau (sera recuperer depuis le back apres)
+    std::vector<Couleur> listeCouleur = { Couleur::BLANC, Couleur::BLEU, Couleur::VERT, Couleur::ROUGE, Couleur::NOIR, Couleur::PERLE, Couleur::OR};
+
+    std::vector<int> indices;
+    for (int i = 0; i < 25; ++i) {
+        indices.push_back(i % 7); // Utilisez l'opération modulo pour obtenir des indices entre 0 et n-1
+    }
+
+    // Mélangez les indices pour les rendre aléatoires
+    std::mt19937 generateur(static_cast<unsigned int>(std::time(0)));
+    std::shuffle(indices.begin(), indices.end(), generateur);
+
+    nbJetons = 25; //Nombre de jetons sur la plateau (sera récupérer depuis le back après)
     setFixedSize(l, h); //Fixe la taille du plateau
     //sac = plateau->getSac();
     for(int i = 0; i < nbJetons; i++){
-        //Creer un getteur pour les Jetons
-        listeJetons[i] = new vueJeton(nullptr, (h - 100)/(2*sqrt(nbJetons)));
+        //Créer un getteur pour les Jetons
+        listeJetons[i] = new vueJeton(nullptr, (h - 100)/(2*sqrt(nbJetons)), listeCouleur[indices[i]]);
         layoutJetons -> addWidget(listeJetons[i], i / 5, i % 5);
         QObject::connect(listeJetons[i], &vueJeton::clicked, [this, i]() {
-            boutonClique(i); //Permet d'appeler la fonction boutonClique(int i) lorsque le bouton i est clique
+            boutonClique(i); //Permet d'appeler la fonction boutonClique(int i) lorsque le bouton i est cliqué
         });
     }
     for(int i = 0; i < 3; i++){
         jetonSelection[i] = nullptr; //Initialise jetonSelection avec nullptr
     }
 
-    boutonValider = new QPushButton("Valider le choix des jetons"); //Creer le bouton valider (pour la selection des jetons)
+    boutonValider = new QPushButton("Valider le choix des jetons"); //Créer le bouton valider (pour la selection des jetons)
 
     layout = new QVBoxLayout; //Layout pour mettre le Grid + les boutons en dessous
 
@@ -35,12 +46,11 @@ vuePlateau::vuePlateau(QWidget* parent, int hauteur, int largeur) : QWidget(pare
 
     connect(boutonValider, &QPushButton::clicked, this, &vuePlateau::validerJetons); //connect boutonValider avec valliderJetons
 
-    info = new popUpInfo(nullptr, "Vos jetons ont bien ete ajoute");
+    info = new popUpInfo(nullptr, "Vos jetons ont bien été ajouté");
 }
 
 void vuePlateau::boutonClique(int i){
     int j = 0;
-    qDebug() << nbJetonSelection;
     if(estSelectionne(listeJetons[i])){
         for(j = 0; j < 3; j++){
             if(jetonSelection[j] == listeJetons[i]){
@@ -60,6 +70,7 @@ void vuePlateau::boutonClique(int i){
             nbJetonSelection += 1;
         }
     }
+    qDebug() << nbJetonSelection;
 }
 
 void vuePlateau::deselectionner(){
@@ -82,10 +93,23 @@ bool vuePlateau::estSelectionne(vueJeton* jeton){
 
 void vuePlateau::validerJetons(){
     info -> show();
+    for(int j = 0; j < 3; j++){
+        if(jetonSelection[j] != nullptr){
+            jetonSelection[j] -> enleverCroix();
+        }
+    }
 }
 
 void vuePlateau::cacherElements(){
     info -> close();
+}
+
+void vuePlateau::paintEvent(QPaintEvent *event){
+    QWidget::paintEvent(event);
+
+
+    QPainter painter(this);
+    painter.setRenderHint(QPainter::Antialiasing);
 }
 
 /*vueJeton* vuePlateau::recupererBouton(Jeton* jeton){

@@ -14,32 +14,31 @@
 class pageCreation : public QWidget{
     Q_OBJECT
 private:
-    QComboBox* choixPossibles1;
-    QComboBox* choixPossibles2;
+    QComboBox* choixPossibles1; //Liste de choix de joueurs possibles
+    QComboBox* choixPossibles2; //Liste de choix de joueurs possibles
 
-    QStringList choix1;
-    QStringList choix2;
+    QStringList choix1; //Liste de QString avec les différents choix possbiles
+    QStringList choix2; //Liste de QString avec les différents choix possbiles
 
-    QLineEdit* nom1Edit;
-    QLineEdit* nom2Edit;
+    QLineEdit* nom1Edit; //Ligne permettant de rentrer les pseudos
+    QLineEdit* nom2Edit; //Ligne permettant de rentrer les pseudos
 
-    QString nom1;
-    QString nom2;
+    QString nom1; //Récupération des chaines des QLineEdit
+    QString nom2; //Récupération des chaines des QLineEdit
 
-    int index1;
-    int index2;
+    int index1; //Index du QComboBox (savoir quand on ajoute une personne)
+    int index2;//Index du QComboBox (savoir quand on ajoute une personne)
 
-    QPushButton* boutonValider;
+    QPushButton* boutonValider; //Permet la validation du choix de création de la partie
 
-    QVBoxLayout* layout;
-    QPushButton *retourMenu;
+    QVBoxLayout* layout; //Layout pour bien tout ranger
+    QPushButton *retourMenu; //Bouton pour retourner au Menu Principal
 
-    popUpValider* pop;
+    popUpValider* pop; //PopUp pour valider les choix de l'utilisateur
 
-    QWidget* parent;
-    pageJeu* jeu;
-public slots:
-    void comboBox1Active(int index){
+    pageJeu* jeu; //Future page de Jeu
+protected:
+    void comboBox1Active(int index){ //Affichage de la récupération du nom pour le joueur
         if (index != 0){
             nom1Edit -> hide();
         }
@@ -48,7 +47,7 @@ public slots:
         }
         index1 = index;
     }
-    void comboBox2Active(int index){
+    void comboBox2Active(int index){ //Affichage de la récupération du nom pour le joueur
         if (index != 0){
             nom2Edit -> hide();
         }
@@ -57,10 +56,10 @@ public slots:
         }
         index2 = index;
     }
-    void valider(){
+    void valider(){ //Fonction quand le bouton valider est appuyé
         pop -> show();
     }
-    void boutonOuiPresse(){
+    void boutonOuiPresse(){ //Connecte le bouton oui du PopUpValider
         pop -> hide();
         if(index1 == 0){
             nom1 = nom1Edit->text();
@@ -73,7 +72,7 @@ public slots:
         jeu -> show();
         emit fermerToutesPages();
     }
-    void boutonNonPresse(){
+    void boutonNonPresse(){ //Connecte le bouton non du PopUpValider
         pop -> hide();
     }
 public:

@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <QPushButton>
 #include <Qpainter>
+#include "back-end/jetons.hpp"
 
 class position{
 private:
@@ -15,41 +16,27 @@ public:
     int gety() const {return y;}
 };
 
-
-
 class vueJeton : public QPushButton{
     Q_OBJECT
 private:
-    //recupere l'adresse du jeton auquel vueJeton est reliee
+    //récupère l'adresse du jeton auquel vueJeton est reliée
     //Jeton* jeton;
     bool estVisible;
     int rad;
     bool afficherCroix;
+    Couleur couleur;
+    QColor Qcouleur;
+    QColor QcouleurClair;
+    QColor couleurContour;
 public:
-    vueJeton(QWidget* parent = nullptr, int rad = 0);
+    vueJeton(QWidget* parent = nullptr, int rad = 0, Couleur couleur = Couleur::BLEU);
     void apparaitre();
     void disparaitre();
     bool getEstVisible();
     void changeAfficherCroix();
     void enleverCroix();
 protected:
-    void paintEvent(QPaintEvent *event) override {
-        QPushButton::paintEvent(event); // Appeler la methode paintEvent de la classe de base pour dessiner le bouton
-
-        if (afficherCroix) {
-            QPainter painter(this);
-            painter.setRenderHint(QPainter::Antialiasing);
-            painter.setPen(Qt::white);
-
-            // Dessiner une croix qui prend tout le cercle et est centree avec une rotation de 45 degres
-            painter.save(); // Sauvegarder l'etat actuel du QPainter
-            painter.translate(width() / 2, height() / 2); // Translation pour le centre du bouton
-            painter.rotate(45); // Rotation de 45 degres
-            painter.drawLine(-width() / 2, 0, width() / 2, 0); // Horizontal
-            painter.drawLine(0, -height() / 2, 0, height() / 2); // Vertical
-            painter.restore(); // Restaurer l'etat precedent du QPainter
-        }
-    }
+    void paintEvent(QPaintEvent *event);
 };
 
 #endif // VUEJETON_H
