@@ -95,7 +95,7 @@ std::vector<const Jeton*> StrategyIA::recupJetonStrat(Plateau& plateau){
     unsigned int nbJetonsRecup = distribution(gen);
     std::cout<<"On recupere "<<nbJetonsRecup<<" jetons"<<std::endl;
 
-    std::cout << "Merci de selectionner des jetons adjacents en ligne, en colonne ou en diagonale." << std::endl;
+    std::cout << "Selection des jetons." << std::endl;
     // Methode = 1 correspond a recup en colonne
     // Methode = 2 correspond a recup en ligne
     // Methode = 3 correspond a recup en diagonale
