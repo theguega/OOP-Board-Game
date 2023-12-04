@@ -590,11 +590,12 @@ void Controller::sauvegardePartie() {
 
     // Nettoyage de l'ancienne sauvegarde
     QSqlQuery query(db);
-    if (!query.exec("DELETE FROM joueur; DELETE FROM plateau; DELETE FROM infopartie; DELETE FROM pyramide;")) {
-        std::cerr << "Erreur lors du nettoyage de la base de donnee" << std::endl;
-        db.close();
-        return;
-    }
+    QStringList tables = db.tables();
+    foreach (const QString &table, tables) {
+            if (!query.exec("DELETE FROM " + table)) {
+                qWarning() << "Échec de la suppression des données de la table " << table << " : " << query.lastError().text();
+            }
+        }
 
     for (size_t i = 0; i < 2; i++) {
         // Infos du joueur
