@@ -15,6 +15,9 @@ public:
     virtual std::pair<unsigned int, unsigned int> achatNoble(Pyramide& pyramide) = 0;
     virtual unsigned int choixAchat() = 0;
     virtual std::pair< Couleur, unsigned int> achatReserve(unsigned int nbCartesReservees) = 0;
+    virtual unsigned int utiliserPrivilege() = 0;
+
+    //choix de l'action
     virtual unsigned int choixActionsOptionelles() = 0;
     virtual unsigned int choixActionsObligatoires() = 0;
 
@@ -37,7 +40,7 @@ public:
     virtual unsigned int choixActionsOptionelles() override;
     virtual unsigned int choixActionsObligatoires() override;
 
-    //Privilege utiliserPrivilege(const EspaceJeux& espaceJeux) override;
+    virtual unsigned int utiliserPrivilege() override;
 };
 
 class StrategyIA : public Strategy {
@@ -56,11 +59,7 @@ public:
     virtual unsigned int choixActionsOptionelles() override;
     virtual unsigned int choixActionsObligatoires() override;
 
-
-    //Privilege utiliserPrivilege(const EspaceJeux& espaceJeux) override;
-
-
-
+    virtual unsigned int utiliserPrivilege() override;
 };
 
 

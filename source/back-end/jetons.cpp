@@ -137,7 +137,7 @@ const LotDeJetons& LotDeJetons::getLotDeJetons() {
 
 //------------------------------------------------- Classe LotPrivilege
 
-std::ostream& operator<< (std::ostream& f, const Privilege& privilege) {
+std::ostream& operator<< (std::ostream& f,[[maybe_unused]]const Privilege& privilege) {
     f << "Privilege" << std::endl;
     return f;
 }

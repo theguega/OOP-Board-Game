@@ -311,9 +311,7 @@ bool Controller::verifAchatCarte(const Carte& carte, EspaceJeux& espaceJeux) {
 }
 
 void Controller::utiliserPrivilege(Plateau& plateau){
-    size_t priv;
-    std::cout<<"Combien de privilege voulez vous utiliser pour recup des jetons ? (1,2,3)\n";
-    std::cin>>priv;
+    unsigned int priv = strategy_courante->utiliserPrivilege();
     if (priv>joueurCourant->getNbPrivileges())
         throw SplendorException("Vous n'avez pas assez de privilege");
 

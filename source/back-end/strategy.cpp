@@ -164,6 +164,27 @@ std::vector<const Jeton*> StrategyIA::recupJetonStrat(Plateau& plateau){
     return jetonsRecup;
 }
 
+unsigned int StrategyHumain::utiliserPrivilege() {
+    unsigned int choix;
+    std::cout<<"Combien de privilege voulez vous utiliser pour recup des jetons ? (1,2,3)\n";
+    std::cin>>choix;
+
+    return choix;
+}
+
+unsigned int StrategyIA::utiliserPrivilege() {
+    std::cout<<"Combien de privilege voulez vous utiliser pour recup des jetons ? (1,2,3)\n";
+    // Initialiser le generateur de nombres aleatoires avec la graine actuelle du systeme
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    // Creer une distribution uniforme pour les entiers entre 0 et 3 inclus
+    std::uniform_int_distribution<int> distribution(1, 3);
+    // Generer un nombre aleatoire
+    unsigned int choix = distribution(gen);
+    std::cout<<"l'IA utilise "<<choix<<" privilege\n"<<std::endl;
+    return choix;
+}
+
 std::pair<unsigned int, unsigned int> StrategyHumain::choisirJeton(Plateau& plateau){
     unsigned int i, j;
     std::cout << "Entrez la valeur de i (1,2,3,4,5) : ";
@@ -196,6 +217,7 @@ std::pair<unsigned int, unsigned int> StrategyIA::choisirJeton(Plateau& plateau)
     if((i > 5) || (i < 0) || (j > 5) || (j < 0))
         throw SplendorException("Indice de jeton incorrect");
     // Retournez le jeton correspondant aux indices aleatoires
+    std::cout<<"l'IA choisit de recup le jetons : ("<<i+1<<","<<j+1<<")\n";
     return std::make_pair(i, j);
 }
 
