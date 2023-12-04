@@ -16,14 +16,39 @@ unsigned int StrategyIA::choix_min_max(unsigned int min, unsigned int max) {
     std::cout << "l'IA choisit entre " << min << " et " << max <<" :"<<std::endl;
 
     //generation d'un entier aleatoire entre min et max
+    std::cout<<"pregen\n";
     std::random_device rd;
     std::mt19937 gen(rd());
     std::uniform_int_distribution<int> distribution(min, max);
     unsigned int choix = distribution(gen);
 
-    std::cout << "l'IA a choisit : \n" << choix;
+    std::cout << "l'IA a choisit : " << choix << "\n";
+    std::cout<<"postgen\n";
     return choix;
 }
+
+unsigned int StrategyHumain::choixMenu() {
+    unsigned int choix;
+    std::cin>>choix;
+    while(choix<1 || choix>3) {
+        std::cout<< "Votre choix ne rentre pas dans l'intervalle, veuillez recommencer : " << std::endl;
+        std::cin>>choix;
+    }
+    return choix;
+}
+
+unsigned int StrategyIA::choixMenu() {
+    //generation d'un entier aleatoire entre 1 et 3
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<int> distribution(1, 3);
+    unsigned int choix = distribution(gen);
+
+    std::cout << "l'IA a choisit : " << choix << "\n";
+    return choix;
+}
+
+
 
 
 

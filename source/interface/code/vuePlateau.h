@@ -13,7 +13,7 @@
 class vuePlateau : public QWidget{
     Q_OBJECT
 private:
-    //Choix entre pointeur et reference ?
+    //Choix entre pointeur et référence ?
     //Sac* sac;
     //Plateau* plateau;
     std::array<vueJeton*, 25> listeJetons;
@@ -31,6 +31,7 @@ private:
     QVBoxLayout* layout;
 public:
     vuePlateau(QWidget* parent, int hateur, int largeur);
+    void paintEvent(QPaintEvent *event);
     void boutonClique(int i);
     void deselectionner();
     bool estSelectionne(vueJeton* jeton);

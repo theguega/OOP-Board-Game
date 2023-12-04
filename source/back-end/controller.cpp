@@ -163,11 +163,6 @@ void Controller::lancerPartie() {
     // TODO
 }
 
-
-
-
-
-
 void Controller::quitter() {
     std::string sauvegarde;
     std::cout<<"Vous avez decider de quitter la partie\n";
@@ -178,6 +173,189 @@ void Controller::quitter() {
     else
         std::cout<<"tant pis...\n";
     return;
+}
+
+void Controller::jouer() {
+    while (1) {
+        // tour pour chacun des joueurs
+        std::cout<<"\n\n\n\n\n\n\n\n\n\n\n\n";
+        std::cout<< "Tour numero" << getPartie().getTour()+1 << endl;
+
+        //correpond au tour de chaque joueur
+        for (unsigned int i = 0; i < 2; i++) {
+            std::cout<<"--------------------------------------------------------------------------------------------------------------------------------------------\n";
+            std::cout<<"C'est a " << getJoueurCourant().getPseudo()<<" de jouer : \n\n";
+            getJoueurCourant().afficherJoueur();
+
+            unsigned int etat_tour = 0;
+            while (etat_tour != 10) {
+
+                // actions optionelles
+                switch (etat_tour) {
+                case 0: {
+                    bool a_deja_utilise_privilege = false;
+                    bool a_deja_rempli_plateau = false;
+                    unsigned int etat_action = 0;
+                    while (etat_action != 10) {
+                        switch (etat_action)
+                        {
+                        case 0:{
+                            //appel du menu de choix des actions
+                            etat_action = choixActionsOptionelles();
+                            break;}
+                        case 1:{
+                            try
+                            {
+                                //utilisation d'un privilege
+                                if (a_deja_utilise_privilege)
+                                    throw SplendorException("Vous avez deja utilise cette action");
+                                utiliserPrivilege(getPartie().getEspaceJeux().getPlateau());
+                                a_deja_utilise_privilege = true;
+                                etat_action = 0;
+                            }
+                            catch(SplendorException& e) { std::cerr << "\033[1;31m" << e.getInfo() << "\033[0m" << endl << endl;; etat_action = 0; }
+                            break;
+                        }
+                        case 2:{
+                            try
+                            {
+                                //remplissage du plateau
+                                if (a_deja_rempli_plateau)
+                                    throw SplendorException("Vous avez deja utilise cette action");
+                                remplirPlateau(getPartie().getEspaceJeux().getPlateau(),getPartie().getEspaceJeux().getSac());
+                                a_deja_rempli_plateau = true;
+                                etat_action = 0;
+
+                            }
+                            catch(SplendorException& e) { std::cerr << "\033[1;31m" << e.getInfo() << "\033[0m" << endl << endl;; etat_action = 0; }
+                            break;
+                        }
+                        case 3:{
+                            etat_tour = 1;
+                            etat_action = 10;
+                            break;
+                        }
+
+                        case 9:{
+                            quitter();
+                            return;
+                        }
+
+                        default:{
+                            etat_action=0;
+                            std::cout<<"Veuillez faire un choix correct !\n";
+                            break;
+                        }
+                        }
+                    }
+                    break;
+                }
+
+
+
+
+                    //actions obligatoires :
+                case 1:{
+                    unsigned int etat_action = 0;
+                    while (etat_action != 10) {
+                        switch (etat_action)
+                        {
+                        case 0:
+                            //menu de choix des actions obligatoires
+                            etat_action = choixActionsObligatoires();
+                            break;
+                        case 1:
+                            try
+                            {
+                                //recuperation de jetons
+                                recupererJetons(getPartie().getEspaceJeux().getPlateau());
+                                etat_action = 10;
+                            }
+                            catch(SplendorException& e) { std::cerr << "\033[1;31m" << e.getInfo() << "\033[0m" << endl << endl;; etat_action = 0; }
+                            break;
+                        case 2:
+                            try
+                            {
+                                //achat carte joaillerie
+                                acheterCarteJoaillerie(getPartie().getEspaceJeux());
+                                etat_action = 10;
+                            }
+                            catch(SplendorException& e) { std::cerr << "\033[1;31m" << e.getInfo() << "\033[0m" << endl << endl;; etat_action = 0; }
+                            break;
+                        case 3:
+                            try
+                            {
+                                //reservation carte
+                                orReserverCarte(getPartie().getEspaceJeux().getPyramide(), getPartie().getEspaceJeux().getPlateau());
+                                etat_action = 10;
+                            }
+                            catch(SplendorException& e) { std::cerr << "\033[1;31m" << e.getInfo() << "\033[0m" << endl << endl;; etat_action = 0; }
+                            break;
+                        case 9:{
+                            quitter();
+                            return;
+
+                        }
+                        default:
+                            etat_action=0;
+                            std::cout<<"Veuillez faire un choix correct !\n";
+                            break;
+                        }
+                        etat_tour = 2;
+                    }
+                    break;
+                }
+
+
+
+                    //verification fin de tour d'un joueur
+                case 2:{
+                    //achat obligatoire d'une carte noble si le joueur a 3 ou 6 pts de prestige
+                    if (getJoueurCourant().getptsPrestige() >= 3 or getJoueurCourant().getptsPrestige() >= 6) {
+                        //rajouter une verif si il y a bien des cartes nobles
+                        acheterCarteNoble(getPartie().getEspaceJeux().getPyramide());
+                    }
+
+                    //simulation de victoire
+
+                    if (getJoueurCourant().getNbJetons() >= 4) {
+                        //affichage rigolo
+                        const std::string message = "Le Joueur " + getJoueurCourant().getPseudo() +" a gagne !";
+                        for (size_t j = 0; j<250; j++) {
+                            for (std::size_t i = 0; i < message.size(); ++i) {
+                                // Utilisation des codes ANSI pour le texte en gras et avec différentes couleurs
+                                std::cout << "\033[1;3" << (i % 7) + 1 << "m" << message[i];
+                            }
+                            std::cout<<"\n";
+                            for (std::size_t l = 0; l < j; ++l)
+                                std::cout<<" ";
+                        };
+                        // Réinitialisation du style après la dernière lettre
+                        std::cout << "\033[0m\n";
+
+                        etat_tour = 3;
+                        break;
+                    }
+
+                    //fin du tour du joueur, on passe au joueur suivant
+                    changerJoueurCourant();
+                    etat_tour = 10;
+                    break;
+                }
+                case 3:{
+                    std::cout << "Fin de la partie !\n";
+                    return;
+                    break;
+                }
+                default:{
+                    break;
+                }
+                }
+            }
+            //fin du tour :
+            getPartie().incrementeTour();
+        }
+    }
 }
 
 
@@ -193,7 +371,7 @@ unsigned int Controller::choixActionsObligatoires() {
     std::cout << "9. Quitter le jeu\n";
     std::cout << "Votre choix (1/2/3/9):" << std::endl;
 
-    return strategy_courante->choix_min_max(1,9);;
+    return strategy_courante->choixMenu();;
 }
 
 unsigned int Controller::choixActionsOptionelles() {
@@ -204,7 +382,7 @@ unsigned int Controller::choixActionsOptionelles() {
     std::cout << "9. Quitter le jeu\n";
     std::cout << "Votre choix (1/2/3/9):" << std::endl;
 
-    return strategy_courante->choix_min_max(1,9);;
+    return strategy_courante->choixMenu();;
 }
 
 void Controller::utiliserPrivilege(Plateau& plateau){
@@ -237,6 +415,10 @@ void Controller::utiliserPrivilege(Plateau& plateau){
                      joueurCourant->afficherJoueur();
     return;
 }
+
+
+
+
 
 
 

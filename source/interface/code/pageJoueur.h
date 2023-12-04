@@ -12,18 +12,18 @@
 class pageJoueur : public QWidget{
     Q_OBJECT
 private:
-    QHBoxLayout* cartesReserveesLayout;
-    QHBoxLayout* cartesPossedeesLayout;
-    QHBoxLayout* jetonsPossedesLayout;
-    QVBoxLayout* layout;
+    QHBoxLayout* cartesReserveesLayout; //Layout avec les cartes reservees
+    QHBoxLayout* cartesPossedeesLayout; //Layout avec les cartes possedees
+    QHBoxLayout* jetonsPossedesLayout; //Layout avec les jeton possedes
+    QVBoxLayout* layout; //Layout principal
 
     QWidget* cartesReserveesWidget;
     QWidget* cartesPossedeesWidget;
     QWidget* jetonsPossedesWidget;
 
-    std::vector<vueCarte*> cartesReservees;
-    std::vector<vueCarte*> cartesPossedees;
-    std::vector<vueJeton*> jetonsPossedes;
+    std::vector<vueCarte*> cartesReservees; //Vecteur avec les cartes reservees
+    std::vector<vueCarte*> cartesPossedees; //Vecteur avec les cartes possedees
+    std::vector<vueJeton*> jetonsPossedes; //Vecteur avec les jeton possedes
 public:
     pageJoueur(QWidget* parent);
     void ajouterCarteReservee(vueCarte* carte);
