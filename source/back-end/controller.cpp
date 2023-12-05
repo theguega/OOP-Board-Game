@@ -679,6 +679,7 @@ void Controller::acheterCarteNoble (Pyramide& pyramide){
 }
 
 void Controller::orReserverCarte (Pyramide& pyramide, Plateau& plateau){
+    verifTroisCarteReserve();
     verifOrSurPlateau();
     cout << "Commencez par choisir un jeton Or : \n";
     cout <<  getPlateau();
@@ -900,6 +901,11 @@ void Controller::verifSacvide(){
 void Controller::verifOrSurPlateau(){
     if(!getPlateau().contientOr())
         throw SplendorException("\nLe plateau ne contient aucun jeton Or, vous ne pouvez pas reserver de carte\n");
+}
+
+void Controller::verifTroisCarteReserve(){
+    if(joueurCourant->getNbCartesReservees() == 3)
+        throw SplendorException("\nVous avez deja 3 cartes reservees\n");
 }
 
 void Controller::verifJetonSupDix(){
