@@ -341,6 +341,15 @@ bool Plateau::caseOr(unsigned int i, unsigned int j) const{
     return false;
 };
 
+bool Plateau::contientOr() const {
+    for(int i =0; i <5; i++){
+        for(int j = 0; j<5; j++){
+            if(!caseVide(i, j) && caseOr(i, j))
+                return true;
+        }
+    }
+    return false;
+}
 //Singleton
 //Avec sac et lot de privileges (debut de partie)
 Plateau& Plateau::getPlateau(const LotPrivileges& lotp) {

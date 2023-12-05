@@ -140,35 +140,30 @@ const Carte & Pyramide::acheterCarte(unsigned int niveau, unsigned int numero) {
 const Carte & Pyramide::ReserverCartePioche(unsigned int niveau) {
 
     switch (niveau) {
-    case 0:
+    case 1:
         if (not(pNv1.estVide())) {
-            return pNv1.piocher();; // piocher/tirer des cartes de niveau 3
+            return pNv1.piocher(); // piocher/tirer des cartes de niveau 3
             break;
         } else {
             throw SplendorException("Pioche vide");
         }
 
-    case 1:
+    case 2:
         if (!pNv2.estVide()) {
             return pNv2.piocher(); // piocher des cartes de niveau 2
             break;
         } else {
             throw SplendorException("Pioche vide");
         }
-    case 2:
+    case 3:
         if (!pNv3.estVide()) {
             return pNv3.piocher(); // piocher des cartes de niveau 1
             break;
         } else {
             throw SplendorException("Pioche vide");
         }
-    case 3:
-        if (!pNoble.estVide()) {
-            return pNoble.piocher(); // piocher des cartes nobles
-            break;
-        } else {
-            throw SplendorException("Pioche vide");
-        }
+    case 4:
+        throw SplendorException("Vous ne pouvez pas reserver de carte Noble");
     default:
         throw SplendorException("Indice de pioche invalide");
         break;

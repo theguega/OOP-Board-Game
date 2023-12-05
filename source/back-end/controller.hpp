@@ -31,7 +31,7 @@ public:
         throw SplendorException("pas de d'adverssaire trouvé..\n");
     };
     Plateau& getPlateau() const {return partie->getEspaceJeux().getPlateau();}
-
+    Pyramide& getPyramide() const {return partie->getEspaceJeux().getPyramide();}
 	// setters
 	void setJoueurCourant(int n);
 
@@ -65,7 +65,9 @@ public:
     void verifPrivileges();
     void verifPlateauvide();
     void verifSacvide();
+    void verifOrSurPlateau();
     bool verifAchatCarte(const Carte& carte, EspaceJeux& espaceJeux);
+
 };
 
 

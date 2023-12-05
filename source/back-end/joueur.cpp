@@ -22,11 +22,11 @@ Joueur::Joueur(string pseudo, type typeDeJoueur):
 
                 //on initialise les map avec les bonnes couleurs
                 for (const auto& couleur : Couleurs) {
+                    cartesReservees[couleur];
                     if (couleur != Couleur::INDT) {
                         jetons[couleur];
                         if (couleur != Couleur::OR) {
                             cartes[couleur];
-                            cartesReservees[couleur];
                             bonus[couleur] = 0;
                         }
                     }
@@ -70,7 +70,7 @@ size_t Joueur::getNbCartes() const {
 size_t Joueur::getNbCartesReservees() const {
     size_t nbCartes = 0;
     for (const auto& couleur : Couleurs) {
-        if (couleur != Couleur::INDT && couleur != Couleur::OR) {
+        if (couleur != Couleur::OR) {
             nbCartes += cartesReservees.at(couleur).size();
         }
     }
@@ -81,7 +81,7 @@ size_t Joueur::getNbCartesReservees() const {
 size_t Joueur::getNbJetons() const {
     size_t nbJetons = 0;
     for (const auto& couleur : Couleurs) {
-        if (couleur != Couleur::INDT && couleur != Couleur::OR) {
+        if (couleur != Couleur::INDT) {
             nbJetons += jetons.at(couleur).size();
         }
     }
@@ -126,6 +126,7 @@ void Joueur::addCarte(const Carte &carte) {
 
 void Joueur::addCarteReservee(const Carte &carte) {
     cartesReservees[carte.getBonus().getCouleur()].push_back(&carte);
+
 }
 
 void Joueur::addCarteNoble(const Carte& carte){

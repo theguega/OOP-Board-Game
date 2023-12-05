@@ -584,47 +584,51 @@ void Controller::recupererJetons(){
 
 
 
-
-
-
-
 void Controller::orReserverCarte (Pyramide& pyramide, Plateau& plateau){
-    unsigned int choix = strategy_courante->choixNiveau();
+    verifOrSurPlateau();
+    cout << "Commencez par choisir un jeton Or : \n";
+    cout <<  getPlateau();
+    cout << "Choisissez une ligne : \n";
+    unsigned int coord_ligne = strategy_courante->choix_min_max(1, 5);
+    cout << "Choisissez une colonne : \n";
+    unsigned int coord_col = strategy_courante->choix_min_max(1, 5);
+    while(getPlateau().caseVide(coord_ligne-1, coord_col-1) || !getPlateau().caseOr(coord_ligne-1, coord_col-1)){
+        cout << "La case est vide ou ce n'est pas un jeton Or\n";
+        cout << "Choisissez une ligne : \n";
+        coord_ligne = strategy_courante->choix_min_max(1, 5);
+        cout << "Choisissez une colonne : \n";
+        coord_col = strategy_courante->choix_min_max(1, 5);
+    }
 
+    cout << "Voulez-vous reserver une carte de la pyramide (0) ou celle d'une pioche (1, 2, 3) ?\n";
+    unsigned int choix = strategy_courante->choix_min_max(0, 3);
 
     if (choix == 0){
         // Reservation de la carte
-        std::pair<unsigned int, unsigned int> numNivCarteSelec = strategy_courante->reservationCarte(pyramide);
+        std::cout << "Voici les cartes du plateau : " << std::endl;
+        getPyramide().afficherPyramide(); //Gerer l'affichage de la pyramide
 
-        const Carte& carte = pyramide.acheterCarte(numNivCarteSelec.first, numNivCarteSelec.second);
+        cout << "rentrez le niveau de la carte souhaitee : \n";
+        unsigned int niveau = strategy_courante->choix_min_max(1, 3);
+        cout << "rentrez le numero de la carte souhaitee : \n";
+        unsigned int num_carte = strategy_courante->choix_min_max(1, getPyramide().getNbCartesNiv(niveau-1));
+
+        const Carte& carte = pyramide.acheterCarte(niveau, num_carte);
         joueurCourant->addCarteReservee(carte);
 
-        // Recuperation d'un jeton or Voir exception mecanique de jeu
-        // Recuperation d'un jeton or
-        std::pair<unsigned int, unsigned int> coordJetonSelec = strategy_courante->choisirJeton(plateau);
-        if(getPlateau().getJeton(coordJetonSelec.first, coordJetonSelec.second)->getCouleur() != Couleur::OR){
-            throw SplendorException("Le jeton choisi n'est pas un jeton or");
-        }
-        const Jeton& jeton = plateau.recupererJeton(coordJetonSelec.first, coordJetonSelec.second);
+        const Jeton& jeton = plateau.recupererJeton(coord_ligne-1, coord_col-1);
         joueurCourant->addJeton(jeton);
-
-
     }
     else if (choix == 1 || choix == 2 || choix == 3){
         // Reservation de la carte
         const Carte& carte = pyramide.ReserverCartePioche(choix);
         joueurCourant->addCarteReservee(carte);
 
-        // Recuperation d'un jeton or
-        std::pair<unsigned int, unsigned int> coordJetonSelec = strategy_courante->choisirJeton(plateau);
-        if(getPlateau().getJeton(coordJetonSelec.first, coordJetonSelec.second)->getCouleur() != Couleur::OR){
-            throw SplendorException("Le jeton choisi n'est pas un jeton or");
-        }
-        const Jeton& jeton = plateau.recupererJeton(coordJetonSelec.first, coordJetonSelec.second);
+        const Jeton& jeton = plateau.recupererJeton(coord_ligne-1, coord_col-1);
         joueurCourant->addJeton(jeton);
     }
-
-
+    cout << "Etat du joueur apres l'action : \n";
+    joueurCourant->afficherJoueur();
 }
 
 
@@ -903,6 +907,11 @@ void Controller::verifSacvide(){
     if (partie->getEspaceJeux().getSac().estVide()){
         throw SplendorException("\nLe sac de jetons est vide");
     }
+}
+
+void Controller::verifOrSurPlateau(){
+    if(!getPlateau().contientOr())
+        throw SplendorException("\nLe plateau ne contient aucun jeton Or, vous ne pouvez pas reserver de carte\n");
 }
 
 
