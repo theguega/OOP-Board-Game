@@ -54,6 +54,9 @@ public:
     void acheterCarteJoaillerie(EspaceJeux& espaceJeux);
 	void orReserverCarte(Pyramide& pyramide, Plateau& plateau);
 
+    //donne un privilege au joueur adverse en suivant la logique de splendor duel
+    void donPrivilegeAdverse();
+
     //s'effectue automatiquement lorsque le joueur a 3,6 pts prestige
     void acheterCarteNoble (Pyramide& pyramide);
 

@@ -6,6 +6,7 @@
     \ \ / _ \| __| / _ \ | '_ \ / __|
  /\_/ /|  __/| |_ | (_) || | | |\__ \
  \___/  \___| \__| \___/ |_| |_||___/
+
 */
 
 //------------------------------------------------- Gestion de la couleur des jetons
@@ -371,5 +372,12 @@ std::ostream& operator<< (std::ostream& f, const Plateau& plateau) {
         };
         f << "\n" << "---------------------" << std::endl;
     }
+
+
+    //Sous la matrice, on affiche les privileges :
+    for(unsigned int i = 0; i<plateau.getNbPrivileges();i++)
+        f << "|\033[1;38;5;208mP\033[0m|";
+
+    f << "\n" << "---------------------" << std::endl;
     return f;
 }

@@ -190,13 +190,12 @@ void Joueur::supJetonNb(unsigned int nb, Couleur c, EspaceJeux& espaceJeux){
 
 }
 
-const Privilege&::Joueur::supPrivilege(Plateau& plateau) {
-    const Privilege& sup = *privileges[0];
-    privileges.erase(privileges.begin());
-    // rajout du privilege sur le plateau
-   //plateau.poserPrivilege(sup); deja fait dans une autre methode
-
-    return  sup;
+const Privilege&::Joueur::supPrivilege() {
+    if (getNbPrivileges()==0)
+        throw SplendorException("Le joueur n'a pas de privileges");
+    const Privilege& priv = *privileges.back();
+    privileges.pop_back();
+    return  priv;
 }
 
 

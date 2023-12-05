@@ -1,9 +1,5 @@
 # Problemes Splendor Duel
 
-## remplir plateau :
-*  attribution du privilege au joueur adverse a gerer
-
-
 ## reserver carte (tout a revoir en gros mdr):
 * lors de la reserevation d'un carte, il faut faire recuperer un jeton or (donc afficher plateau et recup d'abord)
 * donc d'abord : plateau, puis affichage des cartes

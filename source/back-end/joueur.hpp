@@ -94,7 +94,7 @@ public:
     void supCarteNoble(const Carte& carte);
     void supJeton(Jeton *jeton, EspaceJeux& espaceJeux);
     void supJetonNb(unsigned int nb, Couleur c, EspaceJeux& espaceJeux);
-    const Privilege& supPrivilege(Plateau& plateau);
+    const Privilege& supPrivilege();
 
     // Affichage Done
     void afficherJoueur() const;
