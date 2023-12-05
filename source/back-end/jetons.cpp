@@ -51,13 +51,13 @@ std::string toStringCouleur(Couleur c) {
     switch (c)
     {
     case Couleur::BLANC: return "Blanc"; // Blanc
-    case Couleur::BLEU: return "Bleu";  // Bleu
-    case Couleur::VERT: return "Vert";  // Vert
+    case Couleur::BLEU: return "Bleu ";  // Bleu
+    case Couleur::VERT: return "Vert ";  // Vert
     case Couleur::ROUGE: return "Rouge"; // Rouge
-    case Couleur::NOIR: return "Noir";  // Noir
+    case Couleur::NOIR: return "Noir ";  // Noir
     case Couleur::PERLE: return "Perle"; // Perle (rose)
-    case Couleur::OR: return "Or";    // Or (jaune)
-    case Couleur::INDT: return "Indt";
+    case Couleur::OR: return "Or   ";    // Or (jaune)
+    case Couleur::INDT: return "Indt ";
     default: throw SplendorException("Couleur inconnue");
     }
 }

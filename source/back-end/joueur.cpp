@@ -92,14 +92,19 @@ size_t Joueur::getNbJetons() const {
 // Affichages
 
 void Joueur::afficherJoueur() const {
-    std::cout << "Pseudo : " << pseudo;
-    std::cout << "\nType de joueur : " << toStringType(typeDeJoueur);
-    std::cout << "\nPoints de prestiges : " << ptsPrestige;
-    std::cout << "\nNombre de couronnes : " << nbCouronnes;
-    std::cout << "\nNombre de cartes : " << getNbCartes();
-    std::cout << "\nNombre de cartes reservees : " << getNbCartesReservees();
-    std::cout << "\nNombre de jetons : " << getNbJetons();
-    std::cout << "\nNombre de privileges : " << getNbPrivileges() << "\n\n";
+    std::cout << "\n#############################################\n";
+    std::cout << "Pseudo : " << pseudo << " | Type : " << toStringType(typeDeJoueur);
+    std::cout << "\nPts prestige : " << ptsPrestige << "  | Nb couronnes : " << nbCouronnes;
+    std::cout << "\nNb cartes : " << getNbCartes() << "     | Nb cartes reservees : " << getNbCartesReservees();
+    std::cout << "\nNb privileges : " << getNbPrivileges() << " | Nb jetons : " << getNbJetons() << "\n";
+    for (const auto& pair : jetons) {
+        std::cout << "Jetons " << toStringCouleur(pair.first) << " - ";
+        for (const auto& jeton : pair.second) {
+            std::cout << *jeton;
+        }
+        std::cout << "\n";
+    }
+    std::cout << "#############################################\n\n";
 }
 
 void Joueur::afficherCartes() const {
