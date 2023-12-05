@@ -1,11 +1,11 @@
 # Problemes Splendor Duel
 
-## reserver carte (tout a revoir en gros mdr):
+## reserver carte
+* ça passe en vrai
 
-* si pas de carte reserve : erreur quand on essaye d'acheter une carte reserver
-
-## achat carte (tout a revoir en gros aussi...)
-* voir affichage clean + debug
+## achat carte
+* ça passe petit soucis avec la map :
+la l'achat d'une carte reservée marche pas : pb taille du vect 
 
 ## recuperration de jeton :
 * si le joueur recup 3 jetons mm couleur ou 2 jetons perle -> son adv recup un privilege
@@ -16,6 +16,9 @@
 * l'IA choisit d'acheter une carte reserver (alors qu'elle na pas reserver de carte)
 * l'IA bute apres "carte achetable avec X jetons utilises"
 * l'IA va dans la pyramide/pioche 3
+
+## JE sais meme plus :
+* refaire au propre le choix de la couleur dans strategy : utiliser directement l'enum et pas faire une nouvelle liste moche -> pas extenssible
 
 ## Verif :
 

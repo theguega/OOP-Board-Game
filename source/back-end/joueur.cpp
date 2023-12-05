@@ -74,7 +74,6 @@ size_t Joueur::getNbCartesReservees() const {
             nbCartes += cartesReservees.at(couleur).size();
         }
     }
-
     return nbCartes;
 }
 
@@ -132,7 +131,6 @@ void Joueur::addCarte(const Carte &carte) {
 
 void Joueur::addCarteReservee(const Carte &carte) {
     cartesReservees[carte.getBonus().getCouleur()].push_back(&carte);
-
 }
 
 void Joueur::addCarteNoble(const Carte& carte){

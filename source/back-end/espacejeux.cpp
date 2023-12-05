@@ -111,8 +111,6 @@ bool Pyramide::estVide() const {
 //2 fois la meme fonction a ameliorer
 
 const Carte & Pyramide::reserverCarte(int niveau, int numero) {
-    niveau--;
-    numero--; // pour que l'utilisateur rentre les coordonnees de 1 a 5
     if (array_cartes[niveau][numero] != nullptr) {
         const Carte & ma_carte = * array_cartes[niveau][numero];
         array_cartes[niveau][numero] = nullptr;
@@ -124,8 +122,6 @@ const Carte & Pyramide::reserverCarte(int niveau, int numero) {
 }
 
 const Carte & Pyramide::acheterCarte(unsigned int niveau, unsigned int numero) {
-    niveau--;
-    numero--; // pour que l'utilisateur rentre les coordonnees de 1 a 5
     if (array_cartes[niveau][numero] != nullptr) {
         const Carte & ma_carte = * array_cartes[niveau][numero];
         array_cartes[niveau][numero] = nullptr;

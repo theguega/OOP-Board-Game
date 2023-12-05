@@ -6,6 +6,8 @@
 class Strategy {
 public:
     virtual ~Strategy() = default;
+
+    /*
     virtual std::pair<unsigned int, unsigned int> choisirJeton(Plateau& plateau) = 0;
 
     //virtual std::vector<const Jeton*> recupJetonStrat(Plateau& plateau) = 0;
@@ -19,16 +21,19 @@ public:
     //choix de l'action
     virtual unsigned int choixActionsOptionelles() = 0;
     virtual unsigned int choixActionsObligatoires() = 0;
+    */
 
     //Nouvelle version de strategy
     virtual unsigned int choix_min_max(unsigned int min, unsigned int j) = 0;
     virtual unsigned int choixMenu() = 0;
-
+    virtual Couleur choixCouleur() = 0;
+    virtual Couleur choixCouleurNonINDT() = 0;
 };
 
 
 class StrategyHumain : public Strategy {
 public:
+    /*
     std::pair<unsigned int, unsigned int> choisirJeton(Plateau& plateau) override;
     //std::vector<const Jeton*> recupJetonStrat(Plateau& plateau) override;
     unsigned int choixNiveau() override;
@@ -43,14 +48,18 @@ public:
     virtual unsigned int choixActionsObligatoires() override;
 
     virtual unsigned int utiliserPrivilege() override;
+    */
 
     //Nouvelle version de strategy
     virtual unsigned int choix_min_max(unsigned int min, unsigned int j) override;
     virtual unsigned int choixMenu() override;
+    virtual Couleur choixCouleur() override;
+    virtual Couleur choixCouleurNonINDT() override;
 };
 
 class StrategyIA : public Strategy {
 public:
+    /*
     std::pair<unsigned int, unsigned int> choisirJeton(Plateau& plateau) override;
     //std::vector<const Jeton*> recupJetonStrat(Plateau& plateau) override;
     unsigned int choixNiveau() override;
@@ -65,10 +74,13 @@ public:
     virtual unsigned int choixActionsObligatoires() override;
 
     virtual unsigned int utiliserPrivilege() override;
+    */
 
     //Nouvelle version de strategy
     virtual unsigned int choix_min_max(unsigned int min, unsigned int j) override;
     virtual unsigned int choixMenu() override;
+    virtual Couleur choixCouleur() override;
+    virtual Couleur choixCouleurNonINDT() override;
 };
 
 

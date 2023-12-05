@@ -2,13 +2,11 @@
 #include <random>
 
 unsigned int StrategyHumain::choix_min_max(unsigned int min, unsigned int max) {
-    int choix;
+    unsigned int choix;
     std::cout << "Choisissez un entier entre " << min << " et " << max <<" :"<<std::endl;
     std::cin>>choix;
-    while(choix<min || choix>max) {
-        std::cout<< "Votre choix ne rentre pas dans l'intervalle, veuillez recommencer : " << std::endl;
-        std::cin>>choix;
-    }
+    if(choix<min || choix>max)
+        throw SplendorException("Votrez choix ne rentrait pas dans l'intervalle");
     return choix;
 }
 
@@ -30,10 +28,8 @@ unsigned int StrategyIA::choix_min_max(unsigned int min, unsigned int max) {
 unsigned int StrategyHumain::choixMenu() {
     unsigned int choix;
     std::cin>>choix;
-    while(((choix<1) || (choix>3)) && (choix != 9)) {
-        std::cout<< "Votre choix ne rentre pas dans l'intervalle, veuillez recommencer : " << std::endl;
-        std::cin>>choix;
-    }
+    if(((choix<1) || (choix>3)) && (choix != 9))
+        throw SplendorException("Votre choix n'est pas conforme");
     return choix;
 }
 
@@ -48,6 +44,75 @@ unsigned int StrategyIA::choixMenu() {
     return choix;
 }
 
+Couleur StrategyHumain::choixCouleur() {
+    std::vector<std::string> listeCouleurs = {"BLANC", "BLEU", "VERT", "NOIR", "ROUGE", "PERLE", "INDT"};
+    std::cout << "Choisissez une couleur (BLANC, BLEU, VERT, NOIR, ROUGE, PERLE, INDT \n" << std::endl;
+    string couleur_input;
+    std::cin >> couleur_input;
+    // Verification si la chaîne est presente dans la liste
+    auto it = std::find(listeCouleurs.begin(), listeCouleurs.end(), couleur_input);
+    while (it == listeCouleurs.end()){
+        std::cout<<"La couleur est invalide"<<std::endl;
+        std::cout << "Choisissez une couleur (BLANC, BLEU, VERT, NOIR, ROUGE, PERLE, INDT \n" << std::endl;
+        std::cin >> couleur_input;
+        it = std::find(listeCouleurs.begin(), listeCouleurs.end(), couleur_input);
+    }
+    Couleur couleur = StringToCouleur(couleur_input);
+
+    return couleur;
+}
+
+Couleur StrategyIA::choixCouleur() {
+    std::vector<std::string> listeCouleurs = {"BLANC", "BLEU", "VERT", "NOIR", "ROUGE", "PERLE", "INDT"};
+
+    //generation d'un entier aleatoire entre 0 et 6
+    std::cout<<"pregen\n";
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<int> distribution(0, 6);
+    int choix = distribution(gen);
+    std::cout<<"postgen\n";
+
+    Couleur couleur = StringToCouleur(listeCouleurs[choix]);
+    std::cout << "l'IA a choisit la couleur " << listeCouleurs[choix] << "\n";
+
+    return couleur;
+}
+
+Couleur StrategyHumain::choixCouleurNonINDT() {
+    std::vector<std::string> listeCouleurs = {"BLANC", "BLEU", "VERT", "NOIR", "ROUGE", "PERLE"};
+    std::cout << "Choisissez une couleur (BLANC, BLEU, VERT, NOIR, ROUGE, PERLE \n" << std::endl;
+    string couleur_input;
+    std::cin >> couleur_input;
+    // Verification si la chaîne est presente dans la liste
+    auto it = std::find(listeCouleurs.begin(), listeCouleurs.end(), couleur_input);
+    while (it == listeCouleurs.end()){
+        std::cout<<"La couleur est invalide"<<std::endl;
+        std::cout << "Choisissez une couleur (BLANC, BLEU, VERT, NOIR, ROUGE, PERLE\n" << std::endl;
+        std::cin >> couleur_input;
+        it = std::find(listeCouleurs.begin(), listeCouleurs.end(), couleur_input);
+    }
+    Couleur couleur = StringToCouleur(couleur_input);
+
+    return couleur;
+}
+
+Couleur StrategyIA::choixCouleurNonINDT() {
+    std::vector<std::string> listeCouleurs = {"BLANC", "BLEU", "VERT", "NOIR", "ROUGE", "PERLE"};
+
+    //generation d'un entier aleatoire entre 0 et 6
+    std::cout<<"pregen\n";
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<int> distribution(0, listeCouleurs.size());
+    int choix = distribution(gen);
+    std::cout<<"postgen\n";
+
+    Couleur couleur = StringToCouleur(listeCouleurs[choix]);
+    std::cout << "l'IA a choisit la couleur " << listeCouleurs[choix] << "\n";
+
+    return couleur;
+}
 
 
 
@@ -61,6 +126,7 @@ unsigned int StrategyIA::choixMenu() {
 
 
 
+/*
 
 
 
@@ -107,7 +173,7 @@ std::pair<unsigned int, unsigned int> StrategyIA::choisirJeton(Plateau& plateau)
 }
 
 // les méthodes pour recup des jetons ont été bougées dans le controller
-/*std::vector<const Jeton*> StrategyHumain::recupJetonStrat(Plateau& plateau){
+std::vector<const Jeton*> StrategyHumain::recupJetonStrat(Plateau& plateau){
     std::cout << "Combien de jetons souhaitez-vous recuperer ? (1 a 3) " << std::endl;
     unsigned int nbJetonsRecup;
     std::cin >> nbJetonsRecup;
@@ -266,6 +332,8 @@ std::vector<const Jeton*> StrategyIA::recupJetonStrat(Plateau& plateau){
     }
     return jetonsRecup;
 }*/
+
+/*
 
 unsigned int StrategyHumain::utiliserPrivilege() {
     unsigned int choix;
@@ -489,6 +557,7 @@ std::pair< Couleur, unsigned int> StrategyHumain::achatReserve(unsigned int nbCa
 
 }
 
+
 std::pair< Couleur, unsigned int> StrategyIA::achatReserve(unsigned int nbCartesReservees){
     // Initialiser le generateur de nombres aleatoires avec la graine actuelle du systeme
     std::random_device rd;
@@ -518,3 +587,6 @@ std::pair< Couleur, unsigned int> StrategyIA::achatReserve(unsigned int nbCartes
     return std::make_pair(couleur2, numCarte);
 
 }
+
+
+*/

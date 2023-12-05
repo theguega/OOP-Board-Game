@@ -365,7 +365,6 @@ void Controller::jouer() {
                     }
 
                     //simulation de victoire
-
                     /*if (getJoueurCourant().getNbJetons() >= 4) {
                         //affichage rigolo
                         const std::string message = "Le Joueur " + getJoueurCourant().getPseudo() +" a gagne !";
@@ -384,7 +383,9 @@ void Controller::jouer() {
                         etat_tour = 3;
                         break;
                     }*/
+
                     verifJetonSupDix();
+
                     //fin du tour du joueur, on passe au joueur suivant
                     changerJoueurCourant();
                     etat_tour = 10;
@@ -611,58 +612,90 @@ void Controller::recupererJetons(){
 
 //TODO
 void Controller::acheterCarteJoaillerie (EspaceJeux& espaceJeux){
-    unsigned int choix = strategy_courante->choixAchat();
+    std::cout<<"Vous avez decider d'acheter une carte joaillerie\n";
+    std::cout<<"Voulez vous acheter une carte reservee (1) ou une carte du plateau de jeu (2)\n";
+    unsigned int choix = strategy_courante->choix_min_max(1,2);
 
 
     // Achat carte reservee
     if (choix == 1){
-        std::cout << "Voici les cartes reservees : " << std::endl;
+        if(joueurCourant->getNbCartesReservees()==0)
+            throw SplendorException("Vous n'avez pas de carte rerservee\n");
+
+        std::cout << "Voici les cartes reservees : \n";
         unsigned int i = 0;
         // Affichage de la reserve
         for (const auto& couleurEtCartes : joueurCourant->cartesReservees) {
+            std::cout << "Couleur : " << couleurEtCartes.first << "\n";
             const std::vector<const Carte*>& cartes = couleurEtCartes.second;
             for (const Carte* carte : cartes) {
                 std::cout << "Numero "<<++i<<" : \n"<< *carte << std::endl;
             }
         }
 
-        std::pair< Couleur, unsigned int> carteDescr = strategy_courante->achatReserve(joueurCourant->cartesReservees.size());
-        if(carteDescr.second >= joueurCourant->cartesReservees[carteDescr.first].size() || joueurCourant->cartesReservees[carteDescr.first].size()==0)
-            throw SplendorException("vous n'avez pas cette carte dans votre reserve ou la reserve est vide");
-        else{
-            const Carte& carte = *(joueurCourant->cartesReservees[carteDescr.first][carteDescr.second]);
+        // on recupere la couleur de la carte reservee
+        std::cout<<"Veuillez entrer la couleur de la carte que vous souhiatez reserver\n";
+        Couleur c = strategy_courante->choixCouleur();
 
-            if (!verifAchatCarte(carte, espaceJeux)) {
-                throw SplendorException("Vous n'avez pas assez de gemmes pour acheter cette carte...");
-            }
-            joueurCourant->addCarte(carte);
-            // rajout des couronnes
-            joueurCourant->nbCouronnes += carte.getNbCouronnes();
-            // Rajout du bonus dans le joueur
-            joueurCourant->bonus[carte.getBonus().getCouleur()] += carte.getBonus().getNbBonus();
-            joueurCourant->supCarteReservee(carte);
+        //on recupere l'indice de la carte
+        std::cout<<"Indiquez l'indice de la carte que vous voulez recuperer\n";
+        unsigned int choix_indice_carte = strategy_courante->choix_min_max(1,joueurCourant->cartesReservees.at(c).size())-1;
+
+        //on recup la carte
+        const Carte& carte = joueurCourant->getCarteReservee(c, choix_indice_carte);
+        //on verifie que le joueur peut bien acheter la carte, sinon on la repose
+        if(!verifAchatCarte(carte, partie->getEspaceJeux())) {
+            joueurCourant->addCarteReservee(carte);
+            throw SplendorException("Vous ne pouvez pas acheter cette carte");
         }
-    }
-    // Achat carte du plateau
-    else if (choix == 2){
-        // Affichage des cartes
-        std::cout << "Voici les cartes du plateau : " << std::endl;
-        espaceJeux.getPyramide().afficherPyramide(); //Gerer l'affichage de la pyramide
 
-        std::pair<unsigned int, unsigned int> carteDescr = strategy_courante->reservationCarte(espaceJeux.getPyramide());
+        //si la carte à une couleur indeterminer, le joueur doit choisir la couleur de la carte
 
-        const Carte& carte = espaceJeux.getPyramide().acheterCarte(carteDescr.first, carteDescr.second);
-        if (!verifAchatCarte(carte, espaceJeux)){
-            throw SplendorException("Vous n'avez pas assez de gemmes pour acheter cette carte");
-        }
+        //on ajoute la carte au joueur
         joueurCourant->addCarte(carte);
-        // rajout des couronnes
-        joueurCourant->nbCouronnes += carte.getNbCouronnes();
-        // Rajout du bonus dans le joueur
-        joueurCourant->bonus[carte.getBonus().getCouleur()] += carte.getBonus().getNbBonus();
+
+        //le bonus de la carte est utilisés
+
+        //on actualise les stats du jouur avec le nombre de couronnes et de prestiges
+        joueurCourant->nbCouronnes+=carte.getNbCouronnes();
+        return;
     }
+
+    // Achat carte du plateau
     else {
-        std::cout<<"Le choix est incorrect\n"<<std::endl;
+        // Affichage des cartes
+        std::cout << "Voici les cartes du plateau : \n";
+        espaceJeux.getPyramide().afficherPyramide();
+
+        cout << "rentrez le niveau de la carte souhaitee : \n";
+        unsigned int niveau = strategy_courante->choix_min_max(1, 3)-1;
+        cout << "rentrez le numero de la carte souhaitee : \n";
+        unsigned int num_carte = strategy_courante->choix_min_max(1, getPyramide().getNbCartesNiv(niveau-1))-1;
+
+        const Carte& carte = partie->getEspaceJeux().getPyramide().acheterCarte(niveau, num_carte);
+
+        //on verifie que le joueur peut bien acheter la carte, sinon on la repose
+        if(!verifAchatCarte(carte, partie->getEspaceJeux())) {
+            partie->getEspaceJeux().getPyramide().definitCarte(niveau, num_carte, carte);
+            throw SplendorException("Vous ne pouvez pas acheter cette carte");
+        }
+        //remettre un carte pour la remplacer
+        partie->getEspaceJeux().getPyramide().remplircasePyramide(niveau, num_carte);
+
+        //si la carte à une couleur indeterminer, le joueur doit choisir la couleur de la carte
+        if(carte.getBonus().getCouleur()==Couleur::INDT){
+            std::cout<<"Votre carte est de couleur indeterminee, veuillez choisir une couleur pour votre carte\n";
+            Couleur c = strategy_courante->choixCouleur();
+        }
+
+        //on ajoute la carte au joueur
+        joueurCourant->addCarte(carte);
+
+        //le bonus de la carte est utilisés
+
+        //on actualise les stats du jouur avec le nombre de couronnes et de prestiges
+        joueurCourant->nbCouronnes+=carte.getNbCouronnes();
+        return;
     }
 }
 
@@ -701,12 +734,12 @@ void Controller::orReserverCarte (Pyramide& pyramide, Plateau& plateau){
     if (choix == 0){
         // Reservation de la carte
         std::cout << "Voici les cartes de la pyramide : " << std::endl;
-        getPyramide().afficherPyramide(); //Gerer l'affichage de la pyramide
+        getPyramide().afficherPyramide();
 
         cout << "rentrez le niveau de la carte souhaitee : \n";
-        unsigned int niveau = strategy_courante->choix_min_max(1, 3);
+        unsigned int niveau = strategy_courante->choix_min_max(1, 3)-1;
         cout << "rentrez le numero de la carte souhaitee : \n";
-        unsigned int num_carte = strategy_courante->choix_min_max(1, getPyramide().getNbCartesNiv(niveau-1));
+        unsigned int num_carte = strategy_courante->choix_min_max(1, getPyramide().getNbCartesNiv(niveau))-1;
 
         const Carte& carte = pyramide.acheterCarte(niveau, num_carte);
         joueurCourant->addCarteReservee(carte);
