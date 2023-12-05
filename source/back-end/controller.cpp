@@ -366,7 +366,7 @@ void Controller::jouer() {
 
                     //simulation de victoire
 
-                    if (getJoueurCourant().getNbJetons() >= 4) {
+                    /*if (getJoueurCourant().getNbJetons() >= 4) {
                         //affichage rigolo
                         const std::string message = "Le Joueur " + getJoueurCourant().getPseudo() +" a gagne !";
                         for (size_t j = 0; j<250; j++) {
@@ -383,8 +383,8 @@ void Controller::jouer() {
 
                         etat_tour = 3;
                         break;
-                    }
-
+                    }*/
+                    verifJetonSupDix();
                     //fin du tour du joueur, on passe au joueur suivant
                     changerJoueurCourant();
                     etat_tour = 10;
@@ -900,6 +900,22 @@ void Controller::verifSacvide(){
 void Controller::verifOrSurPlateau(){
     if(!getPlateau().contientOr())
         throw SplendorException("\nLe plateau ne contient aucun jeton Or, vous ne pouvez pas reserver de carte\n");
+}
+
+void Controller::verifJetonSupDix(){
+    cout << "Verification que le joueur courant n'a pas plus de 10 jetons dans sa main\n";
+    while(joueurCourant->getNbJetons() > 10){
+        cout << "Vous devez reposer des jetons dans le sac : \n";
+        cout << "Choisissez une couleur parmi : \n";
+        cout << "1 - Blanc\n2 - Bleu\n3 - Vert\n4 - Rouge\n5 - Noir\n6 - Perle\n7 - Or\n";
+        unsigned int choix = strategy_courante->choix_min_max(1, 7);
+        Couleur choix_c = static_cast<Couleur>(choix-1);
+        if (joueurCourant->getNbJetons(choix_c) == 0)
+            cout << "Vous n'avez pas de jetons de cette couleur !\n";
+        else{
+            joueurCourant->supJetonNb(1, choix_c, getEspaceJeux());
+        }
+    }
 }
 
 

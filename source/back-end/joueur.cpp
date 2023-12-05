@@ -97,6 +97,7 @@ void Joueur::afficherJoueur() const {
     std::cout << "\nPts prestige : " << ptsPrestige << "  | Nb couronnes : " << nbCouronnes;
     std::cout << "\nNb cartes : " << getNbCartes() << "     | Nb cartes reservees : " << getNbCartesReservees();
     std::cout << "\nNb privileges : " << getNbPrivileges() << " | Nb jetons : " << getNbJetons() << "\n";
+    std::cout << "-----------------------------------------------\n";
     for (const auto& pair : jetons) {
         std::cout << "Jetons " << toStringCouleur(pair.first) << " - ";
         for (const auto& jeton : pair.second) {

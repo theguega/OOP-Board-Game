@@ -32,6 +32,7 @@ public:
     };
     Plateau& getPlateau() const {return partie->getEspaceJeux().getPlateau();}
     Pyramide& getPyramide() const {return partie->getEspaceJeux().getPyramide();}
+    EspaceJeux& getEspaceJeux() const{return partie->getEspaceJeux();}
 	// setters
 	void setJoueurCourant(int n);
 
@@ -69,6 +70,7 @@ public:
     void verifPlateauvide();
     void verifSacvide();
     void verifOrSurPlateau();
+    void verifJetonSupDix();
     bool verifAchatCarte(const Carte& carte, EspaceJeux& espaceJeux);
 
 };
