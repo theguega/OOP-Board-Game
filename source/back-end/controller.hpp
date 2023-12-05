@@ -70,6 +70,7 @@ public:
     void verifPlateauvide();
     void verifSacvide();
     void verifOrSurPlateau();
+    void verifTroisCarteReserve();
     void verifJetonSupDix();
     bool verifAchatCarte(const Carte& carte, EspaceJeux& espaceJeux);
 
