@@ -609,7 +609,7 @@ void Controller::recupererJetons(){
     return;
 }
 
-
+//TODO
 void Controller::acheterCarteJoaillerie (EspaceJeux& espaceJeux){
     unsigned int choix = strategy_courante->choixAchat();
 
@@ -664,12 +664,20 @@ void Controller::acheterCarteJoaillerie (EspaceJeux& espaceJeux){
     else {
         std::cout<<"Le choix est incorrect\n"<<std::endl;
     }
-
-
 }
 
+void Controller::acheterCarteNoble (Pyramide& pyramide){
+    std::cout<<"Vous devez achter une carte noble car vous avez 3 ou 6 pts de prestige\n";
+    // affichage cartes nobles
+    pyramide.afficherNobles();
 
-//TODO
+    unsigned int i = strategy_courante->choix_min_max(0,pyramide.getNbCartesNiv(4));
+
+    const Carte& carte = pyramide.acheterCarte(4, i);
+
+    joueurCourant->addCarteNoble(carte);
+}
+
 void Controller::orReserverCarte (Pyramide& pyramide, Plateau& plateau){
     verifOrSurPlateau();
     cout << "Commencez par choisir un jeton Or : \n";
@@ -716,22 +724,6 @@ void Controller::orReserverCarte (Pyramide& pyramide, Plateau& plateau){
     cout << "Etat du joueur apres l'action : \n";
     joueurCourant->afficherJoueur();
 }
-
-
-
-
-//TODO
-void Controller::acheterCarteNoble (Pyramide& pyramide){
-    // affichage cartes nobles
-    pyramide.afficherPyramide();
-
-    std::pair< unsigned int, unsigned int> carteDescr = strategy_courante->achatNoble(pyramide);
-
-    const Carte& carte = pyramide.acheterCarte(4, carteDescr.second);
-    joueurCourant->addCarteNoble(carte);
-}
-
-
 
 ///////////////////////////////////////////////////////////////////////////////////
 ///////// Méthodes qui restent à implementer de manière fonctionnelle /////////////

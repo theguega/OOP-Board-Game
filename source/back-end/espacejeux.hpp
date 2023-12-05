@@ -39,6 +39,7 @@ class Pyramide {
         Pioche& getPiocheNoble() const { return pNoble; }
 
         void afficherPyramide() const;
+        void afficherNobles() const;
         
         Pyramide(const Pyramide&) = delete;
         Pyramide& operator=(const Pyramide&) = delete;
