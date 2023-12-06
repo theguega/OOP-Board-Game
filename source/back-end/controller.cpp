@@ -670,7 +670,8 @@ void Controller::acheterCarteJoaillerie (EspaceJeux& espaceJeux){
         cout << "rentrez le niveau de la carte souhaitee : \n";
         unsigned int niveau = strategy_courante->choix_min_max(1, 3)-1;
         cout << "rentrez le numero de la carte souhaitee : \n";
-        unsigned int num_carte = strategy_courante->choix_min_max(1, getPyramide().getNbCartesNiv(niveau-1))-1;
+        std::cout<<"DEBUG : "<<getPyramide().getNbCartesNiv(niveau);
+        unsigned int num_carte = strategy_courante->choix_min_max(1, getPyramide().getNbCartesNiv(niveau))-1;
 
         const Carte& carte = partie->getEspaceJeux().getPyramide().acheterCarte(niveau, num_carte);
 
