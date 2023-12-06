@@ -46,6 +46,7 @@ vuePlateau::vuePlateau(QWidget* parent, int hauteur, int largeur) : QWidget(pare
     }
 
     boutonValider = new QPushButton("Valider le choix des jetons"); //Creer le bouton valider (pour la selection des jetons)
+    boutonValider->setStyleSheet("color blue;");
 
     layout = new QVBoxLayout; //Layout pour mettre le Grid + les boutons en dessous
 
@@ -58,8 +59,9 @@ vuePlateau::vuePlateau(QWidget* parent, int hauteur, int largeur) : QWidget(pare
 
     info = new popUpInfo(nullptr, "Vos jetons ont bien ete ajoute");
 
-    xBoutonHG = temp->pos().x();
-    yBoutonHG = temp->pos().y();
+    xBoutonHG = temp->rect().center().x();
+    yBoutonHG = temp->rect().center().y();
+    qDebug()<<yBoutonHG <<" " <<xBoutonHG;
 }
 
 void vuePlateau::boutonClique(int i){
@@ -150,8 +152,8 @@ void vuePlateau::paintEvent(QPaintEvent *event) {
     int tailleCelluleV = (h - 100)/sqrt(nbJetons) + verticalSpacing;
 
     // Coordonnées de départ pour positionner le plateau
-    int startX = xBoutonHG + horizontalSpacing * 2; // Coordonnée X de départ
-    int startY = yBoutonHG + verticalSpacing * 2.4; // Coordonnée Y de départ
+    int startX = xBoutonHG/3.5; // Coordonnée X de départ
+    int startY = yBoutonHG/3.5; // Coordonnée Y de départ
 
     // Dessiner le plateau avec les emplacements carrés
     painter.setPen(QPen(QColor("#A0522D"), 4)); // Couleur des bordures
