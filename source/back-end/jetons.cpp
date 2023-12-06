@@ -367,6 +367,17 @@ bool Plateau::contientOr() const {
     }
     return false;
 }
+
+bool Plateau::contientOnlyOr() const{
+    for(int i =0; i <5; i++){
+        for(int j = 0; j<5; j++){
+            if(getJeton(i, j)->getCouleur() != Couleur::OR)
+                return false;
+        }
+    }
+    return true;
+}
+
 //Singleton
 //Avec sac et lot de privileges (debut de partie)
 Plateau& Plateau::getPlateau(const LotPrivileges& lotp) {

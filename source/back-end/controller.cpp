@@ -1006,6 +1006,19 @@ void Controller::verifJetonSupDix(){
     }
 }
 
+void Controller::verifActionsImpossibles(){
+    bool peut_recup = true;
+    bool peut_resa = true;
+    bool peut_achat = true;
+    if(getPlateau().estVide() || getPlateau().contientOnlyOr())
+        peut_recup = false;
+    if(getPlateau().contientOr() == false || joueurCourant->getNbCartesReservees() == 3)
+        peut_resa = false;
+
+    // on boucle sur chaque carte de la pyramide
+
+    // on boucle sur chaque carte des cartes réservées
+}
 
 ///////////////////////// Sauvegarde /////////////////////////
 
