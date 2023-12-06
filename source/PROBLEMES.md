@@ -8,7 +8,7 @@
 la l'achat d'une carte reservée marche pas : pb taille du vect 
 
 ## recuperration de jeton :
-* si le joueur recup 3 jetons mm couleur ou 2 jetons perle -> son adv recup un privilege
+* si le joueur recup 3 jetons mm couleur ou 2 jetons perle -> son adv recup un privilege DONE (normalement)
 * la méthode ne verifiat pas si les jetons étaient à cote, même s'ils etaient alignes. 
 * Problème corrigé pour ligne et colonne, pas diago
 

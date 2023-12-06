@@ -604,6 +604,28 @@ void Controller::recupererJetons(){
         joueurCourant->addJeton(*i);
     }
 
+    // Ajout privilège joueur adv si 3 jetons mm couleur ou 2 jetons perle
+    unsigned int nbJetonsPerle = 0;
+    bool troisJetons = true;
+    Couleur coulPremierJeton = jetonsRecup[0]->getCouleur();
+    for(unsigned int k = 0; k < nbJetons; k++){
+        if(jetonsRecup[k]->getCouleur() == Couleur::PERLE){
+            nbJetonsPerle++;
+        }
+        if(jetonsRecup[k]->getCouleur() != coulPremierJeton && troisJetons != false){
+            troisJetons = false;
+        }
+    }
+    if(nbJetonsPerle == 2 || (troisJetons == true && jetonsRecup.size()== 3)){
+        std::cout<<"Ajout d'un privilège pour le joueur adverse\n" ;
+        donPrivilegeAdverse();
+        std::cout<<"Voici l'etat du joueur adverse apres recuperation :\n" ;
+        getJoueurAdverse().afficherJoueur();
+
+    }
+
+
+
     std::cout<<"Voici le nouveau plateau (apres recuperation) \n" << getPlateau();
     std::cout<<"Voici l'etat du joueur apres recuperation :\n" ;
     joueurCourant->afficherJoueur();
