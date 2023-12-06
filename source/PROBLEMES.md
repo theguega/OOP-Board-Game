@@ -10,7 +10,6 @@
 - [x] = la tâche est faite
 - [ ] Si aucune action obligatoire possible -> rempli le plateau puis action obligatoire
 - [ ] interdit d'acheter une carte de bonus indt si on a pas de carte avec un bonus defini devant nous
-- [ ] Reserver une carte est l'unique moyen d'avoir un jeton OR
 - [ ] Chaque jeton Or est un joker qui remplace un jeton de couleur au choix
 - [ ] Des qu'un joueur a 3 ou 6 couronnes il prend une carte Noble et applique la capacite
 

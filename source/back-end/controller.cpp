@@ -690,7 +690,6 @@ void Controller::acheterCarteJoaillerie (EspaceJeux& espaceJeux){
         const Carte& carte = joueurCourant->getCarteReservee(c, choix_indice_carte);
         //on verifie que le joueur peut bien acheter la carte, sinon on la repose
         if(!verifAchatCarte(carte, partie->getEspaceJeux())) {
-            joueurCourant->addCarteReservee(carte);
             throw SplendorException("Vous ne pouvez pas acheter cette carte");
         }
 
@@ -993,7 +992,10 @@ void Controller::verifJetonSupDix(){
     while(joueurCourant->getNbJetons() > 10){
         cout << "Vous devez reposer des jetons dans le sac : \n";
         cout << "Choisissez une couleur parmi : \n";
-        cout << "1 - Blanc\n2 - Bleu\n3 - Vert\n4 - Rouge\n5 - Noir\n6 - Perle\n7 - Or\n";
+        for (auto& couleur : Couleurs){
+            if (couleur != Couleur::INDT)
+                cout << static_cast<int>(couleur)+1 << " - " << toStringCouleur(couleur) << "\n";
+        }
         unsigned int choix = strategy_courante->choix_min_max(1, 7);
         Couleur choix_c = static_cast<Couleur>(choix-1);
         if (joueurCourant->getNbJetons(choix_c) == 0)
