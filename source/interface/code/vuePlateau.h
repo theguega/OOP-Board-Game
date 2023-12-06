@@ -25,6 +25,9 @@ private:
     int h;
     int l;
 
+    int xBoutonHG;
+    int yBoutonHG;
+
     QPushButton* boutonValider;
     popUpInfo* info;
 

@@ -25,7 +25,15 @@ vuePlateau::vuePlateau(QWidget* parent, int hauteur, int largeur) : QWidget(pare
     nbJetons = 25; //Nombre de jetons sur la plateau (sera recuperer depuis le back apres)
     setFixedSize(l, h); //Fixe la taille du plateau
     //sac = plateau->getSac();
-    for(int i = 0; i < nbJetons; i++){
+
+    vueJeton* temp = new vueJeton(nullptr, (h - 100)/(2*sqrt(nbJetons)), new Jeton(listeCouleur[indices[0]]));
+    listeJetons[0] = temp;
+    layoutJetons -> addWidget(listeJetons[0], 0, 0);
+    QObject::connect(listeJetons[0], &vueJeton::clicked, [this]() {
+        boutonClique(0); //Permet d'appeler la fonction boutonClique(int i) lorsque le bouton i est clique
+    });
+
+    for(int i = 1; i < nbJetons; i++){
         //Creer un getteur pour les Jetons
         listeJetons[i] = new vueJeton(nullptr, (h - 100)/(2*sqrt(nbJetons)), new Jeton(listeCouleur[indices[i]]));
         layoutJetons -> addWidget(listeJetons[i], i / 5, i % 5);
@@ -49,6 +57,9 @@ vuePlateau::vuePlateau(QWidget* parent, int hauteur, int largeur) : QWidget(pare
     connect(boutonValider, &QPushButton::clicked, this, &vuePlateau::validerJetons); //connect boutonValider avec valliderJetons
 
     info = new popUpInfo(nullptr, "Vos jetons ont bien ete ajoute");
+
+    xBoutonHG = temp->pos().x();
+    yBoutonHG = temp->pos().y();
 }
 
 void vuePlateau::boutonClique(int i){
@@ -139,8 +150,8 @@ void vuePlateau::paintEvent(QPaintEvent *event) {
     int tailleCelluleV = (h - 100)/sqrt(nbJetons) + verticalSpacing;
 
     // Coordonnées de départ pour positionner le plateau
-    int startX = horizontalSpacing * 2.1; // Coordonnée X de départ
-    int startY = verticalSpacing * 2.4; // Coordonnée Y de départ
+    int startX = xBoutonHG + horizontalSpacing * 2; // Coordonnée X de départ
+    int startY = yBoutonHG + verticalSpacing * 2.4; // Coordonnée Y de départ
 
     // Dessiner le plateau avec les emplacements carrés
     painter.setPen(QPen(QColor("#A0522D"), 4)); // Couleur des bordures
