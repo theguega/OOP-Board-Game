@@ -28,13 +28,15 @@ private:
     QColor Qcouleur;
     QColor QcouleurClair;
     QColor couleurContour;
+    position* pos;
 public:
-    vueJeton(QWidget* parent = nullptr, int rad = 0, Jeton* jeton = nullptr);
+    vueJeton(QWidget* parent = nullptr, int rad = 0, Jeton* jeton = nullptr, position* p = nullptr);
     void apparaitre();
     void disparaitre();
     bool getEstVisible();
     void changeAfficherCroix();
     void enleverCroix();
+    position* getPosition(){return pos;}
 protected:
     void paintEvent(QPaintEvent *event);
 };

@@ -2,7 +2,7 @@
 #include <QPushButton>
 #include <interface/code/vueJeton.h>
 
-vueJeton::vueJeton(QWidget* parent, int rad, Jeton* jeton) : QPushButton(parent){
+vueJeton::vueJeton(QWidget* parent, int rad, Jeton* jeton, position* p) : QPushButton(parent), pos(p){
     this->jeton = jeton;
     switch(jeton->getCouleur()){
     case Couleur::BLANC:
@@ -55,7 +55,6 @@ vueJeton::vueJeton(QWidget* parent, int rad, Jeton* jeton) : QPushButton(parent)
     afficherCroix = false; //afficherCroix est un booleen pour savoir si on montre la croix de selection (false d'origine)
     setFlat(true);
     setStyleSheet("QPushButton:pressed { border: none; }"); // Annule le style du contour quand le bouton est presse
-
 }
 
 void vueJeton::apparaitre(){ //Fait apparaitre le jeton (utile quand on voudra les remettre sur le plateau)
