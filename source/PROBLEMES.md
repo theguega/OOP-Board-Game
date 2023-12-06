@@ -1,7 +1,6 @@
 # Problemes Splendor Duel
 
 ## recuperration de jeton :
-* si le joueur recup 3 jetons mm couleur ou 2 jetons perle -> son adv recup un privilege
 
 ## Crash (IA)
 * l'IA choisit d'acheter une carte reserver (alors qu'elle na pas reserver de carte)
@@ -30,7 +29,7 @@
 - [x] Si aucun jeton Or sur le plateau on peut pas reserver de carte
 - [x] Si deja 3 cartes reservees on peut pas reserver plus de carte
 - [ ] interdit d'acheter une carte de bonus indt si on a pas de carte avec un bonus defini devant nous
-- [ ] Reserver une carte est l'unique moyen d'avoir un jeton OR
+- [x] Reserver une carte est l'unique moyen d'avoir un jeton OR
 - [ ] Chaque jeton Or est un joker qui remplace un jeton de couleur au choix
 - [ ] Des qu'un joueur a 3 ou 6 couronnes il prend une carte Noble et applique la capacite
 - [x] Un joueur doit avoir au plus 10 jetons a la fin d'un tour (pendant on s'en fout)
