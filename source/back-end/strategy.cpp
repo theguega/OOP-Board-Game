@@ -14,14 +14,12 @@ unsigned int StrategyIA::choix_min_max(unsigned int min, unsigned int max) {
     std::cout << "l'IA choisit entre " << min << " et " << max <<" :"<<std::endl;
 
     //generation d'un entier aleatoire entre min et max
-    std::cout<<"pregen\n";
     std::random_device rd;
     std::mt19937 gen(rd());
     std::uniform_int_distribution<int> distribution(min, max);
     int choix = distribution(gen);
 
     std::cout << "l'IA a choisit : " << choix << "\n";
-    std::cout<<"postgen\n";
     return choix;
 }
 
@@ -45,33 +43,22 @@ unsigned int StrategyIA::choixMenu() {
 }
 
 Couleur StrategyHumain::choixCouleur() {
-    std::vector<std::string> listeCouleurs = {"BLANC", "BLEU", "VERT", "NOIR", "ROUGE", "PERLE", "INDT"};
-    std::cout << "Choisissez une couleur (BLANC, BLEU, VERT, NOIR, ROUGE, PERLE, INDT \n" << std::endl;
+    std::cout << "Choisissez une couleur : (blanc,bleu,vert,noir,rouge,perle,indt) (sensible a la casse) \n" << std::endl;
     string couleur_input;
     std::cin >> couleur_input;
-    // Verification si la chaîne est presente dans la liste
-    auto it = std::find(listeCouleurs.begin(), listeCouleurs.end(), couleur_input);
-    while (it == listeCouleurs.end()){
-        std::cout<<"La couleur est invalide"<<std::endl;
-        std::cout << "Choisissez une couleur (BLANC, BLEU, VERT, NOIR, ROUGE, PERLE, INDT \n" << std::endl;
-        std::cin >> couleur_input;
-        it = std::find(listeCouleurs.begin(), listeCouleurs.end(), couleur_input);
-    }
     Couleur couleur = StringToCouleur(couleur_input);
 
     return couleur;
 }
 
 Couleur StrategyIA::choixCouleur() {
-    std::vector<std::string> listeCouleurs = {"BLANC", "BLEU", "VERT", "NOIR", "ROUGE", "PERLE", "INDT"};
+    std::vector<std::string> listeCouleurs = {"blanc", "bleu", "vert", "noir", "rouge", "perle", "indt"};
 
     //generation d'un entier aleatoire entre 0 et 6
-    std::cout<<"pregen\n";
     std::random_device rd;
     std::mt19937 gen(rd());
     std::uniform_int_distribution<int> distribution(0, 6);
     int choix = distribution(gen);
-    std::cout<<"postgen\n";
 
     Couleur couleur = StringToCouleur(listeCouleurs[choix]);
     std::cout << "l'IA a choisit la couleur " << listeCouleurs[choix] << "\n";
@@ -80,33 +67,25 @@ Couleur StrategyIA::choixCouleur() {
 }
 
 Couleur StrategyHumain::choixCouleurNonINDT() {
-    std::vector<std::string> listeCouleurs = {"BLANC", "BLEU", "VERT", "NOIR", "ROUGE", "PERLE"};
-    std::cout << "Choisissez une couleur (BLANC, BLEU, VERT, NOIR, ROUGE, PERLE \n" << std::endl;
+    std::cout << "Choisissez une couleur : (blanc,bleu,vert,noir,rouge,perle) (sensible a la casse) \n" << std::endl;
     string couleur_input;
     std::cin >> couleur_input;
-    // Verification si la chaîne est presente dans la liste
-    auto it = std::find(listeCouleurs.begin(), listeCouleurs.end(), couleur_input);
-    while (it == listeCouleurs.end()){
-        std::cout<<"La couleur est invalide"<<std::endl;
-        std::cout << "Choisissez une couleur (BLANC, BLEU, VERT, NOIR, ROUGE, PERLE\n" << std::endl;
-        std::cin >> couleur_input;
-        it = std::find(listeCouleurs.begin(), listeCouleurs.end(), couleur_input);
-    }
     Couleur couleur = StringToCouleur(couleur_input);
+
+    if(couleur==Couleur::INDT)
+        throw SplendorException("La couleur ne doit pas etre indtermine dans ce cas ci");
 
     return couleur;
 }
 
 Couleur StrategyIA::choixCouleurNonINDT() {
-    std::vector<std::string> listeCouleurs = {"BLANC", "BLEU", "VERT", "NOIR", "ROUGE", "PERLE"};
+    std::vector<std::string> listeCouleurs = {"blanc", "bleu", "vert", "noir", "rouge", "perle"};
 
     //generation d'un entier aleatoire entre 0 et 6
-    std::cout<<"pregen\n";
     std::random_device rd;
     std::mt19937 gen(rd());
     std::uniform_int_distribution<int> distribution(0, listeCouleurs.size());
     int choix = distribution(gen);
-    std::cout<<"postgen\n";
 
     Couleur couleur = StringToCouleur(listeCouleurs[choix]);
     std::cout << "l'IA a choisit la couleur " << listeCouleurs[choix] << "\n";

@@ -626,10 +626,18 @@ void Controller::acheterCarteJoaillerie (EspaceJeux& espaceJeux){
         unsigned int i = 0;
         // Affichage de la reserve
         for (const auto& couleurEtCartes : joueurCourant->cartesReservees) {
-            std::cout << "Couleur : " << couleurEtCartes.first << "\n";
-            const std::vector<const Carte*>& cartes = couleurEtCartes.second;
-            for (const Carte* carte : cartes) {
-                std::cout << "Numero "<<++i<<" : \n"<< *carte << std::endl;
+            Couleur couleur = couleurEtCartes.first;
+
+            // Ignorer les cartes de couleur OR et INDT
+            if (couleur != Couleur::OR) {
+                std::cout << "Cartes de couleur : " << couleur << "\n";
+                const std::vector<const Carte*>& cartes = couleurEtCartes.second;
+
+                for (const Carte* carte : cartes) {
+                    std::cout << "Numero " << ++i << " : \n" << *carte << std::endl;
+                }
+
+                std::cout << "\n\n\n";
             }
         }
 
@@ -637,9 +645,14 @@ void Controller::acheterCarteJoaillerie (EspaceJeux& espaceJeux){
         std::cout<<"Veuillez entrer la couleur de la carte que vous souhiatez reserver\n";
         Couleur c = strategy_courante->choixCouleur();
 
+        //on verifie qu'il a bien des cartes de cette couleur reservee
+        unsigned int nb_carte = joueurCourant->getNbCartesReservees(c);
+        if (nb_carte==0)
+            throw SplendorException("Vous n'avez pas de carte de cette couleur\n");
+
         //on recupere l'indice de la carte
         std::cout<<"Indiquez l'indice de la carte que vous voulez recuperer\n";
-        unsigned int choix_indice_carte = strategy_courante->choix_min_max(1,joueurCourant->cartesReservees.at(c).size())-1;
+        unsigned int choix_indice_carte = strategy_courante->choix_min_max(1,nb_carte)-1;
 
         //on recup la carte
         const Carte& carte = joueurCourant->getCarteReservee(c, choix_indice_carte);
@@ -687,6 +700,7 @@ void Controller::acheterCarteJoaillerie (EspaceJeux& espaceJeux){
         if(carte.getBonus().getCouleur()==Couleur::INDT){
             std::cout<<"Votre carte est de couleur indeterminee, veuillez choisir une couleur pour votre carte\n";
             Couleur c = strategy_courante->choixCouleur();
+            //attribuer la couleur choisit à la carte
         }
 
         //on ajoute la carte au joueur

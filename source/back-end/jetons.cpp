@@ -83,7 +83,7 @@ Couleur StringToCouleur(const std::string& couleurStr) {
         return tmp->second;
     }
     else {
-        return Couleur::INDT;
+        throw SplendorException("Couleur de carte inconnu, attention à la casse\n");
     }
 }
 
