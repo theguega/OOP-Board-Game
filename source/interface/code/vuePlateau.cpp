@@ -2,6 +2,8 @@
 #include <array>
 #include <QVBoxLayout>
 #include <QPushButton>
+#include <QRandomGenerator>
+#include <QPainterPath>
 #include "vuePlateau.h"
 #include "vueJeton.h"
 
@@ -25,7 +27,7 @@ vuePlateau::vuePlateau(QWidget* parent, int hauteur, int largeur) : QWidget(pare
     //sac = plateau->getSac();
     for(int i = 0; i < nbJetons; i++){
         //Creer un getteur pour les Jetons
-        listeJetons[i] = new vueJeton(nullptr, (h - 100)/(2*sqrt(nbJetons)), listeCouleur[indices[i]]);
+        listeJetons[i] = new vueJeton(nullptr, (h - 100)/(2*sqrt(nbJetons)), new Jeton(listeCouleur[indices[i]]));
         layoutJetons -> addWidget(listeJetons[i], i / 5, i % 5);
         QObject::connect(listeJetons[i], &vueJeton::clicked, [this, i]() {
             boutonClique(i); //Permet d'appeler la fonction boutonClique(int i) lorsque le bouton i est clique
@@ -104,14 +106,6 @@ void vuePlateau::cacherElements(){
     info -> close();
 }
 
-void vuePlateau::paintEvent(QPaintEvent *event){
-    QWidget::paintEvent(event);
-
-
-    QPainter painter(this);
-    painter.setRenderHint(QPainter::Antialiasing);
-}
-
 /*vueJeton* vuePlateau::recupererBouton(Jeton* jeton){
     for(int i = 0; i < 25; i++){
         if(listeJetons[i]->getJeton() == jeton){
@@ -131,3 +125,135 @@ void vuePlateau::paintEvent(QPaintEvent *event){
         }
     }
 }*/
+
+void vuePlateau::paintEvent(QPaintEvent *event) {
+    QWidget::paintEvent(event);
+    QPainter painter(this);
+    painter.setRenderHint(QPainter::Antialiasing);
+
+    int horizontalSpacing = layoutJetons->spacing();
+    int verticalSpacing = layoutJetons->spacing();
+
+    // Taille du côté d'une cellule (emplacement)
+    int tailleCelluleH = (h - 100)/sqrt(nbJetons) + horizontalSpacing * 3.2;
+    int tailleCelluleV = (h - 100)/sqrt(nbJetons) + verticalSpacing;
+
+    // Coordonnées de départ pour positionner le plateau
+    int startX = horizontalSpacing * 2.1; // Coordonnée X de départ
+    int startY = verticalSpacing * 2.4; // Coordonnée Y de départ
+
+    // Dessiner le plateau avec les emplacements carrés
+    painter.setPen(QPen(QColor("#A0522D"), 4)); // Couleur des bordures
+    painter.setBrush(QColor("#DEB887")); // Couleur de fond des emplacements
+
+    for (int i = 0; i < sqrt(nbJetons); ++i) {
+        for (int j = 0; j < sqrt(nbJetons); ++j) {
+            int x = startX + i * (tailleCelluleH);
+            int y = startY + j * (tailleCelluleV);
+
+            painter.drawRect(x, y, tailleCelluleH, tailleCelluleV);
+        }
+    }
+
+    int cx = startX + (tailleCelluleH * sqrt(nbJetons)) / 2; // Coordonnée X du centre
+    int cy = startY + (tailleCelluleV * sqrt(nbJetons)) / 2; // Coordonnée Y du centre
+
+    painter.setPen(QPen(Qt::black, 2)); // Couleur et épaisseur des flèches
+
+    int dx = 0;
+    int dy = 0;
+
+    int currentX = cx; // Coordonnée X actuelle
+    int currentY = cy; // Coordonnée Y actuelle
+
+    size_t h = 1, d = 1, b = 2, g = 2;
+    size_t direction = 0, avancement = 0;
+    for(int step = 0; step < nbJetons - 1; step++) {
+        switch (direction) {
+        case 0:  // Vers le haut
+            avancement++;
+            if (avancement == h){
+                avancement = 0;
+                direction = 1;
+                h += 2;
+            }
+            dx = 0;
+            dy = -1;
+            break;
+        case 1:  // Vers la droite
+            avancement++;
+            if (avancement == d){
+                avancement = 0;
+                direction = 2;
+                d += 2;
+            }
+            dx = 1;
+            dy = 0;
+            break;
+        case 2:  // Vers le bas
+            avancement++;
+            if (avancement == b){
+                avancement = 0;
+                direction = 3;
+                b += 2;
+            }
+            dx = 0;
+            dy = 1;
+            break;
+        case 3:  // Vers la gauche
+            avancement++;
+            if (avancement == g){
+                avancement = 0;
+                direction = 0;
+                g += 2;
+            }
+            dx = -1;
+            dy = 0;
+            break;
+        }
+        int nextX = currentX + dx * tailleCelluleH;
+        int nextY = currentY + dy * tailleCelluleV;
+
+        painter.drawLine(currentX, currentY, nextX, nextY);
+
+        int triangleSize = 10; // Taille du triangle (base/hauteur)
+        int midX = (currentX + nextX) / 2; // Coordonnée X du milieu de la ligne
+        int midY = (currentY + nextY) / 2; // Coordonnée Y du milieu de la ligne
+
+        QPolygon triangle;
+
+        // Dessiner un triangle dans la direction spécifiée
+        if(currentY == nextY){ // Ligne horizontale
+            if(currentX < nextX){ // Vers la droite
+                triangle << QPoint(midX + triangleSize / 2, midY);
+                triangle << QPoint(midX - triangleSize / 2, midY + triangleSize / 2);
+                triangle << QPoint(midX - triangleSize / 2, midY - triangleSize / 2);
+            }
+            else{ // Vers la gauche
+                triangle << QPoint(midX - triangleSize / 2, midY);
+                triangle << QPoint(midX + triangleSize / 2, midY + triangleSize / 2);
+                triangle << QPoint(midX + triangleSize / 2, midY - triangleSize / 2);
+            }
+        }
+        else{ // Ligne verticale
+            if(currentY < nextY){ // Vers le bas
+                triangle << QPoint(midX, midY + triangleSize / 2);
+                triangle << QPoint(midX + triangleSize / 2, midY - triangleSize / 2);
+                triangle << QPoint(midX - triangleSize / 2, midY - triangleSize / 2);
+            }
+            else{ // Vers le haut
+                triangle << QPoint(midX, midY - triangleSize / 2);
+                triangle << QPoint(midX + triangleSize / 2, midY + triangleSize / 2);
+                triangle << QPoint(midX - triangleSize / 2, midY + triangleSize / 2);
+            }
+        }
+
+        QPainterPath path;
+        path.addPolygon(triangle);
+
+        painter.fillPath(path, Qt::black);
+
+        currentX = nextX;
+        currentY = nextY;
+    }
+}

@@ -46,3 +46,16 @@ pageJeu::pageJeu(QWidget *parent) : QWidget(parent) {
     connect(aSauvegarde -> getBoutonNon(), &QPushButton::clicked, this, &pageJeu::rester);
 }
 
+void pageJeu::paintEvent(QPaintEvent *event){
+    QWidget::paintEvent(event);
+    QPainter painter(this);
+
+    painter.setRenderHint(QPainter::Antialiasing);
+
+    painter.setBrush(Qt::white); //On definie la couleur du pinceau en blanc
+    painter.drawPolygon(rect()); //On colorie le polygone
+
+    painter.setPen(QPen(Qt::black, 5)); //On def le pinceau comme etant de couleur noir et de taille 2 (pour faire un rebord)
+    painter.drawRect(rect()); //On peind ce rectangle (permet de fair eun contour de la carte)
+}
+

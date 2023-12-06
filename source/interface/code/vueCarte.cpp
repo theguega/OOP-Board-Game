@@ -15,18 +15,17 @@ carteVisuel::carteVisuel(QWidget *parent, int hauteur, int largeur, QColor coule
     setFixedSize(l, h); //Fixe la taille de la carte
 }
 
-void carteVisuel::paintEvent(QPaintEvent *) { //Permet de faire les dessins vectoriels sur la carte
+void carteVisuel::paintEvent(QPaintEvent *event) { //Permet de faire les dessins vectoriels sur la carte
+    QWidget::paintEvent(event);
     QPainter painter(this);
 
     painter.setRenderHint(QPainter::Antialiasing);
 
-    QPolygonF rectangle; //Creer un Polygone Qt en y mettant des points
-    rectangle << QPointF(0, 0) << QPointF(l - 2, 0) << QPointF(l - 2, h - 2) << QPointF(0, h - 2); //On ajoute les points du rectangles
     painter.setBrush(Qt::white); //On definie la couleur du pinceau en blanc
-    painter.drawPolygon(rectangle); //On colorie le polygone
+    painter.drawPolygon(rect()); //On colorie le polygone
 
     painter.setPen(QPen(Qt::black, 2)); //On def le pinceau comme etant de couleur noir et de taille 2 (pour faire un rebord)
-    painter.drawRect(0, 0, width(), height()); //On peind ce rectangle (permet de fair eun contour de la carte)
+    painter.drawRect(rect()); //On peind ce rectangle (permet de fair eun contour de la carte)
 
     QPolygonF triangle; //Creer un polygone Qt
     triangle << QPointF(0, 0) << QPointF(l - 2, 0) << QPointF(0, (h-2)/3); //Ajoute les points du triangle
@@ -58,16 +57,34 @@ void carteVisuel::paintEvent(QPaintEvent *) { //Permet de faire les dessins vect
     painter.drawText(l/10, h/6, QString::number(numero));
 }
 
-carteInfo::carteInfo(QWidget* parent, int hauteur, int largeur, std::string texte) : QLabel(parent){ //Carte info sera la partie avec les infos de la carte
+carteInfo::carteInfo(QWidget* parent, int hauteur, int largeur, std::string texte) : QWidget(parent){ //Carte info sera la partie avec les infos de la carte
     l = largeur; //Def la hauteur des cartes
     h = hauteur; //Def la largeur des cartes
-
-    setText(QString::fromStdString(texte)); //Def le texte du QLabel
     setFixedSize(l, h); //Fixe la taille
+
+    labelInfo = new QLabel;
+    labelInfo->setText(QString::fromStdString(texte)); //Def le texte du QLabel
+
+    layout = new QVBoxLayout;
+    layout->addWidget(labelInfo);
+    setLayout(layout);
 
 }
 
-vueCarte::vueCarte(QWidget* parent, int hauteur, int largeur) : QStackedWidget(parent), h(hauteur), l(largeur){ //C'est un QStackedWidget afin de gerer plus facilement le changement entre les infos et le visu
+void carteInfo::paintEvent(QPaintEvent *event){
+    QWidget::paintEvent(event);
+    QPainter painter(this);
+
+    painter.setRenderHint(QPainter::Antialiasing);
+
+    painter.setBrush(Qt::white); //On definie la couleur du pinceau en blanc
+    painter.drawPolygon(rect()); //On colorie le polygone
+
+    painter.setPen(QPen(Qt::black, 2)); //On def le pinceau comme etant de couleur noir et de taille 2 (pour faire un rebord)
+    painter.drawRect(rect()); //On peind ce rectangle (permet de fair eun contour de la carte)
+}
+
+vueCarte::vueCarte(QWidget* parent, int hauteur, int largeur, Carte* carte) : QStackedWidget(parent), h(hauteur), l(largeur){ //C'est un QStackedWidget afin de gerer plus facilement le changement entre les infos et le visu
     setFixedSize(l, h); //Fixe la taille
     /*switch(carte->getCouleur())*/
 
@@ -79,4 +96,22 @@ vueCarte::vueCarte(QWidget* parent, int hauteur, int largeur) : QStackedWidget(p
 
     setMouseTracking(true); //Autorise le tracking de la souris pour les enterEvent et leaveEvent
     //setAttribute(Qt::WA_Hover, true);
+}
+
+bool vueCarte::event(QEvent *event){
+    if(affichageInfo){
+        if (event->type() == QEvent::Enter) {
+            qDebug() << "C'est un evenement d'entree (Enter Event).";
+            setCurrentIndex(1);
+            return true; // evenement traite
+        }
+        else if (event->type() == QEvent::Leave){
+            qDebug() << "C'est un evenement de sorti (Leave Event).";
+            setCurrentIndex(0);
+            return true; // evenement traite
+        }
+    }
+
+    // Appel a la methode parent pour gerer d'autres types d'evenements
+    return QWidget::event(event);
 }

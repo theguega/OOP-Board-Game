@@ -51,6 +51,7 @@ protected:
     void rester(){ //Permet de restetr sur la page
         aSauvegarde -> close();
     }
+    void paintEvent(QPaintEvent *event);
 public:
     pageJeu(QWidget *parent = nullptr);
     ~pageJeu() = default;

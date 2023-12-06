@@ -2,52 +2,46 @@
 #include <QPushButton>
 #include <interface/code/vueJeton.h>
 
-vueJeton::vueJeton(QWidget* parent, int rad, Couleur couleur) : QPushButton(parent){
-    switch(couleur){
+vueJeton::vueJeton(QWidget* parent, int rad, Jeton* jeton) : QPushButton(parent){
+    this->jeton = jeton;
+    switch(jeton->getCouleur()){
     case Couleur::BLANC:
-        this->couleur = couleur;
         Qcouleur = QColor("white");
         QcouleurClair = QColor("white");
         couleurContour = QColor("black");
         break;
 
     case Couleur::BLEU:
-        this->couleur = couleur;
         Qcouleur = QColor("blue");
         QcouleurClair = QColor("lightblue");
         couleurContour = QColor("black");
         break;
 
     case Couleur::VERT:
-        this->couleur = couleur;
         Qcouleur = QColor("green");
         QcouleurClair = QColor("lightgreen");
         couleurContour = QColor("black");
         break;
 
     case Couleur::ROUGE:
-        this->couleur = couleur;
         Qcouleur = QColor("red");
         QcouleurClair = QColor("#CD5C5C");
         couleurContour = QColor("black");
         break;
 
     case Couleur::NOIR:
-        this->couleur = couleur;
         Qcouleur = QColor("black");
         QcouleurClair = QColor("black");
         couleurContour = QColor("white");
         break;
 
     case Couleur::PERLE:
-        this->couleur = couleur;
         Qcouleur = QColor("#FF69B4");
         QcouleurClair = QColor("#FFB6C1");
         couleurContour = QColor("black");
         break;
 
     case Couleur::OR:
-        this->couleur = couleur;
         Qcouleur = QColor("yellow");
         QcouleurClair = QColor("lightyellow");
         couleurContour = QColor("black");
@@ -161,23 +155,4 @@ void vueJeton::paintEvent(QPaintEvent *event) {
         painter.drawPolygon(bigDiamondShape);
         painter.drawEllipse(center, circleRadius, circleRadius);
     }
-
-    /*if (afficherCroix) {
-        QPainter painter(this);
-        painter.setRenderHint(QPainter::Antialiasing);
-        if(couleur != Couleur::BLANC){
-            painter.setPen(Qt::white);
-        }
-        else{
-            painter.setPen(Qt::black);
-        }
-
-        // Dessiner une croix qui prend tout le cercle et est centree avec une rotation de 45 degres
-        painter.save(); // Sauvegarder l'etat actuel du QPainter
-        painter.translate(width() / 2, height() / 2); // Translation pour le centre du bouton
-        painter.rotate(45); // Rotation de 45 degres
-        painter.drawLine(-width() / 2, 0, width() / 2, 0); // Horizontal
-        painter.drawLine(0, -height() / 2, 0, height() / 2); // Vertical
-        painter.restore(); // Restaurer l'etat precedent du QPainter
-    }*/
 }

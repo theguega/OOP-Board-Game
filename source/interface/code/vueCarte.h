@@ -10,7 +10,9 @@
 #include <QPainter>
 #include <string>
 #include <QStackedWidget>
+#include <QVBoxLayout>
 #include "vueJeton.h"
+#include "back-end/carte.hpp"
 
 class carteVisuel : public QWidget{ //Gere le visuel de la carte
     Q_OBJECT
@@ -26,12 +28,16 @@ public:
     carteVisuel(QWidget* parent = nullptr, int hauteur = 0, int largeur = 0, QColor couleur = Qt::blue);
 };
 
-class carteInfo : public QLabel{ //Gere les infos de la carte
+class carteInfo : public QWidget{ //Gere les infos de la carte
     Q_OBJECT
 private:
     int h;
     int l;
     std::string texteInfo;
+    QLabel* labelInfo;
+    QVBoxLayout* layout;
+protected:
+    void paintEvent(QPaintEvent *event);
 public:
     carteInfo(QWidget* parent, int hauteur, int largeur, std::string texte);
 };
@@ -39,33 +45,24 @@ public:
 class vueCarte : public QStackedWidget{ //Gere la carte elle même
     Q_OBJECT
 private:
-    //Carte* carte;
     int h;
     int l;
+
     position* pos = nullptr;
     QColor triangleColor = Qt::blue;
+
     int numero = 0;
+
     std::string texteInfo = "Ceci est un test";
     carteInfo* info;
     carteVisuel* visu;
-    bool estAffiche = true;
-    QTimer* timer;
-protected:
-    bool event(QEvent *event) override {
-        if (event->type() == QEvent::Enter) {
-            qDebug() << "C'est un evenement d'entree (Enter Event).";
-            setCurrentIndex(1);
-            return true; // evenement traite
-        }
-        else if (event->type() == QEvent::Leave){
-            qDebug() << "C'est un evenement de sorti (Leave Event).";
-            setCurrentIndex(0);
-            return true; // evenement traite
-        }
 
-        // Appel a la methode parent pour gerer d'autres types d'evenements
-        return QWidget::event(event);
-    }
+    bool estAffiche = true;
+    bool affichageInfo = true;
+
+    Carte* carte;
+protected:
+    bool event(QEvent *event) override;
 
     void mousePressEvent(QMouseEvent *event) override {
         if (event->button() == Qt::LeftButton) {
@@ -75,9 +72,11 @@ protected:
         }
     }
 public:
-    vueCarte(QWidget* parent = nullptr, int hauteur = 0, int largeur = 0);
+    vueCarte(QWidget* parent = nullptr, int hauteur = 0, int largeur = 0, Carte* carte = nullptr);
     void setPosition(position* pos){this->pos = pos;}
     position* getPosition(){return pos;}
+    void cacherInfo(){affichageInfo = false;}
+    void afficherInfo(){affichageInfo = true;}
 };
 
 #endif // VUECARTE_H

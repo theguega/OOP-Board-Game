@@ -24,12 +24,12 @@ private:
     bool estVisible;
     int rad;
     bool afficherCroix;
-    Couleur couleur;
+    Jeton* jeton;
     QColor Qcouleur;
     QColor QcouleurClair;
     QColor couleurContour;
 public:
-    vueJeton(QWidget* parent = nullptr, int rad = 0, Couleur couleur = Couleur::BLEU);
+    vueJeton(QWidget* parent = nullptr, int rad = 0, Jeton* jeton = nullptr);
     void apparaitre();
     void disparaitre();
     bool getEstVisible();
