@@ -439,11 +439,14 @@ unsigned int Controller::choixActionsOptionelles() {
 void Controller::utiliserPrivilege(Plateau& plateau){
     //on verifie d'abord si le joueur a un/des privilege
     verifPrivileges();
+    verifPlateauvide();
 
     std::cout << "Combien de privileges voulez vous utiliser ?\n";
     unsigned int priv = strategy_courante->choix_min_max(1,3);
     if (priv>joueurCourant->getNbPrivileges())
         throw SplendorException("Vous n'avez pas assez de privilege");
+    if (priv>plateau.getNbJetons())
+        throw SplendorException("Il n'y a plus assez de jetons sur le plateau");
 
     //on recupere autant de jetons que de privilege
     for (size_t k=0; k<priv;k++) {
@@ -471,7 +474,9 @@ void Controller::utiliserPrivilege(Plateau& plateau){
 }
 
 void Controller::remplirPlateau(Plateau& plateau, Sac& sac){
-    verifSacvide();
+    //on verifie d'abord si le joueur a un/des privilege
+    verifPrivileges();
+    verifPlateauvide();
 
     std::cout<<"Le joueur rempli le plateau :\n"<<plateau<<endl;
 
@@ -505,10 +510,15 @@ void Controller::donPrivilegeAdverse() {
 void Controller::recupererJetons(){
     std::cout<<"Vous avez decider de recuperer des jetons sur le plateau :\n"<<getPlateau();
 
+    verifPlateauvide();
+
     // Recuperation des jetons 1 2 ou 3 jetons en fonction de la strategy
 
     std::cout << "Combien de jetons souhaitez-vous recuperer ? (1,2,3) " << std::endl;
     unsigned int nbJetons = strategy_courante->choix_min_max(1,3);
+
+    if (nbJetons>partie->getEspaceJeux().getPlateau().getNbJetons())
+        throw SplendorException("Il n'y a plus assez de jetons sur le plateau");
 
     std::cout << "Merci de selectionner des jetons adjacents en ligne, en colonne ou en diagonale.\n\n";
 

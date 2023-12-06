@@ -330,6 +330,22 @@ bool Plateau::estVide() const {
     return true;
 }
 
+size_t Plateau::getNbJetons() const {
+    size_t nombreDeJetons = 0;
+
+    // Parcours de chaque élément de la structure
+    for (const auto& ligne : jetons) {
+        for (const Jeton* jeton : ligne) {
+            // Vérification si le pointeur jeton n'est pas nul
+            if (jeton != nullptr) {
+                // Incrémentation du compteur
+                nombreDeJetons++;
+            }
+        }
+    }
+    return nombreDeJetons;
+}
+
 bool Plateau::caseVide(unsigned int i, unsigned int j) const{
     if (jetons[i][j] == nullptr)
         return true;

@@ -23,6 +23,9 @@ unsigned int StrategyIA::choix_min_max(unsigned int min, unsigned int max) {
     return choix;
 }
 
+
+
+
 unsigned int StrategyHumain::choixMenu() {
     unsigned int choix;
     std::cin>>choix;
@@ -41,6 +44,9 @@ unsigned int StrategyIA::choixMenu() {
     std::cout << "l'IA a choisit : " << choix << "\n";
     return choix;
 }
+
+
+
 
 Couleur StrategyHumain::choixCouleur() {
     std::cout << "Choisissez une couleur : (blanc,bleu,vert,noir,rouge,perle,indt) (sensible a la casse) \n" << std::endl;
