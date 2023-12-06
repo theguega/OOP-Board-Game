@@ -23,10 +23,10 @@
 - [x] = la tâche est faite
 - [x] Interdiction de prendre un jeton Or avec un privilege
 - [x] Si un joueur remplit le plateau -> son adversaire recoit un privilege
-- [ ] Si on doit prendre un privilege mais aucun sur le plateau on le prend a l'adversaire
+- [x] Si on doit prendre un privilege mais aucun sur le plateau on le prend a l'adversaire -> fait avec méthode donPrivilegeAdverse
 - [ ] Si aucune action obligatoire possible -> rempli le plateau puis action obligatoire
 - [x] Pas de jeton Or ou vide dans la selection de jeton 
-- [ ] 3 jetons de même couleur ou 2 perles dans la selection -> adversaire recoit 1 privilege
+- [x] 3 jetons de même couleur ou 2 perles dans la selection -> adversaire recoit 1 privilege
 - [x] Si aucun jeton Or sur le plateau on peut pas reserver de carte
 - [x] Si deja 3 cartes reservees on peut pas reserver plus de carte
 - [ ] interdit d'acheter une carte de bonus indt si on a pas de carte avec un bonus defini devant nous
