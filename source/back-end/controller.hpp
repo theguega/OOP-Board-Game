@@ -66,6 +66,7 @@ public:
 	void enregisterScore();
 
 	// verifications
+    void verifActionsImpossibles();
     void verifPrivileges();
     void verifPlateauvide();
     void verifSacvide();
