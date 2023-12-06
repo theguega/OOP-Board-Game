@@ -365,7 +365,8 @@ void Controller::jouer() {
                     }
 
                     //simulation de victoire
-                    /*if (getJoueurCourant().getNbJetons() >= 4) {
+                    /*
+                    if (getJoueurCourant().getNbJetons() >= 6) {
                         //affichage rigolo
                         const std::string message = "Le Joueur " + getJoueurCourant().getPseudo() +" a gagne !";
                         for (size_t j = 0; j<250; j++) {
@@ -373,7 +374,7 @@ void Controller::jouer() {
                                 // Utilisation des codes ANSI pour le texte en gras et avec differentes couleurs
                                 std::cout << "\033[1;3" << (i % 7) + 1 << "m" << message[i];
                             }
-                            std::cout<<"\n";
+                            std::cout<<"\n\n";
                             for (std::size_t l = 0; l < j; ++l)
                                 std::cout<<" ";
                         };
@@ -475,8 +476,7 @@ void Controller::utiliserPrivilege(Plateau& plateau){
 
 void Controller::remplirPlateau(Plateau& plateau, Sac& sac){
     //on verifie d'abord si le joueur a un/des privilege
-    verifPrivileges();
-    verifPlateauvide();
+    verifSacvide();
 
     std::cout<<"Le joueur rempli le plateau :\n"<<plateau<<endl;
 
