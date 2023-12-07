@@ -46,6 +46,9 @@ public:
     unsigned int choixActionsOptionelles();
     unsigned int choixActionsObligatoires();
 
+    // Capacite
+    void appliquerCapacite(Capacite capa);
+
 	// Actions optionnelles
 	void utiliserPrivilege(Plateau& plateau);
     void remplirPlateau(Plateau& plateau, Sac& sac);

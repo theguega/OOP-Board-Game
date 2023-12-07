@@ -144,10 +144,6 @@ Controller::Controller(QString statut_partie, QString pseudo_j_1, type type_j_1,
 
 
 
-
-
-
-
 void Controller::setJoueurCourant(int n) {
     switch (n) {
     case 0:
@@ -178,13 +174,6 @@ void Controller::changerJoueurCourant() {
     else 
         strategy_courante = &strategy_Humain;
 }
-
-
-
-
-
-
-
 
 void Controller::lancerPartie() {
     // choix aleatoire entre 0 et 1 pour le choix du joueur qui commence
@@ -410,6 +399,42 @@ void Controller::jouer() {
 
 
 ///////////////////////// Actions d'un joueur /////////////////////////
+
+// Capacite
+void appliquerCapacite(Capacite capa){
+    //NewTurn, TakePrivilege, TakeJetonFromBonus, TakeJetonToAdv, AssociationBonus, None
+
+    switch (capa) {
+    case Capacite::NewTurn: {
+
+        break;
+    }
+    case Capacite::TakePrivilege: {
+
+        break;
+    }
+    case Capacite::TakeJetonFromBonus: {
+
+        break;
+    }
+    case Capacite::TakeJetonToAdv: {
+
+        break;
+    }
+    case Capacite::AssociationBonus: {
+
+        break;
+    }
+
+    default:{
+        std::cout<<"Impossible\n";
+        break;
+    }
+
+    }
+
+}
+
 
 
 //Menu choix des actions
