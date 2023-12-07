@@ -493,20 +493,6 @@ bool Controller::appliquerCapacite(Capacite capa,const Carte &carte){
         break;
     }
     case Capacite::AssociationBonus: {
-        std::cout<<"La carte a une capacite qui permet d'ajouter un bonus a la couleur de votre choix\n";
-
-        std::string coulJetonStr;
-        std::cout<<"Quel est la couleur du bonus que vous voulez recuperer ?\n";
-
-        Couleur coulBonus = strategy_courante->choixCouleur();
-        // On verifie que la validite de la couleur du bonus
-        while(coulBonus == Couleur::PERLE || coulBonus == Couleur::INDT){
-            std::cout<<"Veuillez selectionner un jeton Gemme ou perle\n";
-            coulBonus = strategy_courante->choixCouleur();
-        }
-        // Ajout du bonus
-        joueurCourant->bonus[coulBonus]++;
-        std::cout<<"Le bonus a bien ete ajoute\n";
 
         break;
     }
@@ -821,13 +807,37 @@ bool Controller::acheterCarteJoaillerie (EspaceJeux& espaceJeux){
             return res;
         }
 
-        //on ajoute la carte au joueur
-        joueurCourant->addCarte(carte);
+        if(carte.getCapacite1() != Capacite::AssociationBonus || carte.getCapacite2() != Capacite::AssociationBonus){
+            std::cout<<"La carte a une capacite qui permet d'ajouter un bonus a la couleur de votre choix\n";
+
+            std::string coulJetonStr;
+            std::cout<<"Quel est la couleur du bonus que vous voulez recuperer ?\n";
+
+            Couleur coulBonus = strategy_courante->choixCouleur();
+            // On verifie que la validite de la couleur du bonus
+            while(coulBonus == Couleur::PERLE || coulBonus == Couleur::INDT){
+                std::cout<<"Veuillez selectionner un jeton Gemme ou perle\n";
+                coulBonus = strategy_courante->choixCouleur();
+            }
+            // Ajout du bonus
+            joueurCourant->bonus[coulBonus]++;
+            std::cout<<"Le bonus a bien ete ajoute\n";
+
+            joueurCourant->cartes[coulBonus].push_back(&carte);
+            joueurCourant->ptsPrestige += carte.getNbPtsPrivilege();
+            joueurCourant->nbCouronnes += carte.getNbCouronnes();
+        } else{
+            //on ajoute la carte au joueur
+            joueurCourant->addCarte(carte);
+            joueurCourant->addCarte(carte);
+        }
+
+
 
         //le bonus de la carte est utilisés
 
-        //on actualise les stats du jouur avec le nombre de couronnes et de prestiges
-        joueurCourant->nbCouronnes+=carte.getNbCouronnes();
+        //on actualise les stats du jouur avec le nombre de couronnes et de prestiges --> deja fait dans add carte
+        //joueurCourant->nbCouronnes+=carte.getNbCouronnes();
         return res;
     }
 
