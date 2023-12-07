@@ -218,14 +218,18 @@ void Controller::jouer() {
         std::cout<<"\n\n\n\n\n\n\n\n\n\n\n\n";
         std::cout<< "Tour numero" << getPartie().getTour()+1 << endl;
 
+        bool tourEnPlus;
+
         //correpond au tour de chaque joueur
         for (unsigned int i = 0; i < 2; i++) {
             std::cout<<"--------------------------------------------------------------------------------------------------------------------------------------------\n";
             std::cout<<"C'est a " << getJoueurCourant().getPseudo()<<" de jouer : \n\n";
             getJoueurCourant().afficherJoueur();
+            tourEnPlus = false;
 
             unsigned int etat_tour = 0;
-            while (etat_tour != 10) {
+            while (etat_tour != 10 || tourEnPlus) {
+                tourEnPlus = false;
 
                 // actions optionelles
                 switch (etat_tour) {
@@ -305,8 +309,11 @@ void Controller::jouer() {
                             try
                             {
                                 //recuperation de jetons
+                                std::cout<<joueurCourant->getPseudo();
                                 recupererJetons(false);
                                 etat_action = 10;
+                                tourEnPlus = true;
+
                             }
                             catch(SplendorException& e) { std::cerr << "\033[1;31m" << e.getInfo() << "\033[0m" << endl << endl;; etat_action = 0; }
                             break;
@@ -314,7 +321,7 @@ void Controller::jouer() {
                             try
                             {
                                 //achat carte joaillerie
-                                acheterCarteJoaillerie(getPartie().getEspaceJeux());
+                                tourEnPlus = acheterCarteJoaillerie(getPartie().getEspaceJeux());
                                 etat_action = 10;
                             }
                             catch(SplendorException& e) { std::cerr << "\033[1;31m" << e.getInfo() << "\033[0m" << endl << endl;; etat_action = 0; }
@@ -834,10 +841,24 @@ bool Controller::acheterCarteJoaillerie (EspaceJeux& espaceJeux){
         partie->getEspaceJeux().getPyramide().remplircasePyramide(niveau, num_carte);
 
         //si la carte à une couleur indeterminer, le joueur doit choisir la couleur de la carte
-        if(carte.getBonus().getCouleur()==Couleur::INDT){
+        /*if(carte.getBonus().getCouleur()==Couleur::INDT){
             std::cout<<"Votre carte est de couleur indeterminee, veuillez choisir une couleur pour votre carte\n";
             Couleur c = strategy_courante->choixCouleur();
             //attribuer la couleur choisit à la carte
+        }*/
+
+        // Attention il faut attribuer la couleur pour la capa on
+
+        bool res = false;
+        if(carte.getCapacite1() != Capacite::None){
+            res = appliquerCapacite(carte.getCapacite1(), carte);
+            // On regarde si on ajoute un tour
+            return res;
+        }
+        if(carte.getCapacite2() != Capacite::None){
+            res = appliquerCapacite(carte.getCapacite2(), carte);
+            // On regarde si on ajoute un tour
+            return res;
         }
 
         //on ajoute la carte au joueur
@@ -847,7 +868,7 @@ bool Controller::acheterCarteJoaillerie (EspaceJeux& espaceJeux){
 
         //on actualise les stats du jouur avec le nombre de couronnes et de prestiges
         joueurCourant->nbCouronnes+=carte.getNbCouronnes();
-        return;
+        return res;
     }
 }
 
