@@ -47,14 +47,14 @@ public:
     unsigned int choixActionsObligatoires();
 
     // Capacite
-    void appliquerCapacite(Capacite capa);
+    bool appliquerCapacite(Capacite capa, Carte &carte);
 
 	// Actions optionnelles
 	void utiliserPrivilege(Plateau& plateau);
     void remplirPlateau(Plateau& plateau, Sac& sac);
 
 	// Actions obligatoires
-    void recupererJetons();
+    void recupererJetons(bool capacite,Couleur coulBonus = Couleur::INDT);
     void acheterCarteJoaillerie(EspaceJeux& espaceJeux);
 	void orReserverCarte(Pyramide& pyramide, Plateau& plateau);
 

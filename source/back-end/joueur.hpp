@@ -96,6 +96,8 @@ public:
     void supJetonNb(unsigned int nb, Couleur c, EspaceJeux& espaceJeux);
     const Privilege& supPrivilege();
 
+    const Jeton& RecupJetonCoul(Couleur c);
+
     // Affichage Done
     void afficherJoueur() const;
     void afficherCartes() const;

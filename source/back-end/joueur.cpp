@@ -194,6 +194,13 @@ void Joueur::supJetonNb(unsigned int nb, Couleur c, EspaceJeux& espaceJeux){
 
 }
 
+const Jeton& Joueur::RecupJetonCoul(Couleur c){
+    const Jeton& jetonRecup = *jetons[c].back();
+    // On supprime le jeton du joueur
+    jetons[c].pop_back();
+    return jetonRecup;
+}
+
 const Privilege&::Joueur::supPrivilege() {
     if (getNbPrivileges()==0)
         throw SplendorException("Le joueur n'a pas de privileges");

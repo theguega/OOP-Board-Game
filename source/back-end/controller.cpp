@@ -305,7 +305,7 @@ void Controller::jouer() {
                             try
                             {
                                 //recuperation de jetons
-                                recupererJetons();
+                                recupererJetons(false);
                                 etat_action = 10;
                             }
                             catch(SplendorException& e) { std::cerr << "\033[1;31m" << e.getInfo() << "\033[0m" << endl << endl;; etat_action = 0; }
@@ -400,28 +400,93 @@ void Controller::jouer() {
 
 ///////////////////////// Actions d'un joueur /////////////////////////
 
+void Controller::donPrivilegeAdverse() {
+    if (partie->getEspaceJeux().getPlateau().getNbPrivileges()==0){
+        //si il n'y a plus de privileges sur le plateau
+        if(getJoueurAdverse().getNbPrivileges()!=3) {
+            //si il n'a pas déjà les 3 privilèges, il prends celui du joueur actuel, sinon il n'en recupere pas
+            getJoueurAdverse().addPrivilege(joueurCourant->supPrivilege());
+        }
+    } else {
+        //si il y a un jetons sur le plateau, le joueur le recupere
+        getJoueurAdverse().addPrivilege(partie->getEspaceJeux().getPlateau().recupererPrivilege());
+    }
+    return;
+}
+
+
 // Capacite
-void appliquerCapacite(Capacite capa){
+bool Controller::appliquerCapacite(Capacite capa, Carte &carte){
     //NewTurn, TakePrivilege, TakeJetonFromBonus, TakeJetonToAdv, AssociationBonus, None
 
     switch (capa) {
-    case Capacite::NewTurn: {
-
+    case Capacite::NewTurn: { // Modifier achar carte et la boucle de jeu pour que ça soit effectif
+        return true;
         break;
     }
     case Capacite::TakePrivilege: {
-
+        if (partie->getEspaceJeux().getPlateau().getNbPrivileges()==0){
+            //si il n'y a plus de privileges sur le plateau
+            if(joueurCourant->getNbPrivileges()!=3) {
+                //si il n'a pas déjà les 3 privilèges, il prends celui du joueur actuel, sinon il n'en recupere pas
+                joueurCourant->addPrivilege(getJoueurAdverse().supPrivilege());
+            }
+        } else {
+            //si il y a un jetons sur le plateau, le joueur le recupere
+            joueurCourant->addPrivilege(partie->getEspaceJeux().getPlateau().recupererPrivilege());
+        }
+        std::cout<<"Ajout d'un privilège correspondant à la capacite\n";
         break;
     }
     case Capacite::TakeJetonFromBonus: {
-
+        std::cout<<"Recuperation d'un jeton correspondant à la capacite\n";
+        recupererJetons(true, carte.getBonus().getCouleur());
         break;
     }
     case Capacite::TakeJetonToAdv: {
+        // le joueur prend 1 jeton Gemme ou Perle à son adversaire. Si ce dernier n’en a pas,
+        //cette capacité est sans effet. Il est interdit de prendre un jeton Or à son adversaire.
+        std::cout<<"Voici les jetons de votre adversaire\n";
+        getJoueurAdverse().afficherJoueur();
+
+        std::string coulJetonStr;
+        std::cout<<"Quel est la couleur du jeton que vous voulez recuperer que Gemme ou perle ?\n";
+
+        Couleur coulJeton = strategy_courante->choixCouleur();
+        // On verifie que le jeton est bien un jeton gemme ou perle
+        while(coulJeton == Couleur::OR || coulJeton == Couleur::INDT){
+            std::cout<<"Veuillez selectionner un jeton Gemme ou perle\n";
+            coulJeton = strategy_courante->choixCouleur();
+        }
+
+        // Si le joueur adverse n'as pas de jeton de cette couleur on ne fait rien
+        if(getJoueurAdverse().cartes[coulJeton].empty())
+            throw SplendorException("Impossible le joueur adverse ne possede pas de jetons de cette couleur");
+        // Recup du jeton a l'adversaire
+        const Jeton &jeton = getJoueurAdverse().RecupJetonCoul(coulJeton);
+
+        std::cout<<"Ajout du jeton grace a la capacite\n";
+        joueurCourant->addJeton(jeton);
+
+
 
         break;
     }
     case Capacite::AssociationBonus: {
+        std::cout<<"La carte a une capacite qui permet d'ajouter un bonus a la couleur de votre choix\n";
+
+        std::string coulJetonStr;
+        std::cout<<"Quel est la couleur du bonus que vous voulez recuperer ?\n";
+
+        Couleur coulBonus = strategy_courante->choixCouleur();
+        // On verifie que la validite de la couleur du bonus
+        while(coulBonus == Couleur::PERLE || coulBonus == Couleur::INDT){
+            std::cout<<"Veuillez selectionner un jeton Gemme ou perle\n";
+            coulBonus = strategy_courante->choixCouleur();
+        }
+        // Ajout du bonus
+        joueurCourant->bonus[coulBonus]++;
+        std::cout<<"Le bonus a bien ete ajoute\n";
 
         break;
     }
@@ -433,6 +498,7 @@ void appliquerCapacite(Capacite capa){
 
     }
 
+    return false;
 }
 
 
@@ -514,38 +580,38 @@ void Controller::remplirPlateau(Plateau& plateau, Sac& sac){
     return;
 }
 
-void Controller::donPrivilegeAdverse() {
-    if (partie->getEspaceJeux().getPlateau().getNbPrivileges()==0){
-        //si il n'y a plus de privileges sur le plateau
-        if(getJoueurAdverse().getNbPrivileges()!=3) {
-            //si il n'a pas déjà les 3 privilèges, il prends celui du joueur actuel, sinon il n'en recupere pas
-            getJoueurAdverse().addPrivilege(joueurCourant->supPrivilege());
-        }
-    } else {
-        //si il y a un jetons sur le plateau, le joueur le recupere
-        getJoueurAdverse().addPrivilege(partie->getEspaceJeux().getPlateau().recupererPrivilege());
-    }
-    return;
-}
 
 
 
 
 // Recuperer des jetons
-void Controller::recupererJetons(){
+void Controller::recupererJetons(bool capacite,Couleur coulBonus){
     std::cout<<"Vous avez decider de recuperer des jetons sur le plateau :\n"<<getPlateau();
 
     verifPlateauvide();
 
     // Recuperation des jetons 1 2 ou 3 jetons en fonction de la strategy
 
-    std::cout << "Combien de jetons souhaitez-vous recuperer ? (1,2,3) " << std::endl;
-    unsigned int nbJetons = strategy_courante->choix_min_max(1,3);
+    unsigned int nbJetons;
+    // Recuperation d'un jeton pour la capacite
+    if(capacite){
+        nbJetons = 0;
+    } else {
+        std::cout << "Combien de jetons souhaitez-vous recuperer ? (1,2,3) " << std::endl;
+        nbJetons = strategy_courante->choix_min_max(1,3);
+    }
+
 
     if (nbJetons>partie->getEspaceJeux().getPlateau().getNbJetons())
         throw SplendorException("Il n'y a plus assez de jetons sur le plateau");
 
-    std::cout << "Merci de selectionner des jetons adjacents en ligne, en colonne ou en diagonale.\n\n";
+
+    if(capacite){
+        std::cout << "Merci de selectionner un jeton de la meme couleur que le bonus.\n\n";
+    }else {
+        std::cout << "Merci de selectionner des jetons adjacents en ligne, en colonne ou en diagonale.\n\n";
+    }
+
 
     std::vector<std::pair<int, int>> vecteurCoordonnees;
     std::cout<<"Vous allez rentrer les coordonnees des jetons : \n";
@@ -632,6 +698,8 @@ void Controller::recupererJetons(){
     }
     for (unsigned int k = 0; k < nbJetons; k++){
         jetonsRecup.push_back(&getPlateau().recupererJeton(vecteurCoordonnees[k].first, vecteurCoordonnees[k].second));
+        if (capacite && jetonsRecup[k]->getCouleur() != coulBonus)
+            throw SplendorException("Le jeton n'est pas de la couleur du bonus");
     }
 
     // ajout des jetons dans la main du joueur
