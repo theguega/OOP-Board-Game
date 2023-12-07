@@ -228,7 +228,7 @@ void Controller::jouer() {
             tourEnPlus = false;
 
             unsigned int etat_tour = 0;
-            while (etat_tour != 10 || tourEnPlus) {
+            while (etat_tour != 10) {
                 tourEnPlus = false;
 
                 // actions optionelles
@@ -312,7 +312,14 @@ void Controller::jouer() {
                                 std::cout<<joueurCourant->getPseudo();
                                 recupererJetons(false);
                                 etat_action = 10;
-                                tourEnPlus = true;
+                                /*tourEnPlus = true;
+                                if(tourEnPlus){
+                                    etat_tour=0;
+                                    etat_action=0;
+                                }
+                                else {
+                                    etat_action = 10;
+                                }*/
 
                             }
                             catch(SplendorException& e) { std::cerr << "\033[1;31m" << e.getInfo() << "\033[0m" << endl << endl;; etat_action = 0; }
@@ -322,7 +329,13 @@ void Controller::jouer() {
                             {
                                 //achat carte joaillerie
                                 tourEnPlus = acheterCarteJoaillerie(getPartie().getEspaceJeux());
-                                etat_action = 10;
+                                if(tourEnPlus){
+                                    etat_tour=0;
+                                    etat_action=0;
+                                }
+                                else {
+                                    etat_action = 10;
+                                }
                             }
                             catch(SplendorException& e) { std::cerr << "\033[1;31m" << e.getInfo() << "\033[0m" << endl << endl;; etat_action = 0; }
                             break;
