@@ -416,7 +416,7 @@ void Controller::donPrivilegeAdverse() {
 
 
 // Capacite
-bool Controller::appliquerCapacite(Capacite capa, Carte &carte){
+bool Controller::appliquerCapacite(Capacite capa,const Carte &carte){
     //NewTurn, TakePrivilege, TakeJetonFromBonus, TakeJetonToAdv, AssociationBonus, None
 
     switch (capa) {
@@ -736,7 +736,7 @@ void Controller::recupererJetons(bool capacite,Couleur coulBonus){
 }
 
 //TODO
-void Controller::acheterCarteJoaillerie (EspaceJeux& espaceJeux){
+bool Controller::acheterCarteJoaillerie (EspaceJeux& espaceJeux){
     std::cout<<"Vous avez decider d'acheter une carte joaillerie\n";
     std::cout<<"Voulez vous acheter une carte reservee (1) ou une carte du plateau de jeu (2)\n";
     unsigned int choix = strategy_courante->choix_min_max(1,2);
@@ -788,6 +788,19 @@ void Controller::acheterCarteJoaillerie (EspaceJeux& espaceJeux){
 
         //si la carte à une couleur indeterminer, le joueur doit choisir la couleur de la carte
 
+        // Si la carte a une capacite on l'execute
+        bool res = false;
+        if(carte.getCapacite1() != Capacite::None){
+            res = appliquerCapacite(carte.getCapacite1(), carte);
+            // On regarde si on ajoute un tour
+            return res;
+        }
+        if(carte.getCapacite2() != Capacite::None){
+            res = appliquerCapacite(carte.getCapacite2(), carte);
+            // On regarde si on ajoute un tour
+            return res;
+        }
+
         //on ajoute la carte au joueur
         joueurCourant->addCarte(carte);
 
@@ -795,7 +808,7 @@ void Controller::acheterCarteJoaillerie (EspaceJeux& espaceJeux){
 
         //on actualise les stats du jouur avec le nombre de couronnes et de prestiges
         joueurCourant->nbCouronnes+=carte.getNbCouronnes();
-        return;
+        return res;
     }
 
     // Achat carte du plateau

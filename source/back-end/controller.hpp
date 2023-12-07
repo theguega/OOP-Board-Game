@@ -47,7 +47,7 @@ public:
     unsigned int choixActionsObligatoires();
 
     // Capacite
-    bool appliquerCapacite(Capacite capa, Carte &carte);
+    bool appliquerCapacite(Capacite capa,const Carte &carte);
 
 	// Actions optionnelles
 	void utiliserPrivilege(Plateau& plateau);
@@ -55,7 +55,7 @@ public:
 
 	// Actions obligatoires
     void recupererJetons(bool capacite,Couleur coulBonus = Couleur::INDT);
-    void acheterCarteJoaillerie(EspaceJeux& espaceJeux);
+    bool acheterCarteJoaillerie(EspaceJeux& espaceJeux);
 	void orReserverCarte(Pyramide& pyramide, Plateau& plateau);
 
     //donne un privilege au joueur adverse en suivant la logique de splendor duel
