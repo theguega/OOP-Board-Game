@@ -601,7 +601,7 @@ void Controller::recupererJetons(bool capacite,Couleur coulBonus){
     unsigned int nbJetons;
     // Recuperation d'un jeton pour la capacite
     if(capacite){
-        nbJetons = 0;
+        nbJetons = 1;
     } else {
         std::cout << "Combien de jetons souhaitez-vous recuperer ? (1,2,3) " << std::endl;
         nbJetons = strategy_courante->choix_min_max(1,3);
