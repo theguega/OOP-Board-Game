@@ -1,23 +1,12 @@
 @startuml splendor
 '    https://plantuml.com/class-diagram
 
-class JetonException {
+class SplendorException {
   - info : string
 }
 
-class PrivilegeException {
-  - info : string
-}
 
-enum CouleurJeton {
-  RUBIS
-  SAPHIR
-  ÉMÉRAUDE
-  ONYX
-  DIAMANT
-  OR
-  PERLE
-}
+
 
 
 
@@ -116,13 +105,10 @@ abstract Strategy {
 class StrategyHumain
 class StrategyIA
 
-Joueur *- "1" Strategy
+Controller *- "1" Strategy
 StrategyHumain --|> Strategy
 StrategyIA --|> Strategy
-enum Type {
-    IA
-    HUMAIN
-}
+
 
 ' Partie
 
@@ -142,9 +128,14 @@ class EspaceJeux {
     + plateau : Plateau
 }
 
-class Jeu {
+class Controller {
+	- joueurCourant : Joueur*
+
     + lancer() : Partie
     + conditionsVictoire() : bool
+    + jouer() : void
+    + void quitter() : void
+    + actions joueur
 }
 
 Partie *--- EspaceJeux
@@ -158,6 +149,6 @@ EspaceJeux *---"1" LotPrivileges
 EspaceJeux *--"1" JeuCarte
 Pioche "4"-* EspaceJeux
 
-Jeu <-- Partie
+Controller *-- Partie
 
 @enduml
