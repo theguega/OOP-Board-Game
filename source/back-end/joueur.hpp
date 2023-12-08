@@ -95,6 +95,7 @@ public:
     void supJeton(Jeton *jeton, EspaceJeux& espaceJeux);
     void supJetonNb(unsigned int nb, Couleur c, EspaceJeux& espaceJeux);
     const Privilege& supPrivilege();
+    void setGagnant() {gagnant=true;}
 
     const Jeton& RecupJetonCoul(Couleur c);
 

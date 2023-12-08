@@ -312,15 +312,6 @@ void Controller::jouer() {
                                 std::cout<<joueurCourant->getPseudo();
                                 recupererJetons(false);
                                 etat_action = 10;
-                                /*tourEnPlus = true;
-                                if(tourEnPlus){
-                                    etat_tour=0;
-                                    etat_action=0;
-                                }
-                                else {
-                                    etat_action = 10;
-                                }*/
-
                             }
                             catch(SplendorException& e) { std::cerr << "\033[1;31m" << e.getInfo() << "\033[0m" << endl << endl;; etat_action = 0; }
                             break;
@@ -365,7 +356,7 @@ void Controller::jouer() {
 
 
 
-                    //verification fin de tour d'un joueur
+                //verification fin de tour d'un joueur
                 case 2:{
                     //achat obligatoire d'une carte noble si le joueur a 3 ou 6 pts de prestige
                     if (getJoueurCourant().getptsPrestige() >= 3 or getJoueurCourant().getptsPrestige() >= 6) {
@@ -373,28 +364,20 @@ void Controller::jouer() {
                         acheterCarteNoble(getPartie().getEspaceJeux().getPyramide());
                     }
 
-                    //simulation de victoire
-                    /*
-                    if (getJoueurCourant().getNbJetons() >= 6) {
-                        //affichage rigolo
-                        const std::string message = "Le Joueur " + getJoueurCourant().getPseudo() +" a gagne !";
-                        for (size_t j = 0; j<250; j++) {
-                            for (std::size_t i = 0; i < message.size(); ++i) {
-                                // Utilisation des codes ANSI pour le texte en gras et avec differentes couleurs
-                                std::cout << "\033[1;3" << (i % 7) + 1 << "m" << message[i];
-                            }
-                            std::cout<<"\n\n";
-                            for (std::size_t l = 0; l < j; ++l)
-                                std::cout<<" ";
-                        };
-                        // Reinitialisation du style apres la derniere lettre
-                        std::cout << "\033[0m\n";
-
-                        etat_tour = 3;
-                        break;
-                    }*/
-
                     verifJetonSupDix();
+
+                    //Conditions victoires :
+                    if (getJoueurCourant().getNbCouronnes()>=10)
+                        getJoueurCourant().setGagnant();
+                    if (getJoueurCourant().getptsPrestige()>=20)
+                        getJoueurCourant().setGagnant();
+                    if (getJoueurCourant().nbPtsPrestigeParCouleurSupDix())
+                        getJoueurCourant().setGagnant();
+
+                    //Fin de partie :
+                    if (getJoueurCourant().estGagnant())
+                        etat_tour = 3;
+
 
                     //fin du tour du joueur, on passe au joueur suivant
                     changerJoueurCourant();
@@ -402,6 +385,20 @@ void Controller::jouer() {
                     break;
                 }
                 case 3:{
+                    //affichage rigolo
+                    const std::string message = "Le Joueur " + getJoueurCourant().getPseudo() +" a gagne !";
+                    for (size_t j = 0; j<250; j++) {
+                        for (std::size_t i = 0; i < message.size(); ++i) {
+                            // Utilisation des codes ANSI pour le texte en gras et avec differentes couleurs
+                            std::cout << "\033[1;3" << (i % 7) + 1 << "m" << message[i];
+                        }
+                        std::cout<<"\n\n";
+                        for (std::size_t l = 0; l < j; ++l)
+                            std::cout<<" ";
+                    };
+                    // Reinitialisation du style apres la derniere lettre
+                    std::cout << "\033[0m\n";
+
                     std::cout << "Fin de la partie !\n";
                     return;
                     break;
@@ -409,7 +406,7 @@ void Controller::jouer() {
                 default:{
                     break;
                 }
-                }
+            }
             }
             //fin du tour :
             getPartie().incrementeTour();
