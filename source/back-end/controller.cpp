@@ -358,9 +358,8 @@ void Controller::jouer() {
 
                 //verification fin de tour d'un joueur
                 case 2:{
-                    //achat obligatoire d'une carte noble si le joueur a 3 ou 6 pts de prestige
-                    if (getJoueurCourant().getptsPrestige() >= 3 or getJoueurCourant().getptsPrestige() >= 6) {
-                        //rajouter une verif si il y a bien des cartes nobles
+                    //achat obligatoire d'une carte noble si le joueur a 3 pts et 0 cartes nobles ou 6 pts de prestige et 1 carte noble
+                    if ((getJoueurCourant().getptsPrestige() >= 3 && getJoueurCourant().getNbCartesNobles()==0) || (getJoueurCourant().getptsPrestige() >= 6 && getJoueurCourant().getNbCartesNobles()==0)) {
                         acheterCarteNoble(getPartie().getEspaceJeux().getPyramide());
                     }
 
