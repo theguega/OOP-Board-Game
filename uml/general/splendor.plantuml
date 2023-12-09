@@ -130,12 +130,13 @@ class EspaceJeux {
 
 class Controller {
 	- joueurCourant : Joueur*
+	- partie : Partie*
 
-    + lancer() : Partie
+    + lancer()
     + conditionsVictoire() : bool
     + jouer() : void
     + void quitter() : void
-    + actions joueur
+
 }
 
 Partie *--- EspaceJeux
