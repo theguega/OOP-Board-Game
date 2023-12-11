@@ -3,7 +3,7 @@
 
 unsigned int StrategyHumain::choix_min_max(unsigned int min, unsigned int max) {
     unsigned int choix;
-    std::cout << "Choisissez un entier entre " << min << " et " << max <<" :"<<std::endl;
+    qDebug() << "Choisissez un entier entre " << min << " et " << max <<" :"<<"\n";
     std::cin>>choix;
     if(choix<min || choix>max)
         throw SplendorException("Votrez choix ne rentrait pas dans l'intervalle");
@@ -11,7 +11,7 @@ unsigned int StrategyHumain::choix_min_max(unsigned int min, unsigned int max) {
 }
 
 unsigned int StrategyIA::choix_min_max(unsigned int min, unsigned int max) {
-    std::cout << "l'IA choisit entre " << min << " et " << max <<" :"<<std::endl;
+    qDebug() << "l'IA choisit entre " << min << " et " << max <<" :"<<"\n";
 
     //generation d'un entier aleatoire entre min et max
     std::random_device rd;
@@ -19,7 +19,7 @@ unsigned int StrategyIA::choix_min_max(unsigned int min, unsigned int max) {
     std::uniform_int_distribution<int> distribution(min, max);
     int choix = distribution(gen);
 
-    std::cout << "l'IA a choisit : " << choix << "\n";
+    qDebug() << "l'IA a choisit : " << choix << "\n";
     return choix;
 }
 
@@ -41,7 +41,7 @@ unsigned int StrategyIA::choixMenu() {
     std::uniform_int_distribution<int> distribution(1, 3);
     unsigned int choix = distribution(gen);
 
-    std::cout << "l'IA a choisit : " << choix << "\n";
+    qDebug() << "l'IA a choisit : " << choix << "\n";
     return choix;
 }
 
@@ -49,7 +49,7 @@ unsigned int StrategyIA::choixMenu() {
 
 
 Couleur StrategyHumain::choixCouleur() {
-    std::cout << "Choisissez une couleur : (blanc,bleu,vert,noir,rouge,perle,indt) (sensible a la casse) \n" << std::endl;
+    qDebug() << "Choisissez une couleur : (blanc,bleu,vert,noir,rouge,perle,indt) (sensible a la casse) \n" << "\n";
     string couleur_input;
     std::cin >> couleur_input;
     Couleur couleur = StringToCouleur(couleur_input);
@@ -67,13 +67,13 @@ Couleur StrategyIA::choixCouleur() {
     int choix = distribution(gen);
 
     Couleur couleur = StringToCouleur(listeCouleurs[choix]);
-    std::cout << "l'IA a choisit la couleur " << listeCouleurs[choix] << "\n";
+    qDebug() << "l'IA a choisit la couleur " << listeCouleurs[choix] << "\n";
 
     return couleur;
 }
 
 Couleur StrategyHumain::choixCouleurNonINDT() {
-    std::cout << "Choisissez une couleur : (blanc,bleu,vert,noir,rouge,perle) (sensible a la casse) \n" << std::endl;
+    qDebug() << "Choisissez une couleur : (blanc,bleu,vert,noir,rouge,perle) (sensible a la casse) \n" << "\n";
     string couleur_input;
     std::cin >> couleur_input;
     Couleur couleur = StringToCouleur(couleur_input);
@@ -94,7 +94,7 @@ Couleur StrategyIA::choixCouleurNonINDT() {
     int choix = distribution(gen);
 
     Couleur couleur = StringToCouleur(listeCouleurs[choix]);
-    std::cout << "l'IA a choisit la couleur " << listeCouleurs[choix] << "\n";
+    qDebug() << "l'IA a choisit la couleur " << listeCouleurs[choix] << "\n";
 
     return couleur;
 }
@@ -159,7 +159,7 @@ std::pair<unsigned int, unsigned int> StrategyIA::choisirJeton(Plateau& plateau)
 
 // les méthodes pour recup des jetons ont été bougées dans le controller
 std::vector<const Jeton*> StrategyHumain::recupJetonStrat(Plateau& plateau){
-    std::cout << "Combien de jetons souhaitez-vous recuperer ? (1 a 3) " << std::endl;
+    std::cout << "Combien de jetons souhaitez-vous recuperer ? (1 a 3) " << "\n"
     unsigned int nbJetonsRecup;
     std::cin >> nbJetonsRecup;
 

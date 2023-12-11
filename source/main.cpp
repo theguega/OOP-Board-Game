@@ -23,13 +23,16 @@
 
 int main(int argc, char * argv[]) {
     QApplication app(argc, argv);
+    toutesPages* page = new toutesPages(nullptr, &app);
+    page->show();
+    app.exec();
     Controller control;
     control.lancerPartie();
-
     control.jouer();
 
-    return 0;
+
     return app.exec();
+    return 0;
 }
 
 

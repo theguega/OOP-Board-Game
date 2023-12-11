@@ -1,29 +1,23 @@
-#include "controller.hpp"
-#include <QDebug>
+#include "controller_qt.hpp"
 
 Controller::Controller() {
     //Choix du type de partie
     //Choix du type de partie
     Director* director = new Director();
-
-    qDebug() << "\033[1;33mAncienne ou nouvelle partie ? (New/Old)\033[0m\n";
-
-
-    //QTextStream stream(stdin);
     string statut_partie;
-    cin >> statut_partie;
+    std::cout << "\033[1;33mAncienne ou nouvelle partie ? (New/Old)\033[0m" << std::endl;
+	std::cin >> statut_partie;
 
-   //Si nouvelle partie
+    //Si nouvelle partie
 	if (statut_partie == "New") {
 		NewPartieBuilder* builder = new NewPartieBuilder();
 		director->set_builder(builder);
-        qDebug() << "\033[1;33mA combien de joueurs voulez-vous jouer ? (0, 1, 2)\033[0m\n";
-
+        std::cout << "\033[1;33mA combien de joueurs voulez-vous jouer ? (0, 1, 2)\033[0m" << std::endl;
 		int nbJoueur;
 		cin >> nbJoueur;
         switch (nbJoueur) {
         case 0:
-        {   qDebug()  << "\nIA vs IA\n\n";
+        {   cout << "\nIA vs IA\n\n";
             director->BuildNewPartie("Alain Telligence", type::IA, "Al Gorythme", type::IA);
             Partie* p = builder->GetProduct();
             partie = p;
@@ -31,9 +25,8 @@ Controller::Controller() {
         }
         case 1:
         {
-            qDebug() <<"\nIA vs HUMAIN\n\n";
-            qDebug() << "\033[1;33mVeuillez saisir le pseudo du joueur\033[0m\n";
-
+            cout<<"\nIA vs HUMAIN\n\n";
+            std::cout << "\033[1;33mVeuillez saisir le pseudo du joueur\033[0m" << std::endl;
             string pseudo;
             std::cin>>pseudo;
             director->BuildNewPartie(pseudo, type::HUMAIN, "Al Gorythme", type::IA);
@@ -43,13 +36,11 @@ Controller::Controller() {
         }
         case 2:
         {
-            qDebug() <<"\nHUMAIN vs HUMAIN\n\n";
-            qDebug() << "\033[1;33mVeuillez saisir le pseudo du joueur 1\033[0m\n";
-
+            cout<<"\nHUMAIN vs HUMAIN\n\n";
+            std::cout << "\033[1;33mVeuillez saisir le pseudo du joueur 1\033[0m" << std::endl;
             string pseudo1;
             cin>>pseudo1;
-            qDebug() << "\033[1;33mVeuillez saisir le pseudo du joueur 2\033[0m\n";
-
+            std::cout << "\033[1;33mVeuillez saisir le pseudo du joueur 2\033[0m" << std::endl;
             string pseudo2;
             cin>>pseudo2;
             director->BuildNewPartie(pseudo1, type::HUMAIN, pseudo2, type::HUMAIN);
@@ -75,12 +66,12 @@ Controller::Controller() {
         QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE", "conn3");
         db.setDatabaseName("data/save.sqlite");
         if (!db.open()) {
-            qCritical() << "Impossible d'ouvrir la base de donnees 8: " << db.lastError().text().toStdString() << '\n';
+            std::cerr << "Impossible d'ouvrir la base de donnees 8: " << db.lastError().text().toStdString() << std::endl;
             return;
         }
         QSqlQuery query(db);
         if (!query.exec("SELECT * FROM infopartie")) {
-            qCritical() << "Erreur de preparation de la requete 9: " << query.lastError().text().toStdString() << '\n';
+            std::cerr << "Erreur de preparation de la requete 9: " << query.lastError().text().toStdString() << std::endl;
             db.close();
             return;
         }
@@ -101,7 +92,7 @@ Controller::Controller() {
 }
 
 //surcharge du constructeur du controller pour la partie graphique
-Controller::Controller(QString statut_partie, QString pseudo_j_1, type type_j_1, QString pseudo_j_2, type type_j_2){
+/*Controller::Controller(QString statut_partie, QString pseudo_j_1, type type_j_1, QString pseudo_j_2, type type_j_2){
     Director* director = new Director();
 
     //Si nouvelle partie
@@ -125,12 +116,12 @@ Controller::Controller(QString statut_partie, QString pseudo_j_1, type type_j_1,
         QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE", "conn3");
         db.setDatabaseName("data/save.sqlite");
         if (!db.open()) {
-            qCritical() << "Impossible d'ouvrir la base de donnees 8: " << db.lastError().text().toStdString() << '\n';
+            std::cerr << "Impossible d'ouvrir la base de donnees 8: " << db.lastError().text().toStdString() << std::endl;
             return;
         }
         QSqlQuery query(db);
         if (!query.exec("SELECT * FROM infopartie")) {
-            qCritical() << "Erreur de preparation de la requete 9: " << query.lastError().text().toStdString() << '\n';
+            std::cerr << "Erreur de preparation de la requete 9: " << query.lastError().text().toStdString() << std::endl;
             db.close();
             return;
         }
@@ -148,8 +139,9 @@ Controller::Controller(QString statut_partie, QString pseudo_j_1, type type_j_1,
     } else {
         throw SplendorException("Statut invalide");
     }
-}
 
+}
+*/
 
 
 
@@ -193,11 +185,11 @@ void Controller::lancerPartie() {
     setJoueurCourant(rd_number);
     switch (rd_number) {
     case 0:
-        qDebug() << "\033[1;36mC'est " << partie->getJoueur1()->getPseudo() << " qui commence, son adversaire recoit donc 1 privilege.\033[0m\n";
+        std::cout << "\033[1;36mC'est " << partie->getJoueur1()->getPseudo() << " qui commence, son adversaire recoit donc 1 privilege.\033[0m\n";
         partie->getJoueur2()->addPrivilege(partie->getEspaceJeux().getPlateau().recupererPrivilege());
         break;
     case 1:
-        qDebug() << "\033[1;36mC'est " << partie->getJoueur2()->getPseudo() << " qui commence, son adversaire recoit donc 1 privilege.\033[0m\n";
+        std::cout << "\033[1;36mC'est " << partie->getJoueur2()->getPseudo() << " qui commence, son adversaire recoit donc 1 privilege.\033[0m\n";
         partie->getJoueur1()->addPrivilege(partie->getEspaceJeux().getPlateau().recupererPrivilege());
         break;
     default:
@@ -211,28 +203,28 @@ void Controller::lancerPartie() {
 
 void Controller::quitter() {
     std::string sauvegarde;
-    qDebug()<<"Vous avez decider de quitter la partie\n";
-    qDebug()<<"Voulez vous la sauvegarde ? (Oui, Non)\n";
+    std::cout<<"Vous avez decider de quitter la partie\n";
+    std::cout<<"Voulez vous la sauvegarde ? (Oui, Non)\n";
     std::cin>>sauvegarde;
     if (sauvegarde=="OUI"||sauvegarde=="oui"||sauvegarde=="Oui")
         sauvegardePartie();
     else
-        qDebug()<<"tant pis...\n";
+        std::cout<<"tant pis...\n";
     return;
 }
 
 void Controller::jouer() {
     while (1) {
         // tour pour chacun des joueurs
-        qDebug()<<"\n\n\n\n\n\n\n\n\n\n\n\n";
-        qDebug()<< "Tour numero" << getPartie().getTour()+1 << '\n';
+        std::cout<<"\n\n\n\n\n\n\n\n\n\n\n\n";
+        std::cout<< "Tour numero" << getPartie().getTour()+1 << endl;
 
         bool tourEnPlus;
 
         //correpond au tour de chaque joueur
         for (unsigned int i = 0; i < 2; i++) {
-            qDebug()<<"--------------------------------------------------------------------------------------------------------------------------------------------\n";
-            qDebug()<<"C'est a " << getJoueurCourant().getPseudo()<<" de jouer : \n\n";
+            std::cout<<"--------------------------------------------------------------------------------------------------------------------------------------------\n";
+            std::cout<<"C'est a " << getJoueurCourant().getPseudo()<<" de jouer : \n\n";
             getJoueurCourant().afficherJoueur();
             tourEnPlus = false;
 
@@ -263,7 +255,7 @@ void Controller::jouer() {
                                 a_deja_utilise_privilege = true;
                                 etat_action = 0;
                             }
-                            catch(SplendorException& e) { qCritical() << "\033[1;31m" << e.getInfo() << "\033[0m" << '\n'<< '\n'; etat_action = 0; }
+                            catch(SplendorException& e) { std::cerr << "\033[1;31m" << e.getInfo() << "\033[0m" << endl << endl;; etat_action = 0; }
                             break;
                         }
                         case 2:{
@@ -277,7 +269,7 @@ void Controller::jouer() {
                                 etat_action = 0;
 
                             }
-                            catch(SplendorException& e) { qCritical() << "\033[1;31m" << e.getInfo() << "\033[0m" << '\n'<< '\n'; etat_action = 0; }
+                            catch(SplendorException& e) { std::cerr << "\033[1;31m" << e.getInfo() << "\033[0m" << endl << endl;; etat_action = 0; }
                             break;
                         }
                         case 3:{
@@ -293,7 +285,7 @@ void Controller::jouer() {
 
                         default:{
                             etat_action=0;
-                            qDebug()<<"Veuillez faire un choix correct !\n";
+                            std::cout<<"Veuillez faire un choix correct !\n";
                             break;
                         }
                         }
@@ -318,11 +310,11 @@ void Controller::jouer() {
                             try
                             {
                                 //recuperation de jetons
-                                qDebug()<<joueurCourant->getPseudo();
+                                std::cout<<joueurCourant->getPseudo();
                                 recupererJetons(false);
                                 etat_action = 10;
                             }
-                            catch(SplendorException& e) { qCritical() << "\033[1;31m" << e.getInfo() << "\033[0m" << '\n'<< '\n'; etat_action = 0; }
+                            catch(SplendorException& e) { std::cerr << "\033[1;31m" << e.getInfo() << "\033[0m" << endl << endl;; etat_action = 0; }
                             break;
                         case 2:
                             try
@@ -337,7 +329,7 @@ void Controller::jouer() {
                                     etat_action = 10;
                                 }
                             }
-                            catch(SplendorException& e) { qCritical() << "\033[1;31m" << e.getInfo() << "\033[0m" << '\n'<< '\n'; etat_action = 0; }
+                            catch(SplendorException& e) { std::cerr << "\033[1;31m" << e.getInfo() << "\033[0m" << endl << endl;; etat_action = 0; }
                             break;
                         case 3:
                             try
@@ -346,7 +338,7 @@ void Controller::jouer() {
                                 orReserverCarte(getPartie().getEspaceJeux().getPyramide(), getPartie().getEspaceJeux().getPlateau());
                                 etat_action = 10;
                             }
-                            catch(SplendorException& e) { qCritical() << "\033[1;31m" << e.getInfo() << "\033[0m" << '\n'<< '\n'; etat_action = 0; }
+                            catch(SplendorException& e) { std::cerr << "\033[1;31m" << e.getInfo() << "\033[0m" << endl << endl;; etat_action = 0; }
                             break;
                         case 9:{
                             quitter();
@@ -355,7 +347,7 @@ void Controller::jouer() {
                         }
                         default:
                             etat_action=0;
-                            qDebug()<<"Veuillez faire un choix correct !\n";
+                            std::cout<<"Veuillez faire un choix correct !\n";
                             break;
                         }
                         etat_tour = 2;
@@ -398,16 +390,16 @@ void Controller::jouer() {
                     for (size_t j = 0; j<250; j++) {
                         for (std::size_t i = 0; i < message.size(); ++i) {
                             // Utilisation des codes ANSI pour le texte en gras et avec differentes couleurs
-                            qDebug() << "\033[1;3" << (i % 7) + 1 << "m" << message[i];
+                            std::cout << "\033[1;3" << (i % 7) + 1 << "m" << message[i];
                         }
-                        qDebug()<<"\n\n";
+                        std::cout<<"\n\n";
                         for (std::size_t l = 0; l < j; ++l)
-                            qDebug()<<" ";
+                            std::cout<<" ";
                     };
                     // Reinitialisation du style apres la derniere lettre
-                    qDebug() << "\033[0m\n";
+                    std::cout << "\033[0m\n";
 
-                    qDebug() << "Fin de la partie !\n";
+                    std::cout << "Fin de la partie !\n";
                     return;
                     break;
                 }
@@ -460,27 +452,27 @@ bool Controller::appliquerCapacite(Capacite capa,const Carte &carte){
             //si il y a un jetons sur le plateau, le joueur le recupere
             joueurCourant->addPrivilege(partie->getEspaceJeux().getPlateau().recupererPrivilege());
         }
-        qDebug()<<"Ajout d'un privilège correspondant à la capacite\n";
+        std::cout<<"Ajout d'un privilège correspondant à la capacite\n";
         break;
     }
     case Capacite::TakeJetonFromBonus: {
-        qDebug()<<"Recuperation d'un jeton correspondant à la capacite\n";
+        std::cout<<"Recuperation d'un jeton correspondant à la capacite\n";
         recupererJetons(true, carte.getBonus().getCouleur());
         break;
     }
     case Capacite::TakeJetonToAdv: {
         // le joueur prend 1 jeton Gemme ou Perle à son adversaire. Si ce dernier n’en a pas,
         //cette capacité est sans effet. Il est interdit de prendre un jeton Or à son adversaire.
-        qDebug()<<"Voici les jetons de votre adversaire\n";
+        std::cout<<"Voici les jetons de votre adversaire\n";
         getJoueurAdverse().afficherJoueur();
 
         std::string coulJetonStr;
-        qDebug()<<"Quel est la couleur du jeton que vous voulez recuperer que Gemme ou perle ?\n";
+        std::cout<<"Quel est la couleur du jeton que vous voulez recuperer que Gemme ou perle ?\n";
 
         Couleur coulJeton = strategy_courante->choixCouleur();
         // On verifie que le jeton est bien un jeton gemme ou perle
         while(coulJeton == Couleur::OR || coulJeton == Couleur::INDT){
-            qDebug()<<"Veuillez selectionner un jeton Gemme ou perle\n";
+            std::cout<<"Veuillez selectionner un jeton Gemme ou perle\n";
             coulJeton = strategy_courante->choixCouleur();
         }
 
@@ -490,7 +482,7 @@ bool Controller::appliquerCapacite(Capacite capa,const Carte &carte){
         // Recup du jeton a l'adversaire
         const Jeton &jeton = getJoueurAdverse().RecupJetonCoul(coulJeton);
 
-        qDebug()<<"Ajout du jeton grace a la capacite\n";
+        std::cout<<"Ajout du jeton grace a la capacite\n";
         joueurCourant->addJeton(jeton);
 
 
@@ -503,7 +495,7 @@ bool Controller::appliquerCapacite(Capacite capa,const Carte &carte){
     }
 
     default:{
-        qDebug()<<"Impossible\n";
+        std::cout<<"Impossible\n";
         break;
     }
 
@@ -516,25 +508,23 @@ bool Controller::appliquerCapacite(Capacite capa,const Carte &carte){
 
 //Menu choix des actions
 unsigned int Controller::choixActionsObligatoires() {
-    qDebug() << "\033[1mActions obligatoires:\033[0m\n";
-    qDebug() << "1. Recuperer des jetons\n";
-    qDebug()  << "2. Acheter une carte joaillerie\n";
-    qDebug() << "3. Reserver une carte\n";
-    qDebug() << "9. Quitter le jeu\n";
-    qDebug() << "Votre choix (1/2/3/9):\n";
-
+    std::cout << "\033[1mActions obligatoires:\033[0m\n";
+    std::cout << "1. Recuperer des jetons\n";
+    std:: cout << "2. Acheter une carte joaillerie\n";
+    std::cout << "3. Reserver une carte\n";
+    std::cout << "9. Quitter le jeu\n";
+    std::cout << "Votre choix (1/2/3/9):" << std::endl;
 
     return strategy_courante->choixMenu();;
 }
 
 unsigned int Controller::choixActionsOptionelles() {
-    qDebug() << "\033[1mActions optionnelles:\033[0m\n";
-    qDebug() << "1. Utiliser un privilege\n";
-    qDebug()  << "2. Remplir le plateau\n";
-    qDebug() << "3. Ne plus faire d'actions optionnelles\n";
-    qDebug() << "9. Quitter le jeu\n";
-    qDebug() << "Votre choix (1/2/3/9):\n";
-
+    std::cout << "\033[1mActions optionnelles:\033[0m\n";
+    std::cout << "1. Utiliser un privilege\n";
+    std:: cout << "2. Remplir le plateau\n";
+    std::cout << "3. Ne plus faire d'actions optionnelles\n";
+    std::cout << "9. Quitter le jeu\n";
+    std::cout << "Votre choix (1/2/3/9):" << std::endl;
 
     return strategy_courante->choixMenu();;
 }
@@ -546,7 +536,7 @@ void Controller::utiliserPrivilege(Plateau& plateau){
     verifPrivileges();
     verifPlateauvide();
 
-    qDebug() << "Combien de privileges voulez vous utiliser ?\n";
+    std::cout << "Combien de privileges voulez vous utiliser ?\n";
     unsigned int priv = strategy_courante->choix_min_max(1,3);
     if (priv>joueurCourant->getNbPrivileges())
         throw SplendorException("Vous n'avez pas assez de privilege");
@@ -555,8 +545,8 @@ void Controller::utiliserPrivilege(Plateau& plateau){
 
     //on recupere autant de jetons que de privilege
     for (size_t k=0; k<priv;k++) {
-        qDebug()<<"Utiliser un privilege permet de recup un jeton de couleur ou perle de votre choix (i,j):\n";
-        qDebug()<<plateau<<"\n";
+        std::cout<<"Utiliser un privilege permet de recup un jeton de couleur ou perle de votre choix (i,j):\n";
+        std::cout<<plateau<<"\n";
 
         unsigned int i = strategy_courante->choix_min_max(1,5)-1;
         unsigned int j = strategy_courante->choix_min_max(1,5)-1;
@@ -573,8 +563,8 @@ void Controller::utiliserPrivilege(Plateau& plateau){
         plateau.poserPrivilege(privilege);
     }
 
-    qDebug() << "Voici le nouveau plateau (apres recuperation) \n" << getPartie().getEspaceJeux().getPlateau();
-    joueurCourant->afficherJoueur();
+    std::cout << "Voici le nouveau plateau (apres recuperation) \n" << getPartie().getEspaceJeux().getPlateau();
+                     joueurCourant->afficherJoueur();
     return;
 }
 
@@ -582,13 +572,13 @@ void Controller::remplirPlateau(Plateau& plateau, Sac& sac){
     //on verifie d'abord si le joueur a un/des privilege
     verifSacvide();
 
-    qDebug()<<"Le joueur rempli le plateau :\n" << plateau << '\n';
+    std::cout<<"Le joueur rempli le plateau :\n"<<plateau<<endl;
 
     //on donne un privilege au joueur adverse
     donPrivilegeAdverse();
 
     plateau.remplirPlateau(sac);
-    qDebug()<<"Nouveau plateau : \n" <<plateau;
+    std::cout<<"Nouveau plateau : \n"<<plateau;
 
     return;
 }
@@ -599,7 +589,7 @@ void Controller::remplirPlateau(Plateau& plateau, Sac& sac){
 
 // Recuperer des jetons
 void Controller::recupererJetons(bool capacite,Couleur coulBonus){
-    qDebug()<<"Vous avez decider de recuperer des jetons sur le plateau :\n"<<getPlateau();
+    std::cout<<"Vous avez decider de recuperer des jetons sur le plateau :\n"<<getPlateau();
 
     verifPlateauvide();
 
@@ -610,8 +600,7 @@ void Controller::recupererJetons(bool capacite,Couleur coulBonus){
     if(capacite){
         nbJetons = 1;
     } else {
-        qDebug() << "Combien de jetons souhaitez-vous recuperer ? (1,2,3) \n";
-
+        std::cout << "Combien de jetons souhaitez-vous recuperer ? (1,2,3) " << std::endl;
         nbJetons = strategy_courante->choix_min_max(1,3);
     }
 
@@ -621,23 +610,23 @@ void Controller::recupererJetons(bool capacite,Couleur coulBonus){
 
 
     if(capacite){
-        qDebug() << "Merci de selectionner un jeton de la meme couleur que le bonus.\n\n";
+        std::cout << "Merci de selectionner un jeton de la meme couleur que le bonus.\n\n";
     }else {
-        qDebug() << "Merci de selectionner des jetons adjacents en ligne, en colonne ou en diagonale.\n\n";
+        std::cout << "Merci de selectionner des jetons adjacents en ligne, en colonne ou en diagonale.\n\n";
     }
 
 
     std::vector<std::pair<int, int>> vecteurCoordonnees;
-    qDebug()<<"Vous allez rentrer les coordonnees des jetons : \n";
+    std::cout<<"Vous allez rentrer les coordonnees des jetons : \n";
     // Recup des coordonnees des jetons
     for (unsigned int k = 0; k < nbJetons; k++){
 
         // Ajout des coordonnees
-        qDebug()<<"Jetons numero "<<k+1<<" : \n";
+        std::cout<<"Jetons numero "<<k+1<<" : \n";
 
-        qDebug() << "Numero de ligne (1,2,3,4,5) : \n";
+        std::cout << "Numero de ligne (1,2,3,4,5) : \n";
         int indice_i = strategy_courante->choix_min_max(1, 5);
-        qDebug() << "Numero de colonne (1,2,3,4,5) : \n";
+        std::cout << "Numero de colonne (1,2,3,4,5) : \n";
         int indice_j = strategy_courante->choix_min_max(1, 5);
         vecteurCoordonnees.emplace_back(std::make_pair(indice_i-1, indice_j-1));
     }
@@ -734,25 +723,25 @@ void Controller::recupererJetons(bool capacite,Couleur coulBonus){
         }
     }
     if(nbJetonsPerle == 2 || (troisJetons == true && jetonsRecup.size()== 3)){
-        qDebug()<<"Ajout d'un privilège pour le joueur adverse\n" ;
+        std::cout<<"Ajout d'un privilège pour le joueur adverse\n" ;
         donPrivilegeAdverse();
-        qDebug()<<"Voici l'etat du joueur adverse apres recuperation :\n" ;
+        std::cout<<"Voici l'etat du joueur adverse apres recuperation :\n" ;
         getJoueurAdverse().afficherJoueur();
 
     }
 
 
 
-    qDebug()<<"Voici le nouveau plateau (apres recuperation) \n" << getPlateau();
-    qDebug()<<"Voici l'etat du joueur apres recuperation :\n" ;
+    std::cout<<"Voici le nouveau plateau (apres recuperation) \n" << getPlateau();
+    std::cout<<"Voici l'etat du joueur apres recuperation :\n" ;
     joueurCourant->afficherJoueur();
     return;
 }
 
 //TODO
 bool Controller::acheterCarteJoaillerie (EspaceJeux& espaceJeux){
-    qDebug()<<"Vous avez decider d'acheter une carte joaillerie\n";
-    qDebug()<<"Voulez vous acheter une carte reservee (1) ou une carte du plateau de jeu (2)\n";
+    std::cout<<"Vous avez decider d'acheter une carte joaillerie\n";
+    std::cout<<"Voulez vous acheter une carte reservee (1) ou une carte du plateau de jeu (2)\n";
     unsigned int choix = strategy_courante->choix_min_max(1,2);
 
 
@@ -761,7 +750,7 @@ bool Controller::acheterCarteJoaillerie (EspaceJeux& espaceJeux){
         if(joueurCourant->getNbCartesReservees()==0)
             throw SplendorException("Vous n'avez pas de carte rerservee\n");
 
-        qDebug() << "Voici les cartes reservees : \n";
+        std::cout << "Voici les cartes reservees : \n";
         unsigned int i = 0;
         // Affichage de la reserve
         for (const auto& couleurEtCartes : joueurCourant->cartesReservees) {
@@ -769,19 +758,19 @@ bool Controller::acheterCarteJoaillerie (EspaceJeux& espaceJeux){
 
             // Ignorer les cartes de couleur OR et INDT
             if (couleur != Couleur::OR) {
-                qDebug() << "Cartes de couleur : " << couleur << "\n";
+                std::cout << "Cartes de couleur : " << couleur << "\n";
                 const std::vector<const Carte*>& cartes = couleurEtCartes.second;
 
                 for (const Carte* carte : cartes) {
-                    qDebug() << "Numero " << ++i << " : \n" << *carte << '\n';
+                    std::cout << "Numero " << ++i << " : \n" << *carte << std::endl;
                 }
 
-                qDebug() << "\n\n\n";
+                std::cout << "\n\n\n";
             }
         }
 
         // on recupere la couleur de la carte reservee
-        qDebug()<<"Veuillez entrer la couleur de la carte que vous souhiatez reserver\n";
+        std::cout<<"Veuillez entrer la couleur de la carte que vous souhiatez reserver\n";
         Couleur c = strategy_courante->choixCouleur();
 
         //on verifie qu'il a bien des cartes de cette couleur reservee
@@ -790,7 +779,7 @@ bool Controller::acheterCarteJoaillerie (EspaceJeux& espaceJeux){
             throw SplendorException("Vous n'avez pas de carte de cette couleur\n");
 
         //on recupere l'indice de la carte
-        qDebug()<<"Indiquez l'indice de la carte que vous voulez recuperer\n";
+        std::cout<<"Indiquez l'indice de la carte que vous voulez recuperer\n";
         unsigned int choix_indice_carte = strategy_courante->choix_min_max(1,nb_carte)-1;
 
         //on recup la carte
@@ -816,20 +805,20 @@ bool Controller::acheterCarteJoaillerie (EspaceJeux& espaceJeux){
         }
 
         if(carte.getCapacite1() != Capacite::AssociationBonus || carte.getCapacite2() != Capacite::AssociationBonus){
-            qDebug()<<"La carte a une capacite qui permet d'ajouter un bonus a la couleur de votre choix\n";
+            std::cout<<"La carte a une capacite qui permet d'ajouter un bonus a la couleur de votre choix\n";
 
             std::string coulJetonStr;
-            qDebug()<<"Quel est la couleur du bonus que vous voulez recuperer ?\n";
+            std::cout<<"Quel est la couleur du bonus que vous voulez recuperer ?\n";
 
             Couleur coulBonus = strategy_courante->choixCouleur();
             // On verifie que la validite de la couleur du bonus
             while(coulBonus == Couleur::PERLE || coulBonus == Couleur::INDT){
-                qDebug()<<"Veuillez selectionner un jeton Gemme ou perle\n";
+                std::cout<<"Veuillez selectionner un jeton Gemme ou perle\n";
                 coulBonus = strategy_courante->choixCouleur();
             }
             // Ajout du bonus
             joueurCourant->bonus[coulBonus]++;
-            qDebug()<<"Le bonus a bien ete ajoute\n";
+            std::cout<<"Le bonus a bien ete ajoute\n";
 
             joueurCourant->cartes[coulBonus].push_back(&carte);
             joueurCourant->ptsPrestige += carte.getNbPtsPrivilege();
@@ -852,13 +841,13 @@ bool Controller::acheterCarteJoaillerie (EspaceJeux& espaceJeux){
     // Achat carte du plateau
     else {
         // Affichage des cartes
-        qDebug() << "Voici les cartes du plateau : \n";
+        std::cout << "Voici les cartes du plateau : \n";
         espaceJeux.getPyramide().afficherPyramide();
 
-        qDebug()  << "rentrez le niveau de la carte souhaitee : \n";
+        cout << "rentrez le niveau de la carte souhaitee : \n";
         unsigned int niveau = strategy_courante->choix_min_max(1, 3)-1;
-        qDebug()  << "rentrez le numero de la carte souhaitee : \n";
-        qDebug()<<"DEBUG : "<<getPyramide().getNbCartesNiv(niveau);
+        cout << "rentrez le numero de la carte souhaitee : \n";
+        std::cout<<"DEBUG : "<<getPyramide().getNbCartesNiv(niveau);
         unsigned int num_carte = strategy_courante->choix_min_max(1, getPyramide().getNbCartesNiv(niveau))-1;
 
         const Carte& carte = partie->getEspaceJeux().getPyramide().acheterCarte(niveau, num_carte);
@@ -873,7 +862,7 @@ bool Controller::acheterCarteJoaillerie (EspaceJeux& espaceJeux){
 
         //si la carte à une couleur indeterminer, le joueur doit choisir la couleur de la carte
         /*if(carte.getBonus().getCouleur()==Couleur::INDT){
-            qDebug()<<"Votre carte est de couleur indeterminee, veuillez choisir une couleur pour votre carte\n";
+            std::cout<<"Votre carte est de couleur indeterminee, veuillez choisir une couleur pour votre carte\n";
             Couleur c = strategy_courante->choixCouleur();
             //attribuer la couleur choisit à la carte
         }*/
@@ -904,7 +893,7 @@ bool Controller::acheterCarteJoaillerie (EspaceJeux& espaceJeux){
 }
 
 void Controller::acheterCarteNoble (Pyramide& pyramide){
-    qDebug()<<"Vous devez achter une carte noble car vous avez 3 ou 6 pts de prestige\n";
+    std::cout<<"Vous devez achter une carte noble car vous avez 3 ou 6 pts de prestige\n";
     // affichage cartes nobles
     pyramide.afficherNobles();
 
@@ -918,32 +907,31 @@ void Controller::acheterCarteNoble (Pyramide& pyramide){
 void Controller::orReserverCarte (Pyramide& pyramide, Plateau& plateau){
     verifTroisCarteReserve();
     verifOrSurPlateau();
-    qDebug()  << "Commencez par choisir un jeton Or : \n";
-    qDebug()  <<  getPlateau();
-    qDebug()  << "Choisissez une ligne : \n";
+    cout << "Commencez par choisir un jeton Or : \n";
+    cout <<  getPlateau();
+    cout << "Choisissez une ligne : \n";
     unsigned int coord_ligne = strategy_courante->choix_min_max(1, 5);
-    qDebug()  << "Choisissez une colonne : \n";
+    cout << "Choisissez une colonne : \n";
     unsigned int coord_col = strategy_courante->choix_min_max(1, 5);
     while(getPlateau().caseVide(coord_ligne-1, coord_col-1) || !getPlateau().caseOr(coord_ligne-1, coord_col-1)){
-        qDebug()  << "La case est vide ou ce n'est pas un jeton Or\n";
-        qDebug()  << "Choisissez une ligne : \n";
+        cout << "La case est vide ou ce n'est pas un jeton Or\n";
+        cout << "Choisissez une ligne : \n";
         coord_ligne = strategy_courante->choix_min_max(1, 5);
-        qDebug()  << "Choisissez une colonne : \n";
+        cout << "Choisissez une colonne : \n";
         coord_col = strategy_courante->choix_min_max(1, 5);
     }
 
-    qDebug()  << "Voulez-vous reserver une carte de la pyramide (0) ou celle d'une pioche (1, 2, 3) ?\n";
+    cout << "Voulez-vous reserver une carte de la pyramide (0) ou celle d'une pioche (1, 2, 3) ?\n";
     unsigned int choix = strategy_courante->choix_min_max(0, 3);
 
     if (choix == 0){
         // Reservation de la carte
-        qDebug() << "Voici les cartes de la pyramide : \n";
-
+        std::cout << "Voici les cartes de la pyramide : " << std::endl;
         getPyramide().afficherPyramide();
 
-        qDebug()  << "rentrez le niveau de la carte souhaitee : \n";
+        cout << "rentrez le niveau de la carte souhaitee : \n";
         unsigned int niveau = strategy_courante->choix_min_max(1, 3)-1;
-        qDebug()  << "rentrez le numero de la carte souhaitee : \n";
+        cout << "rentrez le numero de la carte souhaitee : \n";
         unsigned int num_carte = strategy_courante->choix_min_max(1, getPyramide().getNbCartesNiv(niveau))-1;
 
         const Carte& carte = pyramide.acheterCarte(niveau, num_carte);
@@ -960,7 +948,7 @@ void Controller::orReserverCarte (Pyramide& pyramide, Plateau& plateau){
         const Jeton& jeton = plateau.recupererJeton(coord_ligne-1, coord_col-1);
         joueurCourant->addJeton(jeton);
     }
-    qDebug()  << "Etat du joueur apres l'action : \n";
+    cout << "Etat du joueur apres l'action : \n";
     joueurCourant->afficherJoueur();
 }
 
@@ -1100,8 +1088,7 @@ bool Controller::verifAchatCarte(const Carte& carte, EspaceJeux& espaceJeux) {
     // Verifier a nouveau si le joueur a maintenant assez de points pour acheter la carte
     if (needBlanc <= nbBlanc && needBleu <= nbBleu && needVert <= nbVert &&
         needRouge <= nbRouge && needNoir <= nbNoir && needPerle <= nbPerle) {
-        qDebug() << "Carte achetable avec " << jetonsOrUtilises << " jeton(s) or utilise(s).\n";
-
+        std::cout << "Carte achetable avec " << jetonsOrUtilises << " jeton(s) or utilise(s)." << std::endl;
 
         joueurCourant->supJetonNb(needBlanc, Couleur::BLANC, espaceJeux);
         joueurCourant->supJetonNb(needBleu, Couleur::BLEU, espaceJeux);
@@ -1113,8 +1100,7 @@ bool Controller::verifAchatCarte(const Carte& carte, EspaceJeux& espaceJeux) {
 
         return true;
     } else {
-        qDebug() << "Le joueur n'a pas assez de jetons pour acheter la carte.\n";
-
+        std::cout << "Le joueur n'a pas assez de jetons pour acheter la carte." << std::endl;
         return false;
     }
 }
@@ -1149,18 +1135,18 @@ void Controller::verifTroisCarteReserve(){
 }
 
 void Controller::verifJetonSupDix(){
-    qDebug()  << "Verification que le joueur courant n'a pas plus de 10 jetons dans sa main\n";
+    cout << "Verification que le joueur courant n'a pas plus de 10 jetons dans sa main\n";
     while(joueurCourant->getNbJetons() > 10){
-        qDebug()  << "Vous devez reposer des jetons dans le sac : \n";
-        qDebug()  << "Choisissez une couleur parmi : \n";
+        cout << "Vous devez reposer des jetons dans le sac : \n";
+        cout << "Choisissez une couleur parmi : \n";
         for (auto& couleur : Couleurs){
             if (couleur != Couleur::INDT)
-                qDebug()  << static_cast<int>(couleur)+1 << " - " << toStringCouleur(couleur) << "\n";
+                cout << static_cast<int>(couleur)+1 << " - " << toStringCouleur(couleur) << "\n";
         }
         unsigned int choix = strategy_courante->choix_min_max(1, 7);
         Couleur choix_c = static_cast<Couleur>(choix-1);
         if (joueurCourant->getNbJetons(choix_c) == 0)
-            qDebug()  << "Vous n'avez pas de jetons de cette couleur !\n";
+            cout << "Vous n'avez pas de jetons de cette couleur !\n";
         else{
             joueurCourant->supJetonNb(1, choix_c, getEspaceJeux());
         }
@@ -1192,8 +1178,7 @@ void Controller::sauvegardePartie() {
     QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE", "conn1");
     db.setDatabaseName("data/save.sqlite");
     if (!db.open()) {
-        qCritical() << "Erreur lors de la connexion a la base de donnee\n";
-
+        std::cerr << "Erreur lors de la connexion a la base de donnee" << std::endl;
         return;
     }
 
@@ -1210,8 +1195,7 @@ void Controller::sauvegardePartie() {
         // Infos du joueur
         QString sql = "INSERT INTO joueur (id, pseudo, type_joueur, privileges) VALUES (" + QString::number(i + 1) + ", '" + QString::fromStdString(getPartie().getJoueur(i)->getPseudo()) + "', '" + QString::fromStdString(toStringType(getPartie().getJoueur(i)->getTypeDeJoueur())) + "', " + QString::number(getPartie().getJoueur(i)->getNbPrivileges()) + ");";
         if (!query.exec(sql)) {
-            qCritical() << "Erreur lors de la sauvegarde du joueur \n";
-
+            std::cerr << "Erreur lors de la sauvegarde du joueur " << std::endl;
             db.close();
             return;
         }
@@ -1221,8 +1205,7 @@ void Controller::sauvegardePartie() {
                 for (size_t j = 0; j < getPartie().getJoueur(i)->getNbJetons(c); j++) {
                     sql = "INSERT INTO jeton (id_joueur, couleur) VALUES (" + QString::number(i + 1) + ", '" + QString::fromStdString(toStringCouleur(c)) + "');";
                     if (!query.exec(sql)) {
-                        qCritical() << "Erreur lors de la sauvegarde du jeton \n";
-
+                        std::cerr << "Erreur lors de la sauvegarde du jeton " << std::endl;
                         db.close();
                         return;
                     }
@@ -1235,8 +1218,7 @@ void Controller::sauvegardePartie() {
                 for (size_t j = 0; j < getPartie().getJoueur(i)->getNbCartes(c); j++) {
                     sql = "INSERT INTO carte (id_joueur, id_carte, noble, reservee) VALUES (" + QString::number(i + 1) + ", " + QString::number(getPartie().getJoueur(i)->getCarte(c, j).getId()) + ",0,0);";
                     if (!query.exec(sql)) {
-                        qCritical() << "Erreur lors de la sauvegarde de la carte \n";
-
+                        std::cerr << "Erreur lors de la sauvegarde de la carte " << std::endl;
                         db.close();
                         return;
                     }
@@ -1247,8 +1229,7 @@ void Controller::sauvegardePartie() {
         for (size_t j = 0; j < getPartie().getJoueur(i)->getNbCartesNobles(); j++) {
             sql = "INSERT INTO carte (id_joueur, id_carte, noble, reservee) VALUES (" + QString::number(i + 1) + ", " + QString::number(getPartie().getJoueur(i)->getCarteNoble(j).getId()) + ",1,0);";
             if (!query.exec(sql)) {
-                qCritical() << "Erreur lors de la sauvegarde de la carte\n";
-
+                std::cerr << "Erreur lors de la sauvegarde de la carte" << std::endl;
                 db.close();
                 return;
             }
@@ -1259,8 +1240,7 @@ void Controller::sauvegardePartie() {
                 for (size_t j = 0; j < getPartie().getJoueur(i)->getNbCartesReservees(c); j++) {
                     sql = "INSERT INTO carte (id_joueur, id_carte, noble, reservee) VALUES (" + QString::number(i + 1) + ", " + QString::number(getPartie().getJoueur(i)->getCarteReservee(c, j).getId()) + ", " + QString::fromStdString(TypeCartetoString(getPartie().getJoueur(i)->getCarteReservee(c, j).getType())) + ",1);";
                     if (!query.exec(sql)) {
-                        qCritical() << "Erreur lors de la sauvegarde de la carte \n";
-
+                        std::cerr << "Erreur lors de la sauvegarde de la carte " << std::endl;
                         db.close();
                         return;
                     }
@@ -1276,8 +1256,7 @@ void Controller::sauvegardePartie() {
             if (plateau.getJeton(i, j) != nullptr) {
                 QString sql = "INSERT INTO plateau (i, j, couleur) VALUES (" + QString::number(i) + ", " + QString::number(j) + ", '" + QString::fromStdString(toStringCouleur(plateau.getJeton(i, j)->getCouleur())) + "');";
                 if (!query.exec(sql)) {
-                    qCritical() << "Erreur lors de la sauvegarde du plateau\n";
-
+                    std::cerr << "Erreur lors de la sauvegarde du plateau" << std::endl;
                     db.close();
                     return;
                 }
@@ -1292,8 +1271,7 @@ void Controller::sauvegardePartie() {
             const Carte* carte = pyramide.getCarte(i, j);
             QString sql = "INSERT INTO pyramide (i, j, id) VALUES (" + QString::number(i) + ", " + QString::number(j) + ", " + QString::number(carte->getId()) + ");";
             if (!query.exec(sql)) {
-                qCritical() << "Erreur lors de la sauvegarde de la pyramide\n";
-
+                std::cerr << "Erreur lors de la sauvegarde de la pyramide" << std::endl;
                 db.close();
                 return;
             }
@@ -1310,8 +1288,7 @@ void Controller::sauvegardePartie() {
     int tour = getPartie().getTour();
     QString sql = "INSERT INTO infopartie (tour, joueurCourant) VALUES (" + QString::number(tour) + ", " + QString::number(joueurCourant) + ");";
     if (!query.exec(sql)) {
-        qCritical() << "Erreur lors de la sauvegarde des infos de la partie\n";
-
+        std::cerr << "Erreur lors de la sauvegarde des infos de la partie" << std::endl;
         db.close();
         return;
     }
@@ -1330,8 +1307,7 @@ void Controller::enregisterScore() {
     QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE", "conn4");
     db.setDatabaseName("data/score.sqlite");
     if (!db.open()) {
-        qCritical() << "Erreur lors de la connexion a la base de donnee\n";
-
+        std::cerr << "Erreur lors de la connexion a la base de donnee" << std::endl;
         return;
     }
 
@@ -1340,8 +1316,7 @@ void Controller::enregisterScore() {
         // On regarde si le joueur existe deja
         QString sql = "SELECT * FROM score WHERE pseudo = '" + QString::fromStdString(getPartie().getJoueur(i)->getPseudo()) + "';";
         if (!query.exec(sql)) {
-            qCritical() << "Erreur lors de la recherche du joueur dans la base de donnee\n";
-
+            std::cerr << "Erreur lors de la recherche du joueur dans la base de donnee" << std::endl;
             db.close();
             return;
         }
@@ -1359,10 +1334,9 @@ void Controller::enregisterScore() {
             }
             // On met a jour le score du joueur
             sql = "UPDATE score SET nbVictoire = " + QString::number(nbVictoire) + ", nbDefaite = " + QString::number(nbDefaite) + " WHERE pseudo = '" + QString::fromStdString(getPartie().getJoueur(i)->getPseudo()) + "';";
-            qDebug() << sql.toStdString() << '\n';
+            std::cout << sql.toStdString() << std::endl;
             if (!query.exec(sql)) {
-                qCritical() << "Erreur lors de la mise a jour du score du joueur\n";
-
+                std::cerr << "Erreur lors de la mise a jour du score du joueur" << std::endl;
                 db.close();
             }
         } else {
@@ -1375,10 +1349,9 @@ void Controller::enregisterScore() {
                 nbDefaite++;
             }
             sql = "INSERT INTO score (pseudo, nbVictoire, nbDefaite) VALUES ('" + QString::fromStdString(getPartie().getJoueur(i)->getPseudo()) + "', " + QString::number(nbVictoire) + ", " + QString::number(nbDefaite) + ");";
-            qDebug() << sql.toStdString() << '\n';
+            std::cout << sql.toStdString() << std::endl;
             if (!query.exec(sql)) {
-                qCritical() << "Erreur lors de l'ajout du joueur dans la base de donnee\n";
-
+                std::cerr << "Erreur lors de l'ajout du joueur dans la base de donnee" << std::endl;
                 db.close();
             }
         }

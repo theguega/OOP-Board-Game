@@ -1,6 +1,7 @@
 #include "pageMenuPrincipal.h"
 
 pageMenuPrincipal::pageMenuPrincipal(QWidget *parent) : QWidget(parent) {
+
     boutonDemarrer = new QPushButton("Commencer une nouvelle partie");
     boutonSauvegarde = new QPushButton("Demarrer une partie sauvegardee");
     boutonBibli = new QPushButton("Scores");
