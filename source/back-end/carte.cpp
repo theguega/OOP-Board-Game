@@ -1,5 +1,6 @@
 #include "carte.hpp"
 
+
 using namespace std;
 
 
@@ -42,6 +43,11 @@ ostream & operator << (ostream & f, TypeCarte t) {
     return f;
 }
 
+QDebug operator<<(QDebug f, TypeCarte t){
+    f << TypeCartetoString(t);
+    return f;
+}
+
 
 string CapacitetoString(Capacite c) {
     switch (c) {
@@ -66,7 +72,10 @@ ostream & operator << (ostream & f, Capacite c) {
     f << CapacitetoString(c);
     return f;
 }
-
+QDebug operator<<(QDebug f, Capacite c){
+    f << CapacitetoString(c);
+    return f;
+}
 
 std::map < std::string, Capacite > stringToCapaciteMap = {
     {
@@ -115,12 +124,23 @@ ostream & operator << (ostream & f,
 }
 
 
+QDebug operator<<(QDebug f, const Prix &p) {
+    f << toEmojiCouleur(Couleur::BLANC) << " : " << p.getBlanc() << "    " << toEmojiCouleur(Couleur::BLEU) << " : " << p.getBleu() << "\n";
+    f << toEmojiCouleur(Couleur::VERT) << " : " << p.getVert() << "    " << toEmojiCouleur(Couleur::NOIR) << " : " << p.getNoir() << "\n";
+    f << toEmojiCouleur(Couleur::ROUGE) << " : " << p.getRouge() << "    " << toEmojiCouleur(Couleur::PERLE) << " : " << p.getPerle() << "\n";
+    return f;
+}
+
 ostream & operator << (ostream & f,
     const Bonus & b) {
     f << b.getNbBonus() << " " << b.getCouleur();
     return f;
 }
 
+QDebug operator<<(QDebug f, const Bonus &b){
+    f << b.getNbBonus() << " " << b.getCouleur();
+    return f;
+}
 
 Carte::Carte(TypeCarte t, Prix & p, Capacite c1, Capacite c2, Bonus & b, unsigned int nbC, unsigned int nbP, unsigned int id): type(t), prix(p), capacite1(c1), capacite2(c2), bonus(b), nbCouronnes(nbC), nbPtsPrivilege(nbP), id(id) {
     if (t == TypeCarte::Noble)
@@ -136,6 +156,19 @@ Carte::Carte(TypeCarte t, Capacite c, unsigned int nbP, unsigned int id): type(t
 
 ostream & operator << (ostream & f,
     const Carte & c) {
+    f << "------------------------------\n";
+    f << c.getType() << "   " << "Bonus : " << c.getBonus() << "\n";
+    f << "------------------------------\n";
+    f << "Capacite : " << c.getCapacite1() << ", " << c.getCapacite2() << "\n";
+    f << "------------------------------\n";
+    f << "Prix :\n" << c.getPrix();
+    f << "------------------------------\n";
+    f << "Privileges : " << c.getNbPtsPrivilege() << "   " << "Couronnes : " << c.getNbCouronnes() << "\n";
+    f << "------------------------------\n";
+    return f;
+}
+
+QDebug operator<<(QDebug f, const Carte & c) {
     f << "------------------------------\n";
     f << c.getType() << "   " << "Bonus : " << c.getBonus() << "\n";
     f << "------------------------------\n";

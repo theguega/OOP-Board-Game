@@ -13,13 +13,14 @@
 #include <QtSql>
 #include <QSqlDatabase>
 #include <QSqlQuery>
-
+#include <QDebug>
 using namespace std;
 
 
 enum class TypeCarte { Niv1, Niv2, Niv3, Noble };
 string TypeCartetoString(TypeCarte t);
 ostream& operator<<(ostream& f, TypeCarte t);
+QDebug operator<<(QDebug f, TypeCarte t);
 extern std::initializer_list<TypeCarte> TypesCarte;
 
 
@@ -27,6 +28,8 @@ enum class Capacite { NewTurn, TakePrivilege, TakeJetonFromBonus, TakeJetonToAdv
 extern std::map<std::string, Capacite> stringToCapaciteMap;
 string CapacitetoString(Capacite c);
 ostream& operator<<(ostream& f, Capacite c);
+QDebug operator<<(QDebug f, Capacite c);
+
 Capacite StringToCapacite(const string& capaciteStr);
 
 
@@ -45,7 +48,7 @@ public:
     unsigned int getPerle() const { return perle; }
 };
 ostream& operator<<(ostream& f, const Prix& p);
-
+QDebug operator<<(QDebug f, const Prix &p);
 
 class Bonus {
 private:
@@ -59,8 +62,10 @@ public:
     Couleur getCouleur() const { return couleur; }
     unsigned int getNbBonus() const { return nbBonus; }
 };
+
 ostream& operator<<(ostream& f, const Bonus& b);
 
+QDebug operator<<(QDebug f, const Bonus &b);
 
 class Carte {
 private:
@@ -87,7 +92,7 @@ public:
     unsigned int getNbPtsPrivilege() const { return nbPtsPrivilege; }
 };
 ostream& operator<<(ostream& f, const Carte& c);
-
+QDebug operator<<(QDebug f, const Carte &c);
 
 class JeuCarte {
 private:

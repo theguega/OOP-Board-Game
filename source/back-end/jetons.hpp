@@ -8,7 +8,7 @@
 #include <map>
 #include <string>
 #include "back-end/exception.hpp"
-
+#include <QDebug>
 using namespace std;
 
 //Enum pour les couleurs : initialiser, to string, affichage, string to couleur.
@@ -16,6 +16,7 @@ enum class Couleur { BLANC, BLEU, VERT, ROUGE, NOIR, PERLE, OR, INDT};
 std::string toStringCouleur(Couleur c);
 std::string toEmojiCouleur(Couleur c);
 std::ostream& operator<<(std::ostream& f, Couleur c);
+QDebug operator<<(QDebug f, const Couleur &c);
 extern std::initializer_list<Couleur> Couleurs;
 extern std::map<string, Couleur> stringToCouleurMap;
 Couleur StringToCouleur(const string& couleurStr);
@@ -29,6 +30,7 @@ class Jeton {
         Couleur getCouleur() const { return couleur; }
 };
 std::ostream& operator<< (std::ostream& f, const Jeton& jeton);
+QDebug operator<<(QDebug f, const Jeton &jeton);
 
 class LotDeJetons {
     private :
@@ -63,7 +65,9 @@ class LotDeJetons {
 class Privilege {
     //pas d'attribut ni méthode : les 3 privilèges sont identiques
 };
+
 std::ostream& operator<< (std::ostream& f, const Privilege& privilege);
+QDebug operator<<(QDebug f, const Privilege &privilege);
 
 class LotPrivileges {
     private :
@@ -161,7 +165,9 @@ class Plateau {
         //Lot de privilèges (debut de partie)
         static Plateau& getPlateau(const LotPrivileges& lotp);
 };
+
 std::ostream& operator<< (std::ostream& f, const Plateau& plateau);
+QDebug operator<<(QDebug f, const Plateau &plateau);
 
 #endif
 

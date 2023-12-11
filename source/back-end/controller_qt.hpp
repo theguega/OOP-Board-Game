@@ -1,12 +1,25 @@
-#ifndef CONTROLLER_H
-#define CONTROLLER_H
+#ifndef CONTROLLER_QT_H
+#define CONTROLLER_QT_H
 
 #include <random>
 #include "partie.hpp"
-#include <QDebug>
 #include <cstdlib>
+#include <QObject>
+#include <QApplication>
+#include <QTextStream>
+#include <QLabel>
 
-class Controller {
+
+#include "interface/code/vueCarte.h"
+#include "interface/code/pageCreation.h"
+#include "interface/code/vueJeton.h"
+#include "interface/code/vuePlateau.h"
+#include "interface/code/toutesPages.h"
+
+#include <iostream>
+
+class Controller : public QObject {
+    Q_OBJECT
 private:
 	Partie* partie;
 	Joueur* joueurCourant = nullptr;
@@ -16,7 +29,7 @@ private:
 	StrategyIA strategy_IA;
 public:
 	Controller();
-    Controller(QString statut_partie, QString pseudo_j_1, type type_j_1, QString pseudo_j_2, type type_j_2);
+    //Controller(QString statut_partie, QString pseudo_j_1, type type_j_1, QString pseudo_j_2, type type_j_2);
 	~Controller() { delete partie; }
 
 	// getters

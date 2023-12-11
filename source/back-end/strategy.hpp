@@ -3,7 +3,8 @@
 
 #include "espacejeux.hpp"
 
-class Strategy {
+class Strategy  {
+
 public:
     virtual ~Strategy() = default;
 

@@ -1,5 +1,4 @@
 #include "jetons.hpp"
-
 /*
    __         _ 
    \ \   ___ | |_   ___   _ __   ___ 
@@ -65,8 +64,11 @@ std::string toStringCouleur(Couleur c) {
 std::ostream& operator<<(std::ostream& f, Couleur c) {
     return f << toEmojiCouleur(c);
 }
+QDebug operator<<(QDebug f, const Couleur &c) {
+    return f << toEmojiCouleur(c);
+}
 
-std::map<std::string, Couleur> stringToCouleurMap = {
+    std::map<std::string, Couleur> stringToCouleurMap = {
         {"blanc", Couleur::BLANC},
         {"bleu", Couleur::BLEU},
         {"vert", Couleur::VERT},
@@ -93,7 +95,19 @@ std::ostream& operator<< (std::ostream& f, const Jeton& jeton) {
     f << jeton.getCouleur();
     return f;
 }
+
+QDebug operator<<(QDebug f, const Jeton &jeton){
+    f << jeton.getCouleur();
+    return f;
+}
+
+
 std::ostream& operator<< (std::ostream& f, const Jeton* jeton) {
+    f << *jeton;
+    return f;
+}
+
+QDebug operator<<(QDebug f, const Jeton* jeton){
     f << *jeton;
     return f;
 }
@@ -139,7 +153,12 @@ const LotDeJetons& LotDeJetons::getLotDeJetons() {
 //------------------------------------------------- Classe LotPrivilege
 
 std::ostream& operator<< (std::ostream& f,[[maybe_unused]]const Privilege& privilege) {
-    f << "Privilege" << std::endl;
+    f << "Privilege:" << privilege << std::endl;
+    return f;
+}
+
+QDebug operator<<(QDebug f, [[maybe_unused]]const Privilege &privilege){
+    f << "Privilege" << "\n";
     return f;
 }
 
@@ -406,5 +425,29 @@ std::ostream& operator<< (std::ostream& f, const Plateau& plateau) {
         f << "|\033[1;38;5;208mP\033[0m|";
 
     f << "\n" << "---------------------" << std::endl;
+    return f;
+}
+
+QDebug operator<<(QDebug f, const Plateau &plateau) {
+    //On affiche une matrice avec dans chaque case la lettre correpondant au jetons
+    f<<"---------------------"<<"\n";
+    for (size_t i = 0; i < plateau.getLargeurMatrice(); i++) {
+        f << "|";
+        for (size_t j = 0; j < plateau.getLargeurMatrice(); j++) {
+            if (plateau.getJeton(i,j) == nullptr)
+                f << "   ";
+            else
+                f << plateau.getJeton(i, j);
+            f << "|";
+        };
+        f << "\n" << "---------------------" << "\n";
+    }
+
+
+    //Sous la matrice, on affiche les privileges :
+    for(unsigned int i = 0; i<plateau.getNbPrivileges();i++)
+        f << "|\033[1;38;5;208mP\033[0m|";
+
+    f << "\n" << "---------------------" <<"\n";
     return f;
 }
