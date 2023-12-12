@@ -31,6 +31,8 @@ class Jeton {
 };
 std::ostream& operator<< (std::ostream& f, const Jeton& jeton);
 QDebug operator<<(QDebug f, const Jeton &jeton);
+std::ostream& operator<< (std::ostream& f, const Jeton* jeton);
+QDebug operator<<(QDebug f, const Jeton* jeton);
 
 class LotDeJetons {
     private :

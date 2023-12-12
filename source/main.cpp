@@ -15,33 +15,12 @@
 #include <iostream>
 
 
-//####################################
-//###### Partie en mode Terminal #####
-//####################################
-//avec boucle de jeux
-
-
-int main(int argc, char * argv[]) {
-    QApplication app(argc, argv);
-    toutesPages* page = new toutesPages(nullptr, &app);
-    page->show();
-    app.exec();
-    Controller control;
-    control.lancerPartie();
-    control.jouer();
-
-
-    return app.exec();
-    return 0;
-}
-
 
 //#########################################
 //###### Partie avec l'application Qt #####
 //#########################################
 
 
-/*
 int main(int argc, char * argv[]) {
     QApplication app(argc, argv);
 //    vueCarte carte = vueCarte(nullptr);
@@ -69,4 +48,26 @@ int main(int argc, char * argv[]) {
 
     return app.exec();
 }
-*/
+
+
+
+
+
+
+
+
+
+
+
+
+//####################################
+//###### Partie en mode Terminal #####
+//####################################
+
+/*
+int main(int argc, char * argv[]) {
+    Controller control;
+    control.lancerPartie();
+    control.jouer();
+    return 0;
+}*/

@@ -32,15 +32,14 @@ std::string toStringCouleur(Couleur c) {
 //🔵🟢🔴🟡🟣🖤🤍
 
 std::string toEmojiCouleur(Couleur c) {
-    switch (c)
-    {
-    case Couleur::BLANC: return "\033[1;37m O \033[0m"; // Blanc
-    case Couleur::BLEU: return "\033[1;34m O \033[0m";  // Bleu
-    case Couleur::VERT: return "\033[1;32m O \033[0m";  // Vert
-    case Couleur::ROUGE: return "\033[1;31m O \033[0m"; // Rouge
-    case Couleur::NOIR: return "\033[1;90m O \033[0m";  // Noir
-    case Couleur::PERLE: return "\033[1;35m O \033[0m"; // Perle (rose)
-    case Couleur::OR: return "\033[1;33m O \033[0m";    // Or (jaune)
+    switch (c) {
+    case Couleur::BLANC: return "\033[1;37mO\033[0m"; // Blanc
+    case Couleur::BLEU: return "\033[1;34mO\033[0m";  // Bleu
+    case Couleur::VERT: return "\033[1;32mO\033[0m";  // Vert
+    case Couleur::ROUGE: return "\033[1;31mO\033[0m"; // Rouge
+    case Couleur::NOIR: return "\033[1;90mO\033[0m";  // Noir
+    case Couleur::PERLE: return "\033[1;35mO\033[0m"; // Perle (rose)
+    case Couleur::OR: return "\033[1;33mO\033[0m";    // Or (jaune)
     case Couleur::INDT: return "Indt";
     default: throw SplendorException("Couleur inconnue");
     }
@@ -65,10 +64,10 @@ std::ostream& operator<<(std::ostream& f, Couleur c) {
     return f << toEmojiCouleur(c);
 }
 QDebug operator<<(QDebug f, const Couleur &c) {
-    return f << toEmojiCouleur(c);
+    return f << qUtf8Printable(QString::fromStdString(toEmojiCouleur(c)));
 }
 
-    std::map<std::string, Couleur> stringToCouleurMap = {
+std::map<std::string, Couleur> stringToCouleurMap = {
         {"blanc", Couleur::BLANC},
         {"bleu", Couleur::BLEU},
         {"vert", Couleur::VERT},
@@ -435,7 +434,7 @@ QDebug operator<<(QDebug f, const Plateau &plateau) {
         f << "|";
         for (size_t j = 0; j < plateau.getLargeurMatrice(); j++) {
             if (plateau.getJeton(i,j) == nullptr)
-                f << "   ";
+                f << " ";
             else
                 f << plateau.getJeton(i, j);
             f << "|";
