@@ -69,9 +69,9 @@ void carteVisuel::paintEvent(QPaintEvent *event) { //Permet de faire les dessins
         painter.drawText(l/10, h/6, QString::number(carte->getBonus().getNbBonus()));
     }
 
-    double radius = h/10 - 2;
-    double centerX = h/10 + 1;
-    double centerY = h / 5 * 4 + h/10 + 1;
+    int radius = h/10 - 2;
+    int centerX = h/10 + 1;
+    int centerY = h / 5 * 4 + h/10 + 1;
     //Definit les cercles avec un Polygone de plusieurs points
 
     if(carte->getPrix().getBlanc() != 0){
