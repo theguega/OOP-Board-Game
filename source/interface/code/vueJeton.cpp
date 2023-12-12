@@ -2,55 +2,25 @@
 #include <QPushButton>
 #include <interface/code/vueJeton.h>
 
-vueJeton::vueJeton(QWidget* parent, int rad, Couleur couleur) : QPushButton(parent){
-    switch(couleur){
+vueJeton::vueJeton(QWidget* parent, int rad, Jeton* jeton, position* p) : QPushButton(parent), pos(p){
+    this->jeton = jeton;
+    switch(jeton->getCouleur()){
     case Couleur::BLANC:
-        this->couleur = couleur;
         Qcouleur = QColor("white");
         QcouleurClair = QColor("white");
         couleurContour = QColor("black");
         break;
 
-    case Couleur::BLEU:
-        this->couleur = couleur;
-        Qcouleur = QColor("blue");
-        QcouleurClair = QColor("lightblue");
-        couleurContour = QColor("black");
-        break;
-
-    case Couleur::VERT:
-        this->couleur = couleur;
-        Qcouleur = QColor("green");
-        QcouleurClair = QColor("lightgreen");
-        couleurContour = QColor("black");
-        break;
-
-    case Couleur::ROUGE:
-        this->couleur = couleur;
-        Qcouleur = QColor("red");
-        QcouleurClair = QColor("#CD5C5C");
-        couleurContour = QColor("black");
-        break;
-
     case Couleur::NOIR:
-        this->couleur = couleur;
         Qcouleur = QColor("black");
         QcouleurClair = QColor("black");
         couleurContour = QColor("white");
         break;
 
-    case Couleur::PERLE:
-        this->couleur = couleur;
-        Qcouleur = QColor("#FF69B4");
-        QcouleurClair = QColor("#FFB6C1");
-        couleurContour = QColor("black");
-        break;
-
-    case Couleur::OR:
-        this->couleur = couleur;
-        Qcouleur = QColor("yellow");
-        QcouleurClair = QColor("lightyellow");
-        couleurContour = QColor("black");
+    default:
+        Qcouleur = couleurEnQ(toStringCouleur(jeton->getCouleur())+"Fonce");
+        QcouleurClair = couleurEnQ(toStringCouleur(jeton->getCouleur()));
+        couleurContour = QColor("white");
         break;
     }
 
@@ -61,7 +31,6 @@ vueJeton::vueJeton(QWidget* parent, int rad, Couleur couleur) : QPushButton(pare
     afficherCroix = false; //afficherCroix est un booleen pour savoir si on montre la croix de selection (false d'origine)
     setFlat(true);
     setStyleSheet("QPushButton:pressed { border: none; }"); // Annule le style du contour quand le bouton est presse
-
 }
 
 void vueJeton::apparaitre(){ //Fait apparaitre le jeton (utile quand on voudra les remettre sur le plateau)
@@ -161,23 +130,46 @@ void vueJeton::paintEvent(QPaintEvent *event) {
         painter.drawPolygon(bigDiamondShape);
         painter.drawEllipse(center, circleRadius, circleRadius);
     }
+}
 
-    /*if (afficherCroix) {
-        QPainter painter(this);
-        painter.setRenderHint(QPainter::Antialiasing);
-        if(couleur != Couleur::BLANC){
-            painter.setPen(Qt::white);
-        }
-        else{
-            painter.setPen(Qt::black);
-        }
-
-        // Dessiner une croix qui prend tout le cercle et est centree avec une rotation de 45 degres
-        painter.save(); // Sauvegarder l'etat actuel du QPainter
-        painter.translate(width() / 2, height() / 2); // Translation pour le centre du bouton
-        painter.rotate(45); // Rotation de 45 degres
-        painter.drawLine(-width() / 2, 0, width() / 2, 0); // Horizontal
-        painter.drawLine(0, -height() / 2, 0, height() / 2); // Vertical
-        painter.restore(); // Restaurer l'etat precedent du QPainter
-    }*/
+QColor couleurEnQ(std::string c) {
+    if (c == "Bleu") {
+        return QColor("#2FC5FF");
+    }
+    else if (c == "BleuFonce"){
+        return QColor("#002166");
+    }
+    else if (c == "Blanc"){
+        return Qt::white;
+    }
+    else if (c == "Noir"){
+        return Qt::black;
+    }
+    else if (c == "Rouge"){
+        return QColor("#CD534E");
+    }
+    else if (c == "RougeFonce"){
+        return QColor("#5B172E");
+    }
+    else if (c == "Perle"){
+        return QColor("#EFC7FC");
+    }
+    else if (c == "PerleFonce"){
+        return QColor("#7C6994");
+    }
+    else if (c == "Vert"){
+        return QColor("#88C85A");
+    }
+    else if (c == "VertFonce"){
+        return QColor("#2D7A42");
+    }
+    else if (c == "Or"){
+        return QColor("#E6DE73");
+    }
+    else if (c == "OrFonce"){
+        return QColor("#BA7D2A");
+    }
+    else{
+        return Qt::white; // Couleur blanche par défaut en cas de couleur non reconnue
+    }
 }

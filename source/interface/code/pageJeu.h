@@ -38,6 +38,7 @@ private:
     bool quitterPage = false; //Utile pour la redefinission de closeEvent
 protected:
     void closeEvent(QCloseEvent *event) override { //Redefinition de la methode closeEvent
+        aSauvegarde -> hide();
         if(!quitterPage){
             aSauvegarde -> show();
             event -> ignore();
@@ -51,6 +52,7 @@ protected:
     void rester(){ //Permet de restetr sur la page
         aSauvegarde -> close();
     }
+    void paintEvent(QPaintEvent *event);
 public:
     pageJeu(QWidget *parent = nullptr);
     ~pageJeu() = default;
