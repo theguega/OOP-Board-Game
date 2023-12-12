@@ -15,22 +15,6 @@
 #include <iostream>
 
 
-//####################################
-//###### Partie en mode Terminal #####
-//####################################
-//avec boucle de jeux
-
-/*int main(int argc, char * argv[]) {
-    QApplication app(argc, argv);
-    Controller control;
-    control.lancerPartie();
-
-    control.jouer();
-
-    return 0;
-    return app.exec();
-}*/
-
 
 //#########################################
 //###### Partie avec l'application Qt #####
@@ -39,28 +23,51 @@
 
 int main(int argc, char * argv[]) {
     QApplication app(argc, argv);
-//    vueCarte carte = vueCarte(nullptr);
-//    carte.show();
+    //    vueCarte carte = vueCarte(nullptr);
+    //    carte.show();
 
-//    pageCreation page = pageCreation(nullptr);
-//    page.show();
+    //    pageCreation page = pageCreation(nullptr);
+    //    page.show();
 
-//    QWidget* widget = new QWidget;
+    //    QWidget* widget = new QWidget;
 
-//    vueJeton* jeton = new vueJeton(nullptr);
+    //    vueJeton* jeton = new vueJeton(nullptr);
 
-//    QHBoxLayout* layout = new QHBoxLayout;
-//    layout->addWidget(jeton);
+    //    QHBoxLayout* layout = new QHBoxLayout;
+    //    layout->addWidget(jeton);
 
-//    widget -> setLayout(layout);
+    //    widget -> setLayout(layout);
 
-//    widget->show();
+    //    widget->show();
 
-//    vuePlateau* plateau = new vuePlateau(nullptr, 500, 500);
-//    plateau -> show();
+    //    vuePlateau* plateau = new vuePlateau(nullptr, 500, 500);
+    //    plateau -> show();
 
     toutesPages* page = new toutesPages(nullptr, &app);
     page->show();
 
     return app.exec();
 }
+
+
+
+
+
+
+
+
+
+
+
+
+//####################################
+//###### Partie en mode Terminal #####
+//####################################
+
+/*
+int main(int argc, char * argv[]) {
+    Controller control;
+    control.lancerPartie();
+    control.jouer();
+    return 0;
+}*/
