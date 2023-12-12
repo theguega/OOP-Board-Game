@@ -42,7 +42,5 @@ pageCreation::pageCreation(QWidget *parent) : QWidget(parent){
     QObject::connect(pop -> getBoutonOui(), &QPushButton::clicked, this, &pageCreation::boutonOuiPresse);
     QObject::connect(pop -> getBoutonNon(), &QPushButton::clicked, this, &pageCreation::boutonNonPresse);
     pop -> hide();
-
-    jeu = new pageJeu;
 }
 
