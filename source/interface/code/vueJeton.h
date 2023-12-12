@@ -20,7 +20,6 @@ class vueJeton : public QPushButton{
     Q_OBJECT
 private:
     //recupere l'adresse du jeton auquel vueJeton est reliee
-    //Jeton* jeton;
     bool estVisible;
     int rad;
     bool afficherCroix;
@@ -37,8 +36,11 @@ public:
     void changeAfficherCroix();
     void enleverCroix();
     position* getPosition(){return pos;}
+    Jeton* getJeton(){return jeton;}
 protected:
     void paintEvent(QPaintEvent *event);
 };
+
+QColor couleurEnQ(std::string c);
 
 #endif // VUEJETON_H

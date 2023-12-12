@@ -13,6 +13,8 @@ class vuePyramide : public QWidget{
 private:
     int hauteur = 3;
     QVBoxLayout* layoutPyrVer;
+    QVBoxLayout* layoutPaquets;
+    QHBoxLayout* layoutAllCartes;
     QVBoxLayout* layoutPrincipal;
     QPushButton* boutonAfficherInfo;
     bool infoAffichee = true;

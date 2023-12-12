@@ -17,15 +17,13 @@
 class carteVisuel : public QWidget{ //Gere le visuel de la carte
     Q_OBJECT
 private:
-    //Carte* carte;
+    Carte* carte;
     int h;
     int l;
-    QColor triangleColor;
-    int numero = 0;
 protected:
     void paintEvent(QPaintEvent *) override;
 public:
-    carteVisuel(QWidget* parent = nullptr, int hauteur = 0, int largeur = 0, QColor couleur = Qt::blue);
+    carteVisuel(QWidget* parent = nullptr, int hauteur = 0, int largeur = 0, Carte* carte = nullptr);
 };
 
 class carteInfo : public QWidget{ //Gere les infos de la carte
@@ -67,8 +65,10 @@ protected:
     void mousePressEvent(QMouseEvent *event) override {
         if (event->button() == Qt::LeftButton) {
             qDebug() << "Clic gauche detecte sur le widget.";
+            emit carteReservee();
         } else if (event->button() == Qt::RightButton) {
             qDebug() << "Clic droit detecte sur le widget.";
+            emit carteAchetee();
         }
     }
 public:
@@ -77,6 +77,31 @@ public:
     position* getPosition(){return pos;}
     void cacherInfo(){affichageInfo = false;}
     void afficherInfo(){affichageInfo = true;}
+signals:
+    void carteReservee();
+    void carteAchetee();
+};
+
+class vuePaquet : public QWidget{
+    Q_OBJECT
+private:
+    std::vector<vueCarte*> paquetCartes;
+    int h;
+    int l;
+    int niveau;
+protected:
+    void mousePressEvent(QMouseEvent *event) override {
+        if (event->button() == Qt::LeftButton) {
+            qDebug() << "Clic gauche detecte sur le widget.";
+        }
+    }
+    void paintEvent(QPaintEvent* event);
+public:
+    vuePaquet(QWidget* parent = nullptr, int hauteur = 0, int largeur = 0, int n = 0) :
+        QWidget(parent), h(hauteur), l(largeur), niveau(n){setFixedSize(l, h);}
+    std::vector<vueCarte*>* getPaquet(){return &paquetCartes;}
+    vueCarte* getCarteDessus(){return paquetCartes[0]; paquetCartes.erase(paquetCartes.begin());}
+    int getNbCartes(){return paquetCartes.size();}
 };
 
 #endif // VUECARTE_H

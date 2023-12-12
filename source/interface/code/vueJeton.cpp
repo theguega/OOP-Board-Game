@@ -11,40 +11,16 @@ vueJeton::vueJeton(QWidget* parent, int rad, Jeton* jeton, position* p) : QPushB
         couleurContour = QColor("black");
         break;
 
-    case Couleur::BLEU:
-        Qcouleur = QColor("blue");
-        QcouleurClair = QColor("lightblue");
-        couleurContour = QColor("black");
-        break;
-
-    case Couleur::VERT:
-        Qcouleur = QColor("green");
-        QcouleurClair = QColor("lightgreen");
-        couleurContour = QColor("black");
-        break;
-
-    case Couleur::ROUGE:
-        Qcouleur = QColor("red");
-        QcouleurClair = QColor("#CD5C5C");
-        couleurContour = QColor("black");
-        break;
-
     case Couleur::NOIR:
         Qcouleur = QColor("black");
         QcouleurClair = QColor("black");
         couleurContour = QColor("white");
         break;
 
-    case Couleur::PERLE:
-        Qcouleur = QColor("#FF69B4");
-        QcouleurClair = QColor("#FFB6C1");
-        couleurContour = QColor("black");
-        break;
-
-    case Couleur::OR:
-        Qcouleur = QColor("yellow");
-        QcouleurClair = QColor("lightyellow");
-        couleurContour = QColor("black");
+    default:
+        Qcouleur = couleurEnQ(toStringCouleur(jeton->getCouleur())+"Fonce");
+        QcouleurClair = couleurEnQ(toStringCouleur(jeton->getCouleur()));
+        couleurContour = QColor("white");
         break;
     }
 
@@ -153,5 +129,47 @@ void vueJeton::paintEvent(QPaintEvent *event) {
         painter.setPen(Qt::NoPen);
         painter.drawPolygon(bigDiamondShape);
         painter.drawEllipse(center, circleRadius, circleRadius);
+    }
+}
+
+QColor couleurEnQ(std::string c) {
+    if (c == "Bleu") {
+        return QColor("#2FC5FF");
+    }
+    else if (c == "BleuFonce"){
+        return QColor("#002166");
+    }
+    else if (c == "Blanc"){
+        return Qt::white;
+    }
+    else if (c == "Noir"){
+        return Qt::black;
+    }
+    else if (c == "Rouge"){
+        return QColor("#CD534E");
+    }
+    else if (c == "RougeFonce"){
+        return QColor("#5B172E");
+    }
+    else if (c == "Perle"){
+        return QColor("#EFC7FC");
+    }
+    else if (c == "PerleFonce"){
+        return QColor("#7C6994");
+    }
+    else if (c == "Vert"){
+        return QColor("#88C85A");
+    }
+    else if (c == "VertFonce"){
+        return QColor("#2D7A42");
+    }
+    else if (c == "Or"){
+        return QColor("#E6DE73");
+    }
+    else if (c == "OrFonce"){
+        return QColor("#BA7D2A");
+    }
+    else{
+        return Qt::white; // Couleur blanche par défaut en cas de couleur non reconnue
     }
 }
