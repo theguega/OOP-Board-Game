@@ -12,10 +12,12 @@
 #include "interface/code/pageJoueur.h"
 #include "interface/code/popUp.h"
 #include "interface/code/vuePyramide.h"
+#include "back-end/controller.hpp"
 
 class pageJeu : public QWidget {
     Q_OBJECT
 private:
+    Controller* control;
     vuePlateau* vPlateau; //Plateau de jetons
     pageJoueur* joueur1; //Page du joueur1
     pageJoueur* joueur2; //Page du joueur2
@@ -54,7 +56,7 @@ protected:
     }
     void paintEvent(QPaintEvent *event);
 public:
-    pageJeu(QWidget *parent = nullptr);
+    pageJeu(QString statut_partie, QString pseudo_j_1, type type_j_1, QString pseudo_j_2, type type_j_2, QWidget *parent = nullptr);
     ~pageJeu() = default;
     void mousePressEvent(QMouseEvent* event) override { //Permet de cacher tous les elements quand on cique sur la page de Jeu
         joueur1 -> hide();
