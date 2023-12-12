@@ -36,7 +36,7 @@ private:
 
     popUpValider* pop; //PopUp pour valider les choix de l'utilisateur
 
-    pageJeu* jeu; //Future page de Jeu
+    pageJeu* jeu = nullptr; //Future page de Jeu
 protected:
     void comboBox1Active(int index){ //Affichage de la recuperation du nom pour le joueur
         if (index != 0){
@@ -60,15 +60,21 @@ protected:
         pop -> show();
     }
     void boutonOuiPresse(){ //Connecte le bouton oui du PopUpValider
+        type type_tmp1 = type::IA;
+        type type_tmp2 = type::IA;
+
         pop -> hide();
         if(index1 == 0){
             nom1 = nom1Edit->text();
+            type_tmp1 = type::HUMAIN;
         }
         if (index2 == 0){
             nom2 = nom2Edit -> text();
+            type_tmp2 = type::HUMAIN;
         }
         qDebug() << "Texte saisi : " << nom1 << " " << nom2;
         this -> hide();
+        jeu = new pageJeu("New", nom1, type_tmp1, nom2, type_tmp2);
         jeu -> show();
         emit fermerToutesPages();
     }
