@@ -396,13 +396,3 @@ void vuePaquet::paintEvent(QPaintEvent *event){
     painter.drawText(x, y, texte);
 }
 
-vuePaquet::vuePaquet(Pioche& pioche, int hauteur, int largeur, QWidget* parent): QWidget(parent), h(hauteur), l(largeur), niveau(pioche.getTypeCarte()){
-    setFixedSize(l, h);
-    const std::vector<const Carte*>& cartes = pioche.getCartes();
-
-    // Utilisation d'une boucle range-based for pour itérer sur les cartes
-    for (const Carte* carte : cartes) {
-        vueCarte* vue_tmp = new vueCarte(nullptr, h/(hauteur + 1), l/(1.6*(hauteur + 1)), carte);
-        paquetCartes.push_back(vue_tmp);
-    }
-}

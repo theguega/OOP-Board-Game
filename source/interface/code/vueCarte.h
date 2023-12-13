@@ -85,10 +85,10 @@ signals:
 class vuePaquet : public QWidget{
     Q_OBJECT
 private:
-    std::vector<vueCarte*> paquetCartes;
     int h;
     int l;
     TypeCarte niveau;
+    int taille;
 protected:
     void mousePressEvent(QMouseEvent *event) override {
         if (event->button() == Qt::LeftButton) {
@@ -97,10 +97,8 @@ protected:
     }
     void paintEvent(QPaintEvent* event);
 public:
-    vuePaquet(Pioche& pioche, int hauteur = 0, int largeur = 0, QWidget* parent = nullptr);
-    std::vector<vueCarte*>* getPaquet(){return &paquetCartes;}
-    vueCarte* getCarteDessus(){return paquetCartes[0]; paquetCartes.erase(paquetCartes.begin());}
-    int getNbCartes(){return paquetCartes.size();}
+    vuePaquet(Pioche& pioche, int hauteur=0, int largeur=0, QWidget* parent = nullptr): QWidget(parent), h(hauteur), l(largeur), niveau(pioche.getTypeCarte()), taille(pioche.getNbCartes()){setFixedSize(l, h);}
+    int getNbCartes(){return taille;}
 };
 
 #endif // VUECARTE_H
