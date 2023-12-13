@@ -13,6 +13,7 @@
 #include <QVBoxLayout>
 #include "vueJeton.h"
 #include "back-end/carte.hpp"
+#include "back-end/espacejeux.hpp"
 
 class carteVisuel : public QWidget{ //Gere le visuel de la carte
     Q_OBJECT
@@ -88,7 +89,8 @@ private:
     int h;
     int l;
     TypeCarte niveau;
-    int taille;
+    Pioche* pioche;
+
 protected:
     void mousePressEvent(QMouseEvent *event) override {
         if (event->button() == Qt::LeftButton) {
@@ -97,8 +99,8 @@ protected:
     }
     void paintEvent(QPaintEvent* event);
 public:
-    vuePaquet(Pioche& pioche, int hauteur=0, int largeur=0, QWidget* parent = nullptr): QWidget(parent), h(hauteur), l(largeur), niveau(pioche.getTypeCarte()), taille(pioche.getNbCartes()){setFixedSize(l, h);}
-    int getNbCartes(){return taille;}
+    vuePaquet(Pioche& p, int hauteur=0, int largeur=0, QWidget* parent = nullptr): QWidget(parent), h(hauteur), l(largeur), niveau(p.getTypeCarte()), pioche(&p){setFixedSize(l, h);}
+    int getNbCartes(){return pioche->getNbCartes();}
 };
 
 #endif // VUECARTE_H

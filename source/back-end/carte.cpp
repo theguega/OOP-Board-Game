@@ -202,8 +202,8 @@ JeuCarte::JeuCarte() {
         unsigned int p_blanc = query.value(2).toUInt();
         unsigned int p_bleu = query.value(3).toUInt();
         unsigned int p_vert = query.value(4).toUInt();
-        unsigned int p_noir = query.value(5).toUInt();
-        unsigned int p_rouge = query.value(6).toUInt();
+        unsigned int p_rouge = query.value(5).toUInt();
+        unsigned int p_noir = query.value(6).toUInt();
         unsigned int p_perle = query.value(7).toUInt();
         string capacite1 = query.value(8).toString().toStdString();
         string capacite2 = query.value(9).toString().toStdString();
@@ -212,7 +212,7 @@ JeuCarte::JeuCarte() {
         unsigned int nb_couronnes = query.value(12).toUInt();
         unsigned int nb_pts_privileges = query.value(13).toUInt();
 
-        Prix p(p_blanc, p_bleu, p_vert, p_noir, p_rouge, p_perle);
+        Prix p(p_blanc, p_bleu, p_vert, p_rouge, p_noir, p_perle);
         Bonus b(StringToCouleur(couleur_bonus), bonus);
 
         if (type == "Niv1") {

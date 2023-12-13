@@ -36,15 +36,15 @@ Capacite StringToCapacite(const string& capaciteStr);
 
 class Prix { // on l'encapsule dans la classe carte ? ou bien il y'a d'autres elements qui ont un cout ?
 private:
-    unsigned int blanc, bleu, vert, noir, rouge, perle;
+    unsigned int blanc, bleu, vert, rouge, noir, perle;
 public:
-    Prix(unsigned int bla, unsigned int ble, unsigned int v, unsigned int n, unsigned int r, unsigned int p) : blanc(bla), bleu(ble), vert(v), noir(n), rouge(r), perle(p) {}
+    Prix(unsigned int bla, unsigned int ble, unsigned int v, unsigned int r, unsigned int n, unsigned int p) : blanc(bla), bleu(ble), vert(v), rouge(r), noir(n), perle(p) {}
 
     unsigned int getBlanc() const { return blanc; }
     unsigned int getBleu() const { return bleu; }
     unsigned int getVert() const { return vert; }
-    unsigned int getNoir() const { return noir; }
     unsigned int getRouge() const { return rouge; }
+    unsigned int getNoir() const { return noir; }
     unsigned int getPerle() const { return perle; }
 };
 ostream& operator<<(ostream& f, const Prix& p);
