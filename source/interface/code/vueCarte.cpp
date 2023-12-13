@@ -37,7 +37,7 @@ void carteVisuel::paintEvent(QPaintEvent *event) { //Permet de faire les dessins
             triangle << QPointF(0, 0) << QPointF(l - 2, 0) << QPointF(0, (h-2)/3); //Ajoute les points du triangle
             painter.drawPolygon(triangle); //Colorie le triangle
         }
-        else if(carte->getBonus().getCouleur() == Couleur::NOIR){
+        else if(carte->getBonus().getCouleur() == Couleur::BLANC){
             painter.setBrush(Qt::white); //On definie la couleur du pinceau en blanc
             painter.setPen(QPen(Qt::black, 2)); //On def le pinceau comme etant de couleur noir et de taille 2 (pour faire un rebord)
             painter.drawPolygon(rect()); //On colorie le polygone
@@ -260,9 +260,16 @@ void carteVisuel::paintEvent(QPaintEvent *event) { //Permet de faire les dessins
         painter.drawPolygon(couronne);
     }
 
-    y += hauteur/2 * carte->getNbCouronnes();
-    painter.setBrush(Qt::white);
-    painter.drawEllipse(QPoint(l - radius - 2, y), radius, radius);
+    if(carte->getCapacite1() != Capacite::None){
+        y += hauteur;
+        painter.setBrush(Qt::white);
+        painter.drawEllipse(QPoint(l - radius - 2, y), radius, radius);
+    }
+    if(carte->getCapacite2() != Capacite::None){
+        y += hauteur;
+        painter.setBrush(Qt::white);
+        painter.drawEllipse(QPoint(l - radius - 2, y), radius, radius);
+    }
 }
 
 carteInfo::carteInfo(QWidget* parent, int hauteur, int largeur, std::string texte) : QWidget(parent){ //Carte info sera la partie avec les infos de la carte
