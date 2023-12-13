@@ -22,10 +22,12 @@ private:
     int h;
     int l;
     std::vector<vueCarte*> cartesPyramide;
+    Pyramide& pyramide;
 public:
     vuePyramide(QWidget* parent, int hauteur, int largeur, Pyramide& pyr);
     void afficherCartes();
     void boutonAfficherInfoClique();
+    void placerCartes();
 };
 
 #endif // VUEPYRAMIDE_H

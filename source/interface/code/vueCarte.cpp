@@ -252,7 +252,6 @@ void carteVisuel::paintEvent(QPaintEvent *event) { //Permet de faire les dessins
                 couronne << QPointF(x + baseT*i + baseT/2, y - hauteurT); // Sommet
             }
             couronne << QPointF(x + baseT*(i+1), y); // Coin inférieur droit
-            qDebug() << baseT*(i+1) << "et" << base;
         }
 
         couronne << QPointF(x + baseT*(nbTriangle+1) - baseT, y + hauteur/5);
@@ -261,9 +260,9 @@ void carteVisuel::paintEvent(QPaintEvent *event) { //Permet de faire les dessins
         painter.drawPolygon(couronne);
     }
 
-    y += hauteur/2;
+    y += hauteur/2 * carte->getNbCouronnes();
     painter.setBrush(Qt::white);
-    painter.drawEllipse(QPoint(l - radius - 2, centerY + carte->getNbCouronnes()*hauteur), radius, radius);
+    painter.drawEllipse(QPoint(l - radius - 2, y), radius, radius);
 }
 
 carteInfo::carteInfo(QWidget* parent, int hauteur, int largeur, std::string texte) : QWidget(parent){ //Carte info sera la partie avec les infos de la carte

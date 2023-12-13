@@ -4,25 +4,13 @@
 #include "back-end/carte.hpp"
 
 vuePyramide::vuePyramide(QWidget* parent, int hauteur, int largeur, Pyramide& pyr) :
-    QWidget(parent), h(hauteur), l(largeur) {
+    QWidget(parent), h(hauteur), l(largeur), pyramide(pyr) {
     layoutPyrVer = new QVBoxLayout;
     layoutPrincipal = new QVBoxLayout;
     layoutAllCartes = new QHBoxLayout;
     layoutPaquets = new QVBoxLayout;
-    Bonus bonus(Couleur::BLEU, 3);
-    Prix prix(0, 1, 2, 3, 1, 0);
-    Carte* carte = new Carte(TypeCarte::Niv1, prix, Capacite::None, Capacite::None, bonus, 2, 1, 5);
 
-    for(int i = 0; i < this->hauteur; i++){
-        QHBoxLayout* layoutPyrHor = new QHBoxLayout;
-        for(int j = i; j < 5; j++){
-            vueCarte* temp = new vueCarte(nullptr, h/(this->hauteur + 1), l/(this->hauteur + 4), carte);
-            layoutPyrHor->addWidget(temp);
-            cartesPyramide.push_back(temp);
-        }
-        layoutPyrHor->setAlignment(Qt::AlignCenter);
-        layoutPyrVer->addLayout(layoutPyrHor);
-    }
+    placerCartes();
 
     // initialisation des paquets
     layoutPaquets->addWidget(new vuePaquet(pyr.getPioche1(), h/(this->hauteur + 1), l/(this->hauteur + 4)));
@@ -55,6 +43,29 @@ void vuePyramide::boutonAfficherInfoClique(){
         }
         infoAffichee = true;
         boutonAfficherInfo->setText("Cacher les informations des cartes");
+    }
+}
+
+void vuePyramide::placerCartes(){
+    for (auto pt : cartesPyramide) {
+        delete pt;
+    }
+    for (int i = 0; i < hauteur; ++i) {
+        QLayout *layoutToRemove = layoutPyrVer->takeAt(0)->layout();
+        if (layoutToRemove != nullptr) {
+            delete layoutToRemove;
+        }
+    }
+    cartesPyramide.clear();
+    for(int i = 0; i < hauteur; i++){
+        QHBoxLayout* layoutPyrHor = new QHBoxLayout;
+        for(int j = 0; j < pyramide.getNbCartesNiv(i); j++){
+            vueCarte* temp = new vueCarte(nullptr, h/(this->hauteur + 1), l/(this->hauteur + 4), pyramide.getCarte(i, j));
+            temp->setPosition(new position(i, j));
+            cartesPyramide.push_back(temp);
+            layoutPyrHor->addWidget(temp);
+        }
+        layoutPyrVer->addLayout(layoutPyrHor);
     }
 }
 
