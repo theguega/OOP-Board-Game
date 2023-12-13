@@ -23,20 +23,21 @@ private:
     bool estVisible;
     int rad;
     bool afficherCroix;
-    Jeton* jeton;
+    const Jeton* jeton;
     QColor Qcouleur;
     QColor QcouleurClair;
     QColor couleurContour;
     position* pos;
 public:
-    vueJeton(QWidget* parent = nullptr, int rad = 0, Jeton* jeton = nullptr, position* p = nullptr);
+    vueJeton(QWidget* parent = nullptr, int rad = 0, const Jeton* jeton = nullptr, position* p = nullptr);
     void apparaitre();
     void disparaitre();
     bool getEstVisible();
     void changeAfficherCroix();
     void enleverCroix();
     position* getPosition(){return pos;}
-    Jeton* getJeton(){return jeton;}
+    const Jeton* getJeton(){return jeton;}
+    ~vueJeton(){delete pos;}
 protected:
     void paintEvent(QPaintEvent *event);
 };

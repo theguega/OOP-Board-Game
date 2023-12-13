@@ -78,6 +78,7 @@ void vuePyramide::placerCartes(){
             cartesPyramide.push_back(temp);
             layoutPyrHor->addWidget(temp);
         }
+        layoutPyrHor->setAlignment(Qt::AlignCenter);
         layoutPyrVer->addLayout(layoutPyrHor);
     }
 }

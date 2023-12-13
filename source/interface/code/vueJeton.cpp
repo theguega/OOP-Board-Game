@@ -2,7 +2,7 @@
 #include <QPushButton>
 #include <interface/code/vueJeton.h>
 
-vueJeton::vueJeton(QWidget* parent, int rad, Jeton* jeton, position* p) : QPushButton(parent), pos(p){
+vueJeton::vueJeton(QWidget* parent, int rad, const Jeton* jeton, position* p) : QPushButton(parent), pos(p){
     this->jeton = jeton;
     switch(jeton->getCouleur()){
     case Couleur::BLANC:

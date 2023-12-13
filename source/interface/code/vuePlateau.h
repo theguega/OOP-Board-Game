@@ -9,6 +9,7 @@
 #include <QPushButton>
 #include "popUp.h"
 #include "vueJeton.h"
+#include "back-end/espacejeux.hpp"
 //#include <jetons.hpp>
 
 class grilleJetons : public QWidget{
@@ -23,7 +24,7 @@ private:
     int tailleJeton;
 public:
     grilleJetons(QWidget* parent = nullptr, int hauteur = 0, int largeur = 0, int nbJ = 0, int tJ = 0, std::vector<vueJeton*>* pt = nullptr);
-    void placerJetons();
+    void placerJeton(const Jeton* jeton, int i, int j);
     void paintEvent(QPaintEvent *event);
 };
 
@@ -51,8 +52,10 @@ private:
     popUpInfo* info;
 
     QVBoxLayout* layout;
+
+    Plateau& plateau;
 public:
-    vuePlateau(QWidget* parent, int hateur, int largeur);
+    vuePlateau(QWidget* parent, int hateur, int largeur, Plateau& plat);
     //void paintEvent(QPaintEvent *event);
     void boutonClique(int i);
     void deselectionner();
@@ -60,6 +63,7 @@ public:
     void validerJetons();
     void cacherElements();
     void afficherJetons(){for(int i = 0; i < nbJetons; i++){listeJetons[i]->show();}update();}
+    void placerJetons();
     //vueJeton* recupererBouton(Jeton* jeton);
     //void remplirPlateau();
 };
