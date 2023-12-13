@@ -50,12 +50,25 @@ void vuePyramide::placerCartes(){
     for (auto pt : cartesPyramide) {
         delete pt;
     }
-    for (int i = 0; i < hauteur; ++i) {
-        QLayout *layoutToRemove = layoutPyrVer->takeAt(0)->layout();
-        if (layoutToRemove != nullptr) {
-            delete layoutToRemove;
+    if (layoutPyrVer != nullptr) {
+        for (int i = 0; i < hauteur; ++i) {
+            QLayoutItem *itemToRemove = layoutPyrVer->takeAt(0);
+            if (itemToRemove != nullptr) {
+                QLayout *layoutToRemove = itemToRemove->layout();
+                delete itemToRemove;
+                // Si nécessaire, supprimez également le layout associé
+                if (layoutToRemove != nullptr) {
+                    delete layoutToRemove;
+                }
+            }
         }
     }
+//    for (int i = 0; i < hauteur; ++i) {
+//        QLayout *layoutToRemove = layoutPyrVer->takeAt(0)->layout();
+//        if (layoutToRemove != nullptr) {
+//            delete layoutToRemove;
+//        }
+//    }
     cartesPyramide.clear();
     for(int i = 0; i < hauteur; i++){
         QHBoxLayout* layoutPyrHor = new QHBoxLayout;
