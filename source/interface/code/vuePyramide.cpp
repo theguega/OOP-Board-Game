@@ -16,7 +16,7 @@ vuePyramide::vuePyramide(QWidget* parent, int hauteur, int largeur, Pyramide& py
     for(int i = 0; i < this->hauteur; i++){
         QHBoxLayout* layoutPyrHor = new QHBoxLayout;
         for(int j = i; j < 5; j++){
-            vueCarte* temp = new vueCarte(nullptr, h/(this->hauteur + 1), l/(1.6*(this->hauteur + 1)), carte);
+            vueCarte* temp = new vueCarte(nullptr, h/(this->hauteur + 1), l/(this->hauteur + 4), carte);
             layoutPyrHor->addWidget(temp);
             cartesPyramide.push_back(temp);
         }
@@ -25,9 +25,9 @@ vuePyramide::vuePyramide(QWidget* parent, int hauteur, int largeur, Pyramide& py
     }
 
     // initialisation des paquets
-    layoutPaquets->addWidget(new vuePaquet(pyr.getPioche1(), h/(this->hauteur + 1), l/(1.6*(this->hauteur + 1))));
-    layoutPaquets->addWidget(new vuePaquet(pyr.getPioche2(), h/(this->hauteur + 1), l/(1.6*(this->hauteur + 1))));
-    layoutPaquets->addWidget(new vuePaquet(pyr.getPioche3(), h/(this->hauteur + 1), l/(1.6*(this->hauteur + 1))));
+    layoutPaquets->addWidget(new vuePaquet(pyr.getPioche1(), h/(this->hauteur + 1), l/(this->hauteur + 4)));
+    layoutPaquets->addWidget(new vuePaquet(pyr.getPioche2(), h/(this->hauteur + 1), l/(this->hauteur + 4)));
+    layoutPaquets->addWidget(new vuePaquet(pyr.getPioche3(), h/(this->hauteur + 1), l/(this->hauteur + 4)));
 
 
     layoutAllCartes->addLayout(layoutPaquets);
