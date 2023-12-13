@@ -8,7 +8,7 @@
 #include <QTimer>
 #include "vueCarte.h"
 
-carteVisuel::carteVisuel(QWidget *parent, int hauteur, int largeur, Carte* carte) :
+carteVisuel::carteVisuel(QWidget *parent, int hauteur, int largeur, const Carte* carte) :
     QWidget(parent), h(hauteur), l(largeur), carte(carte){ //CarteVisuel sera la partie visuel de la carte
     setFixedSize(l, h); //Fixe la taille de la carte
 }
@@ -279,7 +279,7 @@ void carteInfo::paintEvent(QPaintEvent *event){
     painter.drawRect(rect()); //On peind ce rectangle (permet de fair eun contour de la carte)
 }
 
-vueCarte::vueCarte(QWidget* parent, int hauteur, int largeur, Carte* carte) :
+vueCarte::vueCarte(QWidget* parent, int hauteur, int largeur, const Carte* carte) :
     QStackedWidget(parent), h(hauteur), l(largeur), carte(carte){ //C'est un QStackedWidget afin de gerer plus facilement le changement entre les infos et le visu
     setFixedSize(l, h); //Fixe la taille
     /*switch(carte->getCouleur())*/
@@ -322,15 +322,15 @@ void vuePaquet::paintEvent(QPaintEvent *event){
     painter.drawRect(rect()); //On peind ce rectangle (permet de fair eun contour de la carte)
 
     switch(niveau){
-    case 0:
+    case TypeCarte::Niv1:
         painter.setBrush(QColor("#80A266")); //On definie la couleur du pinceau
         painter.drawPolygon(rect()); //On colorie le polygone
         break;
-    case 1:
+    case TypeCarte::Niv2:
         painter.setBrush(QColor("#A39437")); //On definie la couleur du pinceau
         painter.drawPolygon(rect()); //On colorie le polygone
         break;
-    case 2:
+    case TypeCarte::Niv3:
         painter.setBrush(QColor("#1D60AF")); //On definie la couleur du pinceau
         painter.drawPolygon(rect()); //On colorie le polygone
         break;
@@ -394,4 +394,15 @@ void vuePaquet::paintEvent(QPaintEvent *event){
     y = y + h/3; // Position en y
 
     painter.drawText(x, y, texte);
+}
+
+vuePaquet::vuePaquet(Pioche& pioche, int hauteur, int largeur, QWidget* parent): QWidget(parent), h(hauteur), l(largeur), niveau(pioche.getTypeCarte()){
+    setFixedSize(l, h);
+    const std::vector<const Carte*>& cartes = pioche.getCartes();
+
+    // Utilisation d'une boucle range-based for pour itérer sur les cartes
+    for (const Carte* carte : cartes) {
+        vueCarte* vue_tmp = new vueCarte(nullptr, h/(hauteur + 1), l/(1.6*(hauteur + 1)), carte);
+        paquetCartes.push_back(vue_tmp);
+    }
 }

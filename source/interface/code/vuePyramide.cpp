@@ -3,13 +3,12 @@
 #include "vueJeton.h"
 #include "back-end/carte.hpp"
 
-vuePyramide::vuePyramide(QWidget* parent, int hauteur, int largeur) :
+vuePyramide::vuePyramide(QWidget* parent, int hauteur, int largeur, Pyramide& pyr) :
     QWidget(parent), h(hauteur), l(largeur) {
     layoutPyrVer = new QVBoxLayout;
     layoutPrincipal = new QVBoxLayout;
     layoutAllCartes = new QHBoxLayout;
     layoutPaquets = new QVBoxLayout;
-
     Bonus bonus(Couleur::BLEU, 3);
     Prix prix(0, 1, 2, 3, 1, 0);
     Carte* carte = new Carte(TypeCarte::Niv1, prix, Capacite::None, Capacite::None, bonus, 2, 1, 5);
@@ -25,9 +24,11 @@ vuePyramide::vuePyramide(QWidget* parent, int hauteur, int largeur) :
         layoutPyrVer->addLayout(layoutPyrHor);
     }
 
-    for(int i = 0; i < this->hauteur; i++){
-        layoutPaquets->addWidget(new vuePaquet(nullptr, h/(this->hauteur + 1), l/(1.6*(this->hauteur + 1)), i));
-    }
+    // initialisation des paquets
+    layoutPaquets->addWidget(new vuePaquet(pyr.getPioche1(), h/(this->hauteur + 1), l/(1.6*(this->hauteur + 1))));
+    layoutPaquets->addWidget(new vuePaquet(pyr.getPioche2(), h/(this->hauteur + 1), l/(1.6*(this->hauteur + 1))));
+    layoutPaquets->addWidget(new vuePaquet(pyr.getPioche3(), h/(this->hauteur + 1), l/(1.6*(this->hauteur + 1))));
+
 
     layoutAllCartes->addLayout(layoutPaquets);
     layoutAllCartes->addLayout(layoutPyrVer);

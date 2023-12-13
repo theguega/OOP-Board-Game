@@ -128,6 +128,8 @@ public:
     ~Pioche();
 
     size_t getNbCartes() const { return cartes.size(); }
+    TypeCarte getTypeCarte() const { return type_carte; }
+    const vector<const Carte*>& getCartes() const { return cartes; }
 
     bool estVide() const { return getNbCartes() == 0; }
     const Carte& piocher();

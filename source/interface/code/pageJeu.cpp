@@ -16,7 +16,7 @@ pageJeu::pageJeu(QString statut_partie, QString pseudo_j_1, type type_j_1, QStri
     vPlateau = new vuePlateau(nullptr, tailleHauteur - 100, tailleLargeur / 2);
     joueur1 = new pageJoueur(nullptr);
     joueur2 = new pageJoueur(nullptr);
-    vPyramide = new vuePyramide(nullptr, tailleHauteur - 100, tailleLargeur / 2);
+    vPyramide = new vuePyramide(nullptr, tailleHauteur - 100, tailleLargeur / 2, control->getPyramide());
 
     afficherJ1 = new QPushButton("Afficher Joueur 1");
     afficherJ2 = new QPushButton("Afficher Joueur 1");

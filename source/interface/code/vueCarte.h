@@ -17,13 +17,13 @@
 class carteVisuel : public QWidget{ //Gere le visuel de la carte
     Q_OBJECT
 private:
-    Carte* carte;
+    const Carte* carte;
     int h;
     int l;
 protected:
     void paintEvent(QPaintEvent *) override;
 public:
-    carteVisuel(QWidget* parent = nullptr, int hauteur = 0, int largeur = 0, Carte* carte = nullptr);
+    carteVisuel(QWidget* parent = nullptr, int hauteur = 0, int largeur = 0, const Carte* carte = nullptr);
 };
 
 class carteInfo : public QWidget{ //Gere les infos de la carte
@@ -58,7 +58,7 @@ private:
     bool estAffiche = true;
     bool affichageInfo = true;
 
-    Carte* carte;
+    const Carte* carte;
 protected:
     bool event(QEvent *event) override;
 
@@ -72,7 +72,7 @@ protected:
         }
     }
 public:
-    vueCarte(QWidget* parent = nullptr, int hauteur = 0, int largeur = 0, Carte* carte = nullptr);
+    vueCarte(QWidget* parent = nullptr, int hauteur = 0, int largeur = 0, const Carte* carte = nullptr);
     void setPosition(position* pos){this->pos = pos;}
     position* getPosition(){return pos;}
     void cacherInfo(){affichageInfo = false;}
@@ -88,7 +88,7 @@ private:
     std::vector<vueCarte*> paquetCartes;
     int h;
     int l;
-    int niveau;
+    TypeCarte niveau;
 protected:
     void mousePressEvent(QMouseEvent *event) override {
         if (event->button() == Qt::LeftButton) {
@@ -97,8 +97,7 @@ protected:
     }
     void paintEvent(QPaintEvent* event);
 public:
-    vuePaquet(QWidget* parent = nullptr, int hauteur = 0, int largeur = 0, int n = 0) :
-        QWidget(parent), h(hauteur), l(largeur), niveau(n){setFixedSize(l, h);}
+    vuePaquet(Pioche& pioche, int hauteur = 0, int largeur = 0, QWidget* parent = nullptr);
     std::vector<vueCarte*>* getPaquet(){return &paquetCartes;}
     vueCarte* getCarteDessus(){return paquetCartes[0]; paquetCartes.erase(paquetCartes.begin());}
     int getNbCartes(){return paquetCartes.size();}
