@@ -2,6 +2,7 @@
 #define CARTES_H
 
 #include <iostream>
+#include <sstream>
 #include <string>
 #include <array>
 #include <vector>
@@ -27,6 +28,7 @@ extern std::initializer_list<TypeCarte> TypesCarte;
 enum class Capacite { NewTurn, TakePrivilege, TakeJetonFromBonus, TakeJetonToAdv, AssociationBonus, None };
 extern std::map<std::string, Capacite> stringToCapaciteMap;
 string CapacitetoString(Capacite c);
+string CapacitetoShort(Capacite c);
 ostream& operator<<(ostream& f, Capacite c);
 QDebug operator<<(QDebug f, Capacite c);
 
@@ -90,6 +92,7 @@ public:
     unsigned int getId() const { return id; }
     unsigned int getNbCouronnes() const { return nbCouronnes; }
     unsigned int getNbPtsPrivilege() const { return nbPtsPrivilege; }
+    string getInfos() const;
 };
 ostream& operator<<(ostream& f, const Carte& c);
 QDebug operator<<(QDebug f, const Carte &c);

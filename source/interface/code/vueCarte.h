@@ -52,7 +52,7 @@ private:
 
     int numero = 0;
 
-    std::string texteInfo = "Ceci est un test";
+    std::string texteInfo;
     carteInfo* info;
     carteVisuel* visu;
 

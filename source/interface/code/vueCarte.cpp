@@ -303,7 +303,7 @@ vueCarte::vueCarte(QWidget* parent, int hauteur, int largeur, const Carte* carte
     QStackedWidget(parent), h(hauteur), l(largeur), carte(carte){ //C'est un QStackedWidget afin de gerer plus facilement le changement entre les infos et le visu
     setFixedSize(l, h); //Fixe la taille
     /*switch(carte->getCouleur())*/
-
+    std::string texteInfo = carte->getInfos();
     visu = new carteVisuel(nullptr, h,l, carte); //Ajoute le visuel de la carte
     info = new carteInfo(nullptr, h, l, texteInfo); //Ajoute les infos de la carte
 

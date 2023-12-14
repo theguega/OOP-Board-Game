@@ -68,6 +68,25 @@ string CapacitetoString(Capacite c) {
     }
 }
 
+
+string CapacitetoShort(Capacite c){
+    switch (c) {
+    case Capacite::NewTurn:
+        return "NT";
+    case Capacite::TakePrivilege:
+        return "TP";
+    case Capacite::TakeJetonFromBonus:
+        return "TJ";
+    case Capacite::TakeJetonToAdv:
+        return "TA";
+    case Capacite::AssociationBonus:
+        return "AB";
+    case Capacite::None:
+        return "NN";
+    default:
+        throw SplendorException("Capacite inconnue");
+    }
+}
 ostream & operator << (ostream & f, Capacite c) {
     f << CapacitetoString(c);
     return f;
@@ -180,6 +199,61 @@ QDebug operator<<(QDebug f, const Carte & c) {
     f << "------------------------------\n";
     return f;
 }
+
+string Carte::getInfos() const {
+    std::ostringstream oss;
+    oss << "Capacites : \n";
+    if(getCapacite1() == Capacite::None && getCapacite2() == Capacite::None){
+        oss << "Aucune capacite\n";
+        return oss.str();
+    }
+    if (getCapacite1() != Capacite::None){
+        oss << CapacitetoShort(getCapacite1());
+        switch(getCapacite1()){
+        case Capacite::NewTurn:
+            oss << "\nJouer un \nnouveau tour\n";
+            break;
+        case Capacite::TakePrivilege:
+            oss << "\nPrendre \n1 Privilege\n";
+            break;
+        case Capacite::TakeJetonFromBonus:
+            oss << "\nPrendre sur le \nplateau 1 jeton\nde la couleur du \nbonus de cette \ncarte\n";
+            break;
+        case Capacite::TakeJetonToAdv:
+            oss << "\nPrendre 1 jeton \na l'adversaire \n(sauf jeton Or)\n";
+            break;
+        case Capacite::AssociationBonus:
+            oss << "\nCopier la couleur \nd'un bonus deja \nacquis\n";
+            break;
+        default:
+            throw SplendorException("Capacite inconnue");
+        }
+    }
+
+    if (getCapacite2() != Capacite::None){
+        oss << CapacitetoShort(getCapacite2());
+        switch(getCapacite2()){
+        case Capacite::NewTurn:
+            oss << "\nJouer un \nnouveau tour\n";
+            break;
+        case Capacite::TakePrivilege:
+            oss << "\nPrendre \n1 Privilege\n";
+            break;
+        case Capacite::TakeJetonFromBonus:
+            oss << "\nPrendre sur le \nplateau 1 jeton\nde la couleur du \nbonus de cette \ncarte\n";
+            break;
+        case Capacite::TakeJetonToAdv:
+            oss << "\nPrendre 1 jeton \na l'adversaire \n(sauf jeton Or)\n";
+            break;
+        case Capacite::AssociationBonus:
+            oss << "\nCopier la couleur \nd'un bonus deja \nacquis\n";
+            break;
+        default:
+            throw SplendorException("Capacite inconnue");
+        }
+    }
+    return oss.str();
+};
 
 
 JeuCarte::JeuCarte() {
