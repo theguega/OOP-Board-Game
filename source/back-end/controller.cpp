@@ -1188,14 +1188,15 @@ void Controller::verifActionsImpossibles(){
 
 //TODO
 std::pair<bool, QString> Controller::verifJetons(const std::vector<std::pair<int, int>>& coord){
+    std::vector<std::pair<int, int>> coord_tmp = coord;
     unsigned int nbJetons = coord.size();
 
     // Verifier que les jetons sont adjacents
     if (nbJetons > 1) {
         bool result1 = true;
         bool result2 = true;
-        bool result3 = false; // Diago 1
-        bool result4 = false; // Diago 2
+        bool result3 = true; // Diago 1
+        bool result4 = true; // Diago 2
 
         // Verif que les jetons sont adjacents en ligne
         for (unsigned int i = 0; i < nbJetons-1; i++) {
@@ -1205,10 +1206,16 @@ std::pair<bool, QString> Controller::verifJetons(const std::vector<std::pair<int
         }
         // verif qu'ils ne sont pas distants de + d'une case
         if(result1){
-            for (unsigned int i = 0; i < nbJetons-1; i++) {
-                if (abs(coord[i].second - coord[i + 1].second) != 1)
-                    result1 = false;
+            int max = coord[0].second;
+            int min = coord[0].second;
+            for (unsigned int i = 1; i < nbJetons; i++) {
+                if(coord[i].second > max)
+                    max = coord[i].second;
+                if(coord[i].second < min)
+                    min = coord[i].second;
             }
+            if (abs(max - min)  > 2)
+                result1 = false;
         }
         // Verif que les jetons sont adjacents en colonne
         for (unsigned int i = 0; i < nbJetons-1; i++) {
@@ -1218,31 +1225,68 @@ std::pair<bool, QString> Controller::verifJetons(const std::vector<std::pair<int
         }
         // verif qu'ils ne sont pas distants de + d'une case
         if(result2){
+            int max = coord[0].first;
+            int min = coord[0].first;
             for (unsigned int i = 0; i < nbJetons-1; i++) {
-                if (abs(coord[i].first - coord[i + 1].first) != 1)
+                for (unsigned int i = 1; i < nbJetons; i++) {
+                    if(coord[i].first > max)
+                        max = coord[i].first;
+                    if(coord[i].second < min)
+                        min = coord[i].first;
+                }
+                if (abs(max - min)  > 2)
                     result2 = false;
             }
         }
-        // Verif que les jetons sont adjacents en diagonale
 
-        // Fonction de comparaison pour trier en fonction du premier element de la paire
-//        auto comparaison = [](const auto& a, const auto& b) {
-//            return a.first < b.first;
-//        };
-//        std::sort(coord.begin(), coord.end(), comparaison);
-
-
+        auto comparaison = [](const auto& a, const auto& b) {
+            return a.first < b.first;
+        };
+        std::sort(coord_tmp.begin(), coord_tmp.end(), comparaison);
+        //diagonales
         // il manque la verification que les jetons ne sont pas distants de + d'une case
         for (unsigned int i = 0; i < nbJetons-1; i++) {
             // premiere diagonale
-            if ((coord[i].first+1 == coord[i + 1].first) && (coord[i].second-1 == coord[i + 1].second)) {
-                result3 = true;
+            if ((coord_tmp[i].first+1 != coord_tmp[i + 1].first) || (coord_tmp[i].second-1 != coord_tmp[i + 1].second)) {
+                result3 = false;
             }
         }
         for (unsigned int i = 0; i < nbJetons-1; i++) {
             // seconde diagonale
-            if ((coord[i].first+1 == coord[i + 1].first) && (coord[i].second+1 == coord[i + 1].second)) {
-                result4 = true;
+            if ((coord_tmp[i].first+1 != coord_tmp[i + 1].first) || (coord_tmp[i].second+1 != coord_tmp[i + 1].second)) {
+                result4 = false;
+            }
+        }
+
+        if(result3 || result4){
+            int max = coord[0].second;
+            int min = coord[0].second;
+            for (unsigned int i = 1; i < nbJetons; i++) {
+                if(coord[i].second > max)
+                    max = coord[i].second;
+                if(coord[i].second < min)
+                    min = coord[i].second;
+            }
+            if (abs(max - min)  > 2){
+                if(result3)
+                    result3 = false;
+                if(result4)
+                    result4 = false;
+            }
+
+            max = coord[0].first;
+            min = coord[0].first;
+            for (unsigned int i = 0; i < nbJetons-1; i++) {
+                if(coord[i].first > max)
+                    max = coord[i].first;
+                if(coord[i].second < min)
+                    min = coord[i].first;
+                }
+            if (abs(max - min)  > 2){
+                if(result3)
+                    result3 = false;
+                if(result4)
+                    result4 = false;
             }
         }
 

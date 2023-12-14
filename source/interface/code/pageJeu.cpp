@@ -58,11 +58,13 @@ void pageJeu::validerSelectionJeton()
     handleValidationResult(validationResult.first, validationResult.second);
 }
 
+
 void pageJeu::handleValidationResult(bool isValid, const QString &message)
 {
     popUpInfo* infos = new popUpInfo(nullptr, message.toStdString());
     infos->show();
 }
+
 
 void pageJeu::paintEvent(QPaintEvent *event){
     QWidget::paintEvent(event);
