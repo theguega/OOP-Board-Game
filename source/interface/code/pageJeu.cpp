@@ -46,6 +46,22 @@ pageJeu::pageJeu(QString statut_partie, QString pseudo_j_1, type type_j_1, QStri
     aSauvegarde = new popUpValider(nullptr, "quitter sans sauvegarder");
     connect(aSauvegarde -> getBoutonOui(), &QPushButton::clicked, this, &pageJeu::quitter);
     connect(aSauvegarde -> getBoutonNon(), &QPushButton::clicked, this, &pageJeu::rester);
+    connect(vPlateau, &vuePlateau::signalValiderAppuye, this, &pageJeu::validerSelectionJeton);
+}
+
+void pageJeu::validerSelectionJeton()
+{
+    // Appeler la méthode verifJetons avec la sélection actuelle de la vue
+    std::pair<bool, QString> validationResult = control->verifJetons(vPlateau->getSelectionJetons());
+
+    // Traiter le résultat de la validation
+    handleValidationResult(validationResult.first, validationResult.second);
+}
+
+void pageJeu::handleValidationResult(bool isValid, const QString &message)
+{
+    popUpInfo* infos = new popUpInfo(nullptr, message.toStdString());
+    infos->show();
 }
 
 void pageJeu::paintEvent(QPaintEvent *event){

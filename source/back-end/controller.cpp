@@ -627,7 +627,7 @@ void Controller::recupererJetons(bool capacite,Couleur coulBonus){
     }
 
 
-    std::vector<std::pair<int, int>> vecteurCoordonnees;
+    std::vector<std::pair<int, int>> coord;
     qDebug()<<"Vous allez rentrer les coordonnees des jetons : \n";
     // Recup des coordonnees des jetons
     for (unsigned int k = 0; k < nbJetons; k++){
@@ -639,7 +639,7 @@ void Controller::recupererJetons(bool capacite,Couleur coulBonus){
         int indice_i = strategy_courante->choix_min_max(1, 5);
         qDebug() << "Numero de colonne (1,2,3,4,5) : \n";
         int indice_j = strategy_courante->choix_min_max(1, 5);
-        vecteurCoordonnees.emplace_back(std::make_pair(indice_i-1, indice_j-1));
+        coord.emplace_back(std::make_pair(indice_i-1, indice_j-1));
     }
 
     // Verifier que les jetons sont adjacents
@@ -650,28 +650,28 @@ void Controller::recupererJetons(bool capacite,Couleur coulBonus){
         bool result4 = false; // Diago 2
 
         // Verif que les jetons sont adjacents en ligne
-        for (unsigned int i = 0; i < vecteurCoordonnees.size()-1; i++) {
-            if (vecteurCoordonnees[i].first != vecteurCoordonnees[i + 1].first) {
+        for (unsigned int i = 0; i < coord.size()-1; i++) {
+            if (coord[i].first != coord[i + 1].first) {
                 result1 = false;
             }
         }
         // verif qu'ils ne sont pas distants de + d'une case
         if(result1){
-            for (unsigned int i = 0; i < vecteurCoordonnees.size()-1; i++) {
-                if (abs(vecteurCoordonnees[i].second - vecteurCoordonnees[i + 1].second) != 1)
+            for (unsigned int i = 0; i < coord.size()-1; i++) {
+                if (abs(coord[i].second - coord[i + 1].second) != 1)
                     result1 = false;
             }
         }
         // Verif que les jetons sont adjacents en colonne
-        for (unsigned int i = 0; i < vecteurCoordonnees.size()-1; i++) {
-            if (vecteurCoordonnees[i].second != vecteurCoordonnees[i + 1].second) {
+        for (unsigned int i = 0; i < coord.size()-1; i++) {
+            if (coord[i].second != coord[i + 1].second) {
                 result2 = false;
             }
         }
         // verif qu'ils ne sont pas distants de + d'une case
         if(result2){
-            for (unsigned int i = 0; i < vecteurCoordonnees.size()-1; i++) {
-                if (abs(vecteurCoordonnees[i].first - vecteurCoordonnees[i + 1].first) != 1)
+            for (unsigned int i = 0; i < coord.size()-1; i++) {
+                if (abs(coord[i].first - coord[i + 1].first) != 1)
                     result2 = false;
             }
         }
@@ -681,19 +681,19 @@ void Controller::recupererJetons(bool capacite,Couleur coulBonus){
         auto comparaison = [](const auto& a, const auto& b) {
             return a.first < b.first;
         };
-        std::sort(vecteurCoordonnees.begin(), vecteurCoordonnees.end(), comparaison);
+        std::sort(coord.begin(), coord.end(), comparaison);
 
 
         // il manque la verification que les jetons ne sont pas distants de + d'une case
-        for (unsigned int i = 0; i < vecteurCoordonnees.size()-1; i++) {
+        for (unsigned int i = 0; i < coord.size()-1; i++) {
             // premiere diagonale
-            if ((vecteurCoordonnees[i].first+1 == vecteurCoordonnees[i + 1].first) && (vecteurCoordonnees[i].second-1 == vecteurCoordonnees[i + 1].second)) {
+            if ((coord[i].first+1 == coord[i + 1].first) && (coord[i].second-1 == coord[i + 1].second)) {
                 result3 = true;
             }
         }
-        for (unsigned int i = 0; i < vecteurCoordonnees.size()-1; i++) {
+        for (unsigned int i = 0; i < coord.size()-1; i++) {
             // seconde diagonale
-            if ((vecteurCoordonnees[i].first+1 == vecteurCoordonnees[i + 1].first) && (vecteurCoordonnees[i].second+1 == vecteurCoordonnees[i + 1].second)) {
+            if ((coord[i].first+1 == coord[i + 1].first) && (coord[i].second+1 == coord[i + 1].second)) {
                 result4 = true;
             }
         }
@@ -707,11 +707,11 @@ void Controller::recupererJetons(bool capacite,Couleur coulBonus){
     // Recup des jetons
     std::vector<const Jeton*> jetonsRecup;
     for (unsigned int k = 0; k < nbJetons; k++){
-        if (getPlateau().caseVide(vecteurCoordonnees[k].first, vecteurCoordonnees[k].second) || getPlateau().caseOr(vecteurCoordonnees[k].first, vecteurCoordonnees[k].second))
+        if (getPlateau().caseVide(coord[k].first, coord[k].second) || getPlateau().caseOr(coord[k].first, coord[k].second))
             throw SplendorException("Il y a une case vide ou un jeton Or dans votre selection");
     }
     for (unsigned int k = 0; k < nbJetons; k++){
-        jetonsRecup.push_back(&getPlateau().recupererJeton(vecteurCoordonnees[k].first, vecteurCoordonnees[k].second));
+        jetonsRecup.push_back(&getPlateau().recupererJeton(coord[k].first, coord[k].second));
         if (capacite && jetonsRecup[k]->getCouleur() != coulBonus)
             throw SplendorException("Le jeton n'est pas de la couleur du bonus");
     }
@@ -1180,6 +1180,87 @@ void Controller::verifActionsImpossibles(){
 
     // on boucle sur chaque carte des cartes réservées
 }
+
+
+//////////////////////////////////////////////////////////////
+///////////// Verif de la partie graphique ///////////////////
+//////////////////////////////////////////////////////////////
+
+//TODO
+std::pair<bool, QString> Controller::verifJetons(const std::vector<std::pair<int, int>>& coord){
+    unsigned int nbJetons = coord.size();
+
+    // Verifier que les jetons sont adjacents
+    if (nbJetons > 1) {
+        bool result1 = true;
+        bool result2 = true;
+        bool result3 = false; // Diago 1
+        bool result4 = false; // Diago 2
+
+        // Verif que les jetons sont adjacents en ligne
+        for (unsigned int i = 0; i < nbJetons-1; i++) {
+            if (coord[i].first != coord[i + 1].first) {
+                result1 = false;
+            }
+        }
+        // verif qu'ils ne sont pas distants de + d'une case
+        if(result1){
+            for (unsigned int i = 0; i < nbJetons-1; i++) {
+                if (abs(coord[i].second - coord[i + 1].second) != 1)
+                    result1 = false;
+            }
+        }
+        // Verif que les jetons sont adjacents en colonne
+        for (unsigned int i = 0; i < nbJetons-1; i++) {
+            if (coord[i].second != coord[i + 1].second) {
+                result2 = false;
+            }
+        }
+        // verif qu'ils ne sont pas distants de + d'une case
+        if(result2){
+            for (unsigned int i = 0; i < nbJetons-1; i++) {
+                if (abs(coord[i].first - coord[i + 1].first) != 1)
+                    result2 = false;
+            }
+        }
+        // Verif que les jetons sont adjacents en diagonale
+
+        // Fonction de comparaison pour trier en fonction du premier element de la paire
+//        auto comparaison = [](const auto& a, const auto& b) {
+//            return a.first < b.first;
+//        };
+//        std::sort(coord.begin(), coord.end(), comparaison);
+
+
+        // il manque la verification que les jetons ne sont pas distants de + d'une case
+        for (unsigned int i = 0; i < nbJetons-1; i++) {
+            // premiere diagonale
+            if ((coord[i].first+1 == coord[i + 1].first) && (coord[i].second-1 == coord[i + 1].second)) {
+                result3 = true;
+            }
+        }
+        for (unsigned int i = 0; i < nbJetons-1; i++) {
+            // seconde diagonale
+            if ((coord[i].first+1 == coord[i + 1].first) && (coord[i].second+1 == coord[i + 1].second)) {
+                result4 = true;
+            }
+        }
+
+        if (!result1 && !result2 && !result3 && !result4) {
+            auto output = std::make_pair(false, "\nLes jetons ne sont pas adjacents");
+            return output;
+        }
+    }
+
+    for (unsigned int k = 0; k < nbJetons; k++){
+        if (getPlateau().caseVide(coord[k].first, coord[k].second) || getPlateau().caseOr(coord[k].first, coord[k].second)){
+            auto output = std::make_pair(false, "Il y a une case vide ou un jeton Or dans votre selection");
+            return output;
+        }
+    }
+    auto output = std::make_pair(true, "");
+    return output;
+};
 
 ///////////////////////// Sauvegarde /////////////////////////
 

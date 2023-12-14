@@ -13,6 +13,7 @@
 #include "interface/code/popUp.h"
 #include "interface/code/vuePyramide.h"
 #include "back-end/controller.hpp"
+#include "interface/code/popUp.h"
 
 class pageJeu : public QWidget {
     Q_OBJECT
@@ -65,6 +66,9 @@ public:
         aSauvegarde -> hide();
         QWidget::mousePressEvent(event);
     }
+private slots:
+    void validerSelectionJeton();
+    void handleValidationResult(bool isValid, const QString &message);
 };
 
 #endif // PAGEJEU_H

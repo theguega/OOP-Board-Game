@@ -4,6 +4,7 @@
 #include <random>
 #include "partie.hpp"
 #include <QDebug>
+#include <QString>
 #include <cstdlib>
 
 class Controller {
@@ -78,6 +79,9 @@ public:
     void verifTroisCarteReserve();
     void verifJetonSupDix();
     bool verifAchatCarte(const Carte& carte, EspaceJeux& espaceJeux);
+
+    // verifs de la partie graphique
+    std::pair<bool, QString> verifJetons(const std::vector<std::pair<int, int>>& coord);
 
 };
 

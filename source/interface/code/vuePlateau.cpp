@@ -186,8 +186,8 @@ vuePlateau::vuePlateau(QWidget* parent, int hauteur, int largeur, Plateau& plat)
 
     setLayout(layout); //Set le layout
 
-    connect(boutonValider, &QPushButton::clicked, this, &vuePlateau::validerJetons); //connect boutonValider avec valliderJetons
-
+    //connect(boutonValider, &QPushButton::clicked, this, &vuePlateau::validerJetons); //connect boutonValider avec valliderJetons
+    connect(boutonValider, &QPushButton::clicked, this, &vuePlateau::signalValiderAppuye);
     info = new popUpInfo(nullptr, "Vos jetons ont bien ete ajoute");
 }
 
@@ -262,6 +262,19 @@ void vuePlateau::validerJetons(){
 void vuePlateau::cacherElements(){
     info -> close();
 }
+
+
+std::vector<std::pair<int, int>> vuePlateau::getSelectionJetons() const {
+    std::vector<std::pair<int, int>> tmp;
+    for (int i = 0; i < 3; i++){
+        if(jetonSelection[i] != nullptr){
+            auto pair = std::make_pair(jetonSelection[i]->getPosition()->getx(), jetonSelection[i]->getPosition()->gety());
+            tmp.push_back(pair);
+        }
+    }
+    return tmp;
+};
+
 
 /*vueJeton* vuePlateau::recupererBouton(Jeton* jeton){
     for(int i = 0; i < 25; i++){

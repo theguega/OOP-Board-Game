@@ -64,8 +64,11 @@ public:
     void cacherElements();
     void afficherJetons(){for(int i = 0; i < nbJetons; i++){listeJetons[i]->show();}update();}
     void placerJetons();
+    std::vector<std::pair<int, int>> getSelectionJetons() const;
     //vueJeton* recupererBouton(Jeton* jeton);
     //void remplirPlateau();
+signals:
+    void signalValiderAppuye();
 };
 
 #endif // VUEPLATEAU_H
