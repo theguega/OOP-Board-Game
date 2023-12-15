@@ -232,7 +232,8 @@ void Controller::jouer() {
         //correpond au tour de chaque joueur
         for (unsigned int i = 0; i < 2; i++) {
             qDebug()<<"--------------------------------------------------------------------------------------------------------------------------------------------\n";
-            qDebug()<<"C'est a " << getJoueurCourant().getPseudo()<<" de jouer : \n\n";
+            qDebug()<<"C'est a " << getJoueurCourant().getPseudo()<<" de jouer : \n";
+            qDebug()<<"Nous en sommes au tour : " << getPartie().getTour()+1 << "\n\n";
             getJoueurCourant().afficherJoueur();
             tourEnPlus = false;
 
@@ -368,7 +369,7 @@ void Controller::jouer() {
                 //verification fin de tour d'un joueur
                 case 2:{
                     //achat obligatoire d'une carte noble si le joueur a 3 pts et 0 cartes nobles ou 6 pts de prestige et 1 carte noble
-                    if ((getJoueurCourant().getptsPrestige() >= 3 && getJoueurCourant().getNbCartesNobles()==0) || (getJoueurCourant().getptsPrestige() >= 6 && getJoueurCourant().getNbCartesNobles()==0)) {
+                    if ((getJoueurCourant().getptsPrestige() >= 3 && getJoueurCourant().getNbCartesNobles()==0) || (getJoueurCourant().getptsPrestige() >= 6 && getJoueurCourant().getNbCartesNobles()==1)) {
                         acheterCarteNoble(getPartie().getEspaceJeux().getPyramide());
                     }
 
@@ -765,9 +766,10 @@ bool Controller::acheterCarteJoaillerie (EspaceJeux& espaceJeux){
         unsigned int i = 0;
         // Affichage de la reserve
         for (const auto& couleurEtCartes : joueurCourant->cartesReservees) {
+            i=0;
             Couleur couleur = couleurEtCartes.first;
 
-            // Ignorer les cartes de couleur OR et INDT
+            // Ignorer les cartes de couleur OR
             if (couleur != Couleur::OR) {
                 qDebug() << "Cartes de couleur : " << couleur << "\n";
                 const std::vector<const Carte*>& cartes = couleurEtCartes.second;
@@ -775,7 +777,6 @@ bool Controller::acheterCarteJoaillerie (EspaceJeux& espaceJeux){
                 for (const Carte* carte : cartes) {
                     qDebug() << "Numero " << ++i << " : \n" << *carte << '\n';
                 }
-
                 qDebug() << "\n\n\n";
             }
         }
@@ -796,26 +797,25 @@ bool Controller::acheterCarteJoaillerie (EspaceJeux& espaceJeux){
         //on recup la carte
         const Carte& carte = joueurCourant->getCarteReservee(c, choix_indice_carte);
         //on verifie que le joueur peut bien acheter la carte, sinon on la repose
+
         if(!verifAchatCarte(carte, partie->getEspaceJeux())) {
             throw SplendorException("Vous ne pouvez pas acheter cette carte");
         }
 
-        //si la carte à une couleur indeterminer, le joueur doit choisir la couleur de la carte
-
         // Si la carte a une capacite on l'execute
         bool res = false;
-        if(carte.getCapacite1() != Capacite::None){
+        if(carte.getCapacite1() != Capacite::None && carte.getCapacite1() != Capacite::AssociationBonus){
             res = appliquerCapacite(carte.getCapacite1(), carte);
             // On regarde si on ajoute un tour
             return res;
         }
-        if(carte.getCapacite2() != Capacite::None){
+        if(carte.getCapacite2() != Capacite::None && carte.getCapacite2() != Capacite::AssociationBonus){
             res = appliquerCapacite(carte.getCapacite2(), carte);
             // On regarde si on ajoute un tour
             return res;
         }
 
-        if(carte.getCapacite1() != Capacite::AssociationBonus || carte.getCapacite2() != Capacite::AssociationBonus){
+        if(carte.getCapacite1() == Capacite::AssociationBonus || carte.getCapacite2() == Capacite::AssociationBonus){
             qDebug()<<"La carte a une capacite qui permet d'ajouter un bonus a la couleur de votre choix\n";
 
             std::string coulJetonStr;
@@ -837,15 +837,7 @@ bool Controller::acheterCarteJoaillerie (EspaceJeux& espaceJeux){
         } else{
             //on ajoute la carte au joueur
             joueurCourant->addCarte(carte);
-            joueurCourant->addCarte(carte);
         }
-
-
-
-        //le bonus de la carte est utilisés
-
-        //on actualise les stats du jouur avec le nombre de couronnes et de prestiges --> deja fait dans add carte
-        //joueurCourant->nbCouronnes+=carte.getNbCouronnes();
         return res;
     }
 
@@ -861,44 +853,53 @@ bool Controller::acheterCarteJoaillerie (EspaceJeux& espaceJeux){
         qDebug()<<"DEBUG : "<<getPyramide().getNbCartesNiv(niveau);
         unsigned int num_carte = strategy_courante->choix_min_max(1, getPyramide().getNbCartesNiv(niveau))-1;
 
-        const Carte& carte = partie->getEspaceJeux().getPyramide().acheterCarte(niveau, num_carte);
+        const Carte& carte_verif = *partie->getEspaceJeux().getPyramide().getCarte(niveau, num_carte);
 
-        //on verifie que le joueur peut bien acheter la carte, sinon on la repose
-        if(!verifAchatCarte(carte, partie->getEspaceJeux())) {
-            partie->getEspaceJeux().getPyramide().definitCarte(niveau, num_carte, carte);
+        //on verifie que le joueur peut bien acheter la carte
+        if(!verifAchatCarte(carte_verif, partie->getEspaceJeux())) {
             throw SplendorException("Vous ne pouvez pas acheter cette carte");
         }
-        //remettre un carte pour la remplacer
-        partie->getEspaceJeux().getPyramide().remplircasePyramide(niveau, num_carte);
 
-        //si la carte à une couleur indeterminer, le joueur doit choisir la couleur de la carte
-        /*if(carte.getBonus().getCouleur()==Couleur::INDT){
-            qDebug()<<"Votre carte est de couleur indeterminee, veuillez choisir une couleur pour votre carte\n";
-            Couleur c = strategy_courante->choixCouleur();
-            //attribuer la couleur choisit à la carte
-        }*/
+        //on peut alors l'acheter, elle sera directement remplacer par une nouvelle
+        const Carte& carte = partie->getEspaceJeux().getPyramide().acheterCarte(niveau, num_carte);
 
-        // Attention il faut attribuer la couleur pour la capa on
-
+        // Si la carte a une capacite on l'execute
         bool res = false;
-        if(carte.getCapacite1() != Capacite::None){
+        if(carte.getCapacite1() != Capacite::None && carte.getCapacite1() != Capacite::AssociationBonus){
             res = appliquerCapacite(carte.getCapacite1(), carte);
             // On regarde si on ajoute un tour
             return res;
         }
-        if(carte.getCapacite2() != Capacite::None){
+        if(carte.getCapacite2() != Capacite::None && carte.getCapacite2() != Capacite::AssociationBonus){
             res = appliquerCapacite(carte.getCapacite2(), carte);
             // On regarde si on ajoute un tour
             return res;
         }
 
-        //on ajoute la carte au joueur
-        joueurCourant->addCarte(carte);
+        if(carte.getCapacite1() == Capacite::AssociationBonus || carte.getCapacite2() == Capacite::AssociationBonus){
+            qDebug()<<"La carte a une capacite qui permet d'ajouter un bonus a la couleur de votre choix\n";
 
-        //le bonus de la carte est utilisés
+            std::string coulJetonStr;
+            qDebug()<<"Quel est la couleur du bonus que vous voulez recuperer ?\n";
 
-        //on actualise les stats du jouur avec le nombre de couronnes et de prestiges
-        joueurCourant->nbCouronnes+=carte.getNbCouronnes();
+            Couleur coulBonus = strategy_courante->choixCouleur();
+            // On verifie que la validite de la couleur du bonus
+            while(coulBonus == Couleur::PERLE || coulBonus == Couleur::INDT){
+                qDebug()<<"Veuillez selectionner un jeton Gemme ou perle\n";
+                coulBonus = strategy_courante->choixCouleur();
+            }
+            // Ajout du bonus
+            joueurCourant->bonus[coulBonus]++;
+            qDebug()<<"Le bonus a bien ete ajoute\n";
+
+            joueurCourant->cartes[coulBonus].push_back(&carte);
+            joueurCourant->ptsPrestige += carte.getNbPtsPrivilege();
+            joueurCourant->nbCouronnes += carte.getNbCouronnes();
+        } else{
+            //on ajoute la carte au joueur
+            joueurCourant->addCarte(carte);
+            return res;
+        }
         return res;
     }
 }

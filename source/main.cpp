@@ -20,35 +20,37 @@
 //###### Partie avec l'application Qt #####
 //#########################################
 
-
+/*
 int main(int argc, char * argv[]) {
     QApplication app(argc, argv);
-    //    vueCarte carte = vueCarte(nullptr);
-    //    carte.show();
 
-    //    pageCreation page = pageCreation(nullptr);
-    //    page.show();
+    //vueCarte carte = vueCarte(nullptr);
+    //carte.show();
 
-    //    QWidget* widget = new QWidget;
+    //pageCreation page = pageCreation(nullptr);
+    //page.show();
 
-    //    vueJeton* jeton = new vueJeton(nullptr);
+    //QWidget* widget = new QWidget;
 
-    //    QHBoxLayout* layout = new QHBoxLayout;
-    //    layout->addWidget(jeton);
+    //vueJeton* jeton = new vueJeton(nullptr);
 
-    //    widget -> setLayout(layout);
+    //QHBoxLayout* layout = new QHBoxLayout;
+    //layout->addWidget(jeton);
 
-    //    widget->show();
+    //widget -> setLayout(layout);
 
-    //    vuePlateau* plateau = new vuePlateau(nullptr, 500, 500);
-    //    plateau -> show();
+    //widget->show();
+
+    //vuePlateau* plateau = new vuePlateau(nullptr, 500, 500);
+    //plateau -> show();
+
 
     toutesPages* page = new toutesPages(nullptr, &app);
     page->show();
 
     return app.exec();
 }
-
+*/
 
 
 
@@ -64,10 +66,10 @@ int main(int argc, char * argv[]) {
 //###### Partie en mode Terminal #####
 //####################################
 
-/*
+
 int main(int argc, char * argv[]) {
     Controller control;
     control.lancerPartie();
     control.jouer();
     return 0;
-}*/
+}
