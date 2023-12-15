@@ -439,6 +439,10 @@ void Controller::jouer() {
             }
             //fin du tour :
             getPartie().incrementeTour();
+            if(getEspaceJeux().getSac().getNbJetons() != 0){
+                qDebug() << "ok";
+            }
+
         }
     }
 }
@@ -537,24 +541,24 @@ bool Controller::appliquerCapacite(Capacite capa,const Carte &carte){
 
 //Menu choix des actions
 unsigned int Controller::choixActionsObligatoires() {
-    qDebug() << "\033[1mActions obligatoires:\033[0m\n";
+    /*qDebug() << "\033[1mActions obligatoires:\033[0m\n";
     qDebug() << "1. Recuperer des jetons\n";
     qDebug()  << "2. Acheter une carte joaillerie\n";
     qDebug() << "3. Reserver une carte\n";
     qDebug() << "9. Quitter le jeu\n";
-    qDebug() << "Votre choix (1/2/3/9):\n";
+    qDebug() << "Votre choix (1/2/3/9):\n";*/
 
 
     return strategy_courante->choixMenu();;
 }
 
 unsigned int Controller::choixActionsOptionelles() {
-    qDebug() << "\033[1mActions optionnelles:\033[0m\n";
+    /*qDebug() << "\033[1mActions optionnelles:\033[0m\n";
     qDebug() << "1. Utiliser un privilege\n";
     qDebug()  << "2. Remplir le plateau\n";
     qDebug() << "3. Ne plus faire d'actions optionnelles\n";
     qDebug() << "9. Quitter le jeu\n";
-    qDebug() << "Votre choix (1/2/3/9):\n";
+    qDebug() << "Votre choix (1/2/3/9):\n";*/
 
 
     return strategy_courante->choixMenu();;
@@ -850,7 +854,7 @@ bool Controller::acheterCarteJoaillerie (EspaceJeux& espaceJeux){
                 coulBonus = strategy_courante->choixCouleur();
             }
             // Ajout du bonus
-            joueurCourant->bonus[coulBonus]++;
+            joueurCourant->addBonus(coulBonus, 1);
             qDebug()<<"Le bonus a bien ete ajoute\n";
 
             joueurCourant->cartes[coulBonus].push_back(&carte);
@@ -859,6 +863,7 @@ bool Controller::acheterCarteJoaillerie (EspaceJeux& espaceJeux){
         } else{
             //on ajoute la carte au joueur
             joueurCourant->addCarte(carte);
+            joueurCourant->addBonus(carte.getBonus().getCouleur(), carte.getBonus().getNbBonus());
         }
         return res;
     }
@@ -911,7 +916,7 @@ bool Controller::acheterCarteJoaillerie (EspaceJeux& espaceJeux){
                 coulBonus = strategy_courante->choixCouleur();
             }
             // Ajout du bonus
-            joueurCourant->bonus[coulBonus]++;
+            joueurCourant->addBonus(coulBonus, 1);
             qDebug()<<"Le bonus a bien ete ajoute\n";
 
             joueurCourant->cartes[coulBonus].push_back(&carte);
@@ -920,6 +925,7 @@ bool Controller::acheterCarteJoaillerie (EspaceJeux& espaceJeux){
         } else{
             //on ajoute la carte au joueur
             joueurCourant->addCarte(carte);
+            joueurCourant->addBonus(carte.getBonus().getCouleur(), carte.getBonus().getNbBonus());
             return res;
         }
         return res;
@@ -1157,12 +1163,6 @@ void Controller::verifPlateauvide(){
 }
 
 void Controller::verifSacvide(){
-    if(getPlateau().contientOnlyOr()){
-        qDebug() << getPlateau();
-        //getEspaceJeux().getSac().afficherSac();
-        partie->getJoueur1()->afficherJoueur();
-        partie->getJoueur2()->afficherJoueur();
-    }
     if (partie->getEspaceJeux().getSac().estVide()){
         throw SplendorException("\nLe sac de jetons est vide");
     }

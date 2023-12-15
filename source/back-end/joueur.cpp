@@ -145,6 +145,11 @@ void Joueur::addPrivilege(const Privilege &privilege) {
     privileges.push_back(&privilege);
 }
 
+void Joueur::addBonus(Couleur c, int nb){
+    for (int i =0; i < nb; i++){
+        bonus[c]++;
+    }
+}
 
 // Suppression des elements
 
