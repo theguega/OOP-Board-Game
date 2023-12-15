@@ -70,7 +70,8 @@ public:
 	void enregisterScore();
 
 	// verifications
-    void verifActionsImpossibles();
+    vector<int> verifActionsImpossibles();
+    vector<int> verifActionsOptImpossibles();
     void verifPrivileges();
     void verifPlateauvide();
     void verifSacvide();

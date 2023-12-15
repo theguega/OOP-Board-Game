@@ -11,7 +11,7 @@ unsigned int StrategyHumain::choix_min_max(unsigned int min, unsigned int max) {
 }
 
 unsigned int StrategyIA::choix_min_max(unsigned int min, unsigned int max) {
-    qDebug() << "l'IA choisit entre " << min << " et " << max <<" :"<<"\n";
+    //qDebug() << "l'IA choisit entre " << min << " et " << max <<" :"<<"\n";
 
     //generation d'un entier aleatoire entre min et max
     std::random_device rd;
@@ -19,14 +19,14 @@ unsigned int StrategyIA::choix_min_max(unsigned int min, unsigned int max) {
     std::uniform_int_distribution<int> distribution(min, max);
     int choix = distribution(gen);
 
-    qDebug() << "l'IA a choisit : " << choix << "\n";
+    //qDebug() << "l'IA a choisit : " << choix << "\n";
     return choix;
 }
 
 
 
 
-unsigned int StrategyHumain::choixMenu() {
+unsigned int StrategyHumain::choixMenu(vector<int> poss) {
     unsigned int choix;
     std::cin>>choix;
     if(((choix<1) || (choix>3)) && (choix != 9))
@@ -34,15 +34,15 @@ unsigned int StrategyHumain::choixMenu() {
     return choix;
 }
 
-unsigned int StrategyIA::choixMenu() {
+unsigned int StrategyIA::choixMenu(vector<int> poss) {
     //generation d'un entier aleatoire entre 1 et 3
     std::random_device rd;
     std::mt19937 gen(rd());
-    std::uniform_int_distribution<int> distribution(1, 3);
+    std::uniform_int_distribution<int> distribution(1, poss.size());
     unsigned int choix = distribution(gen);
 
-    qDebug() << "l'IA a choisit : " << choix << "\n";
-    return choix;
+    //qDebug() << "l'IA a choisit : " << choix << "\n";
+    return poss[choix-1];
 }
 
 
@@ -67,7 +67,7 @@ Couleur StrategyIA::choixCouleur() {
     int choix = distribution(gen);
 
     Couleur couleur = StringToCouleur(listeCouleurs[choix]);
-    qDebug() << "l'IA a choisit la couleur " << listeCouleurs[choix] << "\n";
+    //qDebug() << "l'IA a choisit la couleur " << listeCouleurs[choix] << "\n";
 
     return couleur;
 }
@@ -94,7 +94,7 @@ Couleur StrategyIA::choixCouleurNonINDT() {
     int choix = distribution(gen);
 
     Couleur couleur = StringToCouleur(listeCouleurs[choix]);
-    qDebug() << "l'IA a choisit la couleur " << listeCouleurs[choix] << "\n";
+    //qDebug() << "l'IA a choisit la couleur " << listeCouleurs[choix] << "\n";
 
     return couleur;
 }
