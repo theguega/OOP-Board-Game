@@ -267,6 +267,7 @@ void Controller::jouer() {
                         {
                         case 0:{
                             //appel du menu de choix des actions
+                            qDebug()<<"Tour : " << getPartie().getTour()+1 << "\n\n";
                             etat_action = choixActionsOptionelles();
                             break;}
                         case 1:{
@@ -387,9 +388,10 @@ void Controller::jouer() {
                 //verification fin de tour d'un joueur
                 case 2:{
                     //achat obligatoire d'une carte noble si le joueur a 3 pts et 0 cartes nobles ou 6 pts de prestige et 1 carte noble
-                    if ((getJoueurCourant().getptsPrestige() >= 3 && getJoueurCourant().getNbCartesNobles()==0) || (getJoueurCourant().getptsPrestige() >= 6 && getJoueurCourant().getNbCartesNobles()==1)) {
-                        acheterCarteNoble(getPartie().getEspaceJeux().getPyramide());
+                    while ((getJoueurCourant().getptsPrestige() >= 3 && getJoueurCourant().getNbCartesNobles()==0) || (getJoueurCourant().getptsPrestige() >= 6 && getJoueurCourant().getNbCartesNobles()==1)) {
+                        try { acheterCarteNoble(getPartie().getEspaceJeux().getPyramide()); } catch(SplendorException& e) { qCritical() << "\033[1;31m" << e.getInfo() << "\033[0m" << '\n' ;};
                     }
+
 
                     verifJetonSupDix();
 
