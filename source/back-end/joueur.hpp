@@ -87,6 +87,7 @@ public:
     void addCarteNoble(const Carte& carte);
     void addJeton(const Jeton &jeton);
     void addPrivilege(const Privilege &privilege);
+    void addBonus(Couleur c, int nb);
 
 
     void supCarte(Carte &carte);
