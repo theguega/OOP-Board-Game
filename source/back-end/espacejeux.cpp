@@ -184,8 +184,8 @@ void Pyramide::afficherPyramide() const {
 void Pyramide::afficherNobles() const {
     std::cout << "Cartes nobles : " << std::endl;
         for (size_t j = 0; j < array_cartes[3].size(); j++) {
-            if (array_cartes[4][j] != nullptr) {
-                std::cout << "Carte " << j+1 << " : " << std::endl << * array_cartes[4][j] <<  "\n\n\n";
+            if (array_cartes[3][j] != nullptr) {
+                std::cout << "Carte " << j+1 << " : " << std::endl << * array_cartes[3][j] <<  "\n\n\n";
             }
         }
         std::cout<<"\n\n\n\n\n\n\n\n";

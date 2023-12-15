@@ -323,7 +323,7 @@ void Controller::jouer() {
                                 recupererJetons(false);
                                 etat_action = 10;
                             }
-                            catch(SplendorException& e) { qCritical() << "\033[1;31m" << e.getInfo() << "\033[0m" << '\n'<< '\n'; etat_action = 0; }
+                            catch(SplendorException& e) { qCritical() << "\033[1;31m" << e.getInfo() << "\033[0m" << '\n'<< '\n'; etat_tour=0; etat_action = 0; }
                             break;
                         case 2:
                             try
@@ -338,7 +338,7 @@ void Controller::jouer() {
                                     etat_action = 10;
                                 }
                             }
-                            catch(SplendorException& e) { qCritical() << "\033[1;31m" << e.getInfo() << "\033[0m" << '\n'<< '\n'; etat_action = 0; }
+                            catch(SplendorException& e) { qCritical() << "\033[1;31m" << e.getInfo() << "\033[0m" << '\n'<< '\n'; etat_tour=0; etat_action = 0; }
                             break;
                         case 3:
                             try
@@ -347,7 +347,7 @@ void Controller::jouer() {
                                 orReserverCarte(getPartie().getEspaceJeux().getPyramide(), getPartie().getEspaceJeux().getPlateau());
                                 etat_action = 10;
                             }
-                            catch(SplendorException& e) { qCritical() << "\033[1;31m" << e.getInfo() << "\033[0m" << '\n'<< '\n'; etat_action = 0; }
+                            catch(SplendorException& e) { qCritical() << "\033[1;31m" << e.getInfo() << "\033[0m" << '\n'<< '\n'; etat_tour=0; etat_action = 0; }
                             break;
                         case 9:{
                             quitter();
@@ -909,9 +909,9 @@ void Controller::acheterCarteNoble (Pyramide& pyramide){
     // affichage cartes nobles
     pyramide.afficherNobles();
 
-    unsigned int i = strategy_courante->choix_min_max(0,pyramide.getNbCartesNiv(4));
+    unsigned int i = strategy_courante->choix_min_max(1,pyramide.getNbCartesNiv(3)+1)-1;
 
-    const Carte& carte = pyramide.acheterCarte(4, i);
+    const Carte& carte = pyramide.acheterCarte(3, i);
 
     joueurCourant->addCarteNoble(carte);
 }
