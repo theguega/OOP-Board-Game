@@ -94,6 +94,7 @@ public:
     void supCarteNoble(const Carte& carte);
     void supJeton(Jeton *jeton, EspaceJeux& espaceJeux);
     void supJetonNb(unsigned int nb, Couleur c, EspaceJeux& espaceJeux);
+    void supJetonPrix(Carte& c, EspaceJeux& espaceJeux);
     const Privilege& supPrivilege();
     void setGagnant() {gagnant=true;}
 

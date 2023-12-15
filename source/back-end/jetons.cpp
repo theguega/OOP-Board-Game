@@ -234,7 +234,12 @@ Sac& Sac::getSac() {
     return instance;
 }
 
-
+void Sac::afficherSac() const{
+    for (int i = 0; i < jetons.size(); i++){
+        qDebug() << *jetons[i] << " ";
+    }
+    qDebug() << "\n\n";
+}
 //------------------------------------------------- Classe Plateau
 
 void Plateau::positionerJeton(const Jeton& jeton, const size_t i, const size_t j){
@@ -389,7 +394,7 @@ bool Plateau::contientOr() const {
 bool Plateau::contientOnlyOr() const{
     for(int i =0; i <5; i++){
         for(int j = 0; j<5; j++){
-            if(getJeton(i, j)->getCouleur() != Couleur::OR)
+            if(getJeton(i, j) != nullptr && getJeton(i, j)->getCouleur() != Couleur::OR)
                 return false;
         }
     }

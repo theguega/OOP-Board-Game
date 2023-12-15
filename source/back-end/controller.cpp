@@ -100,6 +100,9 @@ Controller::Controller() {
     }
 }
 
+
+
+
 //surcharge du constructeur du controller pour la partie graphique
 Controller::Controller(QString statut_partie, QString pseudo_j_1, type type_j_1, QString pseudo_j_2, type type_j_2){
     Director* director = new Director();
@@ -171,6 +174,9 @@ void Controller::setJoueurCourant(int n) {
         strategy_courante = &strategy_Humain;
 }
 
+
+
+
 void Controller::changerJoueurCourant() {
     //changement du joueur courant
     if (joueurCourant == partie->getJoueur1())
@@ -183,6 +189,9 @@ void Controller::changerJoueurCourant() {
     else 
         strategy_courante = &strategy_Humain;
 }
+
+
+
 
 void Controller::lancerPartie() {
     // choix aleatoire entre 0 et 1 pour le choix du joueur qui commence
@@ -209,6 +218,9 @@ void Controller::lancerPartie() {
     // TODO
 }
 
+
+
+
 void Controller::quitter() {
     std::string sauvegarde;
     qDebug()<<"Vous avez decider de quitter la partie\n";
@@ -220,6 +232,9 @@ void Controller::quitter() {
         qDebug()<<"tant pis...\n";
     return;
 }
+
+
+
 
 void Controller::jouer() {
     while (1) {
@@ -322,8 +337,9 @@ void Controller::jouer() {
                                 qDebug()<<joueurCourant->getPseudo();
                                 recupererJetons(false);
                                 etat_action = 10;
+                                etat_tour = 2;
                             }
-                            catch(SplendorException& e) { qCritical() << "\033[1;31m" << e.getInfo() << "\033[0m" << '\n'<< '\n'; etat_tour=0; etat_action = 0; }
+                            catch(SplendorException& e) { qCritical() << "\033[1;31m" << e.getInfo() << "\033[0m" << '\n'<< '\n'; etat_tour=0; etat_action = 10; }
                             break;
                         case 2:
                             try
@@ -336,9 +352,10 @@ void Controller::jouer() {
                                 }
                                 else {
                                     etat_action = 10;
+                                    etat_tour = 2;
                                 }
                             }
-                            catch(SplendorException& e) { qCritical() << "\033[1;31m" << e.getInfo() << "\033[0m" << '\n'<< '\n'; etat_tour=0; etat_action = 0; }
+                            catch(SplendorException& e) { qCritical() << "\033[1;31m" << e.getInfo() << "\033[0m" << '\n'<< '\n'; etat_tour=0; etat_action = 10; }
                             break;
                         case 3:
                             try
@@ -346,8 +363,9 @@ void Controller::jouer() {
                                 //reservation carte
                                 orReserverCarte(getPartie().getEspaceJeux().getPyramide(), getPartie().getEspaceJeux().getPlateau());
                                 etat_action = 10;
+                                etat_tour = 2;
                             }
-                            catch(SplendorException& e) { qCritical() << "\033[1;31m" << e.getInfo() << "\033[0m" << '\n'<< '\n'; etat_tour=0; etat_action = 0; }
+                            catch(SplendorException& e) { qCritical() << "\033[1;31m" << e.getInfo() << "\033[0m" << '\n'<< '\n'; etat_tour=0; etat_action = 10; }
                             break;
                         case 9:{
                             quitter();
@@ -359,7 +377,7 @@ void Controller::jouer() {
                             qDebug()<<"Veuillez faire un choix correct !\n";
                             break;
                         }
-                        etat_tour = 2;
+
                     }
                     break;
                 }
@@ -580,6 +598,8 @@ void Controller::utiliserPrivilege(Plateau& plateau){
 }
 
 void Controller::remplirPlateau(Plateau& plateau, Sac& sac){
+    if(joueurCourant->getNbJetons() > 10 && getPlateau().contientOnlyOr() && getEspaceJeux().getSac().estVide())
+        verifJetonSupDix();
     //on verifie d'abord si le joueur a un/des privilege
     verifSacvide();
 
@@ -1078,7 +1098,7 @@ bool Controller::verifAchatCarte(const Carte& carte, EspaceJeux& espaceJeux) {
     }
 
     // 5. Si pas assez, essayer avec les jetons or
-    unsigned int jetonsOrUtilises = 0;
+    /*unsigned int jetonsOrUtilises = 0;
 
     // Fonction pour ajouter des jetons or a une couleur donnee
     auto ajouterJetonsOr = [&jetonsOrUtilises, &nbOr](unsigned int& nbCouleur, unsigned int& besoin) {
@@ -1117,7 +1137,8 @@ bool Controller::verifAchatCarte(const Carte& carte, EspaceJeux& espaceJeux) {
         qDebug() << "Le joueur n'a pas assez de jetons pour acheter la carte.\n";
 
         return false;
-    }
+    }*/
+    return false;
 }
 
 ///////////////////////// Verifications /////////////////////////
@@ -1134,6 +1155,12 @@ void Controller::verifPlateauvide(){
 }
 
 void Controller::verifSacvide(){
+    if(getPlateau().contientOnlyOr()){
+        qDebug() << getPlateau();
+        //getEspaceJeux().getSac().afficherSac();
+        partie->getJoueur1()->afficherJoueur();
+        partie->getJoueur2()->afficherJoueur();
+    }
     if (partie->getEspaceJeux().getSac().estVide()){
         throw SplendorException("\nLe sac de jetons est vide");
     }

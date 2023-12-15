@@ -120,6 +120,7 @@ class Sac {
         static Sac& getSac(const LotDeJetons& lot);
         //Sans jetons (restitution de partie)
         static Sac& getSac();
+        void afficherSac() const;
 };
 
 class Plateau {

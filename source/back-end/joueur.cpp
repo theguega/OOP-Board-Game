@@ -194,6 +194,18 @@ void Joueur::supJetonNb(unsigned int nb, Couleur c, EspaceJeux& espaceJeux){
 
 }
 
+
+void Joueur::supJetonPrix(Carte &c, EspaceJeux& espaceJeux){
+    supJetonNb(c.getPrix().getBlanc(), Couleur::BLANC, espaceJeux);
+    supJetonNb(c.getPrix().getBleu(), Couleur::BLEU, espaceJeux);
+    supJetonNb(c.getPrix().getVert(), Couleur::VERT, espaceJeux);
+    supJetonNb(c.getPrix().getRouge(), Couleur::ROUGE, espaceJeux);
+    supJetonNb(c.getPrix().getNoir(), Couleur::NOIR, espaceJeux);
+    supJetonNb(c.getPrix().getPerle(), Couleur::PERLE, espaceJeux);
+}
+
+
+
 const Jeton& Joueur::RecupJetonCoul(Couleur c){
     const Jeton& jetonRecup = *jetons[c].back();
     // On supprime le jeton du joueur
