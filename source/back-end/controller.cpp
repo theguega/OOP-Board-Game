@@ -475,7 +475,7 @@ bool Controller::appliquerCapacite(Capacite capa,const Carte &carte){
         }
 
         // Si le joueur adverse n'as pas de jeton de cette couleur on ne fait rien
-        if(getJoueurAdverse().cartes[coulJeton].empty())
+        if(getJoueurAdverse().jetons.at(coulJeton).empty())
             throw SplendorException("Impossible le joueur adverse ne possede pas de jetons de cette couleur");
         // Recup du jeton a l'adversaire
         const Jeton &jeton = getJoueurAdverse().RecupJetonCoul(coulJeton);
