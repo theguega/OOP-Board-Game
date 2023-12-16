@@ -372,7 +372,7 @@ void Controller::jouer() {
                     /////////////////
                     ///
                     /// POUR DEBUG SAUVEGARDE
-                    if (getPartie().getTour()==30)
+                    if (getPartie().getTour()==15)
                         sauvegardePartie();
                     ///////
                     ///
@@ -1623,6 +1623,7 @@ void Controller::sauvegardePartie() {
     for (int i = 0; i < 4; i++) {
         for (unsigned int j = 0; j < pyramide.getNbCartesNiv(i); j++) {
             const Carte* carte = pyramide.getCarte(i, j);
+
             if (carte != nullptr) {
                 QString sql = "INSERT INTO pyramide (i, j, id) VALUES (" + QString::number(i) + ", " + QString::number(j) + ", " + QString::number(carte->getId()) + ");";
                 if (!query.exec(sql)) {
