@@ -15,6 +15,7 @@ Controller::Controller() {
 
    //Si nouvelle partie
     if (statut_partie == "New") {
+        statut_partie="New";
         NewPartieBuilder* builder = new NewPartieBuilder();
         director->set_builder(builder);
         qDebug() << "\033[1;33mA combien de joueurs voulez-vous jouer ? (0, 1, 2)\033[0m\n";
@@ -64,6 +65,7 @@ Controller::Controller() {
         delete director;
 
     } else if (statut_partie == "Old") {
+        statut_partie="Old";
         LastPartieBuilder* builder = new LastPartieBuilder();
         director->set_builder(builder);
         director->BuildLastPartie();
@@ -88,9 +90,9 @@ Controller::Controller() {
         if (query.next()) {
             int joueur_c = query.value(1).toInt();
             if (joueur_c == 0)
-                joueurCourant = partie->getJoueur1();
+                setJoueurCourant(0);
             else if (joueur_c == 1)
-                joueurCourant = partie->getJoueur2();
+                setJoueurCourant(1);
             partie->setTour(query.value(2).toInt());
         }
 
@@ -109,6 +111,7 @@ Controller::Controller(QString statut_partie, QString pseudo_j_1, type type_j_1,
 
     //Si nouvelle partie
     if (statut_partie == "New") {
+        statut_partie="New";
         NewPartieBuilder* builder = new NewPartieBuilder();
         director->set_builder(builder);
         director->BuildNewPartie(pseudo_j_1.toStdString(), type_j_1, pseudo_j_2.toStdString(), type_j_2);
@@ -117,6 +120,7 @@ Controller::Controller(QString statut_partie, QString pseudo_j_1, type type_j_1,
         delete director;
 
     } else if (statut_partie == "Old") {
+        statut_partie="Old";
         LastPartieBuilder* builder = new LastPartieBuilder();
         director->set_builder(builder);
         director->BuildLastPartie();

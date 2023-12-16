@@ -70,7 +70,8 @@ int main(int argc, char * argv[]) {
 int main(void) {
     try {
         Controller control;
-        control.lancerPartie();
+        if(control.getStatutPartie()=="New")
+            control.lancerPartie();
         control.jouer();
     } catch (SplendorException& e) {qWarning() << e.getInfo() ;};
 
