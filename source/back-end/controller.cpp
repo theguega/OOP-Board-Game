@@ -366,6 +366,12 @@ void Controller::jouer() {
                     //si plus de 10 jetons il faut en reposer
                     verifJetonSupDix();
 
+                    /////////////////
+                    ///
+                    /// POUR DEBUG SAUVEGARDE
+                    if (getPartie().getTour()==30)
+                        sauvegardePartie();
+
                     // Conditions victoires :
                     if (getJoueurCourant().getNbCouronnes() >= 10) getJoueurCourant().setGagnant();
                     if (getJoueurCourant().getptsPrestige() >= 20) getJoueurCourant().setGagnant();
