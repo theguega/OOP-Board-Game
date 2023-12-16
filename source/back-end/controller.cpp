@@ -388,15 +388,15 @@ void Controller::jouer() {
                     for (size_t j = 0; j < 250; j++) {
                         for (std::size_t i = 0; i < message.size(); ++i) {
                             // Utilisation des codes ANSI pour le texte en gras et avec différentes couleurs
-                            qDebug() << "\033[1;3" << (i % 7) + 1 << "m" << message[i];
+                            std::cout << "\033[1;3" << (i % 7) + 1 << "m" << message[i];
                         }
-                        qDebug() << "\n\n";
-                        for (std::size_t l = 0; l < j; ++l) qDebug() << " ";
+                        std::cout << "\n\n";
+                        for (std::size_t l = 0; l < j; ++l) std::cout << " ";
                     };
                     // Reinitialisation du style après la dernière lettre
-                    qDebug() << "\033[0m\n";
+                    std::cout << "\033[0m\n";
 
-                    qDebug() << "Fin de la partie !\n";
+                    std::cout << "Fin de la partie !\n";
                     return;
                     break;
                 }
