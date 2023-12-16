@@ -677,20 +677,23 @@ void Controller::recupererJetons(bool capacite,Couleur coulBonus){
     std::vector<std::pair<int, int>> vecteurCoordonnees;
     qDebug()<<"Vous allez rentrer les coordonnees des jetons : \n";
     // Recup des coordonnees des jetons
+
+    std::vector<std::pair<int, int>> jetonsDispo;
+
+    if(capacite){
+        jetonsDispo = getEspaceJeux().getPlateau().getVectorCouleurDispo(coulBonus);
+    }else {
+        jetonsDispo = getEspaceJeux().getPlateau().getVectorDispo();
+    }
+
+
+
     for (unsigned int k = 0; k < nbJetons; k++){
 
         // Ajout des coordonnees
         qDebug()<<"Jetons numero "<<k+1<<" : \n";
 
         qDebug() << "Voici les jetons disponibles: \n";
-
-        if(capacite){
-            std::vector<std::pair<int, int>> jetonsDispo = getEspaceJeux().getPlateau().getVectorCouleurDispo(coulBonus);
-        }else {
-            std::vector<std::pair<int, int>> jetonsDispo = getEspaceJeux().getPlateau().getVectorDispo();
-        }
-
-        std::vector<std::pair<int, int>> jetonsDispo = getEspaceJeux().getPlateau().getVectorDispo();
 
         if(jetonsDispo.size() == 0){
             getEspaceJeux().getPlateau().remplirPlateau(getEspaceJeux().getSac());
@@ -1558,6 +1561,7 @@ void Controller::sauvegardePartie() {
         // Cartes (toutes les couleurs sauf ind et or)
         for (Couleur c : Couleurs) {
             if (c != Couleur::OR) {
+                qDebug() << "Vecteur " << c << "Nb elem : " << getPartie().getJoueur(i)->getNbCartes(c);
                 for (size_t j = 0; j < getPartie().getJoueur(i)->getNbCartes(c); j++) {
                     QString sql = "INSERT INTO cartes_joueur (id_joueur, id_carte, noble, reserve) VALUES (" + QString::number(i + 1) + ", " + QString::number(getPartie().getJoueur(i)->getCarte(c, j).getId()) + ",0,0);";
                     qDebug() << sql <<"\n" ;
