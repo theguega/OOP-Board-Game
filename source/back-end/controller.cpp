@@ -373,11 +373,13 @@ void Controller::jouer() {
                     if (getJoueurCourant().nbPtsPrestigeParCouleurSupDix()) getJoueurCourant().setGagnant();
 
                     // Fin de partie :
-                    if (getJoueurCourant().estGagnant()) etat_tour = 3;
-
+                    if (getJoueurCourant().estGagnant())
+                        etat_tour = 3;
+                    else{
                     // fin du tour du joueur, on passe au joueur suivant
                     changerJoueurCourant();
                     etat_tour = 10;
+                    }
                     break;
                 }
                 case 3: {
