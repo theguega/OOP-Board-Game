@@ -363,11 +363,10 @@ void Controller::jouer() {
                         try { acheterCarteNoble(getPartie().getEspaceJeux().getPyramide()); } catch (SplendorException& e) { qCritical() << "\033[1;31m" << e.getInfo() << "\033[0m" << '\n'; };
                     }
 
+                    //si plus de 10 jetons il faut en reposer
                     verifJetonSupDix();
 
                     // Conditions victoires :
-                    qDebug() << "prestige : " << getJoueurCourant().getptsPrestige() << "\n";
-                    qDebug() << "couronnes : " << getJoueurCourant().getNbCouronnes() << "\n";
                     if (getJoueurCourant().getNbCouronnes() >= 10) getJoueurCourant().setGagnant();
                     if (getJoueurCourant().getptsPrestige() >= 20) getJoueurCourant().setGagnant();
                     if (getJoueurCourant().nbPtsPrestigeParCouleurSupDix()) getJoueurCourant().setGagnant();
@@ -394,7 +393,12 @@ void Controller::jouer() {
                     // Reinitialisation du style après la dernière lettre
                     qDebug() << "\033[0m\n";
 
+                    qDebug() << "Enregistrement des score...\n";
+                    enregisterScore();
+                    qDebug() << "DONE !\n";
                     qDebug() << "Fin de la partie !\n";
+
+
                     return;
                     break;
                 }
