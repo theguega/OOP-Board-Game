@@ -8,6 +8,7 @@
 #include <map>
 #include <string>
 #include "back-end/exception.hpp"
+#include <vector>
 #include <QDebug>
 using namespace std;
 
@@ -147,11 +148,15 @@ class Plateau {
         size_t getLargeurMatrice() const { return jetons.size(); }
         size_t getNbJetons() const;
 
+        std::vector<std::pair<int, int>> getVectorDispo();
+        std::vector<std::pair<int, int>> getVectorOrDispo();
+        std::vector<std::pair<int, int>> getVectorCouleurDispo(Couleur coulBonus);
         const Jeton& recupererJeton(const size_t i, const size_t j);
         const Privilege& recupererPrivilege();
         bool pivilegeDisponible() const { return !privileges.empty(); }
         const Jeton* getJeton(const size_t i, const size_t j) const { return jetons[i][j]; }
         unsigned int getNbPrivileges() const {return privileges.size(); }
+
 
         //Postionnement du jeton en suivant l'ordre du plateau
         void positionerJeton(const Jeton& jeton);
