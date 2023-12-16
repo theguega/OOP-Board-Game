@@ -240,7 +240,6 @@ bool Joueur::nbPtsPrestigeParCouleurSupDix() const{
 
         // Calcule la somme pour chaque couleur
         for (const auto* carte : tab) somme += carte->getNbPtsPrivilege();
-        qDebug() << somme << "\n";
         if (somme >= 10) return true;
     }
     return false;

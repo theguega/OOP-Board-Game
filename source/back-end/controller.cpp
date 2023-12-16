@@ -365,6 +365,7 @@ void Controller::jouer() {
 
                     verifJetonSupDix();
 
+
                     /////////////////
                     ///
                     /// POUR DEBUG SAUVEGARDE
@@ -375,12 +376,12 @@ void Controller::jouer() {
                     ///
                     ///
 
+
                     // Conditions victoires :
-                    qDebug() << "prestige : " << getJoueurCourant().getptsPrestige() << "\n";
-                    qDebug() << "couronnes : " << getJoueurCourant().getNbCouronnes() << "\n";
                     if (getJoueurCourant().getNbCouronnes() >= 10) getJoueurCourant().setGagnant();
                     if (getJoueurCourant().getptsPrestige() >= 20) getJoueurCourant().setGagnant();
                     if (getJoueurCourant().nbPtsPrestigeParCouleurSupDix()) getJoueurCourant().setGagnant();
+
 
                     // Fin de partie :
                     if (getJoueurCourant().estGagnant())
@@ -393,9 +394,10 @@ void Controller::jouer() {
                     break;
                 }
                 case 3: {
+
                     // affichage rigolo
-                    const std::string message = "Le Joueur " + getJoueurCourant().getPseudo() + " a gagne !";
-                    for (size_t j = 0; j < 250; j++) {
+                    const std::string message = "Le Joueur " + getJoueurCourant().getPseudo() + " a gagne apres " + std::to_string(getPartie().getTour()) + " tours !";
+                    for (size_t j = 0; j < 100; j++) {
                         for (std::size_t i = 0; i < message.size(); ++i) {
                             // Utilisation des codes ANSI pour le texte en gras et avec différentes couleurs
                             std::cout << "\033[1;3" << (i % 7) + 1 << "m" << message[i];
@@ -405,6 +407,11 @@ void Controller::jouer() {
                     };
                     // Reinitialisation du style après la dernière lettre
                     std::cout << "\033[0m\n";
+
+                    //enregistrement des score
+                    qDebug() << "Enregistrement des score...\n";
+                    enregisterScore();
+                    qDebug() << "DONE\n";
 
                     std::cout << "Fin de la partie !\n";
                     return;
@@ -987,7 +994,6 @@ bool Controller::acheterCarteJoaillerie (EspaceJeux& espaceJeux){
     else {
         // Affichage des cartes
         getPyramide().afficherPyramide();
-        //espaceJeux.getPyramide().afficherPyramide();
         vector<pair<int, int>> cartes_dispo = GenereCartePyramideDispo();
 
         if (cartes_dispo.size() == 0)
@@ -1233,8 +1239,10 @@ vector<pair<int, int>> Controller::GenereCartePyramideDispo(){
     vector<pair<int, int>> vect_tmp;
     for(int i = 0; i < 3; i++){
         for(int j =0; j < getPyramide().getNbCartesNiv(i); j++){
-            if(verifAchatCarte(getPyramide().getCarte(i, j)))
-                vect_tmp.push_back(std::make_pair(i, j));
+            if (getPyramide().getCarte(i, j)!=nullptr) {
+                if(verifAchatCarte(getPyramide().getCarte(i, j)))
+                    vect_tmp.push_back(std::make_pair(i, j));
+            }
         }
     }
     return vect_tmp;
