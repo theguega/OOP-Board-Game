@@ -192,6 +192,9 @@ void LastPartieBuilder::updateEspaceJeu() const {
         } else if (i == 2) {
             const Carte &carte = this->partie->espaceJeux->getPyramide().getPioche3().piocher(id_carte);
             partie->espaceJeux->getPyramide().definitCarte(i, j, carte);
+        } else if (i == 3){
+            const Carte &carte = this->partie->espaceJeux->getPyramide().getPiocheNoble().piocher(id_carte);
+            partie->espaceJeux->getPyramide().definitCarte(i, j, carte);
         }
     }
 
