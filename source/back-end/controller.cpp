@@ -8,14 +8,13 @@ Controller::Controller() {
 
     qDebug() << "\033[1;33mAncienne ou nouvelle partie ? (New/Old)\033[0m\n";
 
-
     //QTextStream stream(stdin);
     string statut_partie;
     cin>>statut_partie;
 
    //Si nouvelle partie
     if (statut_partie == "New") {
-        statut_partie="New";
+        stat_partie="New";
         NewPartieBuilder* builder = new NewPartieBuilder();
         director->set_builder(builder);
         qDebug() << "\033[1;33mA combien de joueurs voulez-vous jouer ? (0, 1, 2)\033[0m\n";
@@ -65,7 +64,7 @@ Controller::Controller() {
         delete director;
 
     } else if (statut_partie == "Old") {
-        statut_partie="Old";
+        stat_partie="Old";
         LastPartieBuilder* builder = new LastPartieBuilder();
         director->set_builder(builder);
         director->BuildLastPartie();
@@ -111,7 +110,7 @@ Controller::Controller(QString statut_partie, QString pseudo_j_1, type type_j_1,
 
     //Si nouvelle partie
     if (statut_partie == "New") {
-        statut_partie="New";
+        stat_partie="New";
         NewPartieBuilder* builder = new NewPartieBuilder();
         director->set_builder(builder);
         director->BuildNewPartie(pseudo_j_1.toStdString(), type_j_1, pseudo_j_2.toStdString(), type_j_2);
@@ -120,7 +119,7 @@ Controller::Controller(QString statut_partie, QString pseudo_j_1, type type_j_1,
         delete director;
 
     } else if (statut_partie == "Old") {
-        statut_partie="Old";
+        stat_partie="Old";
         LastPartieBuilder* builder = new LastPartieBuilder();
         director->set_builder(builder);
         director->BuildLastPartie();
