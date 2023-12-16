@@ -560,6 +560,7 @@ unsigned int Controller::choixActionsObligatoires() {
 }
 
 unsigned int Controller::choixActionsOptionelles() {
+
     /*qDebug() << "\033[1mActions optionnelles:\033[0m\n";
     qDebug() << "1. Utiliser un privilege\n";
     qDebug()  << "2. Remplir le plateau\n";
@@ -588,10 +589,25 @@ void Controller::utiliserPrivilege(Plateau& plateau){
     //on recupere autant de jetons que de privilege
     for (size_t k=0; k<priv;k++) {
         qDebug()<<"Utiliser un privilege permet de recup un jeton de couleur ou perle de votre choix (i,j):\n";
+
         qDebug()<<plateau<<"\n";
 
-        unsigned int i = strategy_courante->choix_min_max(1,5)-1;
-        unsigned int j = strategy_courante->choix_min_max(1,5)-1;
+        qDebug() << "Voici les jetons disponibles: \n";
+
+        std::vector<std::pair<int, int>> jetonsDispo = getEspaceJeux().getPlateau().getVectorDispo();
+        if(jetonsDispo.size() == 0){
+            getEspaceJeux().getPlateau().remplirPlateau(getEspaceJeux().getSac());
+            throw SplendorException("\n Plus de Jetons disponibles");
+        }
+
+
+
+        qDebug() << jetonsDispo << "\n "; // Je ferais un affichage propre apres
+
+        int choix_indice_jeton = strategy_courante->choix_min_max(0, jetonsDispo.size()-1);
+
+        int i = jetonsDispo[choix_indice_jeton].first;
+        int j = jetonsDispo[choix_indice_jeton].second;
 
         if(plateau.caseVide(i, j))
             throw SplendorException("La case est vide");
@@ -600,6 +616,7 @@ void Controller::utiliserPrivilege(Plateau& plateau){
 
         const Jeton& jetonSelec = plateau.recupererJeton(i, j);
         joueurCourant->addJeton(jetonSelec);
+
         //on repose le privilege
         const Privilege& privilege = joueurCourant->supPrivilege();
         plateau.poserPrivilege(privilege);
@@ -626,7 +643,6 @@ void Controller::remplirPlateau(Plateau& plateau, Sac& sac){
 
     return;
 }
-
 
 
 
@@ -669,11 +685,29 @@ void Controller::recupererJetons(bool capacite,Couleur coulBonus){
         // Ajout des coordonnees
         qDebug()<<"Jetons numero "<<k+1<<" : \n";
 
-        qDebug() << "Numero de ligne (1,2,3,4,5) : \n";
-        int indice_i = strategy_courante->choix_min_max(1, 5);
-        qDebug() << "Numero de colonne (1,2,3,4,5) : \n";
-        int indice_j = strategy_courante->choix_min_max(1, 5);
-        vecteurCoordonnees.emplace_back(std::make_pair(indice_i-1, indice_j-1));
+        qDebug() << "Voici les jetons disponibles: \n";
+
+        if(capacite){
+            std::vector<std::pair<int, int>> jetonsDispo = getEspaceJeux().getPlateau().getVectorCouleurDispo(coulBonus);
+        }else {
+            std::vector<std::pair<int, int>> jetonsDispo = getEspaceJeux().getPlateau().getVectorDispo();
+        }
+
+        std::vector<std::pair<int, int>> jetonsDispo = getEspaceJeux().getPlateau().getVectorDispo();
+
+        if(jetonsDispo.size() == 0){
+            getEspaceJeux().getPlateau().remplirPlateau(getEspaceJeux().getSac());
+            throw SplendorException("\n Plus de Jetons disponibles");
+        }
+
+        qDebug() << jetonsDispo << "\n "; // Je ferais un affichage propre apres
+
+        int choix_indice_jeton = strategy_courante->choix_min_max(0, jetonsDispo.size()-1);
+
+        vecteurCoordonnees.push_back(jetonsDispo[choix_indice_jeton]);
+
+        jetonsDispo.erase(jetonsDispo.begin() + choix_indice_jeton);
+
     }
 
     // Verifier que les jetons sont adjacents
@@ -956,10 +990,27 @@ void Controller::orReserverCarte (Pyramide& pyramide, Plateau& plateau){
     verifOrSurPlateau();
     qDebug()  << "Commencez par choisir un jeton Or : \n";
     qDebug()  <<  getPlateau();
+
+
+    qDebug() << "Voici les jetons disponibles: \n";
+
+    std::vector<std::pair<int, int>> jetonsOrDispo = getEspaceJeux().getPlateau().getVectorOrDispo();
+
+    if(jetonsOrDispo.size() == 0){
+        //getEspaceJeux().getPlateau().remplirPlateau(getEspaceJeux().getSac());
+        throw SplendorException("\n Plus de Jetons Or disponibles");
+    }
+
+    qDebug() << jetonsOrDispo << "\n "; // Je ferais un affichage propre apres mais pas sur
+
+    int ChoixOrDispo = strategy_courante->choix_min_max(0, jetonsOrDispo.size()-1);
+    jetonsOrDispo[ChoixOrDispo];
+    /*
     qDebug()  << "Choisissez une ligne : \n";
     unsigned int coord_ligne = strategy_courante->choix_min_max(1, 5);
     qDebug()  << "Choisissez une colonne : \n";
     unsigned int coord_col = strategy_courante->choix_min_max(1, 5);
+
     while(getPlateau().caseVide(coord_ligne-1, coord_col-1) || !getPlateau().caseOr(coord_ligne-1, coord_col-1)){
         qDebug()  << "La case est vide ou ce n'est pas un jeton Or\n";
         qDebug()  << "Choisissez une ligne : \n";
@@ -967,6 +1018,7 @@ void Controller::orReserverCarte (Pyramide& pyramide, Plateau& plateau){
         qDebug()  << "Choisissez une colonne : \n";
         coord_col = strategy_courante->choix_min_max(1, 5);
     }
+    */
 
     qDebug()  << "Voulez-vous reserver une carte de la pyramide (0) ou celle d'une pioche (1, 2, 3) ?\n";
     unsigned int choix = strategy_courante->choix_min_max(0, 3);
@@ -984,19 +1036,26 @@ void Controller::orReserverCarte (Pyramide& pyramide, Plateau& plateau){
 
         const Carte& carte = pyramide.acheterCarte(niveau, num_carte);
         joueurCourant->addCarteReservee(carte);
-
+        /*
         const Jeton& jeton = plateau.recupererJeton(coord_ligne-1, coord_col-1);
         joueurCourant->addJeton(jeton);
-    }
+        */
+}
     else if (choix == 1 || choix == 2 || choix == 3){
         // Reservation de la carte
         const Carte& carte = pyramide.ReserverCartePioche(choix);
         joueurCourant->addCarteReservee(carte);
-
+        /*
         const Jeton& jeton = plateau.recupererJeton(coord_ligne-1, coord_col-1);
         joueurCourant->addJeton(jeton);
+        */
     }
+
+    const Jeton& jeton = plateau.recupererJeton( jetonsOrDispo[ChoixOrDispo].first,  jetonsOrDispo[ChoixOrDispo].second);
+    joueurCourant->addJeton(jeton);
+
     qDebug()  << "Etat du joueur apres l'action : \n";
+
     //joueurCourant->afficherJoueur();
 }
 

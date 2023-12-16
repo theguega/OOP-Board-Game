@@ -353,6 +353,41 @@ bool Plateau::estVide() const {
     return true;
 }
 
+std::vector<std::pair<int, int>> Plateau::getVectorDispo(){
+    std::vector<std::pair<int, int>> vectorJeton;
+    for (size_t i = 0; i < 5; i++)
+        for (size_t j = 0; j < 5; j++)
+            if (jetons[i][j] != nullptr && (!caseOr(i,j))) {
+                std::pair<int,int> coordJeton(i, j);
+                vectorJeton.push_back(coordJeton);
+            }
+    return vectorJeton;
+}
+
+std::vector<std::pair<int, int>> Plateau::getVectorOrDispo() {
+    std::vector<std::pair<int, int>> vectorOrJeton;
+    for (size_t i = 0; i < 5; i++)
+        for (size_t j = 0; j < 5; j++)
+            if (jetons[i][j] != nullptr && caseOr(i,j)) {
+                std::pair<int,int> coordJeton(i, j);
+                vectorOrJeton.push_back(coordJeton);
+            }
+    return vectorOrJeton;
+}
+
+std::vector<std::pair<int, int>> Plateau::getVectorCouleurDispo(Couleur coulBonus) {
+    std::vector<std::pair<int, int>> vectorOrJeton;
+    for (size_t i = 0; i < 5; i++)
+        for (size_t j = 0; j < 5; j++)
+            if (jetons[i][j] != nullptr && jetons[i][j]->getCouleur() == coulBonus) {
+                std::pair<int,int> coordJeton(i, j);
+                vectorOrJeton.push_back(coordJeton);
+            }
+    return vectorOrJeton;
+}
+
+
+
 size_t Plateau::getNbJetons() const {
     size_t nombreDeJetons = 0;
 
