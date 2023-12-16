@@ -13,23 +13,6 @@ std::initializer_list<Couleur> Couleurs = {
     Couleur::BLANC, Couleur::BLEU, Couleur::VERT, Couleur::ROUGE, Couleur::NOIR, Couleur::PERLE, Couleur::OR, Couleur::INDT
 };
 
-/*
-std::string toStringCouleur(Couleur c) {
-    switch (c)
-    {
-    case Couleur::BLANC: return "Blanc";
-    case Couleur::BLEU: return "Bleu";
-    case Couleur::VERT: return "Vert";
-    case Couleur::ROUGE: return "Rouge";
-    case Couleur::NOIR: return "Noir";
-    case Couleur::PERLE: return "Perle";
-    case Couleur::OR: return "Or";
-    case Couleur::INDT: return "Indt";
-    default: throw SplendorException("Couleur inconnue");
-    }
-}*/
-
-//🔵🟢🔴🟡🟣🖤🤍
 
 std::string toEmojiCouleur(Couleur c) {
     switch (c) {
@@ -48,14 +31,14 @@ std::string toEmojiCouleur(Couleur c) {
 std::string toStringCouleur(Couleur c) {
     switch (c)
     {
-    case Couleur::BLANC: return "Blanc"; // Blanc
-    case Couleur::BLEU: return "Bleu";  // Bleu
-    case Couleur::VERT: return "Vert";  // Vert
-    case Couleur::ROUGE: return "Rouge"; // Rouge
-    case Couleur::NOIR: return "Noir";  // Noir
-    case Couleur::PERLE: return "Perle"; // Perle (rose)
-    case Couleur::OR: return "Or";    // Or (jaune)
-    case Couleur::INDT: return "Indt";
+    case Couleur::BLANC: return "blanc";
+    case Couleur::BLEU: return "bleu";
+    case Couleur::VERT: return "vert";
+    case Couleur::ROUGE: return "rouge";
+    case Couleur::NOIR: return "noir";
+    case Couleur::PERLE: return "perle";
+    case Couleur::OR: return "or";
+    case Couleur::INDT: return "indt";
     default: throw SplendorException("Couleur inconnue");
     }
 }
@@ -83,6 +66,7 @@ std::map<std::string, Couleur> stringToCouleurMap = {
 };
 
 Couleur StringToCouleur(const std::string& couleurStr) {
+    std::cout<<"Voici le string a convertir en couleur : " << couleurStr << "\n";
     auto tmp = stringToCouleurMap.find(couleurStr);
     if (tmp != stringToCouleurMap.end()) {
         return tmp->second;
