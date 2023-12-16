@@ -814,12 +814,12 @@ bool Controller::acheterCarteJoaillerie (EspaceJeux& espaceJeux){
         //on verifie que le joueur peut bien acheter la carte, sinon on la repose
 
         // recup des points necessaires pour acheter la carte
-        unsigned int needBlanc =  carte.getPrix().getBlanc() ;
-        unsigned int needBleu =  carte.getPrix().getBleu();
-        unsigned int needVert =  carte.getPrix().getVert();
-        unsigned int needRouge =  carte.getPrix().getRouge();
-        unsigned int needNoir =  carte.getPrix().getNoir();
-        unsigned int needPerle = carte.getPrix().getPerle();
+        int needBlanc =  carte.getPrix().getBlanc() ;
+        int needBleu =  carte.getPrix().getBleu();
+        int needVert =  carte.getPrix().getVert();
+        int needRouge =  carte.getPrix().getRouge();
+        int needNoir =  carte.getPrix().getNoir();
+        int needPerle = carte.getPrix().getPerle();
 
 
         unsigned int nbBlanc = 0;
@@ -831,7 +831,10 @@ bool Controller::acheterCarteJoaillerie (EspaceJeux& espaceJeux){
             if (itBonusBlanc != joueurCourant->bonus.end()) {
                 needBlanc -= itBonusBlanc->second;
             }
+            if(needBlanc <0)
+                needBlanc = 0;
         }
+
 
         unsigned int nbBleu = 0;
         auto itBleu = joueurCourant->jetons.find(Couleur::BLEU);
@@ -842,6 +845,8 @@ bool Controller::acheterCarteJoaillerie (EspaceJeux& espaceJeux){
             if (itBonusBleu != joueurCourant->bonus.end()) {
                 needBleu -= itBonusBleu->second;
             }
+            if(needBleu<0)
+                needBleu = 0;
         }
 
         unsigned int nbVert = 0;
@@ -853,6 +858,8 @@ bool Controller::acheterCarteJoaillerie (EspaceJeux& espaceJeux){
             if (itBonusVert != joueurCourant->bonus.end()) {
                 needVert -= itBonusVert->second;
             }
+            if(needVert <0)
+                needVert = 0;
         }
 
         unsigned int nbRouge = 0;
@@ -864,6 +871,8 @@ bool Controller::acheterCarteJoaillerie (EspaceJeux& espaceJeux){
             if (itBonusRouge != joueurCourant->bonus.end()) {
                 needRouge -= itBonusRouge->second;
             }
+            if(needRouge <0)
+                needRouge = 0;
         }
 
         unsigned int nbNoir = 0;
@@ -875,6 +884,8 @@ bool Controller::acheterCarteJoaillerie (EspaceJeux& espaceJeux){
             if (itBonusNoir != joueurCourant->bonus.end()) {
                 needNoir -= itBonusNoir->second;
             }
+            if(needNoir <0)
+                needNoir = 0;
         }
 
         unsigned int nbPerle = 0;
@@ -894,7 +905,7 @@ bool Controller::acheterCarteJoaillerie (EspaceJeux& espaceJeux){
         unsigned int jetonsOrUtilises = 0;
 
         // Fonction pour ajouter des jetons or a une couleur donnee
-        auto ajouterJetonsOr = [&jetonsOrUtilises, &nbOr](unsigned int& nbCouleur, unsigned int& besoin) {
+        auto ajouterJetonsOr = [&jetonsOrUtilises, &nbOr](unsigned int& nbCouleur, int& besoin) {
             while (nbOr > 0 && besoin > nbCouleur) {
                 // Utiliser un jeton or pour completer le besoin
                 nbOr--;
@@ -979,12 +990,12 @@ bool Controller::acheterCarteJoaillerie (EspaceJeux& espaceJeux){
         const Carte& carte = partie->getEspaceJeux().getPyramide().acheterCarte(cartes_dispo[choix].first, cartes_dispo[choix].second);
 
         // recup des points necessaires pour acheter la carte
-        unsigned int needBlanc =  carte.getPrix().getBlanc() ;
-        unsigned int needBleu =  carte.getPrix().getBleu();
-        unsigned int needVert =  carte.getPrix().getVert();
-        unsigned int needRouge =  carte.getPrix().getRouge();
-        unsigned int needNoir =  carte.getPrix().getNoir();
-        unsigned int needPerle = carte.getPrix().getPerle();
+        int needBlanc =  carte.getPrix().getBlanc() ;
+        int needBleu =  carte.getPrix().getBleu();
+        int needVert =  carte.getPrix().getVert();
+        int needRouge =  carte.getPrix().getRouge();
+        int needNoir =  carte.getPrix().getNoir();
+        int needPerle = carte.getPrix().getPerle();
 
 
         unsigned int nbBlanc = 0;
@@ -996,7 +1007,10 @@ bool Controller::acheterCarteJoaillerie (EspaceJeux& espaceJeux){
             if (itBonusBlanc != joueurCourant->bonus.end()) {
                 needBlanc -= itBonusBlanc->second;
             }
+            if(needBlanc <0)
+                needBlanc = 0;
         }
+
 
         unsigned int nbBleu = 0;
         auto itBleu = joueurCourant->jetons.find(Couleur::BLEU);
@@ -1007,6 +1021,8 @@ bool Controller::acheterCarteJoaillerie (EspaceJeux& espaceJeux){
             if (itBonusBleu != joueurCourant->bonus.end()) {
                 needBleu -= itBonusBleu->second;
             }
+            if(needBleu<0)
+                needBleu = 0;
         }
 
         unsigned int nbVert = 0;
@@ -1018,6 +1034,8 @@ bool Controller::acheterCarteJoaillerie (EspaceJeux& espaceJeux){
             if (itBonusVert != joueurCourant->bonus.end()) {
                 needVert -= itBonusVert->second;
             }
+            if(needVert <0)
+                needVert = 0;
         }
 
         unsigned int nbRouge = 0;
@@ -1029,6 +1047,8 @@ bool Controller::acheterCarteJoaillerie (EspaceJeux& espaceJeux){
             if (itBonusRouge != joueurCourant->bonus.end()) {
                 needRouge -= itBonusRouge->second;
             }
+            if(needRouge <0)
+                needRouge = 0;
         }
 
         unsigned int nbNoir = 0;
@@ -1040,6 +1060,8 @@ bool Controller::acheterCarteJoaillerie (EspaceJeux& espaceJeux){
             if (itBonusNoir != joueurCourant->bonus.end()) {
                 needNoir -= itBonusNoir->second;
             }
+            if(needNoir <0)
+                needNoir = 0;
         }
 
         unsigned int nbPerle = 0;
@@ -1059,7 +1081,7 @@ bool Controller::acheterCarteJoaillerie (EspaceJeux& espaceJeux){
         unsigned int jetonsOrUtilises = 0;
 
         // Fonction pour ajouter des jetons or a une couleur donnee
-        auto ajouterJetonsOr = [&jetonsOrUtilises, &nbOr](unsigned int& nbCouleur, unsigned int& besoin) {
+        auto ajouterJetonsOr = [&jetonsOrUtilises, &nbOr](unsigned int& nbCouleur, int& besoin) {
             while (nbOr > 0 && besoin > nbCouleur) {
                 // Utiliser un jeton or pour completer le besoin
                 nbOr--;
