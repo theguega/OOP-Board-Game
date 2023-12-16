@@ -25,6 +25,7 @@ public:
     virtual Couleur choixCouleurNonINDT() override;
 };
 
+
 class StrategyIA : public Strategy {
 public:
     //Nouvelle version de strategy

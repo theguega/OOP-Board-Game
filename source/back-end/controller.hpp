@@ -78,7 +78,9 @@ public:
     void verifOrSurPlateau();
     void verifTroisCarteReserve();
     void verifJetonSupDix();
-    bool verifAchatCarte(const Carte& carte, EspaceJeux& espaceJeux);
+    bool verifAchatCarte(const Carte* carte);
+    vector<pair<int, int>> GenereCartePyramideDispo();
+    vector<pair<Couleur, int>> GenereCarteResaDispo();
 
 };
 

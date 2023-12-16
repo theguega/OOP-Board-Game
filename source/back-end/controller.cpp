@@ -549,10 +549,12 @@ bool Controller::appliquerCapacite(Capacite capa,const Carte &carte){
 //Menu choix des actions
 unsigned int Controller::choixActionsObligatoires() {
     qDebug() << "\033[1mActions obligatoires:\033[0m\n";
+    qDebug() << "\033[1mActions obligatoires:\033[0m\n";
     qDebug() << "1. Recuperer des jetons\n";
     qDebug()  << "2. Acheter une carte joaillerie\n";
     qDebug() << "3. Reserver une carte\n";
     qDebug() << "9. Quitter le jeu\n";
+    qDebug() << "Votre choix (1/2/3/9):\n";
     qDebug() << "Votre choix (1/2/3/9):\n";
 
 
@@ -561,10 +563,12 @@ unsigned int Controller::choixActionsObligatoires() {
 
 unsigned int Controller::choixActionsOptionelles() {
     qDebug() << "\033[1mActions optionnelles:\033[0m\n";
+    qDebug() << "\033[1mActions optionnelles:\033[0m\n";
     qDebug() << "1. Utiliser un privilege\n";
     qDebug()  << "2. Remplir le plateau\n";
     qDebug() << "3. Ne plus faire d'actions optionnelles\n";
     qDebug() << "9. Quitter le jeu\n";
+    qDebug() << "Votre choix (1/2/3/9):\n";
     qDebug() << "Votre choix (1/2/3/9):\n";
 
 
@@ -815,6 +819,11 @@ void Controller::recupererJetons(bool capacite,Couleur coulBonus){
     return;
 }
 
+
+
+
+
+
 //TODO
 bool Controller::acheterCarteJoaillerie (EspaceJeux& espaceJeux){
     qDebug()<<"Vous avez decider d'acheter une carte joaillerie\n";
@@ -827,45 +836,131 @@ bool Controller::acheterCarteJoaillerie (EspaceJeux& espaceJeux){
         if(joueurCourant->getNbCartesReservees()==0)
             throw SplendorException("Vous n'avez pas de carte rerservee\n");
 
-        qDebug() << "Voici les cartes reservees : \n";
-        unsigned int i = 0;
-        // Affichage de la reserve
-        for (const auto& couleurEtCartes : joueurCourant->cartesReservees) {
-            i=0;
-            Couleur couleur = couleurEtCartes.first;
+        vector<pair<Couleur, int>> resa_dispo = GenereCarteResaDispo();
+        if(resa_dispo.size() == 0)
+            throw SplendorException("Vous ne pouvez acheter aucun carte reservee\n");
 
-            // Ignorer les cartes de couleur OR
-            if (couleur != Couleur::OR) {
-                qDebug() << "Cartes de couleur : " << couleur << "\n";
-                const std::vector<const Carte*>& cartes = couleurEtCartes.second;
+        qDebug() << "Voici les cartes reservees que vous pouvez acheter: \n";
 
-                for (const Carte* carte : cartes) {
-                    qDebug() << "Numero " << ++i << " : \n" << *carte << '\n';
-                }
-                qDebug() << "\n\n\n";
-            }
+        for (int i =0; i < resa_dispo.size(); i++){
+            qDebug() << i+1 << " : \n" << joueurCourant->getCarteReservee(resa_dispo[i].first, resa_dispo[i].second) << "\n\n\n";
         }
 
         // on recupere la couleur de la carte reservee
+
+        qDebug() << "veuillez choisir une carte parmi elles\n";
         qDebug()<<"Veuillez entrer la couleur de la carte que vous souhiatez reserver\n";
-        Couleur c = strategy_courante->choixCouleur();
+        unsigned int choix = strategy_courante->choix_min_max(1, resa_dispo.size())-1;
 
-        //on verifie qu'il a bien des cartes de cette couleur reservee
-        unsigned int nb_carte = joueurCourant->getNbCartesReservees(c);
-        if (nb_carte==0)
-            throw SplendorException("Vous n'avez pas de carte de cette couleur\n");
-
-        //on recupere l'indice de la carte
-        qDebug()<<"Indiquez l'indice de la carte que vous voulez recuperer\n";
-        unsigned int choix_indice_carte = strategy_courante->choix_min_max(1,nb_carte)-1;
-
-        //on recup la carte
-        const Carte& carte = joueurCourant->getCarteReservee(c, choix_indice_carte);
+        const Carte& carte = joueurCourant->getCarteReservee(resa_dispo[choix].first, resa_dispo[choix].second);
         //on verifie que le joueur peut bien acheter la carte, sinon on la repose
 
-        if(!verifAchatCarte(carte, partie->getEspaceJeux())) {
-            throw SplendorException("Vous ne pouvez pas acheter cette carte");
+        // recup des points necessaires pour acheter la carte
+        unsigned int needBlanc =  carte.getPrix().getBlanc() ;
+        unsigned int needBleu =  carte.getPrix().getBleu();
+        unsigned int needVert =  carte.getPrix().getVert();
+        unsigned int needRouge =  carte.getPrix().getRouge();
+        unsigned int needNoir =  carte.getPrix().getNoir();
+        unsigned int needPerle = carte.getPrix().getPerle();
+
+
+        unsigned int nbBlanc = 0;
+        auto itBlanc = joueurCourant->jetons.find(Couleur::BLANC);
+        if (itBlanc != joueurCourant->jetons.end()) {
+            nbBlanc = itBlanc->second.size();
+
+            auto itBonusBlanc = joueurCourant->bonus.find(Couleur::BLANC);
+            if (itBonusBlanc != joueurCourant->bonus.end()) {
+                needBlanc -= itBonusBlanc->second;
+            }
         }
+
+        unsigned int nbBleu = 0;
+        auto itBleu = joueurCourant->jetons.find(Couleur::BLEU);
+        if (itBleu != joueurCourant->jetons.end()) {
+            nbBleu = itBleu->second.size();
+
+            auto itBonusBleu = joueurCourant->bonus.find(Couleur::BLEU);
+            if (itBonusBleu != joueurCourant->bonus.end()) {
+                needBleu -= itBonusBleu->second;
+            }
+        }
+
+        unsigned int nbVert = 0;
+        auto itVert = joueurCourant->jetons.find(Couleur::VERT);
+        if (itVert != joueurCourant->jetons.end()) {
+            nbVert = itVert->second.size();
+
+            auto itBonusVert = joueurCourant->bonus.find(Couleur::VERT);
+            if (itBonusVert != joueurCourant->bonus.end()) {
+                needVert -= itBonusVert->second;
+            }
+        }
+
+        unsigned int nbRouge = 0;
+        auto itRouge = joueurCourant->jetons.find(Couleur::ROUGE);
+        if (itRouge != joueurCourant->jetons.end()) {
+            nbRouge = itRouge->second.size();
+
+            auto itBonusRouge = joueurCourant->bonus.find(Couleur::ROUGE);
+            if (itBonusRouge != joueurCourant->bonus.end()) {
+                needRouge -= itBonusRouge->second;
+            }
+        }
+
+        unsigned int nbNoir = 0;
+        auto itNoir = joueurCourant->jetons.find(Couleur::NOIR);
+        if (itNoir != joueurCourant->jetons.end()) {
+            nbNoir = itNoir->second.size();
+
+            auto itBonusNoir = joueurCourant->bonus.find(Couleur::NOIR);
+            if (itBonusNoir != joueurCourant->bonus.end()) {
+                needNoir -= itBonusNoir->second;
+            }
+        }
+
+        unsigned int nbPerle = 0;
+        auto itPerle = joueurCourant->jetons.find(Couleur::PERLE);
+        if (itPerle != joueurCourant->jetons.end()) {
+            nbPerle = itPerle->second.size();
+
+        }
+
+        unsigned int nbOr = 0;
+        auto itOr = joueurCourant->jetons.find(Couleur::OR);
+        if (itOr != joueurCourant->jetons.end()) {
+            nbOr = itOr->second.size();
+
+        }
+
+        unsigned int jetonsOrUtilises = 0;
+
+        // Fonction pour ajouter des jetons or a une couleur donnee
+        auto ajouterJetonsOr = [&jetonsOrUtilises, &nbOr](unsigned int& nbCouleur, unsigned int& besoin) {
+            while (nbOr > 0 && besoin > nbCouleur) {
+                // Utiliser un jeton or pour completer le besoin
+                nbOr--;
+                //nbCouleur++;
+                jetonsOrUtilises++;
+                besoin--;
+            }
+        };
+
+        ajouterJetonsOr(nbBlanc, needBlanc);
+        ajouterJetonsOr(nbBleu, needBleu);
+        ajouterJetonsOr(nbVert, needVert);
+        ajouterJetonsOr(nbRouge, needRouge);
+        ajouterJetonsOr(nbNoir, needNoir);
+        ajouterJetonsOr(nbPerle, needPerle);
+
+        joueurCourant->supJetonNb(needBlanc, Couleur::BLANC, espaceJeux);
+        joueurCourant->supJetonNb(needBleu, Couleur::BLEU, espaceJeux);
+        joueurCourant->supJetonNb(needVert, Couleur::VERT, espaceJeux);
+        joueurCourant->supJetonNb(needRouge, Couleur::ROUGE, espaceJeux);
+        joueurCourant->supJetonNb(needNoir, Couleur::NOIR, espaceJeux);
+        joueurCourant->supJetonNb(needPerle, Couleur::PERLE, espaceJeux);
+        joueurCourant->supJetonNb(jetonsOrUtilises, Couleur::OR, espaceJeux);
+
 
         // Si la carte a une capacite on l'execute
         bool res = false;
@@ -910,23 +1005,127 @@ bool Controller::acheterCarteJoaillerie (EspaceJeux& espaceJeux){
     // Achat carte du plateau
     else {
         // Affichage des cartes
-        qDebug() << "Voici les cartes du plateau : \n";
-        espaceJeux.getPyramide().afficherPyramide();
+        getPyramide().afficherPyramide();
+        //espaceJeux.getPyramide().afficherPyramide();
+        vector<pair<int, int>> cartes_dispo = GenereCartePyramideDispo();
 
-        qDebug()  << "rentrez le niveau de la carte souhaitee : \n";
-        unsigned int niveau = strategy_courante->choix_min_max(1, 3)-1;
-        qDebug()  << "rentrez le numero de la carte souhaitee : \n";
-        unsigned int num_carte = strategy_courante->choix_min_max(1, getPyramide().getNbCartesNiv(niveau))-1;
+        if (cartes_dispo.size() == 0)
+            throw SplendorException("Vous ne pouvez pas acheter de carte de la pyramide\n");
 
-        const Carte& carte_verif = *partie->getEspaceJeux().getPyramide().getCarte(niveau, num_carte);
-
-        //on verifie que le joueur peut bien acheter la carte
-        if(!verifAchatCarte(carte_verif, partie->getEspaceJeux())) {
-            throw SplendorException("Vous ne pouvez pas acheter cette carte");
-        }
+        qDebug() << "Voici les cartes que vous pouvez acheter : \n";
+        for (int i = 0; i < cartes_dispo.size(); i++)
+            qDebug() << i+1 << " : \n" <<  *getPyramide().getCarte(cartes_dispo[i].first, cartes_dispo[i].second) << "\n\n\n";
+        unsigned int choix = strategy_courante->choix_min_max(1, cartes_dispo.size())-1;
 
         //on peut alors l'acheter, elle sera directement remplacer par une nouvelle
-        const Carte& carte = partie->getEspaceJeux().getPyramide().acheterCarte(niveau, num_carte);
+        const Carte& carte = partie->getEspaceJeux().getPyramide().acheterCarte(cartes_dispo[choix].first, cartes_dispo[choix].second);
+
+        // recup des points necessaires pour acheter la carte
+        unsigned int needBlanc =  carte.getPrix().getBlanc() ;
+        unsigned int needBleu =  carte.getPrix().getBleu();
+        unsigned int needVert =  carte.getPrix().getVert();
+        unsigned int needRouge =  carte.getPrix().getRouge();
+        unsigned int needNoir =  carte.getPrix().getNoir();
+        unsigned int needPerle = carte.getPrix().getPerle();
+
+
+        unsigned int nbBlanc = 0;
+        auto itBlanc = joueurCourant->jetons.find(Couleur::BLANC);
+        if (itBlanc != joueurCourant->jetons.end()) {
+            nbBlanc = itBlanc->second.size();
+
+            auto itBonusBlanc = joueurCourant->bonus.find(Couleur::BLANC);
+            if (itBonusBlanc != joueurCourant->bonus.end()) {
+                needBlanc -= itBonusBlanc->second;
+            }
+        }
+
+        unsigned int nbBleu = 0;
+        auto itBleu = joueurCourant->jetons.find(Couleur::BLEU);
+        if (itBleu != joueurCourant->jetons.end()) {
+            nbBleu = itBleu->second.size();
+
+            auto itBonusBleu = joueurCourant->bonus.find(Couleur::BLEU);
+            if (itBonusBleu != joueurCourant->bonus.end()) {
+                needBleu -= itBonusBleu->second;
+            }
+        }
+
+        unsigned int nbVert = 0;
+        auto itVert = joueurCourant->jetons.find(Couleur::VERT);
+        if (itVert != joueurCourant->jetons.end()) {
+            nbVert = itVert->second.size();
+
+            auto itBonusVert = joueurCourant->bonus.find(Couleur::VERT);
+            if (itBonusVert != joueurCourant->bonus.end()) {
+                needVert -= itBonusVert->second;
+            }
+        }
+
+        unsigned int nbRouge = 0;
+        auto itRouge = joueurCourant->jetons.find(Couleur::ROUGE);
+        if (itRouge != joueurCourant->jetons.end()) {
+            nbRouge = itRouge->second.size();
+
+            auto itBonusRouge = joueurCourant->bonus.find(Couleur::ROUGE);
+            if (itBonusRouge != joueurCourant->bonus.end()) {
+                needRouge -= itBonusRouge->second;
+            }
+        }
+
+        unsigned int nbNoir = 0;
+        auto itNoir = joueurCourant->jetons.find(Couleur::NOIR);
+        if (itNoir != joueurCourant->jetons.end()) {
+            nbNoir = itNoir->second.size();
+
+            auto itBonusNoir = joueurCourant->bonus.find(Couleur::NOIR);
+            if (itBonusNoir != joueurCourant->bonus.end()) {
+                needNoir -= itBonusNoir->second;
+            }
+        }
+
+        unsigned int nbPerle = 0;
+        auto itPerle = joueurCourant->jetons.find(Couleur::PERLE);
+        if (itPerle != joueurCourant->jetons.end()) {
+            nbPerle = itPerle->second.size();
+
+        }
+
+        unsigned int nbOr = 0;
+        auto itOr = joueurCourant->jetons.find(Couleur::OR);
+        if (itOr != joueurCourant->jetons.end()) {
+            nbOr = itOr->second.size();
+
+        }
+
+        unsigned int jetonsOrUtilises = 0;
+
+        // Fonction pour ajouter des jetons or a une couleur donnee
+        auto ajouterJetonsOr = [&jetonsOrUtilises, &nbOr](unsigned int& nbCouleur, unsigned int& besoin) {
+            while (nbOr > 0 && besoin > nbCouleur) {
+                // Utiliser un jeton or pour completer le besoin
+                nbOr--;
+                //nbCouleur++;
+                jetonsOrUtilises++;
+                besoin--;
+            }
+        };
+
+        ajouterJetonsOr(nbBlanc, needBlanc);
+        ajouterJetonsOr(nbBleu, needBleu);
+        ajouterJetonsOr(nbVert, needVert);
+        ajouterJetonsOr(nbRouge, needRouge);
+        ajouterJetonsOr(nbNoir, needNoir);
+        ajouterJetonsOr(nbPerle, needPerle);
+
+        joueurCourant->supJetonNb(needBlanc, Couleur::BLANC, espaceJeux);
+        joueurCourant->supJetonNb(needBleu, Couleur::BLEU, espaceJeux);
+        joueurCourant->supJetonNb(needVert, Couleur::VERT, espaceJeux);
+        joueurCourant->supJetonNb(needRouge, Couleur::ROUGE, espaceJeux);
+        joueurCourant->supJetonNb(needNoir, Couleur::NOIR, espaceJeux);
+        joueurCourant->supJetonNb(needPerle, Couleur::PERLE, espaceJeux);
+        joueurCourant->supJetonNb(jetonsOrUtilises, Couleur::OR, espaceJeux);
+
 
         // Si la carte a une capacite on l'execute
         bool res = false;
@@ -1055,6 +1254,42 @@ void Controller::orReserverCarte (Pyramide& pyramide, Plateau& plateau){
     //joueurCourant->afficherJoueur();
 }
 
+
+
+
+
+vector<pair<int, int>> Controller::GenereCartePyramideDispo(){
+    vector<pair<int, int>> vect_tmp;
+    for(int i = 0; i < 3; i++){
+        for(int j =0; j < getPyramide().getNbCartesNiv(i); j++){
+            if(verifAchatCarte(getPyramide().getCarte(i, j)))
+                vect_tmp.push_back(std::make_pair(i, j));
+        }
+    }
+    return vect_tmp;
+}
+
+
+
+vector<pair<Couleur, int>> Controller::GenereCarteResaDispo(){
+    vector<pair<Couleur, int>> vect_tmp;
+    for (const auto& couleurCartesPair : joueurCourant->cartesReservees) {
+        Couleur couleur = couleurCartesPair.first;
+        if (couleur != Couleur::OR) {
+            const std::vector<const Carte*>& cartes = couleurCartesPair.second;
+            for (int i = 0; i < cartes.size(); i++) {
+                if (verifAchatCarte(cartes[i])) {
+                    vect_tmp.push_back(std::make_pair(couleur, i));
+                }
+            }
+        }
+    }
+    return vect_tmp;
+}
+
+
+
+
 ///////////////////////////////////////////////////////////////////////////////////
 ///////// Méthodes qui restent à implementer de manière fonctionnelle /////////////
 ///////////////////////////////////////////////////////////////////////////////////
@@ -1062,26 +1297,16 @@ void Controller::orReserverCarte (Pyramide& pyramide, Plateau& plateau){
 
 
 
-bool Controller::verifAchatCarte(const Carte& carte, EspaceJeux& espaceJeux) {
-    // 1 recuperer les points necessaires pour acheter la carte
-    // 2 voir le nb de jetons par couleur
-    // 3 ajouter les bonus
-    // 4 voir si le joueur a assez de points pour acheter la carte
-    // 5 si pas assez essayer avec les jetons or
-
+bool Controller::verifAchatCarte(const Carte* carte) {
     // recup des points necessaires pour acheter la carte
-    unsigned int needBlanc =  carte.getPrix().getBlanc() ;
-    unsigned int needBleu =  carte.getPrix().getBleu();
-    unsigned int needVert =  carte.getPrix().getVert();
-    unsigned int needRouge =  carte.getPrix().getRouge();
-    unsigned int needNoir =  carte.getPrix().getNoir();
-    unsigned int needPerle = carte.getPrix().getPerle();
+    unsigned int needBlanc =  carte->getPrix().getBlanc() ;
+    unsigned int needBleu =  carte->getPrix().getBleu();
+    unsigned int needVert =  carte->getPrix().getVert();
+    unsigned int needRouge =  carte->getPrix().getRouge();
+    unsigned int needNoir =  carte->getPrix().getNoir();
+    unsigned int needPerle = carte->getPrix().getPerle();
 
-    // recup des jetons du joueur
-    // Map des bonus associes a chaque couleur
-
-// Map des bonus associes a chaque couleur
-
+    // recup des nb de jetons du joueur
 
     unsigned int nbBlanc = 0;
     auto itBlanc = joueurCourant->jetons.find(Couleur::BLANC);
@@ -1154,16 +1379,6 @@ bool Controller::verifAchatCarte(const Carte& carte, EspaceJeux& espaceJeux) {
 
     if (nbBlanc >= needBlanc && nbBleu >= needBleu && nbVert >= needVert &&
         nbRouge >= needRouge && nbNoir >= needNoir && nbPerle >= needPerle) {
-
-        // On supprime les jetons utilises
-        joueurCourant->supJetonNb(needBlanc, Couleur::BLANC, espaceJeux);
-        joueurCourant->supJetonNb(needBleu, Couleur::BLEU, espaceJeux);
-        joueurCourant->supJetonNb(needVert, Couleur::VERT, espaceJeux);
-        joueurCourant->supJetonNb(needRouge, Couleur::ROUGE, espaceJeux);
-        joueurCourant->supJetonNb(needNoir, Couleur::NOIR, espaceJeux);
-        joueurCourant->supJetonNb(needPerle, Couleur::PERLE, espaceJeux);
-
-
         return true;  // Le joueur a suffisamment de jetons pour acheter la carte
     }
 
@@ -1190,26 +1405,21 @@ bool Controller::verifAchatCarte(const Carte& carte, EspaceJeux& espaceJeux) {
 
     // Verifier a nouveau si le joueur a maintenant assez de points pour acheter la carte
     if (needBlanc <= nbBlanc && needBleu <= nbBleu && needVert <= nbVert &&
-        needRouge <= nbRouge && needNoir <= nbNoir && needPerle <= nbPerle) {
-        qDebug() << "Carte achetable avec " << jetonsOrUtilises << " jeton(s) or utilise(s).\n";
-
-
-        joueurCourant->supJetonNb(needBlanc, Couleur::BLANC, espaceJeux);
-        joueurCourant->supJetonNb(needBleu, Couleur::BLEU, espaceJeux);
-        joueurCourant->supJetonNb(needVert, Couleur::VERT, espaceJeux);
-        joueurCourant->supJetonNb(needRouge, Couleur::ROUGE, espaceJeux);
-        joueurCourant->supJetonNb(needNoir, Couleur::NOIR, espaceJeux);
-        joueurCourant->supJetonNb(needPerle, Couleur::PERLE, espaceJeux);
-        joueurCourant->supJetonNb(jetonsOrUtilises, Couleur::OR, espaceJeux);
-
+        needRouge <= nbRouge && needNoir <= nbNoir && needPerle <= nbPerle)
+    {
         return true;
-    } else {
-        qDebug() << "Le joueur n'a pas assez de jetons pour acheter la carte.\n";
-
+    }
+    else
+    {
         return false;
     }
     return false;
 }
+
+
+
+
+
 
 ///////////////////////// Verifications /////////////////////////
 

@@ -234,6 +234,7 @@ JeuCarte::JeuCarte() {
     }
 
     while (query2.next()) {
+        unsigned int id = query2.value(0).toUInt();
         std::string capacite = query2.value(1).toString().toStdString();
         unsigned int nb_pts_privileges = query2.value(2).toUInt();
         unsigned int id = query2.value(0).toUInt();
