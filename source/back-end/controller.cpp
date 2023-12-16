@@ -368,18 +368,6 @@ void Controller::jouer() {
 
                     verifJetonSupDix();
 
-
-                    /////////////////
-                    ///
-                    /// POUR DEBUG SAUVEGARDE
-                    if (getPartie().getTour()==15)
-                        sauvegardePartie();
-                    ///////
-                    ///
-                    ///
-                    ///
-
-
                     // Conditions victoires :
                     if (getJoueurCourant().getNbCouronnes() >= 10) getJoueurCourant().setGagnant();
                     if (getJoueurCourant().getptsPrestige() >= 20) getJoueurCourant().setGagnant();
@@ -1529,7 +1517,14 @@ void Controller::sauvegardePartie() {
     for (size_t i = 0; i < 2; i++) {
         qDebug() << "Sauvegarde joueur : " << i+1 << "...\n" ;
         // Infos du joueur
-        QString sql = "INSERT INTO joueur (id, pseudo, type_joueur, privileges) VALUES (" + QString::number(i + 1) + ", '" + QString::fromStdString(getPartie().getJoueur(i)->getPseudo()) + "', '" + QString::fromStdString(toStringType(getPartie().getJoueur(i)->getTypeDeJoueur())) + "', " + QString::number(getPartie().getJoueur(i)->getNbPrivileges()) + ");";
+        QString sql = "INSERT INTO joueur (id, pseudo, type_joueur, privileges, ptsPrestige, nbCouronnes) VALUES (" +
+                      QString::number(i + 1) + ", '" +
+                      QString::fromStdString(getPartie().getJoueur(i)->getPseudo()) + "', '" +
+                      QString::fromStdString(toStringType(getPartie().getJoueur(i)->getTypeDeJoueur())) + "', " +
+                      QString::number(getPartie().getJoueur(i)->getNbPrivileges()) + ", " +
+                      QString::number(getPartie().getJoueur(i)->getptsPrestige()) + ", " +
+                      QString::number(getPartie().getJoueur(i)->getNbCouronnes()) +
+                      ");";
         if (!query.exec(sql)) {
             qCritical() << "Erreur lors de la sauvegarde du joueur \n";
 
