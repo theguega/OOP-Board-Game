@@ -239,19 +239,12 @@ void Controller::quitter() {
 void Controller::jouer() {
     while (1) {
         // tour pour chacun des joueurs
-        qDebug()<<"\n\n\n\n\n\n\n\n\n\n\n\n";
-        qDebug()<< "Tour numero" << getPartie().getTour()+1 << '\n';
-        qDebug() << joueurCourant->getNbJetons()+getJoueurAdverse().getNbJetons() << "\n";
-        qDebug() << getEspaceJeux().getSac().getNbJetons() << "\n";
-        qDebug() << getPlateau().getNbJetons() << "\n";
+        qDebug() << "\n\n\n\n\n\n\n\n\n\n\n\n";
         bool tourEnPlus;
 
-        //correpond au tour de chaque joueur
+        // correpond au tour de chaque joueur
         for (unsigned int i = 0; i < 2; i++) {
-            qDebug()<<"--------------------------------------------------------------------------------------------------------------------------------------------\n";
-            qDebug()<<"C'est a " << getJoueurCourant().getPseudo()<<" de jouer : \n";
-            qDebug()<<"Nous en sommes au tour : " << getPartie().getTour()+1 << "\n\n";
-            getJoueurCourant().afficherJoueur();
+            qDebug() << "--------------------------------------------------------------------------------------------------------------------------------------------\n";
             tourEnPlus = false;
             bool a_deja_utilise_privilege = false;
             bool a_deja_rempli_plateau = false;
@@ -265,194 +258,157 @@ void Controller::jouer() {
                 case 0: {
                     unsigned int etat_action = 0;
                     while (etat_action != 10) {
-                        switch (etat_action)
-                        {
-                        case 0:{
-                            //appel du menu de choix des actions
-                            qDebug()<<"Tour : " << getPartie().getTour()+1 << "\n\n";
+                        switch (etat_action) {
+                        case 0: {
+                            // affichage de l'etat en cours
+                            qDebug() << "C'est a " << getJoueurCourant().getPseudo() << " de jouer : \n";
+                            qDebug() << "Nous en sommes au tour : " << getPartie().getTour() + 1 << "\n";
+
+                            // appel du menu de choix des actions
+                            getJoueurCourant().afficherJoueur();
                             etat_action = choixActionsOptionelles();
                             qDebug() << etat_action;
-                            break;}
-                        case 1:{
-                            try
-                            {
-                                //utilisation d'un privilege
-                                if (a_deja_utilise_privilege)
-                                    throw SplendorException("Vous avez deja utilise cette action");
+                            break;
+                        }
+                        case 1: {
+                            try {
+                                // utilisation d'un privilege
+                                if (a_deja_utilise_privilege) throw SplendorException("Vous avez deja utilise cette action");
                                 utiliserPrivilege(getPartie().getEspaceJeux().getPlateau());
                                 a_deja_utilise_privilege = true;
                                 etat_action = 0;
-                            }
-                            catch(SplendorException& e) { qCritical() << "\033[1;31m" << e.getInfo() << "\033[0m" << '\n'<< '\n'; etat_action = 0; }
+                            } catch (SplendorException& e) { qCritical() << "\033[1;31m" << e.getInfo() << "\033[0m" << '\n' << '\n'; etat_action = 0; }
                             break;
                         }
-                        case 2:{
-                            try
-                            {
-                                //remplissage du plateau
-                                if (a_deja_rempli_plateau)
-                                    throw SplendorException("Vous avez deja utilise cette action");
-                                remplirPlateau(getPartie().getEspaceJeux().getPlateau(),getPartie().getEspaceJeux().getSac());
+                        case 2: {
+                            try {
+                                // remplissage du plateau
+                                if (a_deja_rempli_plateau) throw SplendorException("Vous avez deja utilise cette action");
+                                remplirPlateau(getPartie().getEspaceJeux().getPlateau(), getPartie().getEspaceJeux().getSac());
                                 a_deja_rempli_plateau = true;
                                 etat_action = 0;
-
-                            }
-                            catch(SplendorException& e) { qCritical() << "\033[1;31m" << e.getInfo() << "\033[0m" << '\n'<< '\n'; etat_action = 0; }
+                            } catch (SplendorException& e) { qCritical() << "\033[1;31m" << e.getInfo() << "\033[0m" << '\n' << '\n'; etat_action = 0; }
                             break;
                         }
-                        case 3:{
+                        case 3: {
                             etat_tour = 1;
                             etat_action = 10;
                             break;
                         }
-
-                        case 9:{
+                        case 9: {
                             quitter();
                             return;
                         }
-
-                        default:{
-                            etat_action=0;
-                            qDebug()<<"Veuillez faire un choix correct !\n";
+                        default: {
+                            etat_action = 0;
+                            qDebug() << "Veuillez faire un choix correct !\n";
                             break;
                         }
                         }
                     }
                     break;
                 }
-
-
-
-
-                    //actions obligatoires :
-                case 1:{
+                // actions obligatoires :
+                case 1: {
                     unsigned int etat_action = 0;
                     while (etat_action != 10) {
-                        switch (etat_action)
-                        {
+                        switch (etat_action) {
                         case 0:
-                            //menu de choix des actions obligatoires
+                            // menu de choix des actions obligatoires
                             etat_action = choixActionsObligatoires();
                             qDebug() << etat_action;
                             break;
                         case 1:
-                            try
-                            {
-                                //recuperation de jetons
-                                qDebug()<<joueurCourant->getPseudo();
+                            try {
+                                // recuperation de jetons
+                                qDebug() << joueurCourant->getPseudo();
                                 recupererJetons(false);
                                 etat_action = 10;
                                 etat_tour = 2;
-                            }
-                            catch(SplendorException& e) { qCritical() << "\033[1;31m" << e.getInfo() << "\033[0m" << '\n'<< '\n'; etat_tour=0; etat_action = 10; }
+                            } catch (SplendorException& e) { qCritical() << "\033[1;31m" << e.getInfo() << "\033[0m" << '\n' << '\n'; etat_tour = 0; etat_action = 10; }
                             break;
                         case 2:
-                            try
-                            {
-                                //achat carte joaillerie
+                            try {
+                                // achat carte joaillerie
                                 tourEnPlus = acheterCarteJoaillerie(getPartie().getEspaceJeux());
-                                if(tourEnPlus){
-                                    etat_tour=0;
-                                    etat_action=0;
-                                }
-                                else {
-                                    etat_action = 10;
-                                    etat_tour = 2;
-                                }
-                            }
-                            catch(SplendorException& e) { qCritical() << "\033[1;31m" << e.getInfo() << "\033[0m" << '\n'<< '\n'; etat_tour=0; etat_action = 10; }
+                                if (tourEnPlus) { etat_tour = 0; etat_action = 0; }
+                                else { etat_action = 10; etat_tour = 2; }
+                            } catch (SplendorException& e) { qCritical() << "\033[1;31m" << e.getInfo() << "\033[0m" << '\n' << '\n'; etat_tour = 0; etat_action = 10; }
                             break;
                         case 3:
-                            try
-                            {
-                                //reservation carte
+                            try {
+                                // reservation carte
                                 orReserverCarte(getPartie().getEspaceJeux().getPyramide(), getPartie().getEspaceJeux().getPlateau());
                                 etat_action = 10;
                                 etat_tour = 2;
-                            }
-                            catch(SplendorException& e) { qCritical() << "\033[1;31m" << e.getInfo() << "\033[0m" << '\n'<< '\n'; etat_tour=0; etat_action = 10; }
+                            } catch (SplendorException& e) { qCritical() << "\033[1;31m" << e.getInfo() << "\033[0m" << '\n' << '\n'; etat_tour = 0; etat_action = 10; }
                             break;
-                        case 9:{
+                        case 9: {
                             quitter();
                             return;
-
                         }
                         default:
-                            etat_action=0;
-                            qDebug()<<"Veuillez faire un choix correct !\n";
+                            etat_action = 0;
+                            qDebug() << "Veuillez faire un choix correct !\n";
                             break;
                         }
-
                     }
                     break;
                 }
-
-
-
-                //verification fin de tour d'un joueur
-                case 2:{
-                    //achat obligatoire d'une carte noble si le joueur a 3 pts et 0 cartes nobles ou 6 pts de prestige et 1 carte noble
-
-                    while ((getJoueurCourant().getNbCouronnes() >= 3 && getJoueurCourant().getNbCartesNobles()==0) || (getJoueurCourant().getNbCouronnes() >= 6 && getJoueurCourant().getNbCartesNobles()==1)) {
-                        try { acheterCarteNoble(getPartie().getEspaceJeux().getPyramide()); } catch(SplendorException& e) { qCritical() << "\033[1;31m" << e.getInfo() << "\033[0m" << '\n' ;};
+                // verification fin de tour d'un joueur
+                case 2: {
+                    // achat obligatoire d'une carte noble si le joueur a 3 pts et 0 cartes nobles ou 6 pts de prestige et 1 carte noble
+                    while ((getJoueurCourant().getNbCouronnes() >= 3 && getJoueurCourant().getNbCartesNobles() == 0) ||
+                           (getJoueurCourant().getNbCouronnes() >= 6 && getJoueurCourant().getNbCartesNobles() == 1)) {
+                        try { acheterCarteNoble(getPartie().getEspaceJeux().getPyramide()); } catch (SplendorException& e) { qCritical() << "\033[1;31m" << e.getInfo() << "\033[0m" << '\n'; };
                     }
-
 
                     verifJetonSupDix();
 
-                    //Conditions victoires :
-                    qDebug() << "prestige : " << getJoueurCourant().getptsPrestige()<< "\n";
-                    qDebug() << "couronnes : " << getJoueurCourant().getNbCouronnes()<< "\n";
-                    if (getJoueurCourant().getNbCouronnes()>=10)
-                        getJoueurCourant().setGagnant();
-                    if (getJoueurCourant().getptsPrestige()>=20)
-                        getJoueurCourant().setGagnant();
-                    if (getJoueurCourant().nbPtsPrestigeParCouleurSupDix())
-                        getJoueurCourant().setGagnant();
+                    // Conditions victoires :
+                    qDebug() << "prestige : " << getJoueurCourant().getptsPrestige() << "\n";
+                    qDebug() << "couronnes : " << getJoueurCourant().getNbCouronnes() << "\n";
+                    if (getJoueurCourant().getNbCouronnes() >= 10) getJoueurCourant().setGagnant();
+                    if (getJoueurCourant().getptsPrestige() >= 20) getJoueurCourant().setGagnant();
+                    if (getJoueurCourant().nbPtsPrestigeParCouleurSupDix()) getJoueurCourant().setGagnant();
 
-                    //Fin de partie :
-                    if (getJoueurCourant().estGagnant())
-                        etat_tour = 3;
+                    // Fin de partie :
+                    if (getJoueurCourant().estGagnant()) etat_tour = 3;
 
-
-                    //fin du tour du joueur, on passe au joueur suivant
+                    // fin du tour du joueur, on passe au joueur suivant
                     changerJoueurCourant();
                     etat_tour = 10;
                     break;
                 }
-                case 3:{
-                    //affichage rigolo
-                    const std::string message = "Le Joueur " + getJoueurCourant().getPseudo() +" a gagne !";
-                    for (size_t j = 0; j<250; j++) {
+                case 3: {
+                    // affichage rigolo
+                    const std::string message = "Le Joueur " + getJoueurCourant().getPseudo() + " a gagne !";
+                    for (size_t j = 0; j < 250; j++) {
                         for (std::size_t i = 0; i < message.size(); ++i) {
-                            // Utilisation des codes ANSI pour le texte en gras et avec differentes couleurs
+                            // Utilisation des codes ANSI pour le texte en gras et avec différentes couleurs
                             qDebug() << "\033[1;3" << (i % 7) + 1 << "m" << message[i];
                         }
-                        qDebug()<<"\n\n";
-                        for (std::size_t l = 0; l < j; ++l)
-                            qDebug()<<" ";
+                        qDebug() << "\n\n";
+                        for (std::size_t l = 0; l < j; ++l) qDebug() << " ";
                     };
-                    // Reinitialisation du style apres la derniere lettre
+                    // Reinitialisation du style après la dernière lettre
                     qDebug() << "\033[0m\n";
 
                     qDebug() << "Fin de la partie !\n";
                     return;
                     break;
                 }
-                default:{
+                default: {
                     break;
                 }
+                }
             }
-            }
-            //fin du tour :
-            getPartie().incrementeTour();
-            if(getEspaceJeux().getSac().getNbJetons() != 0){
-                qDebug() << "ok";
-            }
-
         }
+        // fin du tour :
+        getPartie().incrementeTour();
     }
 }
+
 
 
 ///////////////////////// Actions d'un joueur /////////////////////////
@@ -813,7 +769,7 @@ void Controller::recupererJetons(bool capacite,Couleur coulBonus){
 
     qDebug()<<"Voici le nouveau plateau (apres recuperation) \n" << getPlateau();
     qDebug()<<"Voici l'etat du joueur apres recuperation :\n" ;
-    //joueurCourant->afficherJoueur();
+    joueurCourant->afficherJoueur();
     return;
 }
 
@@ -1558,10 +1514,9 @@ void Controller::sauvegardePartie() {
             }
         }
 
-        // Cartes (toutes les couleurs sauf ind et or)
+        // Cartes (toutes les couleurs sauf or)
         for (Couleur c : Couleurs) {
             if (c != Couleur::OR) {
-                qDebug() << "Vecteur " << c << "Nb elem : " << getPartie().getJoueur(i)->getNbCartes(c);
                 for (size_t j = 0; j < getPartie().getJoueur(i)->getNbCartes(c); j++) {
                     QString sql = "INSERT INTO cartes_joueur (id_joueur, id_carte, noble, reserve) VALUES (" + QString::number(i + 1) + ", " + QString::number(getPartie().getJoueur(i)->getCarte(c, j).getId()) + ",0,0);";
                     qDebug() << sql <<"\n" ;
@@ -1586,7 +1541,7 @@ void Controller::sauvegardePartie() {
                 return;
             }
         }
-        // Cartes reservees (toutes les couleurs sauf ind et or)
+        // Cartes reservees (toutes les couleurs sauf et or)
         for (Couleur c : Couleurs) {
             if (c != Couleur::OR) {
                 for (size_t j = 0; j < getPartie().getJoueur(i)->getNbCartesReservees(c); j++) {
