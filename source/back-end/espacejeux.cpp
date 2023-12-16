@@ -65,34 +65,33 @@ void Pyramide::remplirPyramide() {
 }
 
 void Pyramide::remplircasePyramide(unsigned int i, unsigned int j) {
-    const Carte * ma_carte = nullptr;
     if (array_cartes[i][j] == nullptr) {
+        const Carte * ma_carte = nullptr;
         switch (i) {
         case 0:
-            if (not(pNv1.estVide())) {
-                ma_carte = & pNv1.piocher(); // piocher/tirer des cartes de niveau 3
+            if (!(pNv1.estVide())) {
+                ma_carte = &pNv1.piocher(); // piocher/tirer des cartes de niveau 3
                 break;
             }
 
         case 1:
-            if (not(pNv2.estVide())) {
-                ma_carte = & pNv2.piocher(); // piocher des cartes de niveau 2
+            if (!(pNv2.estVide())) {
+                ma_carte = &pNv2.piocher(); // piocher des cartes de niveau 2
                 break;
             }
         case 2:
-            if (not(pNv3.estVide())) {
-                ma_carte = & pNv3.piocher(); // piocher des cartes de niveau 1
+            if (!(pNv3.estVide())) {
+                ma_carte = &pNv3.piocher(); // piocher des cartes de niveau 1
                 break;
             }
         case 3:
-            if (not(pNoble.estVide())) {
-                ma_carte = & pNoble.piocher(); // piocher des cartes nobles
+            if (!(pNoble.estVide())) {
+                ma_carte = &pNoble.piocher(); // piocher des cartes nobles
                 break;
             }
         default:
             break;
         }
-
         array_cartes[i][j] = ma_carte;
     }
 }
@@ -123,21 +122,19 @@ const Carte & Pyramide::reserverCarte(int niveau, int numero) {
 
 const Carte & Pyramide::acheterCarte(unsigned int niveau, unsigned int numero) {
     if (array_cartes[niveau][numero] != nullptr) {
-        const Carte & ma_carte = * array_cartes[niveau][numero];
+        const Carte &ma_carte = *array_cartes[niveau][numero];
         array_cartes[niveau][numero] = nullptr;
         this -> remplircasePyramide(niveau, numero);
         return ma_carte;
     } else {
         throw SplendorException("Pas de carte a cette emplacement");
     }
-
 }
 
 const Carte & Pyramide::ReserverCartePioche(unsigned int niveau) {
-
     switch (niveau) {
     case 1:
-        if (not(pNv1.estVide())) {
+        if (!pNv1.estVide()) {
             return pNv1.piocher(); // piocher/tirer des cartes de niveau 3
             break;
         } else {
