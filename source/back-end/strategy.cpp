@@ -108,9 +108,6 @@ Couleur StrategyIA::choixCouleurNonINDT() {
 
 
 
-
-
-
 /*
 
 
