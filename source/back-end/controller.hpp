@@ -8,6 +8,7 @@
 
 class Controller {
 private:
+    string statut_partie;
 	Partie* partie;
 	Joueur* joueurCourant = nullptr;
     Strategy * strategy_courante  = nullptr;
@@ -20,6 +21,7 @@ public:
 	~Controller() { delete partie; }
 
 	// getters
+    string getStatutPartie()const{return statut_partie;}
 	Partie& getPartie() { return *partie; };
     Joueur& getJoueurCourant() { return *joueurCourant; }
     Strategy& getStrategyCourante() {return *strategy_courante;}
