@@ -14,13 +14,13 @@ Controller::Controller() {
     cin>>statut_partie;
 
    //Si nouvelle partie
-	if (statut_partie == "New") {
-		NewPartieBuilder* builder = new NewPartieBuilder();
-		director->set_builder(builder);
+    if (statut_partie == "New") {
+        NewPartieBuilder* builder = new NewPartieBuilder();
+        director->set_builder(builder);
         qDebug() << "\033[1;33mA combien de joueurs voulez-vous jouer ? (0, 1, 2)\033[0m\n";
 
-		int nbJoueur;
-		cin >> nbJoueur;
+        int nbJoueur;
+        cin >> nbJoueur;
         switch (nbJoueur) {
         case 0:
         {   qDebug()  << "\nIA vs IA\n\n";
@@ -63,7 +63,7 @@ Controller::Controller() {
         }
         delete director;
 
-	} else if (statut_partie == "Old") {
+    } else if (statut_partie == "Old") {
         LastPartieBuilder* builder = new LastPartieBuilder();
         director->set_builder(builder);
         director->BuildLastPartie();
@@ -168,9 +168,9 @@ void Controller::setJoueurCourant(int n) {
         break;
     }
 
-    if (joueurCourant->getTypeDeJoueur() == type::IA) 
+    if (joueurCourant->getTypeDeJoueur() == type::IA)
         strategy_courante = &strategy_IA;
-    else 
+    else
         strategy_courante = &strategy_Humain;
 }
 
@@ -184,9 +184,9 @@ void Controller::changerJoueurCourant() {
     else
         joueurCourant = partie->getJoueur1();
 
-    if (joueurCourant->getTypeDeJoueur() == type::IA) 
+    if (joueurCourant->getTypeDeJoueur() == type::IA)
         strategy_courante = &strategy_IA;
-    else 
+    else
         strategy_courante = &strategy_Humain;
 }
 
@@ -363,20 +363,11 @@ void Controller::jouer() {
                         try { acheterCarteNoble(getPartie().getEspaceJeux().getPyramide()); } catch (SplendorException& e) { qCritical() << "\033[1;31m" << e.getInfo() << "\033[0m" << '\n'; };
                     }
 
-                    //si plus de 10 jetons il faut en reposer
                     verifJetonSupDix();
 
-                    /////////////////
-                    ///
-                    /// POUR DEBUG SAUVEGARDE
-                    if (getPartie().getTour()==30)
-                        //sauvegardePartie();
-                    ///////
-                    ///
-                    ///
-                    ///
-
                     // Conditions victoires :
+                    qDebug() << "prestige : " << getJoueurCourant().getptsPrestige() << "\n";
+                    qDebug() << "couronnes : " << getJoueurCourant().getNbCouronnes() << "\n";
                     if (getJoueurCourant().getNbCouronnes() >= 10) getJoueurCourant().setGagnant();
                     if (getJoueurCourant().getptsPrestige() >= 20) getJoueurCourant().setGagnant();
                     if (getJoueurCourant().nbPtsPrestigeParCouleurSupDix()) getJoueurCourant().setGagnant();
@@ -397,20 +388,15 @@ void Controller::jouer() {
                     for (size_t j = 0; j < 250; j++) {
                         for (std::size_t i = 0; i < message.size(); ++i) {
                             // Utilisation des codes ANSI pour le texte en gras et avec différentes couleurs
-                            std::cout << "\033[1;3" << (i % 7) + 1 << "m" << message[i];
+                            qDebug() << "\033[1;3" << (i % 7) + 1 << "m" << message[i];
                         }
-                        std::cout << "\n\n";
-                        for (std::size_t l = 0; l < j; ++l) std::cout << " ";
+                        qDebug() << "\n\n";
+                        for (std::size_t l = 0; l < j; ++l) qDebug() << " ";
                     };
                     // Reinitialisation du style après la dernière lettre
-                    std::cout << "\033[0m\n";
+                    qDebug() << "\033[0m\n";
 
-                    qDebug() << "Enregistrement des score...\n";
-                    enregisterScore();
-                    qDebug() << "DONE !\n";
                     qDebug() << "Fin de la partie !\n";
-
-
                     return;
                     break;
                 }
@@ -823,7 +809,6 @@ bool Controller::acheterCarteJoaillerie (EspaceJeux& espaceJeux){
         // on recupere la couleur de la carte reservee
 
         qDebug() << "veuillez choisir une carte parmi elles\n";
-        qDebug()<<"Veuillez entrer la couleur de la carte que vous souhiatez reserver\n";
         unsigned int choix = strategy_courante->choix_min_max(1, resa_dispo.size())-1;
 
         const Carte& carte = joueurCourant->getCarteReservee(resa_dispo[choix].first, resa_dispo[choix].second);
@@ -982,6 +967,7 @@ bool Controller::acheterCarteJoaillerie (EspaceJeux& espaceJeux){
         } else{
             //on ajoute la carte au joueur
             joueurCourant->addCarte(carte);
+            joueurCourant->supCarteReservee(carte);
             joueurCourant->addBonus(carte.getBonus().getCouleur(), carte.getBonus().getNbBonus());
         }
         return res;

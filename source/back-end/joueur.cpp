@@ -164,10 +164,14 @@ void::Joueur::supCarte(Carte &carte) {
 }
 
 void::Joueur::supCarteReservee(const Carte &carte) {
-    for (size_t i = 0; i < cartes[carte.getBonus().getCouleur()].size(); i++) {
-        if (cartesReservees[carte.getBonus().getCouleur()][i] == &carte) {
-            cartesReservees[carte.getBonus().getCouleur()].erase(cartes[carte.getBonus().getCouleur()].begin() + i);
-        }
+    Couleur couleur = carte.getBonus().getCouleur();
+
+    auto& cartesCouleur = cartesReservees[couleur];
+
+    auto it = std::find(cartesCouleur.begin(), cartesCouleur.end(), &carte);
+
+    if (it != cartesCouleur.end()) {
+        cartesCouleur.erase(it);
     }
 }
 
