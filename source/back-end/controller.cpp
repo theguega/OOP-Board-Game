@@ -370,7 +370,7 @@ void Controller::jouer() {
                     ///
                     /// POUR DEBUG SAUVEGARDE
                     if (getPartie().getTour()==30)
-                        sauvegardePartie();
+                        //sauvegardePartie();
                     ///////
                     ///
                     ///
