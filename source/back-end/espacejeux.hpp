@@ -31,8 +31,8 @@ class Pyramide {
         
         void definitCarte(int i, int j, const Carte& c) { array_cartes[i][j] = &c; };
         
-        const Carte* getCarte(size_t i, size_t j) { if (array_cartes[i][j]) return array_cartes[i][j]; else throw SplendorException("Cette carte n'existe pas"); };
-        size_t getNbCartesNiv(unsigned int niveau) const {return array_cartes[niveau].size(); }; 
+        const Carte* getCarte(size_t i, size_t j) { return array_cartes[i][j]; };
+        size_t getNbCartesNiv(unsigned int niveau) const {return array_cartes[niveau].size(); };
         Pioche& getPioche1() const { return pNv1; }
         Pioche& getPioche2() const { return pNv2; }
         Pioche& getPioche3() const { return pNv3; }

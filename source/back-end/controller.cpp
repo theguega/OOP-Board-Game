@@ -370,7 +370,7 @@ void Controller::jouer() {
                     ///
                     /// POUR DEBUG SAUVEGARDE
                     if (getPartie().getTour()==30)
-                        //sauvegardePartie();
+                        sauvegardePartie();
                     ///////
                     ///
                     ///
@@ -1190,7 +1190,7 @@ void Controller::orReserverCarte (Pyramide& pyramide, Plateau& plateau){
 
     if(jetonsOrDispo.size() == 0){
         //getEspaceJeux().getPlateau().remplirPlateau(getEspaceJeux().getSac());
-        throw SplendorException("\n Plus de Jetons Or disponibles");
+        throw SplendorException("Plus de Jetons Or disponibles");
     }
 
     for (int i =0; i<jetonsOrDispo.size(); i++) {
@@ -1198,21 +1198,6 @@ void Controller::orReserverCarte (Pyramide& pyramide, Plateau& plateau){
     }
 
     int ChoixOrDispo = strategy_courante->choix_min_max(1, jetonsOrDispo.size());
-
-    /*
-    qDebug()  << "Choisissez une ligne : \n";
-    unsigned int coord_ligne = strategy_courante->choix_min_max(1, 5);
-    qDebug()  << "Choisissez une colonne : \n";
-    unsigned int coord_col = strategy_courante->choix_min_max(1, 5);
-
-    while(getPlateau().caseVide(coord_ligne-1, coord_col-1) || !getPlateau().caseOr(coord_ligne-1, coord_col-1)){
-        qDebug()  << "La case est vide ou ce n'est pas un jeton Or\n";
-        qDebug()  << "Choisissez une ligne : \n";
-        coord_ligne = strategy_courante->choix_min_max(1, 5);
-        qDebug()  << "Choisissez une colonne : \n";
-        coord_col = strategy_courante->choix_min_max(1, 5);
-    }
-    */
 
     qDebug()  << "Voulez-vous reserver une carte de la pyramide (0) ou celle d'une pioche (1, 2, 3) ?\n";
     unsigned int choix = strategy_courante->choix_min_max(0, 3);
@@ -1230,19 +1215,11 @@ void Controller::orReserverCarte (Pyramide& pyramide, Plateau& plateau){
 
         const Carte& carte = pyramide.acheterCarte(niveau, num_carte);
         joueurCourant->addCarteReservee(carte);
-        /*
-        const Jeton& jeton = plateau.recupererJeton(coord_ligne-1, coord_col-1);
-        joueurCourant->addJeton(jeton);
-        */
 }
     else if (choix == 1 || choix == 2 || choix == 3){
         // Reservation de la carte
         const Carte& carte = pyramide.ReserverCartePioche(choix);
         joueurCourant->addCarteReservee(carte);
-        /*
-        const Jeton& jeton = plateau.recupererJeton(coord_ligne-1, coord_col-1);
-        joueurCourant->addJeton(jeton);
-        */
     }
 
     const Jeton& jeton = plateau.recupererJeton( jetonsOrDispo[ChoixOrDispo-1].first,  jetonsOrDispo[ChoixOrDispo-1].second);
@@ -1543,7 +1520,7 @@ void Controller::sauvegardePartie() {
     }
 
     for (size_t i = 0; i < 2; i++) {
-        qDebug() << "Sauvegarde joueur : " << i+1 << "\n" ;
+        qDebug() << "Sauvegarde joueur : " << i+1 << "...\n" ;
         // Infos du joueur
         QString sql = "INSERT INTO joueur (id, pseudo, type_joueur, privileges) VALUES (" + QString::number(i + 1) + ", '" + QString::fromStdString(getPartie().getJoueur(i)->getPseudo()) + "', '" + QString::fromStdString(toStringType(getPartie().getJoueur(i)->getTypeDeJoueur())) + "', " + QString::number(getPartie().getJoueur(i)->getNbPrivileges()) + ");";
         if (!query.exec(sql)) {
@@ -1575,7 +1552,6 @@ void Controller::sauvegardePartie() {
             if (c != Couleur::OR) {
                 for (size_t j = 0; j < getPartie().getJoueur(i)->getNbCartes(c); j++) {
                     QString sql = "INSERT INTO cartes_joueur (id_joueur, id_carte, noble, reserve) VALUES (" + QString::number(i + 1) + ", " + QString::number(getPartie().getJoueur(i)->getCarte(c, j).getId()) + ",0,0);";
-                    qDebug() << sql <<"\n" ;
                     if (!query.exec(sql)) {
                         qCritical() << "Erreur lors de la sauvegarde de la carte noble \n";
 
@@ -1589,7 +1565,6 @@ void Controller::sauvegardePartie() {
         // Cartes nobles
         for (size_t j = 0; j < getPartie().getJoueur(i)->getNbCartesNobles(); j++) {
             QString sql = "INSERT INTO cartes_joueur (id_joueur, id_carte, noble, reserve) VALUES (" + QString::number(i + 1) + ", " + QString::number(getPartie().getJoueur(i)->getCarteNoble(j).getId()) + ",1,0);";
-            qDebug() << sql <<"\n" ;
             if (!query.exec(sql)) {
                 qCritical() << "Erreur lors de la sauvegarde de la carte noble \n";
 
@@ -1602,7 +1577,6 @@ void Controller::sauvegardePartie() {
             if (c != Couleur::OR) {
                 for (size_t j = 0; j < getPartie().getJoueur(i)->getNbCartesReservees(c); j++) {
                     QString sql = "INSERT INTO cartes_joueur (id_joueur, id_carte, noble, reserve) VALUES (" + QString::number(i + 1) + ", " + QString::number(getPartie().getJoueur(i)->getCarteReservee(c, j).getId()) + ",0,1);";
-                    qDebug() << sql <<"\n" ;
                     if (!query.exec(sql)) {
                         qCritical() << "Erreur lors de la sauvegarde de la carte reservés \n";
 
@@ -1614,6 +1588,8 @@ void Controller::sauvegardePartie() {
         }
         qDebug()<< "DONE \n";
     }
+
+    qDebug() << "Sauvegarde plateau... \n";
 
     // Sauvegarde plateau
     Plateau& plateau = getPartie().getEspaceJeux().getPlateau();
@@ -1631,22 +1607,30 @@ void Controller::sauvegardePartie() {
         }
     }
 
+    qDebug() << "DONE \n";
+
+    qDebug() << "Sauvegarde pyramide... \n";
+
    // Sauvegarde de la pyramide
     Pyramide& pyramide = getPartie().getEspaceJeux().getPyramide();
     for (int i = 0; i < 4; i++) {
         for (unsigned int j = 0; j < pyramide.getNbCartesNiv(i); j++) {
             const Carte* carte = pyramide.getCarte(i, j);
-            QString sql = "INSERT INTO pyramide (i, j, id) VALUES (" + QString::number(i) + ", " + QString::number(j) + ", " + QString::number(carte->getId()) + ");";
-            if (!query.exec(sql)) {
-                qCritical() << "Erreur lors de la sauvegarde de la pyramide\n";
+            if (carte != nullptr) {
+                QString sql = "INSERT INTO pyramide (i, j, id) VALUES (" + QString::number(i) + ", " + QString::number(j) + ", " + QString::number(carte->getId()) + ");";
+                if (!query.exec(sql)) {
+                    qCritical() << "Erreur lors de la sauvegarde de la pyramide\n";
 
-                db.close();
-                return;
+                    db.close();
+                    return;
+                }
             }
         }
     }
 
+    qDebug() << "DONE \n";
 
+    qDebug() << "Sauvegarde des infos de la partie... \n";
 
    //Sauvegarde des infos de la partie
     int joueurCourant = 0;
@@ -1661,6 +1645,8 @@ void Controller::sauvegardePartie() {
         db.close();
         return;
     }
+
+    qDebug() << "DONE \n";
 
     // Fermeture de la base de donnee
     db.close();

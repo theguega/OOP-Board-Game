@@ -329,7 +329,7 @@ const Carte & Pioche::piocher() {
     const Carte * c = cartes[i];
     cartes.erase(cartes.begin() + i);
 
-    return * c;
+    return *c;
 }
 
 
