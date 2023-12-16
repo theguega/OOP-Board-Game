@@ -106,10 +106,10 @@ std::ostream& operator<< (std::ostream& f, const Jeton* jeton) {
     return f;
 }
 
-QDebug operator<<(QDebug f, const Jeton* jeton){
+/*QDebug operator<<(QDebug f, const Jeton* jeton){
     f << *jeton;
     return f;
-}
+}*/
 
 //------------------------------------------------- Classe LotDeJetons
 
@@ -202,9 +202,6 @@ Sac::Sac(const LotDeJetons& lot) {
 }
 
 void Sac::ajouterJeton(const Jeton& j) {
-    if (typeid(j) == typeid(Jeton*)) {
-        std::cout << "Jeton ajouté au sac." << std::endl;
-    }
     jetons.push_back(&j);
 }
 
