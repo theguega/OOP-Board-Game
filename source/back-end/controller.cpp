@@ -378,11 +378,13 @@ void Controller::jouer() {
                     if (getJoueurCourant().nbPtsPrestigeParCouleurSupDix()) getJoueurCourant().setGagnant();
 
                     // Fin de partie :
-                    if (getJoueurCourant().estGagnant()) etat_tour = 3;
-
+                    if (getJoueurCourant().estGagnant())
+                        etat_tour = 3;
+                    else{
                     // fin du tour du joueur, on passe au joueur suivant
                     changerJoueurCourant();
                     etat_tour = 10;
+                    }
                     break;
                 }
                 case 3: {
@@ -391,13 +393,13 @@ void Controller::jouer() {
                     for (size_t j = 0; j < 250; j++) {
                         for (std::size_t i = 0; i < message.size(); ++i) {
                             // Utilisation des codes ANSI pour le texte en gras et avec différentes couleurs
-                            qDebug() << "\033[1;3" << (i % 7) + 1 << "m" << message[i];
+                            std::cout << "\033[1;3" << (i % 7) + 1 << "m" << message[i];
                         }
-                        qDebug() << "\n\n";
-                        for (std::size_t l = 0; l < j; ++l) qDebug() << " ";
+                        std::cout << "\n\n";
+                        for (std::size_t l = 0; l < j; ++l) std::cout << " ";
                     };
                     // Reinitialisation du style après la dernière lettre
-                    qDebug() << "\033[0m\n";
+                    std::cout << "\033[0m\n";
 
                     qDebug() << "Enregistrement des score...\n";
                     enregisterScore();
@@ -564,14 +566,15 @@ void Controller::utiliserPrivilege(Plateau& plateau){
             throw SplendorException("\n Plus de Jetons disponibles");
         }
 
+        for (int i =0; i<jetonsDispo.size(); i++) {
+            qDebug() << "(" << jetonsDispo[i].first << "," << jetonsDispo[i].second << ") (" << i << ")";
+        }
 
 
-        qDebug() << jetonsDispo << "\n "; // Je ferais un affichage propre apres
+        int choix_indice_jeton = strategy_courante->choix_min_max(1, jetonsDispo.size());
 
-        int choix_indice_jeton = strategy_courante->choix_min_max(0, jetonsDispo.size()-1);
-
-        int i = jetonsDispo[choix_indice_jeton].first;
-        int j = jetonsDispo[choix_indice_jeton].second;
+        int i = jetonsDispo[choix_indice_jeton-1].first;
+        int j = jetonsDispo[choix_indice_jeton-1].second;
 
         if(plateau.caseVide(i, j))
             throw SplendorException("La case est vide");
@@ -666,13 +669,16 @@ void Controller::recupererJetons(bool capacite,Couleur coulBonus){
             throw SplendorException("\n Plus de Jetons disponibles");
         }
 
-        qDebug() << jetonsDispo << "\n "; // Je ferais un affichage propre apres
+        for (int i =0; i<jetonsDispo.size(); i++) {
+            qDebug() << "(" << jetonsDispo[i].first << "," << jetonsDispo[i].second << ") (" << i+1 << ")";
+        }
 
-        int choix_indice_jeton = strategy_courante->choix_min_max(0, jetonsDispo.size()-1);
 
-        vecteurCoordonnees.push_back(jetonsDispo[choix_indice_jeton]);
+        int choix_indice_jeton = strategy_courante->choix_min_max(1, jetonsDispo.size());
 
-        jetonsDispo.erase(jetonsDispo.begin() + choix_indice_jeton);
+        vecteurCoordonnees.push_back(jetonsDispo[choix_indice_jeton-1]);
+
+        jetonsDispo.erase(jetonsDispo.begin() + choix_indice_jeton-1);
 
     }
 
@@ -820,12 +826,12 @@ bool Controller::acheterCarteJoaillerie (EspaceJeux& espaceJeux){
         //on verifie que le joueur peut bien acheter la carte, sinon on la repose
 
         // recup des points necessaires pour acheter la carte
-        unsigned int needBlanc =  carte.getPrix().getBlanc() ;
-        unsigned int needBleu =  carte.getPrix().getBleu();
-        unsigned int needVert =  carte.getPrix().getVert();
-        unsigned int needRouge =  carte.getPrix().getRouge();
-        unsigned int needNoir =  carte.getPrix().getNoir();
-        unsigned int needPerle = carte.getPrix().getPerle();
+        int needBlanc =  carte.getPrix().getBlanc() ;
+        int needBleu =  carte.getPrix().getBleu();
+        int needVert =  carte.getPrix().getVert();
+        int needRouge =  carte.getPrix().getRouge();
+        int needNoir =  carte.getPrix().getNoir();
+        int needPerle = carte.getPrix().getPerle();
 
 
         unsigned int nbBlanc = 0;
@@ -837,7 +843,10 @@ bool Controller::acheterCarteJoaillerie (EspaceJeux& espaceJeux){
             if (itBonusBlanc != joueurCourant->bonus.end()) {
                 needBlanc -= itBonusBlanc->second;
             }
+            if(needBlanc <0)
+                needBlanc = 0;
         }
+
 
         unsigned int nbBleu = 0;
         auto itBleu = joueurCourant->jetons.find(Couleur::BLEU);
@@ -848,6 +857,8 @@ bool Controller::acheterCarteJoaillerie (EspaceJeux& espaceJeux){
             if (itBonusBleu != joueurCourant->bonus.end()) {
                 needBleu -= itBonusBleu->second;
             }
+            if(needBleu<0)
+                needBleu = 0;
         }
 
         unsigned int nbVert = 0;
@@ -859,6 +870,8 @@ bool Controller::acheterCarteJoaillerie (EspaceJeux& espaceJeux){
             if (itBonusVert != joueurCourant->bonus.end()) {
                 needVert -= itBonusVert->second;
             }
+            if(needVert <0)
+                needVert = 0;
         }
 
         unsigned int nbRouge = 0;
@@ -870,6 +883,8 @@ bool Controller::acheterCarteJoaillerie (EspaceJeux& espaceJeux){
             if (itBonusRouge != joueurCourant->bonus.end()) {
                 needRouge -= itBonusRouge->second;
             }
+            if(needRouge <0)
+                needRouge = 0;
         }
 
         unsigned int nbNoir = 0;
@@ -881,6 +896,8 @@ bool Controller::acheterCarteJoaillerie (EspaceJeux& espaceJeux){
             if (itBonusNoir != joueurCourant->bonus.end()) {
                 needNoir -= itBonusNoir->second;
             }
+            if(needNoir <0)
+                needNoir = 0;
         }
 
         unsigned int nbPerle = 0;
@@ -900,7 +917,7 @@ bool Controller::acheterCarteJoaillerie (EspaceJeux& espaceJeux){
         unsigned int jetonsOrUtilises = 0;
 
         // Fonction pour ajouter des jetons or a une couleur donnee
-        auto ajouterJetonsOr = [&jetonsOrUtilises, &nbOr](unsigned int& nbCouleur, unsigned int& besoin) {
+        auto ajouterJetonsOr = [&jetonsOrUtilises, &nbOr](unsigned int& nbCouleur, int& besoin) {
             while (nbOr > 0 && besoin > nbCouleur) {
                 // Utiliser un jeton or pour completer le besoin
                 nbOr--;
@@ -985,12 +1002,12 @@ bool Controller::acheterCarteJoaillerie (EspaceJeux& espaceJeux){
         const Carte& carte = partie->getEspaceJeux().getPyramide().acheterCarte(cartes_dispo[choix].first, cartes_dispo[choix].second);
 
         // recup des points necessaires pour acheter la carte
-        unsigned int needBlanc =  carte.getPrix().getBlanc() ;
-        unsigned int needBleu =  carte.getPrix().getBleu();
-        unsigned int needVert =  carte.getPrix().getVert();
-        unsigned int needRouge =  carte.getPrix().getRouge();
-        unsigned int needNoir =  carte.getPrix().getNoir();
-        unsigned int needPerle = carte.getPrix().getPerle();
+        int needBlanc =  carte.getPrix().getBlanc() ;
+        int needBleu =  carte.getPrix().getBleu();
+        int needVert =  carte.getPrix().getVert();
+        int needRouge =  carte.getPrix().getRouge();
+        int needNoir =  carte.getPrix().getNoir();
+        int needPerle = carte.getPrix().getPerle();
 
 
         unsigned int nbBlanc = 0;
@@ -1002,7 +1019,10 @@ bool Controller::acheterCarteJoaillerie (EspaceJeux& espaceJeux){
             if (itBonusBlanc != joueurCourant->bonus.end()) {
                 needBlanc -= itBonusBlanc->second;
             }
+            if(needBlanc <0)
+                needBlanc = 0;
         }
+
 
         unsigned int nbBleu = 0;
         auto itBleu = joueurCourant->jetons.find(Couleur::BLEU);
@@ -1013,6 +1033,8 @@ bool Controller::acheterCarteJoaillerie (EspaceJeux& espaceJeux){
             if (itBonusBleu != joueurCourant->bonus.end()) {
                 needBleu -= itBonusBleu->second;
             }
+            if(needBleu<0)
+                needBleu = 0;
         }
 
         unsigned int nbVert = 0;
@@ -1024,6 +1046,8 @@ bool Controller::acheterCarteJoaillerie (EspaceJeux& espaceJeux){
             if (itBonusVert != joueurCourant->bonus.end()) {
                 needVert -= itBonusVert->second;
             }
+            if(needVert <0)
+                needVert = 0;
         }
 
         unsigned int nbRouge = 0;
@@ -1035,6 +1059,8 @@ bool Controller::acheterCarteJoaillerie (EspaceJeux& espaceJeux){
             if (itBonusRouge != joueurCourant->bonus.end()) {
                 needRouge -= itBonusRouge->second;
             }
+            if(needRouge <0)
+                needRouge = 0;
         }
 
         unsigned int nbNoir = 0;
@@ -1046,6 +1072,8 @@ bool Controller::acheterCarteJoaillerie (EspaceJeux& espaceJeux){
             if (itBonusNoir != joueurCourant->bonus.end()) {
                 needNoir -= itBonusNoir->second;
             }
+            if(needNoir <0)
+                needNoir = 0;
         }
 
         unsigned int nbPerle = 0;
@@ -1065,7 +1093,7 @@ bool Controller::acheterCarteJoaillerie (EspaceJeux& espaceJeux){
         unsigned int jetonsOrUtilises = 0;
 
         // Fonction pour ajouter des jetons or a une couleur donnee
-        auto ajouterJetonsOr = [&jetonsOrUtilises, &nbOr](unsigned int& nbCouleur, unsigned int& besoin) {
+        auto ajouterJetonsOr = [&jetonsOrUtilises, &nbOr](unsigned int& nbCouleur, int& besoin) {
             while (nbOr > 0 && besoin > nbCouleur) {
                 // Utiliser un jeton or pour completer le besoin
                 nbOr--;
@@ -1161,10 +1189,12 @@ void Controller::orReserverCarte (Pyramide& pyramide, Plateau& plateau){
         throw SplendorException("\n Plus de Jetons Or disponibles");
     }
 
-    qDebug() << jetonsOrDispo << "\n "; // Je ferais un affichage propre apres mais pas sur
+    for (int i =0; i<jetonsOrDispo.size(); i++) {
+        qDebug() << "(" << jetonsOrDispo[i].first << "," << jetonsOrDispo[i].second << ") (" << i + 1 << ")";
+    }
 
-    int ChoixOrDispo = strategy_courante->choix_min_max(0, jetonsOrDispo.size()-1);
-    jetonsOrDispo[ChoixOrDispo];
+    int ChoixOrDispo = strategy_courante->choix_min_max(1, jetonsOrDispo.size());
+
     /*
     qDebug()  << "Choisissez une ligne : \n";
     unsigned int coord_ligne = strategy_courante->choix_min_max(1, 5);
@@ -1211,7 +1241,7 @@ void Controller::orReserverCarte (Pyramide& pyramide, Plateau& plateau){
         */
     }
 
-    const Jeton& jeton = plateau.recupererJeton( jetonsOrDispo[ChoixOrDispo].first,  jetonsOrDispo[ChoixOrDispo].second);
+    const Jeton& jeton = plateau.recupererJeton( jetonsOrDispo[ChoixOrDispo-1].first,  jetonsOrDispo[ChoixOrDispo-1].second);
     joueurCourant->addJeton(jeton);
 
     qDebug()  << "Etat du joueur apres l'action : \n";
@@ -1263,12 +1293,12 @@ vector<pair<Couleur, int>> Controller::GenereCarteResaDispo(){
 
 bool Controller::verifAchatCarte(const Carte* carte) {
     // recup des points necessaires pour acheter la carte
-    unsigned int needBlanc =  carte->getPrix().getBlanc() ;
-    unsigned int needBleu =  carte->getPrix().getBleu();
-    unsigned int needVert =  carte->getPrix().getVert();
-    unsigned int needRouge =  carte->getPrix().getRouge();
-    unsigned int needNoir =  carte->getPrix().getNoir();
-    unsigned int needPerle = carte->getPrix().getPerle();
+    int needBlanc =  carte->getPrix().getBlanc() ;
+    int needBleu =  carte->getPrix().getBleu();
+    int needVert =  carte->getPrix().getVert();
+    int needRouge =  carte->getPrix().getRouge();
+    int needNoir =  carte->getPrix().getNoir();
+    int needPerle = carte->getPrix().getPerle();
 
     // recup des nb de jetons du joueur
 
@@ -1280,6 +1310,8 @@ bool Controller::verifAchatCarte(const Carte* carte) {
         auto itBonusBlanc = joueurCourant->bonus.find(Couleur::BLANC);
         if (itBonusBlanc != joueurCourant->bonus.end()) {
             needBlanc -= itBonusBlanc->second;
+            if(needBlanc < 0)
+                needBlanc=0;
         }
     }
 
@@ -1291,6 +1323,8 @@ bool Controller::verifAchatCarte(const Carte* carte) {
         auto itBonusBleu = joueurCourant->bonus.find(Couleur::BLEU);
         if (itBonusBleu != joueurCourant->bonus.end()) {
             needBleu -= itBonusBleu->second;
+            if(needBleu < 0)
+                needBleu=0;
         }
     }
 
@@ -1302,6 +1336,8 @@ bool Controller::verifAchatCarte(const Carte* carte) {
         auto itBonusVert = joueurCourant->bonus.find(Couleur::VERT);
         if (itBonusVert != joueurCourant->bonus.end()) {
             needVert -= itBonusVert->second;
+            if(needVert < 0)
+                needVert=0;
         }
     }
 
@@ -1313,6 +1349,8 @@ bool Controller::verifAchatCarte(const Carte* carte) {
         auto itBonusRouge = joueurCourant->bonus.find(Couleur::ROUGE);
         if (itBonusRouge != joueurCourant->bonus.end()) {
             needRouge -= itBonusRouge->second;
+            if(needRouge < 0)
+                needRouge=0;
         }
     }
 
@@ -1324,6 +1362,8 @@ bool Controller::verifAchatCarte(const Carte* carte) {
         auto itBonusNoir = joueurCourant->bonus.find(Couleur::NOIR);
         if (itBonusNoir != joueurCourant->bonus.end()) {
             needNoir -= itBonusNoir->second;
+            if(needNoir < 0)
+                needNoir=0;
         }
     }
 
@@ -1350,7 +1390,7 @@ bool Controller::verifAchatCarte(const Carte* carte) {
     unsigned int jetonsOrUtilises = 0;
 
     // Fonction pour ajouter des jetons or a une couleur donnee
-    auto ajouterJetonsOr = [&jetonsOrUtilises, &nbOr](unsigned int& nbCouleur, unsigned int& besoin) {
+    auto ajouterJetonsOr = [&jetonsOrUtilises, &nbOr](unsigned int& nbCouleur, int& besoin) {
         while (nbOr > 0 && besoin > nbCouleur) {
             // Utiliser un jeton or pour completer le besoin
             nbOr--;
@@ -1358,6 +1398,8 @@ bool Controller::verifAchatCarte(const Carte* carte) {
             jetonsOrUtilises++;
             besoin--;
         }
+        if(besoin < 0)
+            besoin = 0;
     };
 
     ajouterJetonsOr(nbBlanc, needBlanc);
