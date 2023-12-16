@@ -1295,12 +1295,12 @@ vector<pair<Couleur, int>> Controller::GenereCarteResaDispo(){
 
 bool Controller::verifAchatCarte(const Carte* carte) {
     // recup des points necessaires pour acheter la carte
-    unsigned int needBlanc =  carte->getPrix().getBlanc() ;
-    unsigned int needBleu =  carte->getPrix().getBleu();
-    unsigned int needVert =  carte->getPrix().getVert();
-    unsigned int needRouge =  carte->getPrix().getRouge();
-    unsigned int needNoir =  carte->getPrix().getNoir();
-    unsigned int needPerle = carte->getPrix().getPerle();
+    int needBlanc =  carte->getPrix().getBlanc() ;
+    int needBleu =  carte->getPrix().getBleu();
+    int needVert =  carte->getPrix().getVert();
+    int needRouge =  carte->getPrix().getRouge();
+    int needNoir =  carte->getPrix().getNoir();
+    int needPerle = carte->getPrix().getPerle();
 
     // recup des nb de jetons du joueur
 
@@ -1312,6 +1312,8 @@ bool Controller::verifAchatCarte(const Carte* carte) {
         auto itBonusBlanc = joueurCourant->bonus.find(Couleur::BLANC);
         if (itBonusBlanc != joueurCourant->bonus.end()) {
             needBlanc -= itBonusBlanc->second;
+            if(needBlanc < 0)
+                needBlanc=0;
         }
     }
 
@@ -1323,6 +1325,8 @@ bool Controller::verifAchatCarte(const Carte* carte) {
         auto itBonusBleu = joueurCourant->bonus.find(Couleur::BLEU);
         if (itBonusBleu != joueurCourant->bonus.end()) {
             needBleu -= itBonusBleu->second;
+            if(needBleu < 0)
+                needBleu=0;
         }
     }
 
@@ -1334,6 +1338,8 @@ bool Controller::verifAchatCarte(const Carte* carte) {
         auto itBonusVert = joueurCourant->bonus.find(Couleur::VERT);
         if (itBonusVert != joueurCourant->bonus.end()) {
             needVert -= itBonusVert->second;
+            if(needVert < 0)
+                needVert=0;
         }
     }
 
@@ -1345,6 +1351,8 @@ bool Controller::verifAchatCarte(const Carte* carte) {
         auto itBonusRouge = joueurCourant->bonus.find(Couleur::ROUGE);
         if (itBonusRouge != joueurCourant->bonus.end()) {
             needRouge -= itBonusRouge->second;
+            if(needRouge < 0)
+                needRouge=0;
         }
     }
 
@@ -1356,6 +1364,8 @@ bool Controller::verifAchatCarte(const Carte* carte) {
         auto itBonusNoir = joueurCourant->bonus.find(Couleur::NOIR);
         if (itBonusNoir != joueurCourant->bonus.end()) {
             needNoir -= itBonusNoir->second;
+            if(needNoir < 0)
+                needNoir=0;
         }
     }
 
@@ -1390,6 +1400,8 @@ bool Controller::verifAchatCarte(const Carte* carte) {
             jetonsOrUtilises++;
             besoin--;
         }
+        if(besoin < 0)
+            besoin = 0;
     };
 
     ajouterJetonsOr(nbBlanc, needBlanc);
