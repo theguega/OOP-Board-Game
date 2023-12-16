@@ -560,7 +560,6 @@ unsigned int Controller::choixActionsObligatoires() {
 }
 
 unsigned int Controller::choixActionsOptionelles() {
-    qDebug() << "\033[1mActions optionnelles:\033[0m\n";
     qDebug() << "1. Utiliser un privilege\n";
     qDebug()  << "2. Remplir le plateau\n";
     qDebug() << "3. Ne plus faire d'actions optionnelles\n";
