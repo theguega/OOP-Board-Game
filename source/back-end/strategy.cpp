@@ -11,7 +11,7 @@ unsigned int StrategyHumain::choix_min_max(unsigned int min, unsigned int max) {
 }
 
 unsigned int StrategyIA::choix_min_max(unsigned int min, unsigned int max) {
-    //qDebug() << "l'IA choisit entre " << min << " et " << max <<" :"<<"\n";
+    qDebug() << "l'IA choisit entre " << min << " et " << max <<" :"<<"\n";
 
     //generation d'un entier aleatoire entre min et max
     std::random_device rd;
@@ -19,7 +19,7 @@ unsigned int StrategyIA::choix_min_max(unsigned int min, unsigned int max) {
     std::uniform_int_distribution<int> distribution(min, max);
     int choix = distribution(gen);
 
-    //qDebug() << "l'IA a choisit : " << choix << "\n";
+    qDebug() << "l'IA a choisit : " << choix << "\n";
     return choix;
 }
 
@@ -41,7 +41,7 @@ unsigned int StrategyIA::choixMenu(vector<int> poss) {
     std::uniform_int_distribution<int> distribution(1, poss.size());
     unsigned int choix = distribution(gen);
 
-    //qDebug() << "l'IA a choisit : " << choix << "\n";
+    qDebug() << "l'IA a choisit : " << choix << "\n";
     return poss[choix-1];
 }
 
@@ -67,7 +67,7 @@ Couleur StrategyIA::choixCouleur() {
     int choix = distribution(gen);
 
     Couleur couleur = StringToCouleur(listeCouleurs[choix]);
-    //qDebug() << "l'IA a choisit la couleur " << listeCouleurs[choix] << "\n";
+    qDebug() << "l'IA a choisit la couleur " << listeCouleurs[choix] << "\n";
 
     return couleur;
 }
@@ -94,7 +94,7 @@ Couleur StrategyIA::choixCouleurNonINDT() {
     int choix = distribution(gen);
 
     Couleur couleur = StringToCouleur(listeCouleurs[choix]);
-    //qDebug() << "l'IA a choisit la couleur " << listeCouleurs[choix] << "\n";
+    qDebug() << "l'IA a choisit la couleur " << listeCouleurs[choix] << "\n";
 
     return couleur;
 }

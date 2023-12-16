@@ -249,8 +249,8 @@ void Controller::jouer() {
         //correpond au tour de chaque joueur
         for (unsigned int i = 0; i < 2; i++) {
             qDebug()<<"--------------------------------------------------------------------------------------------------------------------------------------------\n";
-            //qDebug()<<"C'est a " << getJoueurCourant().getPseudo()<<" de jouer : \n";
-            //qDebug()<<"Nous en sommes au tour : " << getPartie().getTour()+1 << "\n\n";
+            qDebug()<<"C'est a " << getJoueurCourant().getPseudo()<<" de jouer : \n";
+            qDebug()<<"Nous en sommes au tour : " << getPartie().getTour()+1 << "\n\n";
             getJoueurCourant().afficherJoueur();
             tourEnPlus = false;
 
@@ -492,27 +492,27 @@ bool Controller::appliquerCapacite(Capacite capa,const Carte &carte){
             //si il y a un jetons sur le plateau, le joueur le recupere
             joueurCourant->addPrivilege(partie->getEspaceJeux().getPlateau().recupererPrivilege());
         }
-        //qDebug()<<"Ajout d'un privilège correspondant à la capacite\n";
+        qDebug()<<"Ajout d'un privilège correspondant à la capacite\n";
         break;
     }
     case Capacite::TakeJetonFromBonus: {
-        //qDebug()<<"Recuperation d'un jeton correspondant à la capacite\n";
+        qDebug()<<"Recuperation d'un jeton correspondant à la capacite\n";
         recupererJetons(true, carte.getBonus().getCouleur());
         break;
     }
     case Capacite::TakeJetonToAdv: {
         // le joueur prend 1 jeton Gemme ou Perle à son adversaire. Si ce dernier n’en a pas,
         //cette capacité est sans effet. Il est interdit de prendre un jeton Or à son adversaire.
-        //qDebug()<<"Voici les jetons de votre adversaire\n";
+        qDebug()<<"Voici les jetons de votre adversaire\n";
         //getJoueurAdverse().afficherJoueur();
 
         std::string coulJetonStr;
-        //qDebug()<<"Quel est la couleur du jeton que vous voulez recuperer que Gemme ou perle ?\n";
+        qDebug()<<"Quel est la couleur du jeton que vous voulez recuperer que Gemme ou perle ?\n";
 
         Couleur coulJeton = strategy_courante->choixCouleur();
         // On verifie que le jeton est bien un jeton gemme ou perle
         while(coulJeton == Couleur::OR || coulJeton == Couleur::INDT){
-            //qDebug()<<"Veuillez selectionner un jeton Gemme ou perle\n";
+            qDebug()<<"Veuillez selectionner un jeton Gemme ou perle\n";
             coulJeton = strategy_courante->choixCouleur();
         }
 
@@ -522,7 +522,7 @@ bool Controller::appliquerCapacite(Capacite capa,const Carte &carte){
         // Recup du jeton a l'adversaire
         const Jeton &jeton = getJoueurAdverse().RecupJetonCoul(coulJeton);
 
-        //qDebug()<<"Ajout du jeton grace a la capacite\n";
+        qDebug()<<"Ajout du jeton grace a la capacite\n";
         joueurCourant->addJeton(jeton);
 
 
@@ -578,7 +578,7 @@ void Controller::utiliserPrivilege(Plateau& plateau){
     verifPrivileges();
     verifPlateauvide();
 
-    //qDebug() << "Combien de privileges voulez vous utiliser ?\n";
+    qDebug() << "Combien de privileges voulez vous utiliser ?\n";
     unsigned int priv = strategy_courante->choix_min_max(1,joueurCourant->getNbPrivileges());
     if (priv>joueurCourant->getNbPrivileges())
         throw SplendorException("Vous n'avez pas assez de privilege");
@@ -587,8 +587,8 @@ void Controller::utiliserPrivilege(Plateau& plateau){
 
     //on recupere autant de jetons que de privilege
     for (size_t k=0; k<priv;k++) {
-        //qDebug()<<"Utiliser un privilege permet de recup un jeton de couleur ou perle de votre choix (i,j):\n";
-        //qDebug()<<plateau<<"\n";
+        qDebug()<<"Utiliser un privilege permet de recup un jeton de couleur ou perle de votre choix (i,j):\n";
+        qDebug()<<plateau<<"\n";
 
         unsigned int i = strategy_courante->choix_min_max(1,5)-1;
         unsigned int j = strategy_courante->choix_min_max(1,5)-1;
@@ -605,7 +605,7 @@ void Controller::utiliserPrivilege(Plateau& plateau){
         plateau.poserPrivilege(privilege);
     }
 
-    //qDebug() << "Voici le nouveau plateau (apres recuperation) \n" << getPartie().getEspaceJeux().getPlateau();
+    qDebug() << "Voici le nouveau plateau (apres recuperation) \n" << getPartie().getEspaceJeux().getPlateau();
     //joueurCourant->afficherJoueur();
     return;
 }
@@ -616,13 +616,13 @@ void Controller::remplirPlateau(Plateau& plateau, Sac& sac){
     //on verifie d'abord si le joueur a un/des privilege
     verifSacvide();
 
-    //qDebug()<<"Le joueur rempli le plateau :\n" << plateau << '\n';
+    qDebug()<<"Le joueur rempli le plateau :\n" << plateau << '\n';
 
     //on donne un privilege au joueur adverse
     donPrivilegeAdverse();
 
     plateau.remplirPlateau(sac);
-    //qDebug()<<"Nouveau plateau : \n" <<plateau;
+    qDebug()<<"Nouveau plateau : \n" <<plateau;
 
     return;
 }
@@ -633,7 +633,7 @@ void Controller::remplirPlateau(Plateau& plateau, Sac& sac){
 
 // Recuperer des jetons
 void Controller::recupererJetons(bool capacite,Couleur coulBonus){
-    //qDebug()<<"Vous avez decider de recuperer des jetons sur le plateau :\n"<<getPlateau();
+    qDebug()<<"Vous avez decider de recuperer des jetons sur le plateau :\n"<<getPlateau();
     cout << getPlateau();
     verifPlateauvide();
 
@@ -644,7 +644,7 @@ void Controller::recupererJetons(bool capacite,Couleur coulBonus){
     if(capacite){
         nbJetons = 1;
     } else {
-        //qDebug() << "Combien de jetons souhaitez-vous recuperer ? (1,2,3) \n";
+        qDebug() << "Combien de jetons souhaitez-vous recuperer ? (1,2,3) \n";
 
         nbJetons = strategy_courante->choix_min_max(1,3);
     }
@@ -655,23 +655,23 @@ void Controller::recupererJetons(bool capacite,Couleur coulBonus){
 
 
     if(capacite){
-        //qDebug() << "Merci de selectionner un jeton de la meme couleur que le bonus.\n\n";
+        qDebug() << "Merci de selectionner un jeton de la meme couleur que le bonus.\n\n";
     }else {
-        //qDebug() << "Merci de selectionner des jetons adjacents en ligne, en colonne ou en diagonale.\n\n";
+        qDebug() << "Merci de selectionner des jetons adjacents en ligne, en colonne ou en diagonale.\n\n";
     }
 
 
     std::vector<std::pair<int, int>> vecteurCoordonnees;
-    //qDebug()<<"Vous allez rentrer les coordonnees des jetons : \n";
+    qDebug()<<"Vous allez rentrer les coordonnees des jetons : \n";
     // Recup des coordonnees des jetons
     for (unsigned int k = 0; k < nbJetons; k++){
 
         // Ajout des coordonnees
-        //qDebug()<<"Jetons numero "<<k+1<<" : \n";
+        qDebug()<<"Jetons numero "<<k+1<<" : \n";
 
-        //qDebug() << "Numero de ligne (1,2,3,4,5) : \n";
+        qDebug() << "Numero de ligne (1,2,3,4,5) : \n";
         int indice_i = strategy_courante->choix_min_max(1, 5);
-        //qDebug() << "Numero de colonne (1,2,3,4,5) : \n";
+        qDebug() << "Numero de colonne (1,2,3,4,5) : \n";
         int indice_j = strategy_courante->choix_min_max(1, 5);
         vecteurCoordonnees.emplace_back(std::make_pair(indice_i-1, indice_j-1));
     }
@@ -768,25 +768,25 @@ void Controller::recupererJetons(bool capacite,Couleur coulBonus){
         }
     }
     if(nbJetonsPerle == 2 || (troisJetons == true && jetonsRecup.size()== 3)){
-        //qDebug()<<"Ajout d'un privilège pour le joueur adverse\n" ;
+        qDebug()<<"Ajout d'un privilège pour le joueur adverse\n" ;
         donPrivilegeAdverse();
-        //qDebug()<<"Voici l'etat du joueur adverse apres recuperation :\n" ;
+        qDebug()<<"Voici l'etat du joueur adverse apres recuperation :\n" ;
         //getJoueurAdverse().afficherJoueur();
 
     }
 
 
 
-    //qDebug()<<"Voici le nouveau plateau (apres recuperation) \n" << getPlateau();
-    //qDebug()<<"Voici l'etat du joueur apres recuperation :\n" ;
+    qDebug()<<"Voici le nouveau plateau (apres recuperation) \n" << getPlateau();
+    qDebug()<<"Voici l'etat du joueur apres recuperation :\n" ;
     //joueurCourant->afficherJoueur();
     return;
 }
 
 //TODO
 bool Controller::acheterCarteJoaillerie (EspaceJeux& espaceJeux){
-    //qDebug()<<"Vous avez decider d'acheter une carte joaillerie\n";
-    //qDebug()<<"Voulez vous acheter une carte reservee (1) ou une carte du plateau de jeu (2)\n";
+    qDebug()<<"Vous avez decider d'acheter une carte joaillerie\n";
+    qDebug()<<"Voulez vous acheter une carte reservee (1) ou une carte du plateau de jeu (2)\n";
     unsigned int choix = strategy_courante->choix_min_max(1,2);
 
 
@@ -795,7 +795,7 @@ bool Controller::acheterCarteJoaillerie (EspaceJeux& espaceJeux){
         if(joueurCourant->getNbCartesReservees()==0)
             throw SplendorException("Vous n'avez pas de carte rerservee\n");
 
-        //qDebug() << "Voici les cartes reservees : \n";
+        qDebug() << "Voici les cartes reservees : \n";
         unsigned int i = 0;
         // Affichage de la reserve
         for (const auto& couleurEtCartes : joueurCourant->cartesReservees) {
@@ -804,18 +804,18 @@ bool Controller::acheterCarteJoaillerie (EspaceJeux& espaceJeux){
 
             // Ignorer les cartes de couleur OR
             if (couleur != Couleur::OR) {
-                //qDebug() << "Cartes de couleur : " << couleur << "\n";
+                qDebug() << "Cartes de couleur : " << couleur << "\n";
                 const std::vector<const Carte*>& cartes = couleurEtCartes.second;
 
                 for (const Carte* carte : cartes) {
-                    //qDebug() << "Numero " << ++i << " : \n" << *carte << '\n';
+                    qDebug() << "Numero " << ++i << " : \n" << *carte << '\n';
                 }
                 qDebug() << "\n\n\n";
             }
         }
 
         // on recupere la couleur de la carte reservee
-        //qDebug()<<"Veuillez entrer la couleur de la carte que vous souhiatez reserver\n";
+        qDebug()<<"Veuillez entrer la couleur de la carte que vous souhiatez reserver\n";
         Couleur c = strategy_courante->choixCouleur();
 
         //on verifie qu'il a bien des cartes de cette couleur reservee
@@ -824,7 +824,7 @@ bool Controller::acheterCarteJoaillerie (EspaceJeux& espaceJeux){
             throw SplendorException("Vous n'avez pas de carte de cette couleur\n");
 
         //on recupere l'indice de la carte
-        //qDebug()<<"Indiquez l'indice de la carte que vous voulez recuperer\n";
+        qDebug()<<"Indiquez l'indice de la carte que vous voulez recuperer\n";
         unsigned int choix_indice_carte = strategy_courante->choix_min_max(1,nb_carte)-1;
 
         //on recup la carte
@@ -849,20 +849,20 @@ bool Controller::acheterCarteJoaillerie (EspaceJeux& espaceJeux){
         }
 
         if(carte.getCapacite1() == Capacite::AssociationBonus || carte.getCapacite2() == Capacite::AssociationBonus){
-            //qDebug()<<"La carte a une capacite qui permet d'ajouter un bonus a la couleur de votre choix\n";
+            qDebug()<<"La carte a une capacite qui permet d'ajouter un bonus a la couleur de votre choix\n";
 
             std::string coulJetonStr;
-            //qDebug()<<"Quel est la couleur du bonus que vous voulez recuperer ?\n";
+            qDebug()<<"Quel est la couleur du bonus que vous voulez recuperer ?\n";
 
             Couleur coulBonus = strategy_courante->choixCouleur();
             // On verifie que la validite de la couleur du bonus
             while(coulBonus == Couleur::PERLE || coulBonus == Couleur::INDT){
-                //qDebug()<<"Veuillez selectionner un jeton Gemme ou perle\n";
+                qDebug()<<"Veuillez selectionner un jeton Gemme ou perle\n";
                 coulBonus = strategy_courante->choixCouleur();
             }
             // Ajout du bonus
             joueurCourant->addBonus(coulBonus, 1);
-            //qDebug()<<"Le bonus a bien ete ajoute\n";
+            qDebug()<<"Le bonus a bien ete ajoute\n";
 
             joueurCourant->cartes[coulBonus].push_back(&carte);
             joueurCourant->ptsPrestige += carte.getNbPtsPrivilege();
@@ -878,13 +878,13 @@ bool Controller::acheterCarteJoaillerie (EspaceJeux& espaceJeux){
     // Achat carte du plateau
     else {
         // Affichage des cartes
-        //qDebug() << "Voici les cartes du plateau : \n";
+        qDebug() << "Voici les cartes du plateau : \n";
         //espaceJeux.getPyramide().afficherPyramide();
 
-        //qDebug()  << "rentrez le niveau de la carte souhaitee : \n";
+        qDebug()  << "rentrez le niveau de la carte souhaitee : \n";
         unsigned int niveau = strategy_courante->choix_min_max(1, 3)-1;
-        //qDebug()  << "rentrez le numero de la carte souhaitee : \n";
-        //qDebug()<<"DEBUG : "<<getPyramide().getNbCartesNiv(niveau);
+        qDebug()  << "rentrez le numero de la carte souhaitee : \n";
+        qDebug()<<"DEBUG : "<<getPyramide().getNbCartesNiv(niveau);
         unsigned int num_carte = strategy_courante->choix_min_max(1, getPyramide().getNbCartesNiv(niveau))-1;
 
         const Carte& carte_verif = *partie->getEspaceJeux().getPyramide().getCarte(niveau, num_carte);
@@ -911,7 +911,7 @@ bool Controller::acheterCarteJoaillerie (EspaceJeux& espaceJeux){
         }
 
         if(carte.getCapacite1() == Capacite::AssociationBonus || carte.getCapacite2() == Capacite::AssociationBonus){
-            //qDebug()<<"La carte a une capacite qui permet d'ajouter un bonus a la couleur de votre choix\n";
+            qDebug()<<"La carte a une capacite qui permet d'ajouter un bonus a la couleur de votre choix\n";
 
             std::string coulJetonStr;
             qDebug()<<"Quel est la couleur du bonus que vous voulez recuperer ?\n";
@@ -924,7 +924,7 @@ bool Controller::acheterCarteJoaillerie (EspaceJeux& espaceJeux){
             }
             // Ajout du bonus
             joueurCourant->addBonus(coulBonus, 1);
-            //qDebug()<<"Le bonus a bien ete ajoute\n";
+            qDebug()<<"Le bonus a bien ete ajoute\n";
 
             joueurCourant->cartes[coulBonus].push_back(&carte);
             joueurCourant->ptsPrestige += carte.getNbPtsPrivilege();
@@ -940,7 +940,7 @@ bool Controller::acheterCarteJoaillerie (EspaceJeux& espaceJeux){
 }
 
 void Controller::acheterCarteNoble (Pyramide& pyramide){
-    //qDebug()<<"Vous devez achter une carte noble car vous avez 3 ou 6 pts de prestige\n";
+    qDebug()<<"Vous devez achter une carte noble car vous avez 3 ou 6 pts de prestige\n";
     // affichage cartes nobles
     //pyramide.afficherNobles();
 
@@ -954,32 +954,32 @@ void Controller::acheterCarteNoble (Pyramide& pyramide){
 void Controller::orReserverCarte (Pyramide& pyramide, Plateau& plateau){
     verifTroisCarteReserve();
     verifOrSurPlateau();
-    //qDebug()  << "Commencez par choisir un jeton Or : \n";
-    //qDebug()  <<  getPlateau();
-    //qDebug()  << "Choisissez une ligne : \n";
+    qDebug()  << "Commencez par choisir un jeton Or : \n";
+    qDebug()  <<  getPlateau();
+    qDebug()  << "Choisissez une ligne : \n";
     unsigned int coord_ligne = strategy_courante->choix_min_max(1, 5);
-    //qDebug()  << "Choisissez une colonne : \n";
+    qDebug()  << "Choisissez une colonne : \n";
     unsigned int coord_col = strategy_courante->choix_min_max(1, 5);
     while(getPlateau().caseVide(coord_ligne-1, coord_col-1) || !getPlateau().caseOr(coord_ligne-1, coord_col-1)){
-        //qDebug()  << "La case est vide ou ce n'est pas un jeton Or\n";
-        //qDebug()  << "Choisissez une ligne : \n";
+        qDebug()  << "La case est vide ou ce n'est pas un jeton Or\n";
+        qDebug()  << "Choisissez une ligne : \n";
         coord_ligne = strategy_courante->choix_min_max(1, 5);
-        //qDebug()  << "Choisissez une colonne : \n";
+        qDebug()  << "Choisissez une colonne : \n";
         coord_col = strategy_courante->choix_min_max(1, 5);
     }
 
-    //qDebug()  << "Voulez-vous reserver une carte de la pyramide (0) ou celle d'une pioche (1, 2, 3) ?\n";
+    qDebug()  << "Voulez-vous reserver une carte de la pyramide (0) ou celle d'une pioche (1, 2, 3) ?\n";
     unsigned int choix = strategy_courante->choix_min_max(0, 3);
 
     if (choix == 0){
         // Reservation de la carte
-        //qDebug() << "Voici les cartes de la pyramide : \n";
+        qDebug() << "Voici les cartes de la pyramide : \n";
 
         //getPyramide().afficherPyramide();
 
-        //qDebug()  << "rentrez le niveau de la carte souhaitee : \n";
+        qDebug()  << "rentrez le niveau de la carte souhaitee : \n";
         unsigned int niveau = strategy_courante->choix_min_max(1, 3)-1;
-        //qDebug()  << "rentrez le numero de la carte souhaitee : \n";
+        qDebug()  << "rentrez le numero de la carte souhaitee : \n";
         unsigned int num_carte = strategy_courante->choix_min_max(1, getPyramide().getNbCartesNiv(niveau))-1;
 
         const Carte& carte = pyramide.acheterCarte(niveau, num_carte);
@@ -996,7 +996,7 @@ void Controller::orReserverCarte (Pyramide& pyramide, Plateau& plateau){
         const Jeton& jeton = plateau.recupererJeton(coord_ligne-1, coord_col-1);
         joueurCourant->addJeton(jeton);
     }
-    //qDebug()  << "Etat du joueur apres l'action : \n";
+    qDebug()  << "Etat du joueur apres l'action : \n";
     //joueurCourant->afficherJoueur();
 }
 
@@ -1186,10 +1186,10 @@ void Controller::verifTroisCarteReserve(){
 }
 
 void Controller::verifJetonSupDix(){
-    //qDebug()  << "Verification que le joueur courant n'a pas plus de 10 jetons dans sa main\n";
+    qDebug()  << "Verification que le joueur courant n'a pas plus de 10 jetons dans sa main\n";
     while(joueurCourant->getNbJetons() > 10){
-        //qDebug()  << "Vous devez reposer des jetons dans le sac : \n";
-        //qDebug()  << "Choisissez une couleur parmi : \n";
+        qDebug()  << "Vous devez reposer des jetons dans le sac : \n";
+        qDebug()  << "Choisissez une couleur parmi : \n";
         for (auto& couleur : Couleurs){
             if (couleur != Couleur::INDT)
                 qDebug()  << static_cast<int>(couleur)+1 << " - " << toStringCouleur(couleur) << "\n";
