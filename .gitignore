@@ -21,3 +21,5 @@ moc_*.cpp
 source/.qtc_clangd/
 build*
 source/data/*.sqlite
+source/data/save.sqlite
+source/data/score.sqlite
