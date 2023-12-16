@@ -140,7 +140,6 @@ void LastPartieBuilder::setJetonsJoueurs() const {
     // Joueur 1 : restitution des jetons
     while (query.next()) {
         string couleur = query.value(1).toString().toStdString();
-        std::cout<<couleur;
         const Jeton &j = this->partie->espaceJeux->getSac().piocherJeton(StringToCouleur(couleur));
         this->partie->getJoueur1()->addJeton(j);
     }

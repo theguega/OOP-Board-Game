@@ -371,6 +371,10 @@ void Controller::jouer() {
                     /// POUR DEBUG SAUVEGARDE
                     if (getPartie().getTour()==30)
                         sauvegardePartie();
+                    ///////
+                    ///
+                    ///
+                    ///
 
                     // Conditions victoires :
                     if (getJoueurCourant().getNbCouronnes() >= 10) getJoueurCourant().setGagnant();

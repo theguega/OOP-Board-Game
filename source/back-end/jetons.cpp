@@ -66,7 +66,6 @@ std::map<std::string, Couleur> stringToCouleurMap = {
 };
 
 Couleur StringToCouleur(const std::string& couleurStr) {
-    std::cout<<"Voici le string a convertir en couleur : " << couleurStr << "\n";
     auto tmp = stringToCouleurMap.find(couleurStr);
     if (tmp != stringToCouleurMap.end()) {
         return tmp->second;
