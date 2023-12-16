@@ -1356,7 +1356,7 @@ bool Controller::verifAchatCarte(const Carte* carte) {
     unsigned int jetonsOrUtilises = 0;
 
     // Fonction pour ajouter des jetons or a une couleur donnee
-    auto ajouterJetonsOr = [&jetonsOrUtilises, &nbOr](unsigned int& nbCouleur, unsigned int& besoin) {
+    auto ajouterJetonsOr = [&jetonsOrUtilises, &nbOr](unsigned int& nbCouleur, int& besoin) {
         while (nbOr > 0 && besoin > nbCouleur) {
             // Utiliser un jeton or pour completer le besoin
             nbOr--;
