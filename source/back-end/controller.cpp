@@ -11,7 +11,7 @@ Controller::Controller() {
 
     //QTextStream stream(stdin);
     string statut_partie;
-    cin >> statut_partie;
+    cin>>statut_partie;
 
    //Si nouvelle partie
 	if (statut_partie == "New") {
@@ -241,9 +241,9 @@ void Controller::jouer() {
         // tour pour chacun des joueurs
         qDebug()<<"\n\n\n\n\n\n\n\n\n\n\n\n";
         qDebug()<< "Tour numero" << getPartie().getTour()+1 << '\n';
-        cout << joueurCourant->getNbJetons()+getJoueurAdverse().getNbJetons() << "\n";
-        cout << getEspaceJeux().getSac().getNbJetons() << "\n";
-        cout << getPlateau().getNbJetons() << "\n";
+        qDebug() << joueurCourant->getNbJetons()+getJoueurAdverse().getNbJetons() << "\n";
+        qDebug() << getEspaceJeux().getSac().getNbJetons() << "\n";
+        qDebug() << getPlateau().getNbJetons() << "\n";
         bool tourEnPlus;
 
         //correpond au tour de chaque joueur
@@ -253,6 +253,8 @@ void Controller::jouer() {
             qDebug()<<"Nous en sommes au tour : " << getPartie().getTour()+1 << "\n\n";
             getJoueurCourant().afficherJoueur();
             tourEnPlus = false;
+            bool a_deja_utilise_privilege = false;
+            bool a_deja_rempli_plateau = false;
 
             unsigned int etat_tour = 0;
             while (etat_tour != 10) {
@@ -261,8 +263,6 @@ void Controller::jouer() {
                 // actions optionelles
                 switch (etat_tour) {
                 case 0: {
-                    bool a_deja_utilise_privilege = false;
-                    bool a_deja_rempli_plateau = false;
                     unsigned int etat_action = 0;
                     while (etat_action != 10) {
                         switch (etat_action)
@@ -548,24 +548,24 @@ bool Controller::appliquerCapacite(Capacite capa,const Carte &carte){
 
 //Menu choix des actions
 unsigned int Controller::choixActionsObligatoires() {
-    /*qDebug() << "\033[1mActions obligatoires:\033[0m\n";
+    qDebug() << "\033[1mActions obligatoires:\033[0m\n";
     qDebug() << "1. Recuperer des jetons\n";
     qDebug()  << "2. Acheter une carte joaillerie\n";
     qDebug() << "3. Reserver une carte\n";
     qDebug() << "9. Quitter le jeu\n";
-    qDebug() << "Votre choix (1/2/3/9):\n";*/
+    qDebug() << "Votre choix (1/2/3/9):\n";
 
 
     return strategy_courante->choixMenu(verifActionsImpossibles());;
 }
 
 unsigned int Controller::choixActionsOptionelles() {
-    /*qDebug() << "\033[1mActions optionnelles:\033[0m\n";
+    qDebug() << "\033[1mActions optionnelles:\033[0m\n";
     qDebug() << "1. Utiliser un privilege\n";
     qDebug()  << "2. Remplir le plateau\n";
     qDebug() << "3. Ne plus faire d'actions optionnelles\n";
     qDebug() << "9. Quitter le jeu\n";
-    qDebug() << "Votre choix (1/2/3/9):\n";*/
+    qDebug() << "Votre choix (1/2/3/9):\n";
 
 
     return strategy_courante->choixMenu(verifActionsOptImpossibles());;
@@ -633,8 +633,7 @@ void Controller::remplirPlateau(Plateau& plateau, Sac& sac){
 
 // Recuperer des jetons
 void Controller::recupererJetons(bool capacite,Couleur coulBonus){
-    qDebug()<<"Vous avez decider de recuperer des jetons sur le plateau :\n"<<getPlateau();
-    cout << getPlateau();
+    qDebug()<<"Vous avez decider de recuperer des jetons sur le plateau :\n" << getPlateau();
     verifPlateauvide();
 
     // Recuperation des jetons 1 2 ou 3 jetons en fonction de la strategy
@@ -771,7 +770,7 @@ void Controller::recupererJetons(bool capacite,Couleur coulBonus){
         qDebug()<<"Ajout d'un privilège pour le joueur adverse\n" ;
         donPrivilegeAdverse();
         qDebug()<<"Voici l'etat du joueur adverse apres recuperation :\n" ;
-        //getJoueurAdverse().afficherJoueur();
+        getJoueurAdverse().afficherJoueur();
 
     }
 
@@ -879,12 +878,11 @@ bool Controller::acheterCarteJoaillerie (EspaceJeux& espaceJeux){
     else {
         // Affichage des cartes
         qDebug() << "Voici les cartes du plateau : \n";
-        //espaceJeux.getPyramide().afficherPyramide();
+        espaceJeux.getPyramide().afficherPyramide();
 
         qDebug()  << "rentrez le niveau de la carte souhaitee : \n";
         unsigned int niveau = strategy_courante->choix_min_max(1, 3)-1;
         qDebug()  << "rentrez le numero de la carte souhaitee : \n";
-        qDebug()<<"DEBUG : "<<getPyramide().getNbCartesNiv(niveau);
         unsigned int num_carte = strategy_courante->choix_min_max(1, getPyramide().getNbCartesNiv(niveau))-1;
 
         const Carte& carte_verif = *partie->getEspaceJeux().getPyramide().getCarte(niveau, num_carte);
@@ -975,7 +973,7 @@ void Controller::orReserverCarte (Pyramide& pyramide, Plateau& plateau){
         // Reservation de la carte
         qDebug() << "Voici les cartes de la pyramide : \n";
 
-        //getPyramide().afficherPyramide();
+        getPyramide().afficherPyramide();
 
         qDebug()  << "rentrez le niveau de la carte souhaitee : \n";
         unsigned int niveau = strategy_courante->choix_min_max(1, 3)-1;
@@ -997,7 +995,7 @@ void Controller::orReserverCarte (Pyramide& pyramide, Plateau& plateau){
         joueurCourant->addJeton(jeton);
     }
     qDebug()  << "Etat du joueur apres l'action : \n";
-    //joueurCourant->afficherJoueur();
+    joueurCourant->afficherJoueur();
 }
 
 ///////////////////////////////////////////////////////////////////////////////////
@@ -1262,12 +1260,13 @@ void Controller::sauvegardePartie() {
     QSqlQuery query(db);
     QStringList tables = db.tables();
     foreach (const QString &table, tables) {
-            if (!query.exec("DELETE FROM " + table)) {
-                qWarning() << "echec de la suppression des donnees de la table " << table << " : " << query.lastError().text();
-            }
+        if (!query.exec("DELETE FROM " + table)) {
+            qWarning() << "echec de la suppression des donnees de la table " << table << " : " << query.lastError().text();
         }
+    }
 
     for (size_t i = 0; i < 2; i++) {
+        qDebug() << "Sauvegarde joueur : " << i+1 << "\n" ;
         // Infos du joueur
         QString sql = "INSERT INTO joueur (id, pseudo, type_joueur, privileges) VALUES (" + QString::number(i + 1) + ", '" + QString::fromStdString(getPartie().getJoueur(i)->getPseudo()) + "', '" + QString::fromStdString(toStringType(getPartie().getJoueur(i)->getTypeDeJoueur())) + "', " + QString::number(getPartie().getJoueur(i)->getNbPrivileges()) + ");";
         if (!query.exec(sql)) {
@@ -1293,13 +1292,15 @@ void Controller::sauvegardePartie() {
                 }
             }
         }
+
         // Cartes (toutes les couleurs sauf ind et or)
         for (Couleur c : Couleurs) {
-            if (c != Couleur::INDT && c != Couleur::OR) {
+            if (c != Couleur::OR) {
                 for (size_t j = 0; j < getPartie().getJoueur(i)->getNbCartes(c); j++) {
-                    sql = "INSERT INTO cartes_joueur (id_joueur, id_carte, noble, reservee) VALUES (" + QString::number(i + 1) + ", " + QString::number(getPartie().getJoueur(i)->getCarte(c, j).getId()) + ",0,0);";
+                    QString sql = "INSERT INTO cartes_joueur (id_joueur, id_carte, noble, reserve) VALUES (" + QString::number(i + 1) + ", " + QString::number(getPartie().getJoueur(i)->getCarte(c, j).getId()) + ",0,0);";
+                    qDebug() << sql <<"\n" ;
                     if (!query.exec(sql)) {
-                        qCritical() << "Erreur lors de la sauvegarde de la carte \n";
+                        qCritical() << "Erreur lors de la sauvegarde de la carte noble \n";
 
                         db.close();
                         return;
@@ -1307,11 +1308,13 @@ void Controller::sauvegardePartie() {
                 }
             }
         }
+
         // Cartes nobles
         for (size_t j = 0; j < getPartie().getJoueur(i)->getNbCartesNobles(); j++) {
-            sql = "INSERT INTO cartes_joueur (id_joueur, id_carte, noble, reservee) VALUES (" + QString::number(i + 1) + ", " + QString::number(getPartie().getJoueur(i)->getCarteNoble(j).getId()) + ",1,0);";
+            QString sql = "INSERT INTO cartes_joueur (id_joueur, id_carte, noble, reserve) VALUES (" + QString::number(i + 1) + ", " + QString::number(getPartie().getJoueur(i)->getCarteNoble(j).getId()) + ",1,0);";
+            qDebug() << sql <<"\n" ;
             if (!query.exec(sql)) {
-                qCritical() << "Erreur lors de la sauvegarde de la carte\n";
+                qCritical() << "Erreur lors de la sauvegarde de la carte noble \n";
 
                 db.close();
                 return;
@@ -1319,11 +1322,12 @@ void Controller::sauvegardePartie() {
         }
         // Cartes reservees (toutes les couleurs sauf ind et or)
         for (Couleur c : Couleurs) {
-            if (c != Couleur::INDT && c != Couleur::OR) {
+            if (c != Couleur::OR) {
                 for (size_t j = 0; j < getPartie().getJoueur(i)->getNbCartesReservees(c); j++) {
-                    sql = "INSERT INTO cartes_joueur (id_joueur, id_carte, noble, reservee) VALUES (" + QString::number(i + 1) + ", " + QString::number(getPartie().getJoueur(i)->getCarteReservee(c, j).getId()) + ", " + QString::fromStdString(TypeCartetoString(getPartie().getJoueur(i)->getCarteReservee(c, j).getType())) + ",1);";
+                    QString sql = "INSERT INTO cartes_joueur (id_joueur, id_carte, noble, reserve) VALUES (" + QString::number(i + 1) + ", " + QString::number(getPartie().getJoueur(i)->getCarteReservee(c, j).getId()) + ",0,1);";
+                    qDebug() << sql <<"\n" ;
                     if (!query.exec(sql)) {
-                        qCritical() << "Erreur lors de la sauvegarde de la carte \n";
+                        qCritical() << "Erreur lors de la sauvegarde de la carte reservés \n";
 
                         db.close();
                         return;
@@ -1331,6 +1335,7 @@ void Controller::sauvegardePartie() {
                 }
             }
         }
+        qDebug()<< "DONE \n";
     }
 
     // Sauvegarde plateau

@@ -125,9 +125,9 @@ ostream & operator << (ostream & f,
 
 
 QDebug operator<<(QDebug f, const Prix &p) {
-    f << toEmojiCouleur(Couleur::BLANC) << " : " << p.getBlanc() << "    " << toEmojiCouleur(Couleur::BLEU) << " : " << p.getBleu() << "\n";
-    f << toEmojiCouleur(Couleur::VERT) << " : " << p.getVert() << "    " << toEmojiCouleur(Couleur::NOIR) << " : " << p.getNoir() << "\n";
-    f << toEmojiCouleur(Couleur::ROUGE) << " : " << p.getRouge() << "    " << toEmojiCouleur(Couleur::PERLE) << " : " << p.getPerle() << "\n";
+    f << Couleur::BLANC << " : " << p.getBlanc() << "    " << Couleur::BLEU << " : " << p.getBleu() << "\n";
+    f << Couleur::VERT << " : " << p.getVert() << "    " << Couleur::NOIR << " : " << p.getNoir() << "\n";
+    f << Couleur::ROUGE << " : " << p.getRouge() << "    " << Couleur::PERLE << " : " << p.getPerle() << "\n";
     return f;
 }
 
@@ -236,7 +236,7 @@ JeuCarte::JeuCarte() {
     while (query2.next()) {
         std::string capacite = query2.value(1).toString().toStdString();
         unsigned int nb_pts_privileges = query2.value(2).toUInt();
-        unsigned int id = query2.value(3).toUInt();
+        unsigned int id = query2.value(0).toUInt();
         cartes_nobles.push_back(new Carte(TypeCarte::Noble, StringToCapacite(capacite), nb_pts_privileges, id));
     }
 

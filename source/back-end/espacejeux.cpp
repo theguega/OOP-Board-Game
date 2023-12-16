@@ -167,16 +167,16 @@ const Carte & Pyramide::ReserverCartePioche(unsigned int niveau) {
 }
 
 void Pyramide::afficherPyramide() const {
-    std::cout << "Pyramide : " << std::endl;
+    qDebug() << "Pyramide : " << "\n";
     for (size_t i = 0; i < array_cartes.size() - 1; i++) {
-        std::cout << "Niveau " << i + 1 << " : " << std::endl;
+        qDebug() << "Niveau " << i + 1 << " : " << "\n";
 
         for (size_t j = 0; j < array_cartes[i].size(); j++) {
             if (array_cartes[i][j] != nullptr) {
-                std::cout << "Carte " << i+1 << " " << j+1 << " : " << std::endl << * array_cartes[i][j] <<  "\n\n\n";
+                qDebug() << "Carte " << i+1 << " " << j+1 << " : " << "\n" << *array_cartes[i][j] <<  "\n\n\n";
             }
         }
-        std::cout<<"\n\n\n\n\n\n\n\n";
+        qDebug() << "\n\n\n\n\n\n\n\n";
     }
 }
 

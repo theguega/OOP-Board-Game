@@ -67,6 +67,10 @@ QDebug operator<<(QDebug f, const Couleur &c) {
     return f << qUtf8Printable(QString::fromStdString(toEmojiCouleur(c)));
 }
 
+QDebug operator<<(QDebug f, const Couleur* c) {
+    return f << qUtf8Printable(QString::fromStdString(toEmojiCouleur(*c)));
+}
+
 std::map<std::string, Couleur> stringToCouleurMap = {
         {"blanc", Couleur::BLANC},
         {"bleu", Couleur::BLEU},
@@ -106,10 +110,10 @@ std::ostream& operator<< (std::ostream& f, const Jeton* jeton) {
     return f;
 }
 
-/*QDebug operator<<(QDebug f, const Jeton* jeton){
+QDebug operator<<(QDebug f, const Jeton* jeton){
     f << *jeton;
     return f;
-}*/
+}
 
 //------------------------------------------------- Classe LotDeJetons
 
@@ -410,17 +414,17 @@ Plateau& Plateau::getPlateau(const LotPrivileges& lotp) {
 
 std::ostream& operator<< (std::ostream& f, const Plateau& plateau) {
     //On affiche une matrice avec dans chaque case la lettre correpondant au jetons
-    f<<"---------------------"<<std::endl;
+    f<<"---------------------"<<"\n";
     for (size_t i = 0; i < plateau.getLargeurMatrice(); i++) {
         f << "|";
         for (size_t j = 0; j < plateau.getLargeurMatrice(); j++) {
             if (plateau.getJeton(i,j) == nullptr)
-                f << "   ";
+                f << " ";
             else
                 f << plateau.getJeton(i, j);
             f << "|";
         };
-        f << "\n" << "---------------------" << std::endl;
+        f << "\n" << "---------------------" << "\n";
     }
 
 
@@ -428,11 +432,11 @@ std::ostream& operator<< (std::ostream& f, const Plateau& plateau) {
     for(unsigned int i = 0; i<plateau.getNbPrivileges();i++)
         f << "|\033[1;38;5;208mP\033[0m|";
 
-    f << "\n" << "---------------------" << std::endl;
+    f << "\n" << "---------------------" <<"\n";
     return f;
 }
 
-QDebug operator<<(QDebug f, const Plateau &plateau) {
+QDebug operator << (QDebug f, const Plateau &plateau) {
     //On affiche une matrice avec dans chaque case la lettre correpondant au jetons
     f<<"---------------------"<<"\n";
     for (size_t i = 0; i < plateau.getLargeurMatrice(); i++) {

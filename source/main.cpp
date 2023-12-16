@@ -67,9 +67,12 @@ int main(int argc, char * argv[]) {
 //####################################
 
 
-int main(int argc, char * argv[]) {
-    Controller control;
-    control.lancerPartie();
-    control.jouer();
+int main(void) {
+    try {
+        Controller control;
+        control.lancerPartie();
+        control.jouer();
+    } catch (SplendorException& e) {qWarning() << e.getInfo() ;};
+
     return 0;
 }

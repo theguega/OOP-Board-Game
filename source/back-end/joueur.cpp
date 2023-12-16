@@ -22,13 +22,13 @@ Joueur::Joueur(string pseudo, type typeDeJoueur):
 
                 //on initialise les map avec les bonnes couleurs
                 for (const auto& couleur : Couleurs) {
-                    cartesReservees[couleur];
                     if (couleur != Couleur::INDT) {
                         jetons[couleur];
-                        if (couleur != Couleur::OR) {
-                            cartes[couleur];
-                            bonus[couleur] = 0;
-                        }
+                    }
+                    if (couleur != Couleur::OR) {
+                        cartes[couleur];
+                        cartesReservees[couleur];
+                        bonus[couleur] = 0;
                     }
                 }
 
