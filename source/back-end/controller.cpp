@@ -554,14 +554,15 @@ void Controller::utiliserPrivilege(Plateau& plateau){
             throw SplendorException("\n Plus de Jetons disponibles");
         }
 
+        for (int i =0; i<jetonsDispo.size(); i++) {
+            qDebug() << "(" << jetonsDispo[i].first << "," << jetonsDispo[i].second << ") (" << i << ")";
+        }
 
 
-        qDebug() << jetonsDispo << "\n "; // Je ferais un affichage propre apres
+        int choix_indice_jeton = strategy_courante->choix_min_max(1, jetonsDispo.size());
 
-        int choix_indice_jeton = strategy_courante->choix_min_max(0, jetonsDispo.size()-1);
-
-        int i = jetonsDispo[choix_indice_jeton].first;
-        int j = jetonsDispo[choix_indice_jeton].second;
+        int i = jetonsDispo[choix_indice_jeton-1].first;
+        int j = jetonsDispo[choix_indice_jeton-1].second;
 
         if(plateau.caseVide(i, j))
             throw SplendorException("La case est vide");
@@ -656,13 +657,16 @@ void Controller::recupererJetons(bool capacite,Couleur coulBonus){
             throw SplendorException("\n Plus de Jetons disponibles");
         }
 
-        qDebug() << jetonsDispo << "\n "; // Je ferais un affichage propre apres
+        for (int i =0; i<jetonsDispo.size(); i++) {
+            qDebug() << "(" << jetonsDispo[i].first << "," << jetonsDispo[i].second << ") (" << i+1 << ")";
+        }
 
-        int choix_indice_jeton = strategy_courante->choix_min_max(0, jetonsDispo.size()-1);
 
-        vecteurCoordonnees.push_back(jetonsDispo[choix_indice_jeton]);
+        int choix_indice_jeton = strategy_courante->choix_min_max(1, jetonsDispo.size());
 
-        jetonsDispo.erase(jetonsDispo.begin() + choix_indice_jeton);
+        vecteurCoordonnees.push_back(jetonsDispo[choix_indice_jeton-1]);
+
+        jetonsDispo.erase(jetonsDispo.begin() + choix_indice_jeton-1);
 
     }
 
@@ -1151,10 +1155,12 @@ void Controller::orReserverCarte (Pyramide& pyramide, Plateau& plateau){
         throw SplendorException("\n Plus de Jetons Or disponibles");
     }
 
-    qDebug() << jetonsOrDispo << "\n "; // Je ferais un affichage propre apres mais pas sur
+    for (int i =0; i<jetonsOrDispo.size(); i++) {
+        qDebug() << "(" << jetonsOrDispo[i].first << "," << jetonsOrDispo[i].second << ") (" << i + 1 << ")";
+    }
 
-    int ChoixOrDispo = strategy_courante->choix_min_max(0, jetonsOrDispo.size()-1);
-    jetonsOrDispo[ChoixOrDispo];
+    int ChoixOrDispo = strategy_courante->choix_min_max(1, jetonsOrDispo.size());
+
     /*
     qDebug()  << "Choisissez une ligne : \n";
     unsigned int coord_ligne = strategy_courante->choix_min_max(1, 5);
@@ -1201,7 +1207,7 @@ void Controller::orReserverCarte (Pyramide& pyramide, Plateau& plateau){
         */
     }
 
-    const Jeton& jeton = plateau.recupererJeton( jetonsOrDispo[ChoixOrDispo].first,  jetonsOrDispo[ChoixOrDispo].second);
+    const Jeton& jeton = plateau.recupererJeton( jetonsOrDispo[ChoixOrDispo-1].first,  jetonsOrDispo[ChoixOrDispo-1].second);
     joueurCourant->addJeton(jeton);
 
     qDebug()  << "Etat du joueur apres l'action : \n";
