@@ -549,12 +549,10 @@ bool Controller::appliquerCapacite(Capacite capa,const Carte &carte){
 //Menu choix des actions
 unsigned int Controller::choixActionsObligatoires() {
     qDebug() << "\033[1mActions obligatoires:\033[0m\n";
-    qDebug() << "\033[1mActions obligatoires:\033[0m\n";
     qDebug() << "1. Recuperer des jetons\n";
     qDebug()  << "2. Acheter une carte joaillerie\n";
     qDebug() << "3. Reserver une carte\n";
     qDebug() << "9. Quitter le jeu\n";
-    qDebug() << "Votre choix (1/2/3/9):\n";
     qDebug() << "Votre choix (1/2/3/9):\n";
 
 
@@ -563,12 +561,10 @@ unsigned int Controller::choixActionsObligatoires() {
 
 unsigned int Controller::choixActionsOptionelles() {
     qDebug() << "\033[1mActions optionnelles:\033[0m\n";
-    qDebug() << "\033[1mActions optionnelles:\033[0m\n";
     qDebug() << "1. Utiliser un privilege\n";
     qDebug()  << "2. Remplir le plateau\n";
     qDebug() << "3. Ne plus faire d'actions optionnelles\n";
     qDebug() << "9. Quitter le jeu\n";
-    qDebug() << "Votre choix (1/2/3/9):\n";
     qDebug() << "Votre choix (1/2/3/9):\n";
 
 
