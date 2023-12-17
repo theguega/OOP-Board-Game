@@ -1228,6 +1228,10 @@ std::pair<bool, QString> Controller::verifJetons(const std::vector<std::pair<int
     std::vector<std::pair<int, int>> coord_tmp = coord;
     unsigned int nbJetons = coord.size();
 
+    if(nbJetons == 0){
+        auto output = std::make_pair(false, "Veuillez selectionner des jetons");
+        return output;
+    }
     // Verifier que les jetons sont adjacents
     if (nbJetons > 1) {
         bool result1 = true;
@@ -1341,7 +1345,7 @@ std::pair<bool, QString> Controller::verifJetons(const std::vector<std::pair<int
     }
     auto output = std::make_pair(true, "");
     return output;
-};
+}
 
 ///////////////////////// Sauvegarde /////////////////////////
 

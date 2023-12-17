@@ -193,9 +193,6 @@ vuePlateau::vuePlateau(QWidget* parent, int hauteur, int largeur, Plateau& plat)
 }
 
 void vuePlateau::placerJetons(){
-    for(int i = 0; i < 3; i++){
-        jetonSelection[i] = nullptr; //Initialise jetonSelection avec nullptr
-    }
     for(auto pt : listeJetons){
         delete pt;
     }
