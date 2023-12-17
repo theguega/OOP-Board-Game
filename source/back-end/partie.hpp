@@ -126,7 +126,7 @@ class LastPartieBuilder: public PartieBuilder {
         this -> partie = new Partie();
     }
 
-    virtual void setJoueurs([[maybe_unused]]string pseudo1,[[maybe_unused]]type t1,[[maybe_unused]]string pseudo2,[[maybe_unused]]type t2) const override {};
+    virtual void setJoueurs([[maybe_unused]]string pseudo1,[[maybe_unused]]type t1,[[maybe_unused]]string pseudo2,[[maybe_unused]]type t2) const override {}
     virtual void setJoueurs() const override;
     virtual void setCartesJoueurs() const override;
     virtual void setJetonsJoueurs() const override;

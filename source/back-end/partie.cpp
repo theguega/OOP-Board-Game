@@ -28,6 +28,9 @@ void LastPartieBuilder::setJoueurs() const {
         string pseudo = query.value(1).toString().toStdString();
         string type = query.value(2).toString().toStdString();
         int nb_privileges = query.value(3).toInt();
+        int ptsPrestige = query.value(4).toInt();
+        int nbCouronnes = query.value(5).toInt();
+
         if (type == "IA")
             this->partie->joueurs[i] = new Joueur(pseudo, type::IA);
         else
@@ -39,6 +42,15 @@ void LastPartieBuilder::setJoueurs() const {
                 this->partie->getJoueur1()->addPrivilege(p);
             else
                 this->partie->getJoueur2()->addPrivilege(p);
+        }
+
+        if(i==0){
+            this->partie->getJoueur1()->updatePtsPrestige(ptsPrestige);
+            this->partie->getJoueur1()->updateNbCouronnes(nbCouronnes);
+        }
+        if(i==1){
+            this->partie->getJoueur2()->updatePtsPrestige(ptsPrestige);
+            this->partie->getJoueur2()->updateNbCouronnes(nbCouronnes);
         }
         i++;
     }
