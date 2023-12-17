@@ -1,9 +1,15 @@
 #include "partie.hpp"
 
+
+
+
 Partie::Partie(): espaceJeux(new EspaceJeux()) {
     joueurs[0] = nullptr;
     joueurs[1] = nullptr;
 }
+
+
+
 
 // ###########   LastPartieBuilder   #############
 
@@ -57,6 +63,8 @@ void LastPartieBuilder::setJoueurs() const {
 
     db.close();
 }
+
+
 
 
 void LastPartieBuilder::setCartesJoueurs() const {
@@ -133,6 +141,8 @@ void LastPartieBuilder::setCartesJoueurs() const {
 }
 
 
+
+
 void LastPartieBuilder::setJetonsJoueurs() const {
     QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE", "conn7");
     db.setDatabaseName("data/save.sqlite");
@@ -172,6 +182,8 @@ void LastPartieBuilder::setJetonsJoueurs() const {
 
     db.close();
 }
+
+
 
 
 void LastPartieBuilder::updateEspaceJeu() const {
@@ -227,6 +239,9 @@ void LastPartieBuilder::updateEspaceJeu() const {
 
     db.close();
 }
+
+
+
 
 void LastPartieBuilder::setInfosPartie() const {
     QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE", "conn9");
