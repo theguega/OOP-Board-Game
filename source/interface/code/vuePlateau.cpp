@@ -208,6 +208,9 @@ void vuePlateau::placerJetons(){
             boutonClique(i); //Permet d'appeler la fonction boutonClique(int i) lorsque le bouton i est clique
         });
     }
+    for(int i = 0; i < 3; i++){
+        jetonSelection[i] = nullptr; //Initialise jetonSelection avec nullptr
+    }
     update();
 }
 
