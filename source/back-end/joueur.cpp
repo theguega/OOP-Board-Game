@@ -2,6 +2,8 @@
 #include <algorithm>
 
 
+
+
 std::string toStringType(type t) {
     switch (t) {
         case type::IA: return "IA";
@@ -10,37 +12,43 @@ std::string toStringType(type t) {
     throw SplendorException("Type inconnu");
 }
 
+
+
+
 type toType(std::string s) {
     if (s == "IA") return type::IA;
     return type::HUMAIN;
 }
 
-// Constructeur
-Joueur::Joueur(string pseudo, type typeDeJoueur):
-               pseudo(pseudo), typeDeJoueur(typeDeJoueur), ptsPrestige(0), nbCouronnes(0), gagnant(0) {
 
 
-                //on initialise les map avec les bonnes couleurs
-                for (const auto& couleur : Couleurs) {
-                    if (couleur != Couleur::INDT) {
-                        jetons[couleur];
-                    }
-                    if (couleur != Couleur::OR) {
-                        cartes[couleur];
-                        cartesReservees[couleur];
-                        bonus[couleur] = 0;
-                    }
-                }
+
+Joueur::Joueur(string pseudo, type typeDeJoueur): pseudo(pseudo), typeDeJoueur(typeDeJoueur), ptsPrestige(0), nbCouronnes(0), gagnant(0) {
+
+    //on initialise les map avec les bonnes couleurs
+    for (const auto& couleur : Couleurs) {
+        if (couleur != Couleur::INDT) {
+            jetons[couleur];
+        }
+        if (couleur != Couleur::OR) {
+            cartes[couleur];
+            cartesReservees[couleur];
+            bonus[couleur] = 0;
+        }
+    }
 
     // Creer la strategie en fonction du type de joueur
     if (typeDeJoueur == type::IA) {
-        strategy = new StrategyIA();  // Vous devez definir le constructeur de StrategyIA
+        strategy = new StrategyIA();
     } else {
-        strategy = new StrategyHumain();  // Vous devez definir le constructeur de StrategyHumain
+        strategy = new StrategyHumain();
     }
 }
 
-// Destructeur
+
+
+
+
 Joueur::~Joueur() {
     // Voir l'interet d'un destructeur
     /*
@@ -55,6 +63,10 @@ Joueur::~Joueur() {
     }*/
 }
 
+
+
+
+
 // Getter
 size_t Joueur::getNbCartes() const {
     size_t nbCartes = 0;
@@ -67,6 +79,9 @@ size_t Joueur::getNbCartes() const {
     return nbCartes;
 }
 
+
+
+
 size_t Joueur::getNbCartesReservees() const {
     size_t nbCartes = 0;
     for (const auto& couleur : Couleurs) {
@@ -76,6 +91,9 @@ size_t Joueur::getNbCartesReservees() const {
     }
     return nbCartes;
 }
+
+
+
 
 size_t Joueur::getNbJetons() const {
     size_t nbJetons = 0;
@@ -88,8 +106,10 @@ size_t Joueur::getNbJetons() const {
     return nbJetons;
 }
 
-// Affichages
 
+
+
+// Affichages
 void Joueur::afficherJoueur() const {
     std::cout << "\n#############################################\n";
     std::cout << "Pseudo : " << pseudo << " | Type : " << toStringType(typeDeJoueur);
@@ -107,12 +127,18 @@ void Joueur::afficherJoueur() const {
     std::cout << "#############################################\n\n";
 }
 
+
+
+
 void Joueur::afficherCartes() const {
     for (size_t i = 0; i < getNbCartes(); i++) {
         std::cout << "Carte " << i << " : " << std::endl;
         //cartes[i]->afficherCarte();
     }
 }
+
+
+
 
 void Joueur::afficherJetons() const {
     for (size_t i = 0; i < getNbJetons(); i++) {
@@ -121,29 +147,46 @@ void Joueur::afficherJetons() const {
     }
 }
 
-// Ajout des elements
 
+
+
+// Setters et updater
 void Joueur::addCarte(const Carte &carte) {
     cartes[carte.getBonus().getCouleur()].push_back(&carte);
     ptsPrestige += carte.getNbPtsPrivilege();
     nbCouronnes += carte.getNbCouronnes();
 }
 
+
+
+
 void Joueur::addCarteReservee(const Carte &carte) {
     cartesReservees[carte.getBonus().getCouleur()].push_back(&carte);
 }
+
+
+
 
 void Joueur::addCarteNoble(const Carte& carte){
     cartesNobles.push_back(&carte);
 }
 
+
+
+
 void Joueur::addJeton(const Jeton& jeton) {
     jetons[jeton.getCouleur()].push_back(&jeton);
 }
 
+
+
+
 void Joueur::addPrivilege(const Privilege &privilege) {
     privileges.push_back(&privilege);
 }
+
+
+
 
 void Joueur::addBonus(Couleur c, int nb){
     for (int i =0; i < nb; i++){
@@ -151,8 +194,10 @@ void Joueur::addBonus(Couleur c, int nb){
     }
 }
 
-// Suppression des elements
 
+
+
+// Suppression des elements
 void::Joueur::supCarte(Carte &carte) {
     for (size_t i = 0; i < cartes[carte.getBonus().getCouleur()].size(); i++) {
         if (cartes[carte.getBonus().getCouleur()][i] == &carte) {
@@ -162,6 +207,9 @@ void::Joueur::supCarte(Carte &carte) {
         }
     }
 }
+
+
+
 
 void::Joueur::supCarteReservee(const Carte &carte) {
     Couleur couleur = carte.getBonus().getCouleur();
@@ -175,6 +223,9 @@ void::Joueur::supCarteReservee(const Carte &carte) {
     }
 }
 
+
+
+
 void Joueur::supCarteNoble(const Carte& carte){
     for (size_t i = 0; i < cartesNobles.size(); i++) {
         if (cartesNobles[i] == &carte) {
@@ -182,6 +233,9 @@ void Joueur::supCarteNoble(const Carte& carte){
         }
     }
 }
+
+
+
 
 void::Joueur::supJeton(Jeton *jeton, EspaceJeux& espaceJeux) {
     for (size_t i = 0; i < jetons[jeton->getCouleur()].size(); i++) {
@@ -193,6 +247,9 @@ void::Joueur::supJeton(Jeton *jeton, EspaceJeux& espaceJeux) {
     }
 }
 
+
+
+
 void Joueur::supJetonNb(unsigned int nb, Couleur c, EspaceJeux& espaceJeux){
     for (size_t i = 0; i < nb; i++) {
         // On rajoute le jeton dans le sac
@@ -202,6 +259,8 @@ void Joueur::supJetonNb(unsigned int nb, Couleur c, EspaceJeux& espaceJeux){
     }
 
 }
+
+
 
 
 void Joueur::supJetonPrix(Carte &c, EspaceJeux& espaceJeux){
@@ -215,12 +274,16 @@ void Joueur::supJetonPrix(Carte &c, EspaceJeux& espaceJeux){
 
 
 
+
 const Jeton& Joueur::RecupJetonCoul(Couleur c){
     const Jeton& jetonRecup = *jetons[c].back();
     // On supprime le jeton du joueur
     jetons[c].pop_back();
     return jetonRecup;
 }
+
+
+
 
 const Privilege&::Joueur::supPrivilege() {
     if (getNbPrivileges()==0)
@@ -229,6 +292,7 @@ const Privilege&::Joueur::supPrivilege() {
     privileges.pop_back();
     return  priv;
 }
+
 
 
 

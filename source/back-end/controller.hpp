@@ -1,10 +1,25 @@
 #ifndef CONTROLLER_H
 #define CONTROLLER_H
 
+/*
+------------------------------------------------
+   _____            _             _ _
+  / ____|          | |           | | |
+ | |     ___  _ __ | |_ _ __ ___ | | | ___ _ __
+ | |    / _ \| '_ \| __| '__/ _ \| | |/ _ \ '__|
+ | |___| (_) | | | | |_| | | (_) | | |  __/ |
+  \_____\___/|_| |_|\__|_|  \___/|_|_|\___|_|
+
+------------------------------------------------
+*/
+
 #include <random>
 #include "partie.hpp"
 #include <QDebug>
 #include <cstdlib>
+
+
+
 
 class Controller {
 private:
@@ -59,6 +74,7 @@ public:
 	// Actions obligatoires
     void recupererJetons(bool capacite,Couleur coulBonus = Couleur::INDT);
     bool acheterCarteJoaillerie(EspaceJeux& espaceJeux);
+    void paiementCarte(const Carte& carte, EspaceJeux& espaceJeux);
 	void orReserverCarte(Pyramide& pyramide, Plateau& plateau);
 
     //donne un privilege au joueur adverse en suivant la logique de splendor duel
@@ -85,6 +101,5 @@ public:
     vector<pair<Couleur, int>> GenereCarteResaDispo();
 
 };
-
 
 #endif

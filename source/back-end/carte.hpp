@@ -20,12 +20,15 @@
 #include <unordered_map>
 #include <map>
 #include <random>
-#include "jetons.hpp"
-#include "exception.hpp"
+
 #include <QtSql>
 #include <QSqlDatabase>
 #include <QSqlQuery>
 #include <QDebug>
+
+#include "jetons.hpp"
+#include "exception.hpp"
+
 using namespace std;
 
 

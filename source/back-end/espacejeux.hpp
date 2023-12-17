@@ -1,5 +1,19 @@
 #ifndef ESPACEJEUX_H
 #define ESPACEJEUX_H
+
+/*
+----------------------------------------------------------
+  ______                               _
+ |  ____|                             | |
+ | |__   ___ _ __   __ _  ___ ___     | | ___ _   ___  __
+ |  __| / __| '_ \ / _` |/ __/ _ \_   | |/ _ \ | | \ \/ /
+ | |____\__ \ |_) | (_| | (_|  __/ |__| |  __/ |_| |>  <
+ |______|___/ .__/ \__,_|\___\___|\____/ \___|\__,_/_/\_\
+            | |
+            |_|
+----------------------------------------------------------
+*/
+
 #include <iostream>
 #include <string>
 #include <array>
@@ -7,6 +21,8 @@
 
 #include "jetons.hpp"
 #include "carte.hpp"
+
+
 
 
 class Pyramide {
@@ -46,6 +62,8 @@ class Pyramide {
      };
 
 
+
+
 class EspaceJeux {
     friend class Partie;
     private:
@@ -74,8 +92,6 @@ class EspaceJeux {
         
         EspaceJeux(const EspaceJeux&) = delete;
         EspaceJeux& operator=(const EspaceJeux&) = delete;
- 
-
 };
  
  #endif  //ESPACEJEUX_H
