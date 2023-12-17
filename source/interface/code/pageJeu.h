@@ -14,6 +14,7 @@
 #include "interface/code/vuePyramide.h"
 #include "back-end/controller.hpp"
 #include "interface/code/popUp.h"
+#include "back-end/joueur.hpp"
 
 class pageJeu : public QWidget {
     Q_OBJECT
@@ -27,9 +28,13 @@ private:
     QPushButton* afficherJ1; //Bouton pour afficher la page du joueur1
     QPushButton* afficherJ2; //Bouton pour afficher la page du joueur2
 
-    QHBoxLayout* partieHaute; //Partie Haute a ranger (pyramide et plateau)
+    QHBoxLayout* partieHaute;
+    QHBoxLayout* partieMoyenne;  //Partie Haute a ranger (pyramide et plateau)
     QHBoxLayout* partieBasse; //Partie Basse a ranger (boutons)
     QVBoxLayout* layout;//Layout principal
+    QVBoxLayout* layoutPrivileges;
+
+    QLabel* labelJC;
 
     QScreen* ecran; //Recupere l'ecran de l'utilisateur
     QSize tailleEcran; //Recupere la taille de l'ecran
@@ -66,9 +71,21 @@ public:
         aSauvegarde -> hide();
         QWidget::mousePressEvent(event);
     }
+    void setLabelJC(){labelJC->setText(QString::fromStdString(control->getJoueurCourant().getPseudo()));}
 private slots:
     void validerSelectionJeton();
     void handleValidationResult(bool isValid, const QString &message);
+};
+
+class vuePrivilege : public QWidget{
+    Q_OBJECT
+private:
+    int h;
+    int l;
+protected:
+    void paintEvent(QPaintEvent *event);
+public:
+    vuePrivilege(int hauteur, int largeur) : h(hauteur), l(largeur){setFixedSize(l, h);}
 };
 
 #endif // PAGEJEU_H

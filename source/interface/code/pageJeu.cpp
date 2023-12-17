@@ -14,10 +14,10 @@ pageJeu::pageJeu(QString statut_partie, QString pseudo_j_1, type type_j_1, QStri
     tailleLargeur = tailleEcran.width();
     tailleHauteur = tailleEcran.height();
 
-    vPlateau = new vuePlateau(nullptr, tailleHauteur - 100, tailleLargeur / 2, control->getPlateau());
+    vPlateau = new vuePlateau(nullptr, tailleHauteur - 100, (tailleLargeur-30) / 2, control->getPlateau());
     joueur1 = new pageJoueur(nullptr);
     joueur2 = new pageJoueur(nullptr);
-    vPyramide = new vuePyramide(nullptr, tailleHauteur - 100, tailleLargeur / 2, control->getPyramide());
+    vPyramide = new vuePyramide(nullptr, tailleHauteur - 100, (tailleLargeur-30) / 2, control->getPyramide());
 
     afficherJ1 = new QPushButton("Afficher Joueur 1");
     afficherJ2 = new QPushButton("Afficher Joueur 1");
@@ -30,16 +30,30 @@ pageJeu::pageJeu(QString statut_partie, QString pseudo_j_1, type type_j_1, QStri
     });
 
     partieHaute = new QHBoxLayout;
+    partieMoyenne = new QHBoxLayout;
     partieBasse = new QHBoxLayout;
     layout = new QVBoxLayout;
+    layoutPrivileges = new QVBoxLayout;
 
-    partieHaute -> addWidget(vPlateau);
-    partieHaute -> addWidget(vPyramide);
+    for(int i = 0; i < 3; i++){
+        layoutPrivileges->addWidget(new vuePrivilege((vPlateau->height() - 130)/3, 30));
+    }
+
+    labelJC = new QLabel;
+    partieHaute -> addWidget(labelJC);
+    partieHaute -> setAlignment(Qt::AlignCenter);
+    setLabelJC();
+
+    partieMoyenne -> addLayout(layoutPrivileges);
+    partieMoyenne -> addWidget(vPlateau);
+    partieMoyenne -> addWidget(vPyramide);
+    partieMoyenne -> setAlignment(Qt::AlignVCenter);
 
     partieBasse -> addWidget(afficherJ1);
     partieBasse -> addWidget(afficherJ2);
 
     layout -> addLayout(partieHaute);
+    layout -> addLayout(partieMoyenne);
     layout -> addLayout(partieBasse);
     setLayout(layout);
 
@@ -79,3 +93,22 @@ void pageJeu::paintEvent(QPaintEvent *event){
     painter.drawRect(rect()); //On peind ce rectangle (permet de fair eun contour de la carte)
 }
 
+void vuePrivilege::paintEvent(QPaintEvent *event){
+    QWidget::paintEvent(event);
+    QPainter painter(this);
+
+    painter.setRenderHint(QPainter::Antialiasing);
+
+    QPolygon triangleSup;
+    QPolygon triangleInf;
+
+    triangleSup << QPoint(0, 0) << QPoint(l, 0) << QPoint(l/2, h/2);
+    triangleInf << QPoint(l, h) << QPoint(0, h) << QPoint(l/2, h/2);
+
+    painter.setBrush(QColor("#B4B4B3"));
+    painter.setPen(QPen(Qt::black, 2));
+    painter.drawPolygon(triangleSup);
+    painter.drawPolygon(triangleInf);
+    painter.setBrush(QColor("#FF9AC7"));
+    painter.drawEllipse(QPoint(l/2, h/2), l/4, l/4);
+}
