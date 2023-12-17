@@ -29,6 +29,7 @@ void grilleJetons::placerJeton(const Jeton* jeton, int i, int j){
     int newY = listeRectangles[k]->center().y() - tailleJeton + 2.5;
     newJeton->move(newX,  newY);
     ptListeJetons->push_back(newJeton);
+    update();
 }
 
 void grilleJetons::paintEvent(QPaintEvent *event){
@@ -192,20 +193,25 @@ vuePlateau::vuePlateau(QWidget* parent, int hauteur, int largeur, Plateau& plat)
 }
 
 void vuePlateau::placerJetons(){
+    for(int i = 0; i < 3; i++){
+        jetonSelection[i] = nullptr; //Initialise jetonSelection avec nullptr
+    }
     for(auto pt : listeJetons){
         delete pt;
     }
     listeJetons.clear();
     for(int i = 0; i < rnbJetons; i++){
         for(int j = 0; j < rnbJetons; j++){
-            grille->placerJeton(plateau.getJeton(i,j), i , j);
+            if(plateau.getJeton(i, j) != nullptr)
+                grille->placerJeton(plateau.getJeton(i,j), i , j);
         }
     }
-    for(int i = 0; i < nbJetons; i++){
+    for(int i = 0; i < listeJetons.size(); i++){
         QObject::connect(listeJetons[i], &vueJeton::clicked, [this, i]() {
             boutonClique(i); //Permet d'appeler la fonction boutonClique(int i) lorsque le bouton i est clique
         });
     }
+    update();
 }
 
 void vuePlateau::boutonClique(int i){

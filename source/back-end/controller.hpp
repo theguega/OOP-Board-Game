@@ -82,6 +82,7 @@ public:
 
     // verifs de la partie graphique
     std::pair<bool, QString> verifJetons(const std::vector<std::pair<int, int>>& coord);
+    void recupererJetons(const std::vector<std::pair<int, int>>& coord);
 
 };
 

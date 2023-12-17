@@ -749,6 +749,43 @@ void Controller::recupererJetons(bool capacite,Couleur coulBonus){
     return;
 }
 
+
+
+
+void Controller::recupererJetons(const std::vector<std::pair<int, int> > &coord){
+
+    // Recup des jetons
+    std::vector<const Jeton*> jetonsRecup;
+    for (unsigned int k = 0; k < coord.size(); k++){
+        jetonsRecup.push_back(&getPlateau().recupererJeton(coord[k].first, coord[k].second));
+    }
+
+    // ajout des jetons dans la main du joueur
+    for (auto & i : jetonsRecup){
+        joueurCourant->addJeton(*i);
+    }
+
+    // Ajout privilège joueur adv si 3 jetons mm couleur ou 2 jetons perle
+    unsigned int nbJetonsPerle = 0;
+    bool troisJetons = true;
+    Couleur coulPremierJeton = jetonsRecup[0]->getCouleur();
+    for(unsigned int k = 0; k < coord.size(); k++){
+        if(jetonsRecup[k]->getCouleur() == Couleur::PERLE){
+            nbJetonsPerle++;
+        }
+        if(jetonsRecup[k]->getCouleur() != coulPremierJeton && troisJetons != false){
+            troisJetons = false;
+        }
+    }
+    if(nbJetonsPerle == 2 || (troisJetons == true && jetonsRecup.size()== 3)){
+        donPrivilegeAdverse();
+    }
+    return;
+}
+
+
+
+
 //TODO
 bool Controller::acheterCarteJoaillerie (EspaceJeux& espaceJeux){
     qDebug()<<"Vous avez decider d'acheter une carte joaillerie\n";

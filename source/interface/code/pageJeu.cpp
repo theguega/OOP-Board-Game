@@ -61,8 +61,15 @@ void pageJeu::validerSelectionJeton()
 
 void pageJeu::handleValidationResult(bool isValid, const QString &message)
 {
-    popUpInfo* infos = new popUpInfo(nullptr, message.toStdString());
-    infos->show();
+    if(isValid){
+        control->recupererJetons(vPlateau->getSelectionJetons());
+        vPlateau->placerJetons();
+        update();
+    }
+    else{
+        popUpInfo* infos = new popUpInfo(nullptr, message.toStdString());
+        infos->show();
+    }
 }
 
 
