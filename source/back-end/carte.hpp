@@ -1,6 +1,18 @@
 #ifndef CARTES_H
 #define CARTES_H
 
+/*
+--------------------------------
+   _____           _
+  / ____|         | |
+ | |     __ _ _ __| |_ ___  ___
+ | |    / _` | '__| __/ _ \/ __|
+ | |___| (_| | |  | ||  __/\__ \
+  \_____\__,_|_|   \__\___||___/
+
+--------------------------------
+*/
+
 #include <iostream>
 #include <string>
 #include <array>
@@ -17,11 +29,15 @@
 using namespace std;
 
 
+
+
 enum class TypeCarte { Niv1, Niv2, Niv3, Noble };
 string TypeCartetoString(TypeCarte t);
 ostream& operator<<(ostream& f, TypeCarte t);
 QDebug operator<<(QDebug f, TypeCarte t);
 extern std::initializer_list<TypeCarte> TypesCarte;
+
+
 
 
 enum class Capacite { NewTurn, TakePrivilege, TakeJetonFromBonus, TakeJetonToAdv, AssociationBonus, None };
@@ -34,7 +50,8 @@ Capacite StringToCapacite(const string& capaciteStr);
 
 
 
-class Prix { // on l'encapsule dans la classe carte ? ou bien il y'a d'autres elements qui ont un cout ?
+
+class Prix {
 private:
     unsigned int blanc, bleu, vert, noir, rouge, perle;
 public:
@@ -49,6 +66,9 @@ public:
 };
 ostream& operator<<(ostream& f, const Prix& p);
 QDebug operator<<(QDebug f, const Prix &p);
+
+
+
 
 class Bonus {
 private:
@@ -66,6 +86,9 @@ public:
 ostream& operator<<(ostream& f, const Bonus& b);
 
 QDebug operator<<(QDebug f, const Bonus &b);
+
+
+
 
 class Carte {
 private:
@@ -94,6 +117,9 @@ public:
 ostream& operator<<(ostream& f, const Carte& c);
 QDebug operator<<(QDebug f, const Carte &c);
 
+
+
+
 class JeuCarte {
 private:
     vector<const Carte*> cartes_nv1; 
@@ -117,6 +143,8 @@ public:
     JeuCarte(const JeuCarte& j) = delete;
     JeuCarte& operator=(const JeuCarte& j) = delete;
 };
+
+
 
 
 class Pioche{
