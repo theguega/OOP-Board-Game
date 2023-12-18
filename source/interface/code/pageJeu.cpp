@@ -16,7 +16,7 @@ pageJeu::pageJeu(QString statut_partie, QString pseudo_j_1, type type_j_1, QStri
     tailleLargeur = tailleEcran.width();
     tailleHauteur = tailleEcran.height();
 
-    vPlateau = new vuePlateau(nullptr, tailleHauteur - 100, (tailleLargeur-30) / 2, control->getPlateau());
+    vPlateau = new vuePlateau(nullptr, tailleHauteur - 150, (tailleLargeur-150) / 2, control->getPlateau());
     joueur1 = new pageJoueur(nullptr, control->getPartie().getJoueur1(), (vPlateau->height() - 130)/4, 30);
     joueur2 = new pageJoueur(nullptr, control->getPartie().getJoueur2(), (vPlateau->height() - 130)/4, 30);
     vPyramide = new vuePyramide(nullptr, tailleHauteur - 100, (tailleLargeur-30) / 2, control->getPyramide());
