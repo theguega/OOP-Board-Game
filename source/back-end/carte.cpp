@@ -1,7 +1,6 @@
 #include "carte.hpp"
-
-
 using namespace std;
+
 
 
 
@@ -13,6 +12,8 @@ std::initializer_list < TypeCarte > TypesCarte = {
 };
 
 
+
+
 std::initializer_list < Capacite > Capacites = {
     Capacite::NewTurn,
     Capacite::TakePrivilege,
@@ -21,6 +22,8 @@ std::initializer_list < Capacite > Capacites = {
     Capacite::AssociationBonus,
     Capacite::None
 };
+
+
 
 
 string TypeCartetoString(TypeCarte t) {
@@ -47,6 +50,8 @@ QDebug operator<<(QDebug f, TypeCarte t){
     f << TypeCartetoString(t);
     return f;
 }
+
+
 
 
 string CapacitetoString(Capacite c) {
@@ -96,6 +101,9 @@ QDebug operator<<(QDebug f, Capacite c){
     return f;
 }
 
+
+
+
 std::map < std::string, Capacite > stringToCapaciteMap = {
     {
         "NewTurn",
@@ -124,6 +132,8 @@ std::map < std::string, Capacite > stringToCapaciteMap = {
 };
 
 
+
+
 Capacite StringToCapacite(const std::string & capaciteStr) {
     auto tmp = stringToCapaciteMap.find(capaciteStr);
     if (tmp != stringToCapaciteMap.end()) {
@@ -133,7 +143,6 @@ Capacite StringToCapacite(const std::string & capaciteStr) {
     }
 }
 
-
 ostream & operator << (ostream & f,
     const Prix & p) {
     f << toEmojiCouleur(Couleur::BLANC) << " : " << p.getBlanc() << "    " << toEmojiCouleur(Couleur::BLEU) << " : " << p.getBleu() << "\n";
@@ -142,11 +151,10 @@ ostream & operator << (ostream & f,
     return f;
 }
 
-
 QDebug operator<<(QDebug f, const Prix &p) {
-    f << toEmojiCouleur(Couleur::BLANC) << " : " << p.getBlanc() << "    " << toEmojiCouleur(Couleur::BLEU) << " : " << p.getBleu() << "\n";
-    f << toEmojiCouleur(Couleur::VERT) << " : " << p.getVert() << "    " << toEmojiCouleur(Couleur::NOIR) << " : " << p.getNoir() << "\n";
-    f << toEmojiCouleur(Couleur::ROUGE) << " : " << p.getRouge() << "    " << toEmojiCouleur(Couleur::PERLE) << " : " << p.getPerle() << "\n";
+    f << Couleur::BLANC << " : " << p.getBlanc() << "    " << Couleur::BLEU << " : " << p.getBleu() << "\n";
+    f << Couleur::VERT << " : " << p.getVert() << "    " << Couleur::NOIR << " : " << p.getNoir() << "\n";
+    f << Couleur::ROUGE << " : " << p.getRouge() << "    " << Couleur::PERLE << " : " << p.getPerle() << "\n";
     return f;
 }
 
@@ -161,6 +169,9 @@ QDebug operator<<(QDebug f, const Bonus &b){
     return f;
 }
 
+
+
+
 Carte::Carte(TypeCarte t, Prix & p, Capacite c1, Capacite c2, Bonus & b, unsigned int nbC, unsigned int nbP, unsigned int id): type(t), prix(p), capacite1(c1), capacite2(c2), bonus(b), nbCouronnes(nbC), nbPtsPrivilege(nbP), id(id) {
     if (t == TypeCarte::Noble)
         throw SplendorException("Veuillez utiliser le constructeur approprie");
@@ -171,6 +182,8 @@ Carte::Carte(TypeCarte t, Capacite c, unsigned int nbP, unsigned int id): type(t
     if (t != TypeCarte::Noble)
         throw SplendorException("Veuillez utiliser le constructeur approprie");
 }
+
+
 
 
 ostream & operator << (ostream & f,
@@ -186,6 +199,9 @@ ostream & operator << (ostream & f,
     f << "------------------------------\n";
     return f;
 }
+
+
+
 
 QDebug operator<<(QDebug f, const Carte & c) {
     f << "------------------------------\n";
@@ -256,6 +272,8 @@ string Carte::getInfos() const {
 };
 
 
+
+
 JeuCarte::JeuCarte() {
     QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE", "conn2");
     db.setDatabaseName("data/data_carte.sqlite");
@@ -308,14 +326,16 @@ JeuCarte::JeuCarte() {
     }
 
     while (query2.next()) {
+        unsigned int id = query2.value(0).toUInt();
         std::string capacite = query2.value(1).toString().toStdString();
         unsigned int nb_pts_privileges = query2.value(2).toUInt();
-        unsigned int id = query2.value(3).toUInt();
         cartes_nobles.push_back(new Carte(TypeCarte::Noble, StringToCapacite(capacite), nb_pts_privileges, id));
     }
 
     db.close();
 }
+
+
 
 
 JeuCarte::~JeuCarte() {
@@ -334,35 +354,44 @@ JeuCarte::~JeuCarte() {
 }
 
 
+
+
 const Carte & JeuCarte::getCarteNiv1(size_t i) const {
     if (i >= getNbCartes_nv1())
-        throw SplendorException("Il n'y a que 30 cartes de niveau 1");
+        throw SplendorException("Indice invalide pour le niveau 1");
     return * cartes_nv1[i];
 }
 
 
+
+
 const Carte & JeuCarte::getCarteNiv2(size_t i) const {
     if (i >= getNbCartes_nv2())
-        throw SplendorException("Il n'y a que 24 cartes de niveau 2");
+        throw SplendorException("Indice invalide pour le niveau 2");
     return * cartes_nv2[i];
 }
 
 
+
+
 const Carte & JeuCarte::getCarteNiv3(size_t i) const {
     if (i >= getNbCartes_nv2())
-        throw SplendorException("Il n'y a que 13 cartes de niveau 3");
+        throw SplendorException("Indice invalide pour le niveau 3");
     return * cartes_nv3[i];
 }
 
 
+
+
 const Carte & JeuCarte::getCarteNoble(size_t i) const {
     if (i >= getNbCartes_nobles())
-        throw SplendorException("Il n'y a que 4 cartes nobles");
+        throw SplendorException("Indice invalide pour les cartes Nobles");
     return * cartes_nobles[i];
 }
 
 
-// constructeur pioche
+
+
 Pioche::Pioche(const JeuCarte & j, TypeCarte t): type_carte(t) {
     if (t == TypeCarte::Niv1) {
         for (size_t i = 0; i < j.getNbCartes_nv1(); i++)
@@ -382,14 +411,16 @@ Pioche::Pioche(const JeuCarte & j, TypeCarte t): type_carte(t) {
 }
 
 
-// destructeur pioche
+
+
 Pioche::~Pioche() {
     for (size_t i = 0; i < getNbCartes(); i++)
         cartes[i] = nullptr;
 }
 
 
-// methode piocher
+
+
 const Carte & Pioche::piocher() {
     if (estVide())
         throw SplendorException("Plus de cartes dans cette pioche");
@@ -403,11 +434,12 @@ const Carte & Pioche::piocher() {
     const Carte * c = cartes[i];
     cartes.erase(cartes.begin() + i);
 
-    return * c;
+    return *c;
 }
 
 
-// methode picoher
+
+
 const Carte & Pioche::piocher(unsigned int id) {
     if (estVide())
         throw SplendorException("Plus de cartes dans cette pioche");

@@ -1,5 +1,19 @@
 #ifndef ESPACEJEUX_H
 #define ESPACEJEUX_H
+
+/*
+----------------------------------------------------------
+  ______                               _
+ |  ____|                             | |
+ | |__   ___ _ __   __ _  ___ ___     | | ___ _   ___  __
+ |  __| / __| '_ \ / _` |/ __/ _ \_   | |/ _ \ | | \ \/ /
+ | |____\__ \ |_) | (_| | (_|  __/ |__| |  __/ |_| |>  <
+ |______|___/ .__/ \__,_|\___\___|\____/ \___|\__,_/_/\_\
+            | |
+            |_|
+----------------------------------------------------------
+*/
+
 #include <iostream>
 #include <string>
 #include <array>
@@ -7,6 +21,8 @@
 
 #include "jetons.hpp"
 #include "carte.hpp"
+
+
 
 
 class Pyramide {
@@ -32,7 +48,7 @@ class Pyramide {
         void definitCarte(int i, int j, const Carte& c) { array_cartes[i][j] = &c; };
         
         const Carte* getCarte(size_t i, size_t j) { return array_cartes[i][j]; };
-        size_t getNbCartesNiv(unsigned int niveau) const {return array_cartes[niveau].size(); }; 
+        size_t getNbCartesNiv(unsigned int niveau) const {return array_cartes[niveau].size(); };
         Pioche& getPioche1() const { return pNv1; }
         Pioche& getPioche2() const { return pNv2; }
         Pioche& getPioche3() const { return pNv3; }
@@ -44,6 +60,8 @@ class Pyramide {
         Pyramide(const Pyramide&) = delete;
         Pyramide& operator=(const Pyramide&) = delete;
      };
+
+
 
 
 class EspaceJeux {
@@ -74,8 +92,6 @@ class EspaceJeux {
         
         EspaceJeux(const EspaceJeux&) = delete;
         EspaceJeux& operator=(const EspaceJeux&) = delete;
- 
-
 };
  
  #endif  //ESPACEJEUX_H

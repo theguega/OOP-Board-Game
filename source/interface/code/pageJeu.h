@@ -74,7 +74,7 @@ public:
         aSauvegarde -> hide();
         QWidget::mousePressEvent(event);
     }
-    void setLabelJC(){labelJC->setText(QString::fromStdString(control->getJoueurCourant().getPseudo()));}
+    void setLabelJC(){labelJC->setText(QString::fromStdString("C'est au tour de " + control->getJoueurCourant().getPseudo()));}
     void afficherPrivileges();
 private slots:
     void validerSelectionJeton();

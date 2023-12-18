@@ -1,14 +1,30 @@
 #ifndef CONTROLLER_H
 #define CONTROLLER_H
 
+/*
+------------------------------------------------
+   _____            _             _ _
+  / ____|          | |           | | |
+ | |     ___  _ __ | |_ _ __ ___ | | | ___ _ __
+ | |    / _ \| '_ \| __| '__/ _ \| | |/ _ \ '__|
+ | |___| (_) | | | | |_| | | (_) | | |  __/ |
+  \_____\___/|_| |_|\__|_|  \___/|_|_|\___|_|
+
+------------------------------------------------
+*/
+
 #include <random>
 #include "partie.hpp"
 #include <QDebug>
 #include <QString>
 #include <cstdlib>
 
+
+
+
 class Controller {
 private:
+    string stat_partie;
 	Partie* partie;
 	Joueur* joueurCourant = nullptr;
     Strategy * strategy_courante  = nullptr;
@@ -21,6 +37,7 @@ public:
 	~Controller() { delete partie; }
 
 	// getters
+    string getStatutPartie()const{return stat_partie;}
 	Partie& getPartie() { return *partie; };
     Joueur& getJoueurCourant() { return *joueurCourant; }
     Strategy& getStrategyCourante() {return *strategy_courante;}
@@ -58,6 +75,7 @@ public:
 	// Actions obligatoires
     void recupererJetons(bool capacite,Couleur coulBonus = Couleur::INDT);
     bool acheterCarteJoaillerie(EspaceJeux& espaceJeux);
+    void paiementCarte(const Carte& carte, EspaceJeux& espaceJeux);
 	void orReserverCarte(Pyramide& pyramide, Plateau& plateau);
 
     //donne un privilege au joueur adverse en suivant la logique de splendor duel
@@ -71,20 +89,22 @@ public:
 	void enregisterScore();
 
 	// verifications
-    void verifActionsImpossibles();
+    vector<int> verifActionsImpossibles();
+    vector<int> verifActionsOptImpossibles();
     void verifPrivileges();
     void verifPlateauvide();
     void verifSacvide();
     void verifOrSurPlateau();
     void verifTroisCarteReserve();
     void verifJetonSupDix();
-    bool verifAchatCarte(const Carte& carte, EspaceJeux& espaceJeux);
+    bool verifAchatCarte(const Carte* carte);
+    vector<pair<int, int>> GenereCartePyramideDispo();
+    vector<pair<Couleur, int>> GenereCarteResaDispo();
 
     // verifs de la partie graphique
-    std::pair<bool, QString> verifJetons(const std::vector<std::pair<int, int>>& coord);
+    std::pair<bool, QString> verifJetons(const std::vector<std::pair<int, int>>& coord, bool capa = false, Couleur coulBonus = Couleur::INDT);
     void recupererJetons(const std::vector<std::pair<int, int>>& coord);
 
 };
-
 
 #endif

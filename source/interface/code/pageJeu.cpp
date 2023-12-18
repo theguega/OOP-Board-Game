@@ -84,6 +84,8 @@ void pageJeu::handleValidationResult(bool isValid, const QString &message)
     if(isValid){
         control->recupererJetons(vPlateau->getSelectionJetons());
         vPlateau->changerPointeurs();
+        control->changerJoueurCourant();
+        setLabelJC();
         update();
     }
     else{
