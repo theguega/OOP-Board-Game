@@ -20,7 +20,7 @@
 //###### Partie avec l'application Qt #####
 //#########################################
 
-/*
+
 int main(int argc, char * argv[]) {
     QApplication app(argc, argv);
 
@@ -50,7 +50,6 @@ int main(int argc, char * argv[]) {
 
     return app.exec();
 }
-*/
 
 
 
@@ -67,7 +66,7 @@ int main(int argc, char * argv[]) {
 //####################################
 
 
-int main(void) {
+/*int main(void) {
     try {
         Controller control;
         if(control.getStatutPartie()=="New")
@@ -76,4 +75,4 @@ int main(void) {
     } catch (SplendorException& e) {qWarning() << e.getInfo() ;};
 
     return 0;
-}
+}*/

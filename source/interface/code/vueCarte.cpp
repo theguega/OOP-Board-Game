@@ -95,7 +95,7 @@ void carteVisuel::paintEvent(QPaintEvent *event) { //Permet de faire les dessins
     centerY = h / 5 * 4 + h/10 + 1;
 
     if(carte->getPrix().getBlanc() != 0){
-        painter.setBrush(couleurEnQ("Blanc"));
+        painter.setBrush(couleurEnQ("blanc"));
         painter.setPen(Qt::black);
 
         painter.drawEllipse(QPoint(centerX, centerY), radius, radius);
@@ -117,7 +117,7 @@ void carteVisuel::paintEvent(QPaintEvent *event) { //Permet de faire les dessins
     }
 
     if(carte->getPrix().getBleu() != 0){
-        painter.setBrush(couleurEnQ("Bleu"));
+        painter.setBrush(couleurEnQ("bleu"));
         painter.setPen(Qt::white);
 
         painter.drawEllipse(QPoint(centerX, centerY), radius, radius);
@@ -140,7 +140,7 @@ void carteVisuel::paintEvent(QPaintEvent *event) { //Permet de faire les dessins
 
 
     if(carte->getPrix().getVert() != 0){
-        painter.setBrush(couleurEnQ("Vert"));
+        painter.setBrush(couleurEnQ("vert"));
         painter.setPen(Qt::white);
 
         painter.drawEllipse(QPoint(centerX, centerY), radius, radius);
@@ -185,7 +185,7 @@ void carteVisuel::paintEvent(QPaintEvent *event) { //Permet de faire les dessins
     }
 
     if(carte->getPrix().getRouge() != 0){
-        painter.setBrush(couleurEnQ("Rouge"));
+        painter.setBrush(couleurEnQ("rouge"));
         painter.setPen(Qt::white);
 
         painter.drawEllipse(QPoint(centerX, centerY), radius, radius);
@@ -207,7 +207,7 @@ void carteVisuel::paintEvent(QPaintEvent *event) { //Permet de faire les dessins
     }
 
     if(carte->getPrix().getPerle() != 0){
-        painter.setBrush(couleurEnQ("Perle"));
+        painter.setBrush(couleurEnQ("perle"));
         painter.setPen(Qt::white);
 
         painter.drawEllipse(QPoint(centerX, centerY), radius, radius);
@@ -283,13 +283,13 @@ void carteVisuel::paintEvent(QPaintEvent *event) { //Permet de faire les dessins
 
     if(carte->getCapacite1() != Capacite::None){
         y += hauteur;
-        painter.setBrush(Qt::white);
+        painter.setBrush(QColor("#844383"));
         painter.setPen(Qt::black);
         painter.drawEllipse(QPoint(l - radius - 2, y), radius, radius);
     }
     if(carte->getCapacite2() != Capacite::None){
         y += hauteur;
-        painter.setBrush(Qt::white);
+        painter.setBrush(QColor("#844383"));
         painter.setPen(Qt::black);
         painter.drawEllipse(QPoint(l - radius - 2, y), radius, radius);
     }

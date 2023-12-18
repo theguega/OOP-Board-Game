@@ -140,40 +140,40 @@ void vueJeton::paintEvent(QPaintEvent *event) {
 }
 
 QColor couleurEnQ(std::string c) {
-    if (c == "Bleu") {
+    if (c == "bleu") {
         return QColor("#2FC5FF");
     }
-    else if (c == "BleuFonce"){
+    else if (c == "bleuFonce"){
         return QColor("#002166");
     }
-    else if (c == "Blanc"){
+    else if (c == "blanc"){
         return Qt::white;
     }
-    else if (c == "Noir"){
+    else if (c == "noir"){
         return Qt::black;
     }
-    else if (c == "Rouge"){
+    else if (c == "rouge"){
         return QColor("#CD534E");
     }
-    else if (c == "RougeFonce"){
+    else if (c == "rougeFonce"){
         return QColor("#5B172E");
     }
-    else if (c == "Perle"){
+    else if (c == "perle"){
         return QColor("#EFC7FC");
     }
-    else if (c == "PerleFonce"){
+    else if (c == "perleFonce"){
         return QColor("#7C6994");
     }
-    else if (c == "Vert"){
+    else if (c == "vert"){
         return QColor("#88C85A");
     }
-    else if (c == "VertFonce"){
+    else if (c == "vertFonce"){
         return QColor("#2D7A42");
     }
-    else if (c == "Or"){
+    else if (c == "or"){
         return QColor("#E6DE73");
     }
-    else if (c == "OrFonce"){
+    else if (c == "orFonce"){
         return QColor("#BA7D2A");
     }
     else{
