@@ -7,6 +7,7 @@
 #include <QPushButton>
 #include <vector>
 #include "vueCarte.h"
+#include "back-end/espacejeux.hpp"
 
 class vuePyramide : public QWidget{
     Q_OBJECT
@@ -21,10 +22,12 @@ private:
     int h;
     int l;
     std::vector<vueCarte*> cartesPyramide;
+    Pyramide& pyramide;
 public:
-    vuePyramide(QWidget* parent, int hauteur, int largeur);
+    vuePyramide(QWidget* parent, int hauteur, int largeur, Pyramide& pyr);
     void afficherCartes();
     void boutonAfficherInfoClique();
+    void placerCartes();
 };
 
 #endif // VUEPYRAMIDE_H

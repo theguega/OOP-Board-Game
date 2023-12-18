@@ -3,31 +3,20 @@
 #include "vueJeton.h"
 #include "back-end/carte.hpp"
 
-vuePyramide::vuePyramide(QWidget* parent, int hauteur, int largeur) :
-    QWidget(parent), h(hauteur), l(largeur) {
+vuePyramide::vuePyramide(QWidget* parent, int hauteur, int largeur, Pyramide& pyr) :
+    QWidget(parent), h(hauteur), l(largeur), pyramide(pyr) {
     layoutPyrVer = new QVBoxLayout;
     layoutPrincipal = new QVBoxLayout;
     layoutAllCartes = new QHBoxLayout;
     layoutPaquets = new QVBoxLayout;
 
-    Bonus bonus(Couleur::BLEU, 3);
-    Prix prix(0, 1, 2, 3, 1, 0);
-    Carte* carte = new Carte(TypeCarte::Niv1, prix, Capacite::None, Capacite::None, bonus, 2, 1, 5);
+    placerCartes();
 
-    for(int i = 0; i < this->hauteur; i++){
-        QHBoxLayout* layoutPyrHor = new QHBoxLayout;
-        for(int j = i; j < 5; j++){
-            vueCarte* temp = new vueCarte(nullptr, h/(this->hauteur + 1), l/(1.6*(this->hauteur + 1)), carte);
-            layoutPyrHor->addWidget(temp);
-            cartesPyramide.push_back(temp);
-        }
-        layoutPyrHor->setAlignment(Qt::AlignCenter);
-        layoutPyrVer->addLayout(layoutPyrHor);
-    }
+    // initialisation des paquets
+    layoutPaquets->addWidget(new vuePaquet(pyr.getPioche1(), h/(this->hauteur + 1), l/(this->hauteur + 4)));
+    layoutPaquets->addWidget(new vuePaquet(pyr.getPioche2(), h/(this->hauteur + 1), l/(this->hauteur + 4)));
+    layoutPaquets->addWidget(new vuePaquet(pyr.getPioche3(), h/(this->hauteur + 1), l/(this->hauteur + 4)));
 
-    for(int i = 0; i < this->hauteur; i++){
-        layoutPaquets->addWidget(new vuePaquet(nullptr, h/(this->hauteur + 1), l/(1.6*(this->hauteur + 1)), i));
-    }
 
     layoutAllCartes->addLayout(layoutPaquets);
     layoutAllCartes->addLayout(layoutPyrVer);
@@ -54,6 +43,43 @@ void vuePyramide::boutonAfficherInfoClique(){
         }
         infoAffichee = true;
         boutonAfficherInfo->setText("Cacher les informations des cartes");
+    }
+}
+
+void vuePyramide::placerCartes(){
+    for (auto pt : cartesPyramide) {
+        delete pt;
+    }
+    if (layoutPyrVer != nullptr) {
+        for (int i = 0; i < hauteur; ++i) {
+            QLayoutItem *itemToRemove = layoutPyrVer->takeAt(0);
+            if (itemToRemove != nullptr) {
+                QLayout *layoutToRemove = itemToRemove->layout();
+                delete itemToRemove;
+                // Si nécessaire, supprimez également le layout associé
+                if (layoutToRemove != nullptr) {
+                    delete layoutToRemove;
+                }
+            }
+        }
+    }
+//    for (int i = 0; i < hauteur; ++i) {
+//        QLayout *layoutToRemove = layoutPyrVer->takeAt(0)->layout();
+//        if (layoutToRemove != nullptr) {
+//            delete layoutToRemove;
+//        }
+//    }
+    cartesPyramide.clear();
+    for(int i = 0; i < hauteur; i++){
+        QHBoxLayout* layoutPyrHor = new QHBoxLayout;
+        for(int j = 0; j < pyramide.getNbCartesNiv(i); j++){
+            vueCarte* temp = new vueCarte(nullptr, h/(this->hauteur + 1), l/(this->hauteur + 4), pyramide.getCarte(i, j));
+            temp->setPosition(new position(i, j));
+            cartesPyramide.push_back(temp);
+            layoutPyrHor->addWidget(temp);
+        }
+        layoutPyrHor->setAlignment(Qt::AlignCenter);
+        layoutPyrVer->addLayout(layoutPyrHor);
     }
 }
 
