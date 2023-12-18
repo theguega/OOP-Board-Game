@@ -33,5 +33,6 @@ CREATE TABLE cartes_joueur (
     id_joueur INTEGER,
     id_carte INTEGER,
     noble INTEGER,
-    reserve INTEGER
+    reserve INTEGER,
+    couleur_associe INTEGER
 );
