@@ -14,6 +14,7 @@
 */
 
 #include <iostream>
+#include <sstream>
 #include <string>
 #include <array>
 #include <vector>
@@ -46,6 +47,7 @@ extern std::initializer_list<TypeCarte> TypesCarte;
 enum class Capacite { NewTurn, TakePrivilege, TakeJetonFromBonus, TakeJetonToAdv, AssociationBonus, None };
 extern std::map<std::string, Capacite> stringToCapaciteMap;
 string CapacitetoString(Capacite c);
+string CapacitetoShort(Capacite c);
 ostream& operator<<(ostream& f, Capacite c);
 QDebug operator<<(QDebug f, Capacite c);
 
@@ -56,15 +58,15 @@ Capacite StringToCapacite(const string& capaciteStr);
 
 class Prix {
 private:
-    unsigned int blanc, bleu, vert, noir, rouge, perle;
+    unsigned int blanc, bleu, vert, rouge, noir, perle;
 public:
-    Prix(unsigned int bla, unsigned int ble, unsigned int v, unsigned int n, unsigned int r, unsigned int p) : blanc(bla), bleu(ble), vert(v), noir(n), rouge(r), perle(p) {}
+    Prix(unsigned int bla, unsigned int ble, unsigned int v, unsigned int r, unsigned int n, unsigned int p) : blanc(bla), bleu(ble), vert(v), rouge(r), noir(n), perle(p) {}
 
     unsigned int getBlanc() const { return blanc; }
     unsigned int getBleu() const { return bleu; }
     unsigned int getVert() const { return vert; }
-    unsigned int getNoir() const { return noir; }
     unsigned int getRouge() const { return rouge; }
+    unsigned int getNoir() const { return noir; }
     unsigned int getPerle() const { return perle; }
 };
 ostream& operator<<(ostream& f, const Prix& p);
@@ -116,6 +118,7 @@ public:
     unsigned int getId() const { return id; }
     unsigned int getNbCouronnes() const { return nbCouronnes; }
     unsigned int getNbPtsPrivilege() const { return nbPtsPrivilege; }
+    string getInfos() const;
 };
 ostream& operator<<(ostream& f, const Carte& c);
 QDebug operator<<(QDebug f, const Carte &c);
@@ -159,6 +162,8 @@ public:
     ~Pioche();
 
     size_t getNbCartes() const { return cartes.size(); }
+    TypeCarte getTypeCarte() const { return type_carte; }
+    const vector<const Carte*>& getCartes() const { return cartes; }
 
     bool estVide() const { return getNbCartes() == 0; }
     const Carte& piocher();

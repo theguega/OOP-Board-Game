@@ -16,6 +16,7 @@
 #include <random>
 #include "partie.hpp"
 #include <QDebug>
+#include <QString>
 #include <cstdlib>
 
 
@@ -99,6 +100,10 @@ public:
     bool verifAchatCarte(const Carte* carte);
     vector<pair<int, int>> GenereCartePyramideDispo();
     vector<pair<Couleur, int>> GenereCarteResaDispo();
+
+    // verifs de la partie graphique
+    std::pair<bool, QString> verifJetons(const std::vector<std::pair<int, int>>& coord, bool capa = false, Couleur coulBonus = Couleur::INDT);
+    void recupererJetons(const std::vector<std::pair<int, int>>& coord);
 
 };
 

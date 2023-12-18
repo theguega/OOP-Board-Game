@@ -8,7 +8,7 @@
 #include <QTimer>
 #include "vueCarte.h"
 
-carteVisuel::carteVisuel(QWidget *parent, int hauteur, int largeur, Carte* carte) :
+carteVisuel::carteVisuel(QWidget *parent, int hauteur, int largeur, const Carte* carte) :
     QWidget(parent), h(hauteur), l(largeur), carte(carte){ //CarteVisuel sera la partie visuel de la carte
     setFixedSize(l, h); //Fixe la taille de la carte
 }
@@ -37,7 +37,7 @@ void carteVisuel::paintEvent(QPaintEvent *event) { //Permet de faire les dessins
             triangle << QPointF(0, 0) << QPointF(l - 2, 0) << QPointF(0, (h-2)/3); //Ajoute les points du triangle
             painter.drawPolygon(triangle); //Colorie le triangle
         }
-        else if(carte->getBonus().getCouleur() == Couleur::NOIR){
+        else if(carte->getBonus().getCouleur() == Couleur::BLANC){
             painter.setBrush(Qt::white); //On definie la couleur du pinceau en blanc
             painter.setPen(QPen(Qt::black, 2)); //On def le pinceau comme etant de couleur noir et de taille 2 (pour faire un rebord)
             painter.drawPolygon(rect()); //On colorie le polygone
@@ -75,7 +75,8 @@ void carteVisuel::paintEvent(QPaintEvent *event) { //Permet de faire les dessins
     //Definit les cercles avec un Polygone de plusieurs points
 
     if(carte->getPrix().getBlanc() != 0){
-        painter.setBrush(couleurEnQ("Blanc"));
+        painter.setBrush(couleurEnQ("blanc"));
+        painter.setPen(Qt::black);
 
         painter.drawEllipse(QPoint(centerX, centerY), radius, radius);
 
@@ -96,7 +97,8 @@ void carteVisuel::paintEvent(QPaintEvent *event) { //Permet de faire les dessins
     }
 
     if(carte->getPrix().getBleu() != 0){
-        painter.setBrush(couleurEnQ("Bleu"));
+        painter.setBrush(couleurEnQ("bleu"));
+        painter.setPen(Qt::white);
 
         painter.drawEllipse(QPoint(centerX, centerY), radius, radius);
 
@@ -118,7 +120,8 @@ void carteVisuel::paintEvent(QPaintEvent *event) { //Permet de faire les dessins
 
 
     if(carte->getPrix().getVert() != 0){
-        painter.setBrush(couleurEnQ("Vert"));
+        painter.setBrush(couleurEnQ("vert"));
+        painter.setPen(Qt::white);
 
         painter.drawEllipse(QPoint(centerX, centerY), radius, radius);
 
@@ -140,13 +143,13 @@ void carteVisuel::paintEvent(QPaintEvent *event) { //Permet de faire les dessins
 
     if(carte->getPrix().getNoir() != 0){
         painter.setBrush(Qt::black);
+        painter.setPen(Qt::white);
 
         painter.drawEllipse(QPoint(centerX, centerY), radius, radius);
 
         QFont font("Arial", 12); // Définir la police et la taille de la police
         painter.setFont(font);
 
-        painter.setPen(Qt::white);
         QString texte = QString::number(carte->getPrix().getNoir());
         QFontMetrics metrics(font);
         int textWidth = metrics.horizontalAdvance(texte);
@@ -162,7 +165,8 @@ void carteVisuel::paintEvent(QPaintEvent *event) { //Permet de faire les dessins
     }
 
     if(carte->getPrix().getRouge() != 0){
-        painter.setBrush(couleurEnQ("Rouge"));
+        painter.setBrush(couleurEnQ("rouge"));
+        painter.setPen(Qt::white);
 
         painter.drawEllipse(QPoint(centerX, centerY), radius, radius);
 
@@ -183,7 +187,8 @@ void carteVisuel::paintEvent(QPaintEvent *event) { //Permet de faire les dessins
     }
 
     if(carte->getPrix().getPerle() != 0){
-        painter.setBrush(couleurEnQ("Perle"));
+        painter.setBrush(couleurEnQ("perle"));
+        painter.setPen(Qt::white);
 
         painter.drawEllipse(QPoint(centerX, centerY), radius, radius);
 
@@ -208,13 +213,14 @@ void carteVisuel::paintEvent(QPaintEvent *event) { //Permet de faire les dessins
     int base = l/5;
     int hauteur = h/5;
     int nbTriangle = 5, x, y, baseT, hauteurT;
+    y = centerY;
     for(int i = 0; i < carte->getNbCouronnes(); i++){
         // Configurer la couleur et l'épaisseur du contour
         painter.setPen(QPen(Qt::black, 0.5));
         painter.setBrush(QColor("#FFD700")); // Couleur dorée
 
         x = centerX;
-        y = centerY + hauteur*i;
+        y = centerY + hauteur*i/2;
 
         baseT = (base/nbTriangle);
 
@@ -227,29 +233,46 @@ void carteVisuel::paintEvent(QPaintEvent *event) { //Permet de faire les dessins
 
 
             if(i == nbTriangle/2){
-                hauteurT = hauteur/2;
-            }
-            else if(i%2 == 1){
                 hauteurT = hauteur/4;
             }
+            else if(i%2 == 1){
+                hauteurT = hauteur/8;
+            }
             else{
-                hauteurT = hauteur/3;
+                hauteurT = hauteur/6;
             }
 
             couronne << QPointF(x + baseT*i, y); // Coin inférieur gauche
-            couronne << QPointF(x + baseT*i + baseT/2, y - hauteurT); // Sommet
+            if(i == 0){
+                couronne << QPointF(x + baseT*i, y - hauteurT); // Sommet
+            }
+            else if(i == nbTriangle - 1){
+                couronne << QPointF(x + baseT*(i+1), y - hauteurT); // Sommet
+            }
+            else{
+                couronne << QPointF(x + baseT*i + baseT/2, y - hauteurT); // Sommet
+            }
             couronne << QPointF(x + baseT*(i+1), y); // Coin inférieur droit
         }
 
-        couronne << QPointF(centerX + base, y + hauteur/3);
-        couronne << QPointF(centerX, y + hauteur/3);
+        couronne << QPointF(x + baseT*(nbTriangle+1) - baseT, y + hauteur/5);
+        couronne << QPointF(centerX, y + hauteur/5);
 
         painter.drawPolygon(couronne);
     }
 
-    y += hauteur;
-    painter.setBrush(Qt::white);
-    painter.drawEllipse(QPoint(l - radius - 2, centerY + carte->getNbCouronnes()*hauteur), radius, radius);
+    if(carte->getCapacite1() != Capacite::None){
+        y += hauteur;
+        painter.setBrush(Qt::white);
+        painter.setPen(Qt::black);
+        painter.drawEllipse(QPoint(l - radius - 2, y), radius, radius);
+    }
+    if(carte->getCapacite2() != Capacite::None){
+        y += hauteur;
+        painter.setBrush(Qt::white);
+        painter.setPen(Qt::black);
+        painter.drawEllipse(QPoint(l - radius - 2, y), radius, radius);
+    }
 }
 
 carteInfo::carteInfo(QWidget* parent, int hauteur, int largeur, std::string texte) : QWidget(parent){ //Carte info sera la partie avec les infos de la carte
@@ -279,11 +302,11 @@ void carteInfo::paintEvent(QPaintEvent *event){
     painter.drawRect(rect()); //On peind ce rectangle (permet de fair eun contour de la carte)
 }
 
-vueCarte::vueCarte(QWidget* parent, int hauteur, int largeur, Carte* carte) :
+vueCarte::vueCarte(QWidget* parent, int hauteur, int largeur, const Carte* carte) :
     QStackedWidget(parent), h(hauteur), l(largeur), carte(carte){ //C'est un QStackedWidget afin de gerer plus facilement le changement entre les infos et le visu
     setFixedSize(l, h); //Fixe la taille
     /*switch(carte->getCouleur())*/
-
+    std::string texteInfo = carte->getInfos();
     visu = new carteVisuel(nullptr, h,l, carte); //Ajoute le visuel de la carte
     info = new carteInfo(nullptr, h, l, texteInfo); //Ajoute les infos de la carte
 
@@ -322,15 +345,15 @@ void vuePaquet::paintEvent(QPaintEvent *event){
     painter.drawRect(rect()); //On peind ce rectangle (permet de fair eun contour de la carte)
 
     switch(niveau){
-    case 0:
+    case TypeCarte::Niv1:
         painter.setBrush(QColor("#80A266")); //On definie la couleur du pinceau
         painter.drawPolygon(rect()); //On colorie le polygone
         break;
-    case 1:
+    case TypeCarte::Niv2:
         painter.setBrush(QColor("#A39437")); //On definie la couleur du pinceau
         painter.drawPolygon(rect()); //On colorie le polygone
         break;
-    case 2:
+    case TypeCarte::Niv3:
         painter.setBrush(QColor("#1D60AF")); //On definie la couleur du pinceau
         painter.drawPolygon(rect()); //On colorie le polygone
         break;
@@ -373,7 +396,15 @@ void vuePaquet::paintEvent(QPaintEvent *event){
         }
 
         couronne << QPointF(x, y); // Coin inférieur gauche
-        couronne << QPointF(x + base / 2, y - hauteur); // Sommet
+        if(i == 0){
+            couronne << QPointF(x, y - hauteur); // Sommet
+        }
+        else if(i == nbTriangle - 1){
+            couronne << QPointF(x + base, y - hauteur); // Sommet
+        }
+        else{
+            couronne << QPointF(x + base / 2, y - hauteur); // Sommet
+        }
         couronne << QPointF(x + base, y); // Coin inférieur droit
     }
 
@@ -395,3 +426,4 @@ void vuePaquet::paintEvent(QPaintEvent *event){
 
     painter.drawText(x, y, texte);
 }
+

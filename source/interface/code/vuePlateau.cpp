@@ -12,8 +12,6 @@ grilleJetons::grilleJetons(QWidget* parent, int hauteur, int largeur, int nbJ, i
     QWidget(parent), h(hauteur), l(largeur), nbJetons(nbJ), tailleJeton(tJ), ptListeJetons(pt){
 
     rnbJetons = static_cast<int>(sqrt(nbJetons));
-    int lRectangle = l / rnbJetons;
-    int hRectangle = h / rnbJetons;
     for(int i = 0; i < rnbJetons; i++){
         for(int j = 0; j < rnbJetons; j++){
             listeRectangles.push_back(new QRect(2 * i * (tailleJeton+5) + (l-(2*(tailleJeton+5))*rnbJetons)/2, 2 * j * (tailleJeton+5), 2*(tailleJeton+5), 2*(tailleJeton+5)));
@@ -22,13 +20,14 @@ grilleJetons::grilleJetons(QWidget* parent, int hauteur, int largeur, int nbJ, i
     setFixedSize(l, h);
 }
 
-void grilleJetons::placerJetons(){
-    for (auto it = ptListeJetons->begin(); it != ptListeJetons->end(); ++it) {
-        int j = (*it)->getPosition()->getx() + (*it)->getPosition()->gety() * rnbJetons;
-        int newX = listeRectangles[j]->center().x() - ((*it)->width() / 2) + 2.5;
-        int newY = listeRectangles[j]->center().y() - ((*it)->height() / 2) + 2.5;
-        (*it)->move(newX,  newY);
-    }
+void grilleJetons::placerJeton(const Jeton* jeton, int i, int j){
+    vueJeton* newJeton = new vueJeton(this, tailleJeton, jeton, new position((i), (j)));
+    int k = i + j * rnbJetons;
+    int newX = listeRectangles[k]->center().x() - tailleJeton + 2.5;
+    int newY = listeRectangles[k]->center().y() - tailleJeton + 2.5;
+    newJeton->move(newX,  newY);
+    ptListeJetons->push_back(newJeton);
+    update();
 }
 
 void grilleJetons::paintEvent(QPaintEvent *event){
@@ -147,7 +146,7 @@ void grilleJetons::paintEvent(QPaintEvent *event){
     }
 }
 
-vuePlateau::vuePlateau(QWidget* parent, int hauteur, int largeur) : QWidget(parent){
+vuePlateau::vuePlateau(QWidget* parent, int hauteur, int largeur, Plateau& plat) : QWidget(parent), plateau(plat){
     h = hauteur; //Def la hateur du plateau
     l = largeur; //Def la largeur du plateau
 
@@ -166,22 +165,10 @@ vuePlateau::vuePlateau(QWidget* parent, int hauteur, int largeur) : QWidget(pare
     setFixedSize(l, h); //Fixe la taille du plateau
     //sac = plateau->getSac();
 
-    int tailleJeton = (h - 100)/(2*rnbJetons) - 5;
-
+    tailleJeton = (h - 100)/(2*rnbJetons) - 5;
     grille = new grilleJetons(nullptr, h-100, l, nbJetons, tailleJeton, &listeJetons);
 
-    for(int i = 0; i < nbJetons; i++){
-        //Creer un getteur pour les Jetons
-        listeJetons.push_back(new vueJeton(grille, tailleJeton, new Jeton(listeCouleur[indices[i]]), new position((i/rnbJetons), (i%rnbJetons))));
-        QObject::connect(listeJetons[i], &vueJeton::clicked, [this, i]() {
-            boutonClique(i); //Permet d'appeler la fonction boutonClique(int i) lorsque le bouton i est clique
-        });
-    }
-    for(int i = 0; i < 3; i++){
-        jetonSelection[i] = nullptr; //Initialise jetonSelection avec nullptr
-    }
-
-    grille->placerJetons();
+    placerJetons();
 
     boutonValider = new QPushButton("Valider le choix des jetons"); //Creer le bouton valider (pour la selection des jetons)
     boutonValider->setStyleSheet("color blue;");
@@ -193,9 +180,39 @@ vuePlateau::vuePlateau(QWidget* parent, int hauteur, int largeur) : QWidget(pare
 
     setLayout(layout); //Set le layout
 
-    connect(boutonValider, &QPushButton::clicked, this, &vuePlateau::validerJetons); //connect boutonValider avec valliderJetons
-
+    //connect(boutonValider, &QPushButton::clicked, this, &vuePlateau::validerJetons); //connect boutonValider avec valliderJetons
+    connect(boutonValider, &QPushButton::clicked, this, &vuePlateau::signalValiderAppuye);
     info = new popUpInfo(nullptr, "Vos jetons ont bien ete ajoute");
+}
+
+void vuePlateau::placerJetons(){
+    for(int i = 0; i < rnbJetons; i++){
+        for(int j = 0; j < rnbJetons; j++){
+            grille->placerJeton(plateau.getJeton(i,j), i , j);
+        }
+    }
+    for(int i = 0; i < listeJetons.size(); i++){
+        QObject::connect(listeJetons[i], &vueJeton::clicked, [this, i]() {
+            boutonClique(i); //Permet d'appeler la fonction boutonClique(int i) lorsque le bouton i est clique
+        });
+    }
+    for(int i = 0; i < 3; i++){
+        jetonSelection[i] = nullptr; //Initialise jetonSelection avec nullptr
+    }
+    update();
+}
+
+void vuePlateau::changerPointeurs(){
+    for(int i = 0; i < rnbJetons; i++){
+        for(int j = 0; j < rnbJetons; j++){
+            int k = i  * rnbJetons + j;
+            listeJetons[k]->setJeton(plateau.getJeton(i,j));
+        }
+    }
+    for(int i = 0; i < 3; i++){
+        jetonSelection[i] = nullptr;
+    }
+    nbJetonSelection = 0;
 }
 
 void vuePlateau::boutonClique(int i){
@@ -252,6 +269,19 @@ void vuePlateau::validerJetons(){
 void vuePlateau::cacherElements(){
     info -> close();
 }
+
+
+std::vector<std::pair<int, int>> vuePlateau::getSelectionJetons() const {
+    std::vector<std::pair<int, int>> tmp;
+    for (int i = 0; i < 3; i++){
+        if(jetonSelection[i] != nullptr){
+            auto pair = std::make_pair(jetonSelection[i]->getPosition()->getx(), jetonSelection[i]->getPosition()->gety());
+            tmp.push_back(pair);
+        }
+    }
+    return tmp;
+}
+
 
 /*vueJeton* vuePlateau::recupererBouton(Jeton* jeton){
     for(int i = 0; i < 25; i++){

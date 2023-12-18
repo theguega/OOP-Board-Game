@@ -15,6 +15,27 @@ pageCreation::pageCreation(QWidget *parent) : QWidget(parent){
     choixPossibles1 -> addItems(choix1);
     choixPossibles2 -> addItems(choix2);
 
+    QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
+    db.setDatabaseName("data/score.sqlite");
+    if (!db.open()) {
+        qDebug() << "Erreur lors de l'ouverture de la base de données:" << db.lastError().text();
+        throw std::runtime_error("Erreur lors de l'ouverture de la base de données: " + db.lastError().text().toStdString());
+    }
+
+    QSqlQuery query("SELECT * FROM score");
+    if (!query.exec()) {
+        qDebug() << "Erreur lors de l'exécution de la requête:" << query.lastError().text();
+        throw std::runtime_error("Erreur lors de l'ouverture de la base de données: " + db.lastError().text().toStdString());
+    }
+
+    while (query.next()) {
+        // Récupération du nom depuis la première colonne
+        QString nom = query.value(1).toString();
+        choixPossibles1 -> addItem(nom);
+        choixPossibles2 -> addItem(nom);
+    }
+    db.close();
+
     nom1Edit = new QLineEdit;
     nom2Edit = new QLineEdit;
 
