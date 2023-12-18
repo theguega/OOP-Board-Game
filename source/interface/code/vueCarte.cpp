@@ -213,6 +213,7 @@ void carteVisuel::paintEvent(QPaintEvent *event) { //Permet de faire les dessins
     int base = l/5;
     int hauteur = h/5;
     int nbTriangle = 5, x, y, baseT, hauteurT;
+    y = centerY;
     for(int i = 0; i < carte->getNbCouronnes(); i++){
         // Configurer la couleur et l'épaisseur du contour
         painter.setPen(QPen(Qt::black, 0.5));
