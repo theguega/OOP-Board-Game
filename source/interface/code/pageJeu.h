@@ -28,6 +28,9 @@ private:
     QPushButton* afficherJ1; //Bouton pour afficher la page du joueur1
     QPushButton* afficherJ2; //Bouton pour afficher la page du joueur2
 
+    std::vector<vuePrivilege*> listePrivileges;
+    boutonSac* bSac;
+
     QHBoxLayout* partieHaute;
     QHBoxLayout* partieMoyenne;  //Partie Haute a ranger (pyramide et plateau)
     QHBoxLayout* partieBasse; //Partie Basse a ranger (boutons)
@@ -72,20 +75,10 @@ public:
         QWidget::mousePressEvent(event);
     }
     void setLabelJC(){labelJC->setText(QString::fromStdString("C'est au tour de " + control->getJoueurCourant().getPseudo()));}
+    void afficherPrivileges();
 private slots:
     void validerSelectionJeton();
     void handleValidationResult(bool isValid, const QString &message);
-};
-
-class vuePrivilege : public QWidget{
-    Q_OBJECT
-private:
-    int h;
-    int l;
-protected:
-    void paintEvent(QPaintEvent *event);
-public:
-    vuePrivilege(int hauteur, int largeur) : h(hauteur), l(largeur){setFixedSize(l, h);}
 };
 
 #endif // PAGEJEU_H

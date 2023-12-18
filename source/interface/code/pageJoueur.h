@@ -8,29 +8,40 @@
 #include "vuePlateau.h"
 #include "vueJeton.h"
 #include "vueCarte.h"
+#include "back-end/joueur.hpp"
+
+
+class vuePrivilege : public QWidget{
+    Q_OBJECT
+private:
+    int h;
+    int l;
+protected:
+    void paintEvent(QPaintEvent *event);
+public:
+    vuePrivilege(int hauteur, int largeur) : h(hauteur), l(largeur){setFixedSize(l, h);}
+};
 
 class pageJoueur : public QWidget{
     Q_OBJECT
 private:
-    QHBoxLayout* cartesReserveesLayout; //Layout avec les cartes reservees
-    QHBoxLayout* cartesPossedeesLayout; //Layout avec les cartes possedees
-    QHBoxLayout* jetonsPossedesLayout; //Layout avec les jeton possedes
-    QVBoxLayout* layout; //Layout principal
+    QVBoxLayout* cartesReserveesLayout; //Layout avec les cartes reservees
+    QVBoxLayout* cartesPossedeesLayout; //Layout avec les cartes possedees
+    QVBoxLayout* jetonsPossedesLayout; //Layout avec les jeton possedes
+    QHBoxLayout* informations;
+    QHBoxLayout* layout; //Layout principal
 
-    QWidget* cartesReserveesWidget;
-    QWidget* cartesPossedeesWidget;
-    QWidget* jetonsPossedesWidget;
+    Joueur* joueur;
+
+    int hP, lP; //hauteur et largeur des privilèges;
+    std::vector<vuePrivilege*> listePrivileges;
 
     std::vector<vueCarte*> cartesReservees; //Vecteur avec les cartes reservees
     std::vector<vueCarte*> cartesPossedees; //Vecteur avec les cartes possedees
     std::vector<vueJeton*> jetonsPossedes; //Vecteur avec les jeton possedes
 public:
-    pageJoueur(QWidget* parent);
-    void ajouterCarteReservee(vueCarte* carte);
-    void ajouterCartePossedee(vueCarte* carte);
-    void ajouterJeton(vueJeton* jeton);
-    void retirerJeton(vueJeton* jeton);
-    void afficher(bool tourJoueur);
+    pageJoueur(QWidget* parent, Joueur* joueur, int hP, int lP);
+    void refreshJoueur(Joueur* joueurCourant);
 };
 
 #endif // PAGEJOUEUR_H

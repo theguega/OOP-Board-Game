@@ -683,7 +683,7 @@ void Controller::recupererJetons(bool capacite,Couleur coulBonus){
 
         int choix_indice_jeton = strategy_courante->choix_min_max(1, jetonsDispo.size());
 
-        vecteurCoordonnees.push_back(jetonsDispo[choix_indice_jeton-1]);
+        coord.push_back(jetonsDispo[choix_indice_jeton-1]);
 
         jetonsDispo.erase(jetonsDispo.begin() + choix_indice_jeton-1);
 
@@ -1468,9 +1468,9 @@ std::pair<bool, QString> Controller::verifJetons(const std::vector<std::pair<int
                         min = coord[i].first;
                 }
                 if (abs(max - min)  > 2 && nbJetons==3)
-                    result1 = false;
+                    result2 = false;
                 if(abs(max-min) >1 && nbJetons==2)
-                    result1 = false;
+                    result2 = false;
             }
         }
 
