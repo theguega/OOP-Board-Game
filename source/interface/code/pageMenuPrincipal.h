@@ -14,6 +14,8 @@ private:
     QPushButton *boutonQuitter;
 
     QVBoxLayout *coucheMP;
+protected:
+    void paintEvent(QPaintEvent *event);
 
 public:
     pageMenuPrincipal(QWidget *parent = nullptr);

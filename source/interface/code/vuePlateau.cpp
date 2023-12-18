@@ -270,6 +270,17 @@ void vuePlateau::cacherElements(){
     info -> close();
 }
 
+void vuePlateau::paintEvent(QPaintEvent *event){
+    QWidget::paintEvent(event); // Appel a la methode paintEvent de la classe de base
+
+    QPainter painter(boutonValider);
+
+    painter.setRenderHint(QPainter::Antialiasing); // Pour des bords plus lisses
+    painter.setBrush(Qt::red);
+    painter.drawRect(boutonValider->rect());
+
+}
+
 
 std::vector<std::pair<int, int>> vuePlateau::getSelectionJetons() const {
     std::vector<std::pair<int, int>> tmp;
@@ -282,155 +293,27 @@ std::vector<std::pair<int, int>> vuePlateau::getSelectionJetons() const {
     return tmp;
 }
 
+void boutonSac::paintEvent(QPaintEvent *event){
+    QPushButton::paintEvent(event); // Appel a la methode paintEvent de la classe de base
 
-/*vueJeton* vuePlateau::recupererBouton(Jeton* jeton){
-    for(int i = 0; i < 25; i++){
-        if(listeJetons[i]->getJeton() == jeton){
-            return listeJetons[i];
-        }
-    }
-    return nullptr;
-}*/
-
-/*void vuePlateau::remplirPlateau(){
-    vueJeton* temp;
-    for(int i = 0; i < 5; i++){
-        for(int j = 0; j < 25; j++){
-            //faire un getteur pour le plateau
-            temp = recupererBouton(plateau.getJeton(i, j));
-            temp->apparaitre(position(i, j));
-        }
-    }
-}*/
-
-/*void vuePlateau::paintEvent(QPaintEvent *event) {
-    QWidget::paintEvent(event);
     QPainter painter(this);
-    painter.setRenderHint(QPainter::Antialiasing);
+    painter.setRenderHint(QPainter::Antialiasing); // Pour des bords plus lisses
 
-    int horizontalSpacing = layoutJetons->spacing();
-    int verticalSpacing = layoutJetons->spacing();
+    // Choix de la couleur du sac en fonction de l'état de fondu
+    QColor couleurSac = isDown() ? QColor("#654321") : QColor("#8B4513"); // Couleur marron foncé en fondu
 
-    // Taille du côté d'une cellule (emplacement)
-    int tailleCelluleH = (h - 100)/sqrt(nbJetons) + horizontalSpacing * 3.2;
-    int tailleCelluleV = (h - 100)/sqrt(nbJetons) + verticalSpacing;
+    painter.setBrush(QBrush(couleurSac));
+    QPolygonF triangle;
+    triangle << QPointF(l * 0.5, h * 0.5) << QPointF(l * 0.65, 0)
+             << QPointF(l * 0.35, 0); // Points pour former un triangle
+    painter.drawPolygon(triangle); // Triangle isocèle
 
-    // Coordonnées de départ pour positionner le plateau
-    int startX = xBoutonHG/3.5; // Coordonnée X de départ
-    int startY = yBoutonHG/3.5; // Coordonnée Y de départ
+    // Fond du sac : cercle avec un rectangle isocèle
+    painter.drawEllipse(l / 10, h / 10, l * 0.8, h * 0.5); // Cercle
 
-    // Dessiner le plateau avec les emplacements carrés
-    painter.setPen(QPen(QColor("#A0522D"), 4)); // Couleur des bordures
-    painter.setBrush(QColor("#DEB887")); // Couleur de fond des emplacements
+    // Corde
+    painter.setPen(QPen(Qt::black, 3)); // Couleur noire pour la corde
+    painter.drawLine(l * 0.65, h * 0.1, l * -1.2, h * 0.25); // Corde gauche
+    painter.drawLine(l * 0.65, h * 0.1, l * 1.1, h * 0.25); // Corde droite
 
-    for (int i = 0; i < sqrt(nbJetons); ++i) {
-        for (int j = 0; j < sqrt(nbJetons); ++j) {
-            int x = startX + i * (tailleCelluleH);
-            int y = startY + j * (tailleCelluleV);
-
-            painter.drawRect(x, y, tailleCelluleH, tailleCelluleV);
-        }
-    }
-
-    int cx = startX + (tailleCelluleH * sqrt(nbJetons)) / 2; // Coordonnée X du centre
-    int cy = startY + (tailleCelluleV * sqrt(nbJetons)) / 2; // Coordonnée Y du centre
-
-    painter.setPen(QPen(Qt::black, 2)); // Couleur et épaisseur des flèches
-
-    int dx = 0;
-    int dy = 0;
-
-    int currentX = cx; // Coordonnée X actuelle
-    int currentY = cy; // Coordonnée Y actuelle
-
-    size_t h = 1, d = 1, b = 2, g = 2;
-    size_t direction = 0, avancement = 0;
-    for(int step = 0; step < nbJetons - 1; step++) {
-        switch (direction) {
-        case 0:  // Vers le haut
-            avancement++;
-            if (avancement == h){
-                avancement = 0;
-                direction = 1;
-                h += 2;
-            }
-            dx = 0;
-            dy = -1;
-            break;
-        case 1:  // Vers la droite
-            avancement++;
-            if (avancement == d){
-                avancement = 0;
-                direction = 2;
-                d += 2;
-            }
-            dx = 1;
-            dy = 0;
-            break;
-        case 2:  // Vers le bas
-            avancement++;
-            if (avancement == b){
-                avancement = 0;
-                direction = 3;
-                b += 2;
-            }
-            dx = 0;
-            dy = 1;
-            break;
-        case 3:  // Vers la gauche
-            avancement++;
-            if (avancement == g){
-                avancement = 0;
-                direction = 0;
-                g += 2;
-            }
-            dx = -1;
-            dy = 0;
-            break;
-        }
-        int nextX = currentX + dx * tailleCelluleH;
-        int nextY = currentY + dy * tailleCelluleV;
-
-        painter.drawLine(currentX, currentY, nextX, nextY);
-
-        int triangleSize = 10; // Taille du triangle (base/hauteur)
-        int midX = (currentX + nextX) / 2; // Coordonnée X du milieu de la ligne
-        int midY = (currentY + nextY) / 2; // Coordonnée Y du milieu de la ligne
-
-        QPolygon triangle;
-
-        // Dessiner un triangle dans la direction spécifiée
-        if(currentY == nextY){ // Ligne horizontale
-            if(currentX < nextX){ // Vers la droite
-                triangle << QPoint(midX + triangleSize / 2, midY);
-                triangle << QPoint(midX - triangleSize / 2, midY + triangleSize / 2);
-                triangle << QPoint(midX - triangleSize / 2, midY - triangleSize / 2);
-            }
-            else{ // Vers la gauche
-                triangle << QPoint(midX - triangleSize / 2, midY);
-                triangle << QPoint(midX + triangleSize / 2, midY + triangleSize / 2);
-                triangle << QPoint(midX + triangleSize / 2, midY - triangleSize / 2);
-            }
-        }
-        else{ // Ligne verticale
-            if(currentY < nextY){ // Vers le bas
-                triangle << QPoint(midX, midY + triangleSize / 2);
-                triangle << QPoint(midX + triangleSize / 2, midY - triangleSize / 2);
-                triangle << QPoint(midX - triangleSize / 2, midY - triangleSize / 2);
-            }
-            else{ // Vers le haut
-                triangle << QPoint(midX, midY - triangleSize / 2);
-                triangle << QPoint(midX + triangleSize / 2, midY + triangleSize / 2);
-                triangle << QPoint(midX - triangleSize / 2, midY + triangleSize / 2);
-            }
-        }
-
-        QPainterPath path;
-        path.addPolygon(triangle);
-
-        painter.fillPath(path, Qt::black);
-
-        currentX = nextX;
-        currentY = nextY;
-    }
-}*/
+}

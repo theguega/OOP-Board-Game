@@ -374,6 +374,10 @@ void Controller::jouer() {
                     if (getJoueurCourant().getptsPrestige() >= 20) getJoueurCourant().setGagnant();
                     if (getJoueurCourant().nbPtsPrestigeParCouleurSupDix()) getJoueurCourant().setGagnant();
 
+                    //Sauvegarde automatique
+                    if (getPartie().getTour()==30) {
+                        sauvegardePartie();
+                    }
 
                     // Fin de partie :
                     if (getJoueurCourant().estGagnant())
@@ -1512,9 +1516,9 @@ std::pair<bool, QString> Controller::verifJetons(const std::vector<std::pair<int
                         min = coord[i].first;
                 }
                 if (abs(max - min)  > 2 && nbJetons==3)
-                    result1 = false;
+                    result2 = false;
                 if(abs(max-min) >1 && nbJetons==2)
-                    result1 = false;
+                    result2 = false;
             }
         }
 
@@ -1785,6 +1789,7 @@ void Controller::sauvegardePartie() {
 
     for (size_t i = 0; i < 2; i++) {
         qDebug() << "Sauvegarde joueur : " << i+1 << "...\n" ;
+        qDebug() << "Sauvegarde des infos\n";
         // Infos du joueur
         QString sql = "INSERT INTO joueur (id, pseudo, type_joueur, privileges, ptsPrestige, nbCouronnes) VALUES (" +
                       QString::number(i + 1) + ", '" +
@@ -1800,6 +1805,7 @@ void Controller::sauvegardePartie() {
             db.close();
             return;
         }
+        qDebug() << "Sauvegarde des jetons\n";
         // Jetons (toutes les couleurs sauf indt)
         for (Couleur c : Couleurs) {
             if (c != Couleur::INDT) {
@@ -1807,7 +1813,7 @@ void Controller::sauvegardePartie() {
                     QString id_joueur = QString::number(i + 1);
                     QString couleur = QString::fromStdString(toStringCouleur(c));
 
-                    QString sql = "INSERT INTO jetons_joueur (id_joueur, couleur) VALUES (" + id_joueur + ", '" + couleur + "')";
+                    sql = "INSERT INTO jetons_joueur (id_joueur, couleur) VALUES (" + id_joueur + ", '" + couleur + "')";
                     if (!query.exec(sql)) {
                         qCritical() << "Erreur lors de la sauvegarde du jeton \n";
 
@@ -1817,12 +1823,20 @@ void Controller::sauvegardePartie() {
                 }
             }
         }
-
+        qDebug() << "Sauvegarde des cartes\n";
         // Cartes (toutes les couleurs sauf or)
         for (Couleur c : Couleurs) {
             if (c != Couleur::OR) {
                 for (size_t j = 0; j < getPartie().getJoueur(i)->getNbCartes(c); j++) {
-                    QString sql = "INSERT INTO cartes_joueur (id_joueur, id_carte, noble, reserve) VALUES (" + QString::number(i + 1) + ", " + QString::number(getPartie().getJoueur(i)->getCarte(c, j).getId()) + ",0,0);";
+                    //si la carte est de couleur indt mais rangés dans le vecteur d'une autre couleur -> bonus : AssociationBonus, il faut donc le sauvegarder
+                    if (getPartie().getJoueur(i)->getCarte(c, j).getBonus().getCouleur()!=c) {
+                        //on push la couleur c de la map dans laquelle la carte est rangés
+                        sql = "INSERT INTO cartes_joueur (id_joueur, id_carte, noble, reserve, couleur_associe) VALUES (" + QString::number(i + 1) + ", " + QString::number(getPartie().getJoueur(i)->getCarte(c, j).getId()) + ",0,0," + QString::number(static_cast<int>(c)) + ");";
+                    } else {
+                        //on push null sinon
+                        sql = "INSERT INTO cartes_joueur (id_joueur, id_carte, noble, reserve, couleur_associe) VALUES (" + QString::number(i + 1) + ", " + QString::number(getPartie().getJoueur(i)->getCarte(c, j).getId()) + ",0,0,NULL);";
+                    }
+                    qDebug() << sql;
                     if (!query.exec(sql)) {
                         qCritical() << "Erreur lors de la sauvegarde de la carte noble \n";
 
@@ -1832,10 +1846,11 @@ void Controller::sauvegardePartie() {
                 }
             }
         }
-
+        qDebug() << "Sauvegarde des cartes nobles\n";
         // Cartes nobles
         for (size_t j = 0; j < getPartie().getJoueur(i)->getNbCartesNobles(); j++) {
-            QString sql = "INSERT INTO cartes_joueur (id_joueur, id_carte, noble, reserve) VALUES (" + QString::number(i + 1) + ", " + QString::number(getPartie().getJoueur(i)->getCarteNoble(j).getId()) + ",1,0);";
+            sql = "INSERT INTO cartes_joueur (id_joueur, id_carte, noble, reserve, couleur_associe) VALUES (" + QString::number(i + 1) + ", " + QString::number(getPartie().getJoueur(i)->getCarteNoble(j).getId()) + ",1,0,NULL);";
+            qDebug() << sql;
             if (!query.exec(sql)) {
                 qCritical() << "Erreur lors de la sauvegarde de la carte noble \n";
 
@@ -1843,11 +1858,13 @@ void Controller::sauvegardePartie() {
                 return;
             }
         }
+        qDebug() << "Sauvegarde des cartes réservées\n";
         // Cartes reservees (toutes les couleurs sauf et or)
         for (Couleur c : Couleurs) {
             if (c != Couleur::OR) {
                 for (size_t j = 0; j < getPartie().getJoueur(i)->getNbCartesReservees(c); j++) {
-                    QString sql = "INSERT INTO cartes_joueur (id_joueur, id_carte, noble, reserve) VALUES (" + QString::number(i + 1) + ", " + QString::number(getPartie().getJoueur(i)->getCarteReservee(c, j).getId()) + ",0,1);";
+                    sql = "INSERT INTO cartes_joueur (id_joueur, id_carte, noble, reserve, couleur_associe) VALUES (" + QString::number(i + 1) + ", " + QString::number(getPartie().getJoueur(i)->getCarteReservee(c, j).getId()) + ",0,1,NULL);";
+                    qDebug() << sql;
                     if (!query.exec(sql)) {
                         qCritical() << "Erreur lors de la sauvegarde de la carte reservés \n";
 

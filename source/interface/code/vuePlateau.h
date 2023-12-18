@@ -55,6 +55,9 @@ private:
     QVBoxLayout* layout;
 
     Plateau& plateau;
+protected:
+    void paintEvent(QPaintEvent *event);
+
 public:
     vuePlateau(QWidget* parent, int hateur, int largeur, Plateau& plat);
     //void paintEvent(QPaintEvent *event);
@@ -71,6 +74,17 @@ public:
     //void remplirPlateau();
 signals:
     void signalValiderAppuye();
+};
+
+class boutonSac : public QPushButton{
+    Q_OBJECT
+private:
+    int h, l;
+public:
+    boutonSac(QWidget* parent, int hauteur, int largeur) : QPushButton(parent), h(hauteur), l(largeur){
+        setFixedSize(l, h);     setFlat(true); setStyleSheet("QPushButton:pressed { border: none; }");}
+protected:
+    void paintEvent(QPaintEvent *event);
 };
 
 #endif // VUEPLATEAU_H

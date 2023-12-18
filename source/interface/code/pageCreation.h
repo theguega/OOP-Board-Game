@@ -38,6 +38,8 @@ private:
 
     pageJeu* jeu = nullptr; //Future page de Jeu
 protected:
+    void paintEvent(QPaintEvent *event);
+
     void comboBox1Active(int index){ //Affichage de la recuperation du nom pour le joueur
         if (index != 0){
             nom1Edit -> hide();
