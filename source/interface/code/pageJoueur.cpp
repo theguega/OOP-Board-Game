@@ -1,52 +1,49 @@
 #include "pageJoueur.h"
 
-pageJoueur::pageJoueur(QWidget* parent) : QWidget(parent){
-    cartesReserveesLayout = new QHBoxLayout;
-    cartesPossedeesLayout = new QHBoxLayout;
-    jetonsPossedesLayout = new QHBoxLayout;
-    layout = new QVBoxLayout;
+pageJoueur::pageJoueur(QWidget* parent, Joueur* joueur, int h, int l) : QWidget(parent), hP(h), lP(l){
+    cartesReserveesLayout = new QVBoxLayout;
+    cartesPossedeesLayout = new QVBoxLayout;
+    jetonsPossedesLayout = new QVBoxLayout;
+    informations = new QHBoxLayout;
+    layout = new QHBoxLayout;
 
-    cartesReserveesWidget = new QWidget;
-    cartesPossedeesWidget = new QWidget;
-    jetonsPossedesWidget = new QWidget;
+    layout->addLayout(cartesReserveesLayout);
+    layout->addLayout(cartesPossedeesLayout);
+    layout->addLayout(jetonsPossedesLayout);
 
-    cartesReserveesWidget->setLayout(cartesReserveesLayout);
-    cartesPossedeesWidget->setLayout(cartesPossedeesLayout);
-    jetonsPossedesWidget->setLayout(jetonsPossedesLayout);
-
-    layout->addWidget(cartesReserveesWidget);
-    layout->addWidget(cartesPossedeesWidget);
-    layout->addWidget(jetonsPossedesWidget);
+    for(int i = 0; i < 3; i++){
+        listePrivileges.push_back(new vuePrivilege(h, l));
+        informations->addWidget(listePrivileges[i]);
+    }
 
     setLayout(layout);
 }
 
-void pageJoueur::ajouterCarteReservee(vueCarte* carte){
-    cartesReservees.push_back(carte);
-    cartesReserveesLayout -> addWidget(carte);
-}
-
-void pageJoueur::ajouterCartePossedee(vueCarte* carte){
-    cartesPossedees.push_back(carte);
-    cartesPossedeesLayout -> addWidget(carte);
-}
-
-void pageJoueur::ajouterJeton(vueJeton* jeton){
-    jetonsPossedes.push_back(jeton);
-    jetonsPossedesLayout -> addWidget(jeton);
-}
-
-void pageJoueur::retirerJeton(vueJeton* jeton){
-    //A faire
-}
-
-void pageJoueur::afficher(bool tourJoueur){
-    if(tourJoueur){
-        this -> show();
-        cartesReserveesWidget -> show();
+void pageJoueur::refreshJoueur(Joueur* joueurCourant){
+    for(int i = 0; i < joueur->getNbPrivileges(); i++){
+        listePrivileges[i]->show();
     }
-    else{
-        this -> show();
-        cartesReserveesWidget -> hide();
+    for(int i = joueur->getNbPrivileges(); i < 3; i++){
+        listePrivileges[i]->hide();
     }
+}
+
+void vuePrivilege::paintEvent(QPaintEvent *event){
+    QWidget::paintEvent(event);
+    QPainter painter(this);
+
+    painter.setRenderHint(QPainter::Antialiasing);
+
+    QPolygon triangleSup;
+    QPolygon triangleInf;
+
+    triangleSup << QPoint(0, 0) << QPoint(l, 0) << QPoint(l/2, h/2);
+    triangleInf << QPoint(l, h) << QPoint(0, h) << QPoint(l/2, h/2);
+
+    painter.setBrush(QColor("#B4B4B3"));
+    painter.setPen(QPen(Qt::black, 2));
+    painter.drawPolygon(triangleSup);
+    painter.drawPolygon(triangleInf);
+    painter.setBrush(QColor("#FF9AC7"));
+    painter.drawEllipse(QPoint(l/2, h/2), l/4, l/4);
 }
