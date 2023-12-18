@@ -12,6 +12,12 @@ vuePyramide::vuePyramide(QWidget* parent, int hauteur, int largeur, Pyramide& py
 
     placerCartes();
 
+    for (vueCarte* carte : cartesPyramide)
+    {
+        // Connect the cardClicked signal of each VueCarte to the cardClicked signal of VuePyramide.
+        connect(carte, &vueCarte::carteAchetee, this, &vuePyramide::cardClicked);
+    }
+
     // initialisation des paquets
     layoutPaquets->addWidget(new vuePaquet(pyr.getPioche1(), h/(this->hauteur + 1), l/(this->hauteur + 4)));
     layoutPaquets->addWidget(new vuePaquet(pyr.getPioche2(), h/(this->hauteur + 1), l/(this->hauteur + 4)));

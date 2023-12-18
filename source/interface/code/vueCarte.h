@@ -69,7 +69,7 @@ protected:
             emit carteReservee();
         } else if (event->button() == Qt::RightButton) {
             qDebug() << "Clic droit detecte sur le widget.";
-            emit carteAchetee();
+            emit carteAchetee(pos);
         }
     }
 public:
@@ -80,7 +80,7 @@ public:
     void afficherInfo(){affichageInfo = true;}
 signals:
     void carteReservee();
-    void carteAchetee();
+    void carteAchetee(position* position);
 };
 
 class vuePaquet : public QWidget{

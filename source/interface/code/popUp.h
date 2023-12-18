@@ -7,6 +7,9 @@
 #include <string>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
+#include <QLabel>
+#include <QDialog>
+
 
 class popUpValider : public QWidget{
     Q_OBJECT
@@ -17,14 +20,17 @@ private:
     std::string texte3 = " ?";
 
     QLabel* info; //Recupere les infos a donner dans la question
+    QLabel* info2;
 
     QHBoxLayout* boutonLayout; //Layout avec les boutons
     QVBoxLayout* layout; //Layout principal
 public:
-    popUpValider(QWidget* parent, std::string info);
+    popUpValider(QWidget* parent, std::string info, std::string info2 = "");
     QPushButton* getBoutonOui(){return oui;}
     QPushButton* getBoutonNon(){return non;}
 };
+
+
 
 class popUpInfo : public QWidget{
     Q_OBJECT
@@ -35,4 +41,25 @@ public:
     popUpInfo(QWidget* parent, std::string info);
 };
 
-#endif // POPUP_H
+
+
+class modalPopup : public QDialog
+{
+    Q_OBJECT
+
+public:
+    modalPopup(QWidget* parent = nullptr, const QString& info = "", const QString& info2 = "");
+
+    QPushButton* getBoutonOui() const { return ouiButton; }
+    QPushButton* getBoutonNon() const { return nonButton; }
+
+private slots:
+    void handleOuiButtonClicked();
+
+private:
+    QPushButton* ouiButton;
+    QPushButton* nonButton;
+};
+
+
+#endif

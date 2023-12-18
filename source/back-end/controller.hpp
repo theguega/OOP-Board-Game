@@ -105,6 +105,9 @@ public:
     std::pair<bool, QString> verifJetons(const std::vector<std::pair<int, int>>& coord, bool capa = false, Couleur coulBonus = Couleur::INDT);
     void recupererJetons(const std::vector<std::pair<int, int>>& coord);
 
+    std::pair<bool, QString> verifAchatCarte(std::pair<int, int> coord);
+    void acheterCarteJoaillerie(std::pair<int, int> coord);
+
 };
 
 #endif

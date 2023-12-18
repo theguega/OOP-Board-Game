@@ -61,20 +61,18 @@ pageJeu::pageJeu(QString statut_partie, QString pseudo_j_1, type type_j_1, QStri
     connect(aSauvegarde -> getBoutonOui(), &QPushButton::clicked, this, &pageJeu::quitter);
     connect(aSauvegarde -> getBoutonNon(), &QPushButton::clicked, this, &pageJeu::rester);
     connect(vPlateau, &vuePlateau::signalValiderAppuye, this, &pageJeu::validerSelectionJeton);
+    connect(vPyramide, &vuePyramide::cardClicked, this, &pageJeu::validerSelectionCarte);
 }
+
 
 void pageJeu::validerSelectionJeton()
 {
     // Appeler la méthode verifJetons avec la sélection actuelle de la vue
     std::pair<bool, QString> validationResult = control->verifJetons(vPlateau->getSelectionJetons());
+    bool isValid = validationResult.first;
+    const QString& message = validationResult.second;
 
     // Traiter le résultat de la validation
-    handleValidationResult(validationResult.first, validationResult.second);
-}
-
-
-void pageJeu::handleValidationResult(bool isValid, const QString &message)
-{
     if(isValid){
         control->recupererJetons(vPlateau->getSelectionJetons());
         vPlateau->changerPointeurs();
@@ -86,6 +84,34 @@ void pageJeu::handleValidationResult(bool isValid, const QString &message)
         popUpInfo* infos = new popUpInfo(nullptr, message.toStdString());
         infos->show();
     }
+}
+
+
+void pageJeu::validerSelectionCarte(position* pos){
+    std::pair<bool, QString> validationResult = control->verifAchatCarte(std::make_pair(pos->getx(), pos->gety()));
+    bool isValid = validationResult.first;
+    const QString& message = validationResult.second;
+
+    if(isValid){
+        modalPopup* validation = new modalPopup(this, message, "Voulez-vous valider ?");
+        int result =validation->exec();
+
+        // Check the result (optional).
+        if (result == QDialog::Accepted){
+            pageJeu::handleValidationCarte(pos);
+        }
+        delete validation;
+    } else{
+        popUpInfo* infos = new popUpInfo(nullptr, message.toStdString());
+        infos->show();
+    }
+}
+
+
+void pageJeu::handleValidationCarte(position* p){
+    std::pair<int, int> coord = std::make_pair(p->getx(), p->gety());
+    control->acheterCarteJoaillerie(coord);
+    qDebug() << "ici";
 }
 
 

@@ -28,6 +28,8 @@ public:
     void afficherCartes();
     void boutonAfficherInfoClique();
     void placerCartes();
+signals:
+    void cardClicked(position* pos);
 };
 
 #endif // VUEPYRAMIDE_H
