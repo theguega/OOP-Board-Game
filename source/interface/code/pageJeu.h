@@ -75,23 +75,21 @@ public:
         QWidget::mousePressEvent(event);
     }
     void setLabelJC(){labelJC->setText(QString::fromStdString("C'est au tour de " + control->getJoueurCourant().getPseudo()));}
-<<<<<<< HEAD
 
 public slots:
     void validerSelectionCarte(position* p);
-=======
     void afficherPrivileges();
->>>>>>> 2c94811a55c124851fb6b68406aa16ba15ad6615
+
 private slots:
     void validerSelectionJeton();
 
     void handleValidationCarte(position* p);
 };
 
-<<<<<<< HEAD
 
 
-class vuePrivilege : public QWidget{
+
+/*class vuePrivilege : public QWidget{
     Q_OBJECT
 private:
     int h;
@@ -100,9 +98,7 @@ protected:
     void paintEvent(QPaintEvent *event);
 public:
     vuePrivilege(int hauteur, int largeur) : h(hauteur), l(largeur){setFixedSize(l, h);}
-};
+};*/
 
-=======
->>>>>>> 2c94811a55c124851fb6b68406aa16ba15ad6615
 #endif // PAGEJEU_H
 

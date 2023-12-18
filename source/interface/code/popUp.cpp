@@ -24,14 +24,11 @@ popUpValider::popUpValider(QWidget* parent, std::string info, std::string info2)
     boutonLayout->addWidget(oui);
     boutonLayout->addWidget(non);
 
-<<<<<<< HEAD
     layout -> addWidget(this->info2);
-=======
     layout -> addWidget(gifLabel);
 
     movie->start(); // Démarre l'animation du GIF
 
->>>>>>> 2c94811a55c124851fb6b68406aa16ba15ad6615
     layout -> addWidget(this->info);
     layout -> addLayout(boutonLayout);
     layout -> setAlignment(Qt::AlignCenter);

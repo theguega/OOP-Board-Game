@@ -7,14 +7,12 @@
 #include <string>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
-<<<<<<< HEAD
 #include <QLabel>
 #include <QDialog>
 
 
-=======
 #include <QMovie>
->>>>>>> 2c94811a55c124851fb6b68406aa16ba15ad6615
+
 class popUpValider : public QWidget{
     Q_OBJECT
 private:
