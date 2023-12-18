@@ -683,7 +683,7 @@ void Controller::recupererJetons(bool capacite,Couleur coulBonus){
 
         int choix_indice_jeton = strategy_courante->choix_min_max(1, jetonsDispo.size());
 
-        coord.push_back(jetonsDispo[choix_indice_jeton-1]);
+        vecteurCoordonnees.push_back(jetonsDispo[choix_indice_jeton-1]);
 
         jetonsDispo.erase(jetonsDispo.begin() + choix_indice_jeton-1);
 
