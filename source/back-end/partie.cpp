@@ -1,9 +1,15 @@
 #include "partie.hpp"
 
+
+
+
 Partie::Partie(): espaceJeux(new EspaceJeux()) {
     joueurs[0] = nullptr;
     joueurs[1] = nullptr;
 }
+
+
+
 
 // ###########   LastPartieBuilder   #############
 
@@ -28,6 +34,9 @@ void LastPartieBuilder::setJoueurs() const {
         string pseudo = query.value(1).toString().toStdString();
         string type = query.value(2).toString().toStdString();
         int nb_privileges = query.value(3).toInt();
+        int ptsPrestige = query.value(4).toInt();
+        int nbCouronnes = query.value(5).toInt();
+
         if (type == "IA")
             this->partie->joueurs[i] = new Joueur(pseudo, type::IA);
         else
@@ -40,11 +49,22 @@ void LastPartieBuilder::setJoueurs() const {
             else
                 this->partie->getJoueur2()->addPrivilege(p);
         }
+
+        if(i==0){
+            this->partie->getJoueur1()->updatePtsPrestige(ptsPrestige);
+            this->partie->getJoueur1()->updateNbCouronnes(nbCouronnes);
+        }
+        if(i==1){
+            this->partie->getJoueur2()->updatePtsPrestige(ptsPrestige);
+            this->partie->getJoueur2()->updateNbCouronnes(nbCouronnes);
+        }
         i++;
     }
 
     db.close();
 }
+
+
 
 
 void LastPartieBuilder::setCartesJoueurs() const {
@@ -121,6 +141,8 @@ void LastPartieBuilder::setCartesJoueurs() const {
 }
 
 
+
+
 void LastPartieBuilder::setJetonsJoueurs() const {
     QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE", "conn7");
     db.setDatabaseName("data/save.sqlite");
@@ -162,6 +184,8 @@ void LastPartieBuilder::setJetonsJoueurs() const {
 }
 
 
+
+
 void LastPartieBuilder::updateEspaceJeu() const {
     QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE", "conn8");
     db.setDatabaseName("data/save.sqlite");
@@ -192,6 +216,9 @@ void LastPartieBuilder::updateEspaceJeu() const {
         } else if (i == 2) {
             const Carte &carte = this->partie->espaceJeux->getPyramide().getPioche3().piocher(id_carte);
             partie->espaceJeux->getPyramide().definitCarte(i, j, carte);
+        } else if (i == 3){
+            const Carte &carte = this->partie->espaceJeux->getPyramide().getPiocheNoble().piocher(id_carte);
+            partie->espaceJeux->getPyramide().definitCarte(i, j, carte);
         }
     }
 
@@ -212,6 +239,9 @@ void LastPartieBuilder::updateEspaceJeu() const {
 
     db.close();
 }
+
+
+
 
 void LastPartieBuilder::setInfosPartie() const {
     QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE", "conn9");

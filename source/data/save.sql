@@ -14,7 +14,9 @@ CREATE TABLE joueur (
     id INTEGER,
     pseudo TEXT,
     type_joueur TEXT,
-    privileges INTEGER
+    privileges INTEGER,
+    ptsPrestige INTEGER,
+    nbCouronnes INTEGER
 );
 
 CREATE TABLE infopartie (

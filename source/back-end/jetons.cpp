@@ -13,23 +13,6 @@ std::initializer_list<Couleur> Couleurs = {
     Couleur::BLANC, Couleur::BLEU, Couleur::VERT, Couleur::ROUGE, Couleur::NOIR, Couleur::PERLE, Couleur::OR, Couleur::INDT
 };
 
-/*
-std::string toStringCouleur(Couleur c) {
-    switch (c)
-    {
-    case Couleur::BLANC: return "Blanc";
-    case Couleur::BLEU: return "Bleu";
-    case Couleur::VERT: return "Vert";
-    case Couleur::ROUGE: return "Rouge";
-    case Couleur::NOIR: return "Noir";
-    case Couleur::PERLE: return "Perle";
-    case Couleur::OR: return "Or";
-    case Couleur::INDT: return "Indt";
-    default: throw SplendorException("Couleur inconnue");
-    }
-}*/
-
-//🔵🟢🔴🟡🟣🖤🤍
 
 std::string toEmojiCouleur(Couleur c) {
     switch (c) {
@@ -48,14 +31,14 @@ std::string toEmojiCouleur(Couleur c) {
 std::string toStringCouleur(Couleur c) {
     switch (c)
     {
-    case Couleur::BLANC: return "Blanc"; // Blanc
-    case Couleur::BLEU: return "Bleu";  // Bleu
-    case Couleur::VERT: return "Vert";  // Vert
-    case Couleur::ROUGE: return "Rouge"; // Rouge
-    case Couleur::NOIR: return "Noir";  // Noir
-    case Couleur::PERLE: return "Perle"; // Perle (rose)
-    case Couleur::OR: return "Or";    // Or (jaune)
-    case Couleur::INDT: return "Indt";
+    case Couleur::BLANC: return "blanc";
+    case Couleur::BLEU: return "bleu";
+    case Couleur::VERT: return "vert";
+    case Couleur::ROUGE: return "rouge";
+    case Couleur::NOIR: return "noir";
+    case Couleur::PERLE: return "perle";
+    case Couleur::OR: return "or";
+    case Couleur::INDT: return "indt";
     default: throw SplendorException("Couleur inconnue");
     }
 }
@@ -65,6 +48,10 @@ std::ostream& operator<<(std::ostream& f, Couleur c) {
 }
 QDebug operator<<(QDebug f, const Couleur &c) {
     return f << qUtf8Printable(QString::fromStdString(toEmojiCouleur(c)));
+}
+
+QDebug operator<<(QDebug f, const Couleur* c) {
+    return f << qUtf8Printable(QString::fromStdString(toEmojiCouleur(*c)));
 }
 
 std::map<std::string, Couleur> stringToCouleurMap = {
@@ -234,7 +221,12 @@ Sac& Sac::getSac() {
     return instance;
 }
 
-
+void Sac::afficherSac() const{
+    for (int i = 0; i < jetons.size(); i++){
+        qDebug() << *jetons[i] << " ";
+    }
+    qDebug() << "\n\n";
+}
 //------------------------------------------------- Classe Plateau
 
 void Plateau::positionerJeton(const Jeton& jeton, const size_t i, const size_t j){
@@ -348,6 +340,41 @@ bool Plateau::estVide() const {
     return true;
 }
 
+std::vector<std::pair<int, int>> Plateau::getVectorDispo(){
+    std::vector<std::pair<int, int>> vectorJeton;
+    for (size_t i = 0; i < 5; i++)
+        for (size_t j = 0; j < 5; j++)
+            if (jetons[i][j] != nullptr && (!caseOr(i,j))) {
+                std::pair<int,int> coordJeton(i, j);
+                vectorJeton.push_back(coordJeton);
+            }
+    return vectorJeton;
+}
+
+std::vector<std::pair<int, int>> Plateau::getVectorOrDispo() {
+    std::vector<std::pair<int, int>> vectorOrJeton;
+    for (size_t i = 0; i < 5; i++)
+        for (size_t j = 0; j < 5; j++)
+            if (jetons[i][j] != nullptr && caseOr(i,j)) {
+                std::pair<int,int> coordJeton(i, j);
+                vectorOrJeton.push_back(coordJeton);
+            }
+    return vectorOrJeton;
+}
+
+std::vector<std::pair<int, int>> Plateau::getVectorCouleurDispo(Couleur coulBonus) {
+    std::vector<std::pair<int, int>> vectorOrJeton;
+    for (size_t i = 0; i < 5; i++)
+        for (size_t j = 0; j < 5; j++)
+            if (jetons[i][j] != nullptr && jetons[i][j]->getCouleur() == coulBonus) {
+                std::pair<int,int> coordJeton(i, j);
+                vectorOrJeton.push_back(coordJeton);
+            }
+    return vectorOrJeton;
+}
+
+
+
 size_t Plateau::getNbJetons() const {
     size_t nombreDeJetons = 0;
 
@@ -389,7 +416,7 @@ bool Plateau::contientOr() const {
 bool Plateau::contientOnlyOr() const{
     for(int i =0; i <5; i++){
         for(int j = 0; j<5; j++){
-            if(getJeton(i, j)->getCouleur() != Couleur::OR)
+            if(getJeton(i, j) != nullptr && getJeton(i, j)->getCouleur() != Couleur::OR)
                 return false;
         }
     }
@@ -405,17 +432,17 @@ Plateau& Plateau::getPlateau(const LotPrivileges& lotp) {
 
 std::ostream& operator<< (std::ostream& f, const Plateau& plateau) {
     //On affiche une matrice avec dans chaque case la lettre correpondant au jetons
-    f<<"---------------------"<<std::endl;
+    f<<"---------------------"<<"\n";
     for (size_t i = 0; i < plateau.getLargeurMatrice(); i++) {
         f << "|";
         for (size_t j = 0; j < plateau.getLargeurMatrice(); j++) {
             if (plateau.getJeton(i,j) == nullptr)
-                f << "   ";
+                f << " ";
             else
                 f << plateau.getJeton(i, j);
             f << "|";
         };
-        f << "\n" << "---------------------" << std::endl;
+        f << "\n" << "---------------------" << "\n";
     }
 
 
@@ -423,11 +450,11 @@ std::ostream& operator<< (std::ostream& f, const Plateau& plateau) {
     for(unsigned int i = 0; i<plateau.getNbPrivileges();i++)
         f << "|\033[1;38;5;208mP\033[0m|";
 
-    f << "\n" << "---------------------" << std::endl;
+    f << "\n" << "---------------------" <<"\n";
     return f;
 }
 
-QDebug operator<<(QDebug f, const Plateau &plateau) {
+QDebug operator << (QDebug f, const Plateau &plateau) {
     //On affiche une matrice avec dans chaque case la lettre correpondant au jetons
     f<<"---------------------"<<"\n";
     for (size_t i = 0; i < plateau.getLargeurMatrice(); i++) {

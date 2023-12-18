@@ -1,6 +1,18 @@
 #ifndef PARTIE_H
 #define PARTIE_H
 
+/*
+-----------------------------
+  _____           _   _
+ |  __ \         | | (_)
+ | |__) |_ _ _ __| |_ _  ___
+ |  ___/ _` | '__| __| |/ _ \
+ | |  | (_| | |  | |_| |  __/
+ |_|   \__,_|_|   \__|_|\___|
+
+-----------------------------
+*/
+
 #include <iostream>
 #include <string>
 #include <array>
@@ -16,7 +28,10 @@
 #include <QString>
 
 
+
+
 //Implémentation de la partie
+
 //La classe partie sert a contenir tous les éléments du jeu, a savoir les joueurs, et l'espace de jeu contenant le plateau et la pyramide de carte
 class Partie {
     friend class PartieBuilder;
@@ -24,22 +39,20 @@ class Partie {
     friend class LastPartieBuilder;
     private:
         EspaceJeux * espaceJeux;
-    Joueur * joueurs[2];
-    int tour;
+        Joueur * joueurs[2];
+        int tour;
     public:
-    //Constructeur/destructeur
-    Partie();
-    ~Partie() {
+        Partie();
+        ~Partie() {
         delete espaceJeux;
         delete joueurs[0];
         delete joueurs[1];
-    }
+        }
 
     //Getter
     EspaceJeux & getEspaceJeux() const {
         return * espaceJeux;
     }
-
     Joueur * getJoueurs() const {
         return * joueurs;
     }
@@ -63,16 +76,22 @@ class Partie {
         tour = n;
     }
 
+    // Autres
     void incrementeTour() {
         tour++;
     }
 };
 
-//  ######  Debut du pattern Builder  ######
+
+
+
+//  ######  Implementation du pattern Builder  ######
 
 //Classe abstraite pour construire une partie (nouvelle ou ancienne)
+
 class PartieBuilder {
-    public: virtual~PartieBuilder() {};
+    public:
+    virtual~PartieBuilder() {}
     virtual void setJoueurs(string pseudo1, type t1, string pseudo2, type t2) const = 0;
     virtual void setJoueurs() const = 0;
     virtual void setCartesJoueurs() const = 0;
@@ -82,83 +101,97 @@ class PartieBuilder {
     friend class Partie;
 };
 
+
+
+
 class NewPartieBuilder: public PartieBuilder {
     private: Partie * partie;
-    public: NewPartieBuilder() {
+    public:
+        NewPartieBuilder() {
             this -> Reset();
         }
         ~NewPartieBuilder() {
             delete partie;
         }
-    void Reset() {
-        this -> partie = new Partie();
-    }
+        void Reset() {
+            this -> partie = new Partie();
+        }
+        void setJoueurs(string pseudo1, type t1, string pseudo2, type t2) const override {
+            partie -> joueurs[0] = new Joueur(pseudo1, t1);
+            partie -> joueurs[1] = new Joueur(pseudo2, t2);
+        }
+        void setInfosPartie() const override {
+            partie -> tour = 0;
+        }
+        Partie * GetProduct() {
+            Partie * result = this -> partie;
+            return result;
+        }
 
-    // Restitution de l'ancienne partie depuis la sauvegarde sqlite
-    void setJoueurs(string pseudo1, type t1, string pseudo2, type t2) const override {
-        partie -> joueurs[0] = new Joueur(pseudo1, t1);
-        partie -> joueurs[1] = new Joueur(pseudo2, t2);
-    };
-    void setJoueurs() const override {};
-    void setCartesJoueurs() const override {};
-    void setJetonsJoueurs() const override {};
-    void updateEspaceJeu() const override {};
-
-    void setInfosPartie() const override {
-        partie -> tour = 0;
-    };
-
-    Partie * GetProduct() {
-        Partie * result = this -> partie;
-        return result;
-    }
+        // unused
+        void setJoueurs() const override {}
+        void setCartesJoueurs() const override {}
+        void setJetonsJoueurs() const override {}
+        void updateEspaceJeu() const override {}
 };
 
+
+
+
 class LastPartieBuilder: public PartieBuilder {
-    private: Partie * partie;
-    public: LastPartieBuilder() {
+    private:
+        Partie * partie;
+    public:
+        LastPartieBuilder() {
             this -> Reset();
         }
         ~LastPartieBuilder() {
             delete partie;
         }
-    void Reset() {
-        this -> partie = new Partie();
-    }
+        void Reset() {
+            this -> partie = new Partie();
+        }
+        void setJoueurs() const override;
+        void setCartesJoueurs() const override;
+        void setJetonsJoueurs() const override;
+        void updateEspaceJeu() const override;
+        void setInfosPartie() const override;
 
-    virtual void setJoueurs([[maybe_unused]]string pseudo1,[[maybe_unused]]type t1,[[maybe_unused]]string pseudo2,[[maybe_unused]]type t2) const override {};
-    virtual void setJoueurs() const override;
-    virtual void setCartesJoueurs() const override;
-    virtual void setJetonsJoueurs() const override;
-    virtual void updateEspaceJeu() const override;
-    virtual void setInfosPartie() const override;
+        Partie * GetProduct() {
+            Partie * result = this -> partie;
+            return result;
+        }
 
-    Partie * GetProduct() {
-        Partie * result = this -> partie;
-        return result;
-    }
+        //unused
+        virtual void setJoueurs([[maybe_unused]]string pseudo1,[[maybe_unused]]type t1,[[maybe_unused]]string pseudo2,[[maybe_unused]]type t2) const override {}
+
 };
 
+
+
+
 class Director {
-    private: PartieBuilder * builder;
-    public: void set_builder(PartieBuilder * builder) {
+    private:
+        PartieBuilder * builder;
+    public:
+        void set_builder(PartieBuilder * builder) {
         this -> builder = builder;
-    }
+        }
 
-    //Nouvelle partie
-    void BuildNewPartie(string pseudo1, type t1, string pseudo2, type t2) {
-        builder -> setJoueurs(pseudo1, t1, pseudo2, t2);
-        builder -> setInfosPartie();
-    };
+        //Nouvelle partie
+        void BuildNewPartie(string pseudo1, type t1, string pseudo2, type t2) {
+            builder -> setJoueurs(pseudo1, t1, pseudo2, t2);
+            builder -> setInfosPartie();
+        }
 
-    //Ancienne partie
-    void BuildLastPartie() {
-        builder -> setJoueurs();
-        builder -> setCartesJoueurs();
-        builder -> setJetonsJoueurs();
-        builder -> updateEspaceJeu();
-        builder -> setInfosPartie();
-    }
+        //Ancienne partie
+        void BuildLastPartie() {
+            builder -> setJoueurs();
+            builder -> setCartesJoueurs();
+            builder -> setJetonsJoueurs();
+            builder -> updateEspaceJeu();
+            builder -> setInfosPartie();
+        }
 };
 
 #endif
