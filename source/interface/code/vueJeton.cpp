@@ -68,7 +68,7 @@ void vueJeton::paintEvent(QPaintEvent *event) {
         QPoint center = rect().center(); // Centre du bouton
 
         if(afficherCroix){
-            painter.setPen(QPen(Qt::red, 2)); // Contours noirs de largeur 1 pixel
+            painter.setPen(QPen(QColor("#FF9600"), 4)); // Contours noirs de largeur 1 pixel
 
         }
         else{
