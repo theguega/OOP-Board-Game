@@ -61,74 +61,81 @@ void vueJeton::paintEvent(QPaintEvent *event) {
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing); // Pour des bords plus lisses
 
-    int side = qMin(width(), height()); // Taille minimale entre largeur et hauteur pour un carre
-    QPoint center = rect().center(); // Centre du bouton
+    if(jeton != nullptr){
+        show();
 
-    if(afficherCroix){
-        painter.setPen(QPen(Qt::red, 2)); // Contours noirs de largeur 1 pixel
+        int side = qMin(width(), height()); // Taille minimale entre largeur et hauteur pour un carre
+        QPoint center = rect().center(); // Centre du bouton
 
+        if(afficherCroix){
+            painter.setPen(QPen(Qt::red, 2)); // Contours noirs de largeur 1 pixel
+
+        }
+        else{
+            painter.setPen(QPen(couleurContour, 3)); // Contours noirs de largeur 1 pixel
+        }
+
+        // Dessin du cercle au centre du bouton
+        int circleRadius = side / 2; // Rayon du cercle pour qu'il soit centre
+        painter.setBrush(QBrush(QcouleurClair)); // Utilisation de la couleur definie
+        painter.drawEllipse(center, circleRadius - 3, circleRadius - 3);
+
+        // Definition des points pour creer le grand losange
+        QVector<QPoint> bigDiamondShape;
+        const int bigWidth = side * 2 / 3;
+        const int bigHeight = side * 3 / 4;
+
+        bigDiamondShape << QPoint(center.x(), center.y() - bigHeight / 2); // Point superieur
+        bigDiamondShape << QPoint(center.x() + bigWidth / 2, center.y()); // Point droit
+        bigDiamondShape << QPoint(center.x(), center.y() + bigHeight / 2); // Point inferieur
+        bigDiamondShape << QPoint(center.x() - bigWidth / 2, center.y()); // Point gauche
+
+        // Dessin du grand losange
+        painter.setPen(QPen(couleurContour, 2)); // Contours noirs de largeur 2 pixels
+        painter.setBrush(Qcouleur); // Couleur bleue pour le grand losange
+        painter.drawPolygon(bigDiamondShape);
+
+        // Definition des points pour creer le petit losange (effet 3D)
+        QVector<QPoint> smallDiamondShape;
+        const int smallWidth = side / 4;
+        const int smallHeight = side / 3;
+
+        smallDiamondShape << QPoint(center.x(), center.y() - smallHeight / 2); // Point superieur
+        smallDiamondShape << QPoint(center.x() + smallWidth / 2, center.y()); // Point droit
+        smallDiamondShape << QPoint(center.x(), center.y() + smallHeight / 2); // Point inferieur
+        smallDiamondShape << QPoint(center.x() - smallWidth / 2, center.y()); // Point gauche
+
+        // Dessin du petit losange (effet 3D)
+        QRadialGradient gradient(center, side / 4, center); // Gradient radial pour l'effet 3D
+        gradient.setColorAt(0, QColor(255, 255, 255, 0)); // Couleur transparente au centre
+        gradient.setColorAt(0.5, QColor(255, 255, 255, 60)); // Couleur semi-opaque au milieu
+        gradient.setColorAt(1, QColor(255, 255, 255, 120)); // Couleur plus opaque a l'exterieur
+
+        painter.setBrush(gradient);
+        painter.setPen(Qt::NoPen);
+        painter.drawPolygon(smallDiamondShape);
+
+        // Dessin des lignes reliant les coins des deux losanges (plus fins)
+        painter.setPen(QPen(couleurContour, 1)); // Lignes noires plus fines
+        painter.drawLine(bigDiamondShape[0], smallDiamondShape[0]);
+        painter.drawLine(bigDiamondShape[1], smallDiamondShape[1]);
+        painter.drawLine(bigDiamondShape[2], smallDiamondShape[2]);
+        painter.drawLine(bigDiamondShape[3], smallDiamondShape[3]);
+
+        // Dessin des contours du losange central en noir
+        painter.setPen(QPen(couleurContour, 2)); // Contours noirs de largeur 2 pixels
+        painter.drawPolygon(smallDiamondShape);
+
+        // Effet lorsqu'on clique sur le bouton (pressed)
+        if (this->isDown()) {
+            painter.setBrush(QColor(0, 0, 0, 30)); // Couleur sombre pour simuler un effet enfonce
+            painter.setPen(Qt::NoPen);
+            painter.drawPolygon(bigDiamondShape);
+            painter.drawEllipse(center, circleRadius, circleRadius);
+        }
     }
     else{
-        painter.setPen(QPen(couleurContour, 3)); // Contours noirs de largeur 1 pixel
-    }
-
-    // Dessin du cercle au centre du bouton
-    int circleRadius = side / 2; // Rayon du cercle pour qu'il soit centre
-    painter.setBrush(QBrush(QcouleurClair)); // Utilisation de la couleur definie
-    painter.drawEllipse(center, circleRadius - 3, circleRadius - 3);
-
-    // Definition des points pour creer le grand losange
-    QVector<QPoint> bigDiamondShape;
-    const int bigWidth = side * 2 / 3;
-    const int bigHeight = side * 3 / 4;
-
-    bigDiamondShape << QPoint(center.x(), center.y() - bigHeight / 2); // Point superieur
-    bigDiamondShape << QPoint(center.x() + bigWidth / 2, center.y()); // Point droit
-    bigDiamondShape << QPoint(center.x(), center.y() + bigHeight / 2); // Point inferieur
-    bigDiamondShape << QPoint(center.x() - bigWidth / 2, center.y()); // Point gauche
-
-    // Dessin du grand losange
-    painter.setPen(QPen(couleurContour, 2)); // Contours noirs de largeur 2 pixels
-    painter.setBrush(Qcouleur); // Couleur bleue pour le grand losange
-    painter.drawPolygon(bigDiamondShape);
-
-    // Definition des points pour creer le petit losange (effet 3D)
-    QVector<QPoint> smallDiamondShape;
-    const int smallWidth = side / 4;
-    const int smallHeight = side / 3;
-
-    smallDiamondShape << QPoint(center.x(), center.y() - smallHeight / 2); // Point superieur
-    smallDiamondShape << QPoint(center.x() + smallWidth / 2, center.y()); // Point droit
-    smallDiamondShape << QPoint(center.x(), center.y() + smallHeight / 2); // Point inferieur
-    smallDiamondShape << QPoint(center.x() - smallWidth / 2, center.y()); // Point gauche
-
-    // Dessin du petit losange (effet 3D)
-    QRadialGradient gradient(center, side / 4, center); // Gradient radial pour l'effet 3D
-    gradient.setColorAt(0, QColor(255, 255, 255, 0)); // Couleur transparente au centre
-    gradient.setColorAt(0.5, QColor(255, 255, 255, 60)); // Couleur semi-opaque au milieu
-    gradient.setColorAt(1, QColor(255, 255, 255, 120)); // Couleur plus opaque a l'exterieur
-
-    painter.setBrush(gradient);
-    painter.setPen(Qt::NoPen);
-    painter.drawPolygon(smallDiamondShape);
-
-    // Dessin des lignes reliant les coins des deux losanges (plus fins)
-    painter.setPen(QPen(couleurContour, 1)); // Lignes noires plus fines
-    painter.drawLine(bigDiamondShape[0], smallDiamondShape[0]);
-    painter.drawLine(bigDiamondShape[1], smallDiamondShape[1]);
-    painter.drawLine(bigDiamondShape[2], smallDiamondShape[2]);
-    painter.drawLine(bigDiamondShape[3], smallDiamondShape[3]);
-
-    // Dessin des contours du losange central en noir
-    painter.setPen(QPen(couleurContour, 2)); // Contours noirs de largeur 2 pixels
-    painter.drawPolygon(smallDiamondShape);
-
-    // Effet lorsqu'on clique sur le bouton (pressed)
-    if (this->isDown()) {
-        painter.setBrush(QColor(0, 0, 0, 30)); // Couleur sombre pour simuler un effet enfonce
-        painter.setPen(Qt::NoPen);
-        painter.drawPolygon(bigDiamondShape);
-        painter.drawEllipse(center, circleRadius, circleRadius);
+        hide();
     }
 }
 

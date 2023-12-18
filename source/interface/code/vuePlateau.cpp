@@ -12,8 +12,6 @@ grilleJetons::grilleJetons(QWidget* parent, int hauteur, int largeur, int nbJ, i
     QWidget(parent), h(hauteur), l(largeur), nbJetons(nbJ), tailleJeton(tJ), ptListeJetons(pt){
 
     rnbJetons = static_cast<int>(sqrt(nbJetons));
-    int lRectangle = l / rnbJetons;
-    int hRectangle = h / rnbJetons;
     for(int i = 0; i < rnbJetons; i++){
         for(int j = 0; j < rnbJetons; j++){
             listeRectangles.push_back(new QRect(2 * i * (tailleJeton+5) + (l-(2*(tailleJeton+5))*rnbJetons)/2, 2 * j * (tailleJeton+5), 2*(tailleJeton+5), 2*(tailleJeton+5)));
@@ -167,13 +165,8 @@ vuePlateau::vuePlateau(QWidget* parent, int hauteur, int largeur, Plateau& plat)
     setFixedSize(l, h); //Fixe la taille du plateau
     //sac = plateau->getSac();
 
-    int tailleJeton = (h - 100)/(2*rnbJetons) - 5;
-
+    tailleJeton = (h - 100)/(2*rnbJetons) - 5;
     grille = new grilleJetons(nullptr, h-100, l, nbJetons, tailleJeton, &listeJetons);
-
-    for(int i = 0; i < 3; i++){
-        jetonSelection[i] = nullptr; //Initialise jetonSelection avec nullptr
-    }
 
     placerJetons();
 
@@ -193,14 +186,9 @@ vuePlateau::vuePlateau(QWidget* parent, int hauteur, int largeur, Plateau& plat)
 }
 
 void vuePlateau::placerJetons(){
-    for(auto pt : listeJetons){
-        delete pt;
-    }
-    listeJetons.clear();
     for(int i = 0; i < rnbJetons; i++){
         for(int j = 0; j < rnbJetons; j++){
-            if(plateau.getJeton(i, j) != nullptr)
-                grille->placerJeton(plateau.getJeton(i,j), i , j);
+            grille->placerJeton(plateau.getJeton(i,j), i , j);
         }
     }
     for(int i = 0; i < listeJetons.size(); i++){
@@ -212,6 +200,19 @@ void vuePlateau::placerJetons(){
         jetonSelection[i] = nullptr; //Initialise jetonSelection avec nullptr
     }
     update();
+}
+
+void vuePlateau::changerPointeurs(){
+    for(int i = 0; i < rnbJetons; i++){
+        for(int j = 0; j < rnbJetons; j++){
+            int k = i  * rnbJetons + j;
+            listeJetons[k]->setJeton(plateau.getJeton(i,j));
+        }
+    }
+    for(int i = 0; i < 3; i++){
+        jetonSelection[i] = nullptr;
+    }
+    nbJetonSelection = 0;
 }
 
 void vuePlateau::boutonClique(int i){
@@ -279,7 +280,7 @@ std::vector<std::pair<int, int>> vuePlateau::getSelectionJetons() const {
         }
     }
     return tmp;
-};
+}
 
 
 /*vueJeton* vuePlateau::recupererBouton(Jeton* jeton){

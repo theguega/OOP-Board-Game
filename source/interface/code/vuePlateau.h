@@ -47,6 +47,7 @@ private:
 
     int xBoutonHG;
     int yBoutonHG;
+    int tailleJeton;
 
     QPushButton* boutonValider;
     popUpInfo* info;
@@ -65,6 +66,7 @@ public:
     void afficherJetons(){for(int i = 0; i < nbJetons; i++){listeJetons[i]->show();}update();}
     void placerJetons();
     std::vector<std::pair<int, int>> getSelectionJetons() const;
+    void changerPointeurs();
     //vueJeton* recupererBouton(Jeton* jeton);
     //void remplirPlateau();
 signals:
