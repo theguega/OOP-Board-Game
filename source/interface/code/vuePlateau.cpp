@@ -270,6 +270,17 @@ void vuePlateau::cacherElements(){
     info -> close();
 }
 
+void vuePlateau::paintEvent(QPaintEvent *event){
+    QWidget::paintEvent(event); // Appel a la methode paintEvent de la classe de base
+
+    QPainter painter(boutonValider);
+
+    painter.setRenderHint(QPainter::Antialiasing); // Pour des bords plus lisses
+    painter.setBrush(Qt::red);
+    painter.drawRect(boutonValider->rect());
+
+}
+
 
 std::vector<std::pair<int, int>> vuePlateau::getSelectionJetons() const {
     std::vector<std::pair<int, int>> tmp;
@@ -304,4 +315,5 @@ void boutonSac::paintEvent(QPaintEvent *event){
     painter.setPen(QPen(Qt::black, 3)); // Couleur noire pour la corde
     painter.drawLine(l * 0.65, h * 0.1, l * -1.2, h * 0.25); // Corde gauche
     painter.drawLine(l * 0.65, h * 0.1, l * 1.1, h * 0.25); // Corde droite
+
 }

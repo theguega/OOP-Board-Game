@@ -7,7 +7,7 @@
 
 pageCreation::pageCreation(QWidget *parent) : QWidget(parent){
     choixPossibles1 = new QComboBox;
-    choixPossibles2 = new QComboBox;
+    choixPossibles2 = new QComboBox;    
 
     choix1 << "Nouvelle Personne" << "IA 1" << "IA 2";
     choix2 << "Nouvelle Personne" << "IA 1" << "IA 2";
@@ -63,5 +63,17 @@ pageCreation::pageCreation(QWidget *parent) : QWidget(parent){
     QObject::connect(pop -> getBoutonOui(), &QPushButton::clicked, this, &pageCreation::boutonOuiPresse);
     QObject::connect(pop -> getBoutonNon(), &QPushButton::clicked, this, &pageCreation::boutonNonPresse);
     pop -> hide();
+}
+
+void pageCreation::paintEvent(QPaintEvent *event){
+    QWidget::paintEvent(event);
+    QPainter painter(this);
+
+    painter.setRenderHint(QPainter::Antialiasing);
+
+    painter.setBrush(QColor("#252525")); //On definie la couleur du pinceau en blanc
+
+    painter.drawPolygon(rect()); //On colorie le polygone
+
 }
 

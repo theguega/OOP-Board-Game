@@ -4,6 +4,8 @@
 #include "pageCreation.h"
 #include "toutesPages.h"
 #include "pageJeu.h"
+#include <QPalette>
+
 
 pageJeu::pageJeu(QString statut_partie, QString pseudo_j_1, type type_j_1, QString pseudo_j_2, type type_j_2, QWidget *parent) : QWidget(parent) {
     control = new Controller(statut_partie, pseudo_j_1, type_j_1, pseudo_j_2, type_j_2);
@@ -43,7 +45,16 @@ pageJeu::pageJeu(QString statut_partie, QString pseudo_j_1, type type_j_1, QStri
     bSac = new boutonSac(nullptr, (vPlateau->height() - 130)/4, 30);
     layoutPrivileges->addWidget(bSac);
 
+
+
+
     labelJC = new QLabel;
+
+    QPalette palette = labelJC->palette();
+    palette.setColor(QPalette::WindowText, Qt::white);
+    labelJC->setPalette(palette);
+
+
     partieHaute -> addWidget(labelJC);
     partieHaute -> setAlignment(Qt::AlignCenter);
     setLabelJC();
@@ -101,7 +112,7 @@ void pageJeu::paintEvent(QPaintEvent *event){
 
     painter.setRenderHint(QPainter::Antialiasing);
 
-    painter.setBrush(Qt::white); //On definie la couleur du pinceau en blanc
+    painter.setBrush(QColor("#252525")); //On definie la couleur du pinceau en blanc
     painter.drawPolygon(rect()); //On colorie le polygone
 
     painter.setPen(QPen(Qt::black, 5)); //On def le pinceau comme etant de couleur noir et de taille 2 (pour faire un rebord)

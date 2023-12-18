@@ -55,6 +55,9 @@ private:
     QVBoxLayout* layout;
 
     Plateau& plateau;
+protected:
+    void paintEvent(QPaintEvent *event);
+
 public:
     vuePlateau(QWidget* parent, int hateur, int largeur, Plateau& plat);
     //void paintEvent(QPaintEvent *event);

@@ -1,4 +1,7 @@
 #include "pageMenuPrincipal.h"
+#include <QPainter>
+
+
 
 pageMenuPrincipal::pageMenuPrincipal(QWidget *parent) : QWidget(parent) {
 
@@ -22,5 +25,17 @@ pageMenuPrincipal::~pageMenuPrincipal() {
     delete boutonBibli;
     delete boutonQuitter;
     delete coucheMP;
+}
+
+void pageMenuPrincipal::paintEvent(QPaintEvent *event){
+    QWidget::paintEvent(event);
+    QPainter painter(this);
+
+    painter.setRenderHint(QPainter::Antialiasing);
+
+    painter.setBrush(QColor("#252525")); //On definie la couleur du pinceau en blanc
+
+    painter.drawPolygon(rect()); //On colorie le polygone
+
 }
 
