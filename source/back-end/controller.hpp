@@ -81,7 +81,7 @@ public:
     bool verifAchatCarte(const Carte& carte, EspaceJeux& espaceJeux);
 
     // verifs de la partie graphique
-    std::pair<bool, QString> verifJetons(const std::vector<std::pair<int, int>>& coord);
+    std::pair<bool, QString> verifJetons(const std::vector<std::pair<int, int>>& coord, bool capa = false, Couleur coulBonus = Couleur::INDT);
     void recupererJetons(const std::vector<std::pair<int, int>>& coord);
 
 };

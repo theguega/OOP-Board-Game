@@ -1224,7 +1224,7 @@ void Controller::verifActionsImpossibles(){
 //////////////////////////////////////////////////////////////
 
 //TODO
-std::pair<bool, QString> Controller::verifJetons(const std::vector<std::pair<int, int>>& coord){
+std::pair<bool, QString> Controller::verifJetons(const std::vector<std::pair<int, int>>& coord, bool capa, Couleur coulBonus){
     std::vector<std::pair<int, int>> coord_tmp = coord;
     unsigned int nbJetons = coord.size();
 
@@ -1255,7 +1255,9 @@ std::pair<bool, QString> Controller::verifJetons(const std::vector<std::pair<int
                 if(coord[i].second < min)
                     min = coord[i].second;
             }
-            if (abs(max - min)  > 2)
+            if (abs(max - min)  > 2 && nbJetons==3)
+                result1 = false;
+            if(abs(max-min) >1 && nbJetons==2)
                 result1 = false;
         }
         // Verif que les jetons sont adjacents en colonne
@@ -1275,8 +1277,10 @@ std::pair<bool, QString> Controller::verifJetons(const std::vector<std::pair<int
                     if(coord[i].second < min)
                         min = coord[i].first;
                 }
-                if (abs(max - min)  > 2)
-                    result2 = false;
+                if (abs(max - min)  > 2 && nbJetons==3)
+                    result1 = false;
+                if(abs(max-min) >1 && nbJetons==2)
+                    result1 = false;
             }
         }
 
@@ -1308,7 +1312,13 @@ std::pair<bool, QString> Controller::verifJetons(const std::vector<std::pair<int
                 if(coord[i].second < min)
                     min = coord[i].second;
             }
-            if (abs(max - min)  > 2){
+            if (abs(max - min)  > 2 && nbJetons==3){
+                if(result3)
+                    result3 = false;
+                if(result4)
+                    result4 = false;
+            }
+            if (abs(max - min)  > 1 && nbJetons==2){
                 if(result3)
                     result3 = false;
                 if(result4)
@@ -1323,7 +1333,13 @@ std::pair<bool, QString> Controller::verifJetons(const std::vector<std::pair<int
                 if(coord[i].second < min)
                     min = coord[i].first;
                 }
-            if (abs(max - min)  > 2){
+            if (abs(max - min)  > 2 && nbJetons==3){
+                if(result3)
+                    result3 = false;
+                if(result4)
+                    result4 = false;
+            }
+            if (abs(max - min)  > 1 && nbJetons==2){
                 if(result3)
                     result3 = false;
                 if(result4)
