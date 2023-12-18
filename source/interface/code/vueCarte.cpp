@@ -263,11 +263,13 @@ void carteVisuel::paintEvent(QPaintEvent *event) { //Permet de faire les dessins
     if(carte->getCapacite1() != Capacite::None){
         y += hauteur;
         painter.setBrush(Qt::white);
+        painter.setPen(Qt::black);
         painter.drawEllipse(QPoint(l - radius - 2, y), radius, radius);
     }
     if(carte->getCapacite2() != Capacite::None){
         y += hauteur;
         painter.setBrush(Qt::white);
+        painter.setPen(Qt::black);
         painter.drawEllipse(QPoint(l - radius - 2, y), radius, radius);
     }
 }
