@@ -11,11 +11,26 @@ popUpValider::popUpValider(QWidget* parent, std::string info) : QWidget(parent){
     boutonLayout = new QHBoxLayout;
     layout = new QVBoxLayout;
 
+    // Ajout du QLabel pour afficher le GIF
+    QLabel *gifLabel = new QLabel(this);
+    gifLabel->setGeometry(50, 50, 300, 200); // Définit la taille et la position du label
+
+    // Charge et affiche le GIF en utilisant QMovie
+    QMovie *movie = new QMovie("gif/200w.gif"); // Remplacez par le chemin de votre GIF
+    gifLabel->setMovie(movie); // Définit le film (movie) sur le QLabel
+
+
+
     boutonLayout->addWidget(oui);
     boutonLayout->addWidget(non);
 
+    layout -> addWidget(gifLabel);
+
+    movie->start(); // Démarre l'animation du GIF
+
     layout -> addWidget(this->info);
     layout -> addLayout(boutonLayout);
+    layout -> setAlignment(Qt::AlignCenter);
 
     setLayout(layout);
 }

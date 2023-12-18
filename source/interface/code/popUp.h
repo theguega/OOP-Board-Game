@@ -7,7 +7,7 @@
 #include <string>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
-
+#include <QMovie>
 class popUpValider : public QWidget{
     Q_OBJECT
 private:
