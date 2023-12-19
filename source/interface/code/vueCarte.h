@@ -25,6 +25,7 @@ protected:
     void paintEvent(QPaintEvent *) override;
 public:
     carteVisuel(QWidget* parent = nullptr, int hauteur = 0, int largeur = 0, const Carte* carte = nullptr);
+    void setCarte(const Carte* c){carte = c;}
 };
 
 class carteInfo : public QWidget{ //Gere les infos de la carte
@@ -39,6 +40,7 @@ protected:
     void paintEvent(QPaintEvent *event);
 public:
     carteInfo(QWidget* parent, int hauteur, int largeur, std::string texte);
+    void setInfo(std::string texte){labelInfo->setText(QString::fromStdString(texte));}
 };
 
 class vueCarte : public QStackedWidget{ //Gere la carte elle même
@@ -78,7 +80,7 @@ public:
     position* getPosition(){return pos;}
     void cacherInfo(){affichageInfo = false;}
     void afficherInfo(){affichageInfo = true;}
-    void setCarte(const Carte* c){carte = c; update();}
+    void setCarte(const Carte* c){carte = c; visu->setCarte(c); info->setInfo(c->getInfos()); update();}
     const Carte* getCarte(){return carte;}
 signals:
     void carteReservee();
