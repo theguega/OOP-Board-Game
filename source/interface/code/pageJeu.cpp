@@ -22,7 +22,7 @@ pageJeu::pageJeu(QString statut_partie, QString pseudo_j_1, type type_j_1, QStri
     vPyramide = new vuePyramide(nullptr, tailleHauteur - 100, (tailleLargeur-30) / 2, control->getPyramide());
 
     afficherJ1 = new QPushButton("Afficher Joueur 1");
-    afficherJ2 = new QPushButton("Afficher Joueur 1");
+    afficherJ2 = new QPushButton("Afficher Joueur 2");
 
     connect(afficherJ1, &QPushButton::clicked, this, [this]() {
         this->joueur1->show();
@@ -72,7 +72,7 @@ pageJeu::pageJeu(QString statut_partie, QString pseudo_j_1, type type_j_1, QStri
     layout -> addLayout(partieBasse);
     setLayout(layout);
 
-    aSauvegarde = new popUpValider(nullptr, "quitter sans sauvegarder");
+    aSauvegarde = new popUpValider(nullptr, "quitter sans sauvegarder", "", "quitter");
     connect(aSauvegarde -> getBoutonOui(), &QPushButton::clicked, this, &pageJeu::quitter);
     connect(aSauvegarde -> getBoutonNon(), &QPushButton::clicked, this, &pageJeu::rester);
     connect(vPlateau, &vuePlateau::signalValiderAppuye, this, &pageJeu::validerSelectionJeton);

@@ -49,7 +49,6 @@ HEADERS += \
     back-end/exception.hpp
 
 DISTFILES += \
-    gif/200w.gif \
     data/data_carte.sqlite \
     data/save.sqlite \
     data/score.sqlite \
