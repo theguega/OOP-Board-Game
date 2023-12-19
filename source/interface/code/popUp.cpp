@@ -1,40 +1,44 @@
 #include "popUp.h"
 
-popUpValider::popUpValider(QWidget* parent, std::string info, std::string info2) : QWidget(parent){ //PopUp pour faire des validations
-    oui = new QPushButton("oui"); //Bouton Oui
-    non = new QPushButton("non"); //Bouton Non
-    std::string tempPhrase = texte1 + info + texte3; //Def la question qui sera poser
+popUpValider::popUpValider(QWidget* parent, std::string info, std::string info2, std::string gif) : QWidget(parent) {
+    oui = new QPushButton("oui"); // Bouton Oui
+    non = new QPushButton("non"); // Bouton Non
+    std::string tempPhrase = texte1 + info + texte3; // Définit la question qui sera posée
     this->info = new QLabel;
     this->info2 = new QLabel;
-    this->info->setText(QString::fromStdString(tempPhrase)); //Def le texte sur le QLabel
+    this->info->setText(QString::fromStdString(tempPhrase)); // Set text on QLabel
+    this->info->setAlignment(Qt::AlignCenter); // Center-align the text
+
     this->info2->setText(QString::fromStdString(info2));
+    this->info2->setAlignment(Qt::AlignCenter); // Center-align the text
     boutonLayout = new QHBoxLayout;
     layout = new QVBoxLayout;
 
     // Ajout du QLabel pour afficher le GIF
     QLabel *gifLabel = new QLabel(this);
-    gifLabel->setGeometry(50, 50, 300, 200); // Définit la taille et la position du label
+    gifLabel->setAlignment(Qt::AlignCenter); // Centre le label
+    layout->addWidget(gifLabel); // Ajoute d'abord le label GIF au layout
 
     // Charge et affiche le GIF en utilisant QMovie
-    QMovie *movie = new QMovie("gif/200w.gif"); // Remplacez par le chemin de votre GIF
+    QString gif_path = QString::fromStdString("gif/") + QString::fromStdString(gif) + QString::fromStdString(".gif");
+    QMovie *movie = new QMovie(gif_path); // Remplacez par le chemin de votre GIF
     gifLabel->setMovie(movie); // Définit le film (movie) sur le QLabel
-
-
 
     boutonLayout->addWidget(oui);
     boutonLayout->addWidget(non);
 
-    layout -> addWidget(this->info2);
-    layout -> addWidget(gifLabel);
+    layout->addWidget(this->info2);
+    layout->addWidget(this->info);
 
-    movie->start(); // Démarre l'animation du GIF
+    layout->addLayout(boutonLayout);
 
-    layout -> addWidget(this->info);
-    layout -> addLayout(boutonLayout);
-    layout -> setAlignment(Qt::AlignCenter);
+    layout->setAlignment(Qt::AlignCenter);
 
     setLayout(layout);
+
+    movie->start(); // Démarre l'animation du GIF
 }
+
 
 popUpInfo::popUpInfo(QWidget* parent, std::string info) : QWidget(parent){ //PopUp pour montrer des infos
     this->info = new QLabel;

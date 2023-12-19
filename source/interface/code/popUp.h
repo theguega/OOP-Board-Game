@@ -29,7 +29,7 @@ private:
     QHBoxLayout* boutonLayout; //Layout avec les boutons
     QVBoxLayout* layout; //Layout principal
 public:
-    popUpValider(QWidget* parent, std::string info, std::string info2 = "");
+    popUpValider(QWidget* parent, std::string info, std::string info2 = "", std::string gif = "quitter");
     QPushButton* getBoutonOui(){return oui;}
     QPushButton* getBoutonNon(){return non;}
 };
