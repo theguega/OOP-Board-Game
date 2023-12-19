@@ -1,7 +1,7 @@
 #include "pageJoueur.h"
 
 pageJoueur::pageJoueur(QWidget* parent, Joueur* joueur, int hP, int lP, int hC, int lC) :
-    QWidget(parent), hP(hP), lP(lP), hC(hC), lC(lC){
+    QWidget(parent), hP(hP), lP(lP), hC(hC), lC(lC), joueur(joueur){
     cartesReserveesLayout = new QVBoxLayout;
     cartesPossedeesLayout = new QVBoxLayout;
     jetonsPossedesLayout = new QVBoxLayout;
@@ -37,8 +37,10 @@ pageJoueur::pageJoueur(QWidget* parent, Joueur* joueur, int hP, int lP, int hC, 
 
 void pageJoueur::refreshJoueur(Joueur* joueurCourant){
 
-    for(size_t i = 0; i < joueur->getNbPrivileges(); i++){
-        listePrivileges[i]->show();
+    if(joueur->getNbPrivileges() != 0){
+        for(size_t i = 0; i < joueur->getNbPrivileges(); i++){
+            listePrivileges[i]->show();
+        }
     }
     for(size_t i = joueur->getNbPrivileges(); i < 3; i++){
         listePrivileges[i]->hide();

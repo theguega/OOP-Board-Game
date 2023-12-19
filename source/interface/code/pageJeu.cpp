@@ -240,4 +240,5 @@ void pageJeu::refresh(){
     joueur2->refreshJoueur(&control->getJoueurCourant());
     setLabelJC();
     vPlateau->changerPointeurs();
+    update();
 }
