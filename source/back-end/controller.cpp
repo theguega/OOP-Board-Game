@@ -1607,6 +1607,10 @@ std::pair<bool, QString> Controller::verifJetons(const std::vector<std::pair<int
 std::pair<bool, QString> Controller::verifAchatCarte(std::pair<int, int> coord){
 
     const Carte* carte = getPyramide().getCarte(coord.first, coord.second);
+
+    if((carte->getCapacite1() == Capacite::AssociationBonus || carte->getCapacite2() == Capacite::AssociationBonus) && joueurCourant->getNbCartes() == 0){
+        return std::make_pair(false, "Vous ne pouvez pas acheter une carte avce la capacité Association Bonus tant que vous n'avez pas de carte au bonus défini");
+    }
     // recup des points necessaires pour acheter la carte
     int needBlanc =  carte->getPrix().getBlanc() ;
     int needBleu =  carte->getPrix().getBleu();

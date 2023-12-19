@@ -130,9 +130,83 @@ void pageJeu::validerSelectionCarte(position* pos){
 
 void pageJeu::handleValidationCarte(position* p){
     std::pair<int, int> coord = std::make_pair(p->getx(), p->gety());
+    const Carte* carte_tmp = control->getPyramide().getCarte(coord.first, coord.second);
     control->acheterCarteJoaillerie(coord);
-    qDebug() << "ici";
+    if(carte_tmp->getCapacite1()!=Capacite::None || carte_tmp->getCapacite2()!=Capacite::None){
+        handleCapa(carte_tmp->getCapacite1(), carte_tmp->getCapacite2());
+    }
 }
+
+
+
+void pageJeu::handleCapa(Capacite capa1, Capacite capa2){
+    popUpInfo* info;
+    popUpChoixCouleur dialog(control);
+    switch(capa1){
+    case Capacite::AssociationBonus:
+        dialog.exec();
+        break;
+    case Capacite::NewTurn:
+        break;
+    case Capacite::TakeJetonFromBonus:
+
+        break;
+    case Capacite::TakeJetonToAdv:
+
+        break;
+    case Capacite::TakePrivilege:
+        if (control->getPlateau().getNbPrivileges()==0){
+            //si il n'y a plus de privileges sur le plateau
+            if(control->getJoueurCourant().getNbPrivileges()!=3) {
+
+                control->getJoueurCourant().addPrivilege(control->getJoueurAdverse().supPrivilege());
+            }
+        } else {
+            //si il y a un jetons sur le plateau, le joueur le recupere
+
+            control->getJoueurCourant().addPrivilege(control->getPlateau().recupererPrivilege());
+        }
+        break;
+    case Capacite::None:
+        break;
+    default:
+        break;
+    }
+    switch(capa2){
+    case Capacite::AssociationBonus:
+        dialog.exec();
+
+        break;
+    case Capacite::NewTurn:
+
+        break;
+    case Capacite::TakeJetonFromBonus:
+
+        break;
+    case Capacite::TakeJetonToAdv:
+
+        break;
+    case Capacite::TakePrivilege:
+        if (control->getPlateau().getNbPrivileges()==0){
+            //si il n'y a plus de privileges sur le plateau
+            if(control->getJoueurCourant().getNbPrivileges()!=3) {
+
+                control->getJoueurCourant().addPrivilege(control->getJoueurAdverse().supPrivilege());
+            }
+        } else {
+            //si il y a un jetons sur le plateau, le joueur le recupere
+
+            control->getJoueurCourant().addPrivilege(control->getPlateau().recupererPrivilege());
+        }
+        break;
+    case Capacite::None:
+        break;
+    default:
+        break;
+    }
+}
+
+
 
 
 void pageJeu::paintEvent(QPaintEvent *event){

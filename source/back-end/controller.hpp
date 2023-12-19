@@ -31,6 +31,8 @@ private:
 	
 	StrategyHumain strategy_Humain;
 	StrategyIA strategy_IA;
+
+    bool nouveau_tour = false;
 public:
 	Controller();
     Controller(QString statut_partie, QString pseudo_j_1, type type_j_1, QString pseudo_j_2, type type_j_2);
@@ -38,7 +40,7 @@ public:
 
 	// getters
     string getStatutPartie()const{return stat_partie;}
-	Partie& getPartie() { return *partie; };
+    Partie& getPartie() { return *partie; }
     Joueur& getJoueurCourant() { return *joueurCourant; }
     Strategy& getStrategyCourante() {return *strategy_courante;}
     Joueur& getJoueurAdverse() {

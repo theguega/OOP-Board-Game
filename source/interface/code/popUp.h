@@ -9,6 +9,8 @@
 #include <QVBoxLayout>
 #include <QLabel>
 #include <QDialog>
+#include "back-end/controller.hpp"
+#include <QRadioButton>
 
 
 #include <QMovie>
@@ -63,5 +65,28 @@ private:
     QPushButton* nonButton;
 };
 
+
+class popUpChoixCouleur : public QDialog {
+        Q_OBJECT
+    public:
+        popUpChoixCouleur(Controller* control, QWidget* parent = nullptr);
+    signals:
+        void colorSelected(const QString& color);
+
+    private slots:
+        void Selected(const QString& color) {
+            selectedColor = color;
+        }
+
+    public:
+        QString getSelectedColor() const {
+            return selectedColor;
+        }
+
+    private:
+        Controller* control;
+        QSignalMapper* signalMapper;
+        QString selectedColor;
+};
 
 #endif

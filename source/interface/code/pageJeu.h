@@ -84,6 +84,7 @@ private slots:
     void validerSelectionJeton();
 
     void handleValidationCarte(position* p);
+    void handleCapa(Capacite capa1, Capacite capa2);
 };
 
 

@@ -83,3 +83,41 @@ void modalPopup::handleOuiButtonClicked()
     // Perform actions specific to the "Oui" button click.
     accept(); // Close the dialog.
 }
+
+
+popUpChoixCouleur::popUpChoixCouleur(Controller* control, QWidget* parent) : QDialog(parent), control(control) {
+    QVBoxLayout* layout = new QVBoxLayout(this);
+    signalMapper = new QSignalMapper(this);
+
+    // Example colors
+    QStringList colors = {"blanc", "bleu", "rouge", "vert", "noir", "perle"};
+
+    for (const QString& color : colors) {
+        int value = 0;
+        if (StringToCouleur(color.toStdString()) == Couleur::BLANC) {
+            value = control->getJoueurCourant().getNbCartes(Couleur::BLANC);
+        } else if (StringToCouleur(color.toStdString()) == Couleur::BLEU) {
+            value = control->getJoueurCourant().getNbCartes(Couleur::BLEU);
+        } else if (StringToCouleur(color.toStdString()) == Couleur::ROUGE) {
+            value = control->getJoueurCourant().getNbCartes(Couleur::ROUGE);
+        } else if (StringToCouleur(color.toStdString()) == Couleur::VERT) {
+            value = control->getJoueurCourant().getNbCartes(Couleur::VERT);
+        } else if (StringToCouleur(color.toStdString()) == Couleur::NOIR) {
+            value = control->getJoueurCourant().getNbCartes(Couleur::NOIR);
+        } else if (StringToCouleur(color.toStdString()) == Couleur::PERLE) {
+            value = control->getJoueurCourant().getNbCartes(Couleur::PERLE);
+        }
+        if (value != 0) {
+            QRadioButton* radioButton = new QRadioButton(color, this);
+            layout->addWidget(radioButton);
+            connect(radioButton, SIGNAL(clicked()), signalMapper, SLOT(map()));
+            signalMapper->setMapping(radioButton, color);
+        }
+    }
+
+    QPushButton* okButton = new QPushButton("OK", this);
+    layout->addWidget(okButton);
+    connect(okButton, SIGNAL(clicked()), this, SLOT(accept()));
+
+    connect(signalMapper, SIGNAL(mapped(QString)), this, SLOT(colorSelected(QString)));
+}
