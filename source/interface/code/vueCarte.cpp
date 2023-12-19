@@ -454,3 +454,444 @@ void vuePaquet::paintEvent(QPaintEvent *event){
     painter.drawText(x, y, texte);
 }
 
+vueCarteJoueur::vueCarteJoueur(QWidget* parent, int hauteur, int largeur, const Carte *c) :
+    QWidget(parent), h(hauteur), l(largeur), carte(c){
+    setFixedSize(l, h);
+}
+
+void vueCarteJoueur::paintEvent(QPaintEvent* event){
+    QWidget::paintEvent(event);
+    QPainter painter(this);
+
+    painter.setRenderHint(QPainter::Antialiasing);
+
+    if(carte != nullptr){
+        if(estComplete && !estReservee){
+
+            setFixedSize(l, h);
+
+            if(carte->getBonus().getCouleur() != Couleur::INDT){
+                if(carte->getBonus().getCouleur() != Couleur::NOIR && carte->getBonus().getCouleur() != Couleur::BLANC){
+                    painter.setBrush(couleurEnQ(toStringCouleur(carte->getBonus().getCouleur()))); //On definie la couleur du pinceau en blanc
+                    painter.setPen(QPen(Qt::black, 1)); //On def le pinceau comme etant de couleur noir et de taille 2 (pour faire un rebord)
+                    painter.drawPolygon(rect()); //On colorie le polygone
+                    QPolygonF rectangle; //Creer un polygone Qt
+                    rectangle << QPointF(1, 1) << QPointF(l - 1, 1) << QPointF(l - 1, (h-1)/4) << QPointF(0, (h-1)/4); //Ajoute les points du triangle
+                    painter.setBrush(couleurEnQ(toStringCouleur(carte->getBonus().getCouleur())+"Fonce")); //Prend la couleur definit
+                    painter.drawPolygon(rectangle); //Colorie le triangle
+                    painter.setBrush(couleurEnQ(toStringCouleur(carte->getBonus().getCouleur()))); //Prend la couleur definit
+                    QPolygonF petitRect;
+                    petitRect << QPointF(l/20, 1) << QPointF(l/5 + l/20, 1) << QPointF(l/5 + l/20, h/5) << QPointF(l/20, h/5);
+                    painter.drawPolygon(petitRect);
+                }
+                else if(carte->getBonus().getCouleur() == Couleur::NOIR){
+                    painter.setBrush(Qt::black); //On definie la couleur du pinceau en blanc
+                    painter.setPen(QPen(Qt::white, 1)); //On def le pinceau comme etant de couleur noir et de taille 2 (pour faire un rebord)
+                    painter.drawPolygon(rect()); //On colorie le polygone
+                    QPolygonF rectangle; //Creer un polygone Qt
+                    rectangle << QPointF(1, 1) << QPointF(l - 1, 1) << QPointF(l - 1, (h-1)/4) << QPointF(0, (h-1)/4); //Ajoute les points du triangle
+                    painter.drawPolygon(rectangle); //Colorie le triangle
+                    painter.drawPolygon(rectangle); //Colorie le triangle
+                    QPolygonF petitRect;
+                    petitRect << QPointF(l/20, 1) << QPointF(l/5 + l/20, 1) << QPointF(l/5 + l/20, h/5) << QPointF(l/20, h/5);
+                    painter.drawPolygon(petitRect);
+                }
+                else if(carte->getBonus().getCouleur() == Couleur::BLANC){
+                    painter.setBrush(Qt::white); //On definie la couleur du pinceau en blanc
+                    painter.setPen(QPen(Qt::black, 1)); //On def le pinceau comme etant de couleur noir et de taille 2 (pour faire un rebord)
+                    painter.drawPolygon(rect()); //On colorie le polygone
+                    QPolygonF rectangle; //Creer un polygone Qt
+                    rectangle << QPointF(1, 1) << QPointF(l - 1, 1) << QPointF(l - 1, (h-1)/4) << QPointF(0, (h-1)/4); //Ajoute les points du triangle
+                    painter.drawPolygon(rectangle); //Colorie le triangle
+                    painter.drawPolygon(rectangle); //Colorie le triangle
+                    QPolygonF petitRect;
+                    petitRect << QPointF(l/20, 1) << QPointF(l/5 + l/20, 1) << QPointF(l/5 + l/20, h/5) << QPointF(l/20, h/5);
+                    painter.drawPolygon(petitRect);
+                }
+            }
+            else{
+                painter.setBrush(Qt::gray); //On definie la couleur du pinceau en blanc
+                painter.setPen(QPen(Qt::black, 1)); //On def le pinceau comme etant de couleur noir et de taille 2 (pour faire un rebord)
+                painter.drawPolygon(rect()); //On colorie le polygone
+                QPolygonF rectangle; //Creer un polygone Qt
+                rectangle << QPointF(1, 1) << QPointF(l - 1, 1) << QPointF(l - 1, (h-1)/4) << QPointF(0, (h-1)/4); //Ajoute les points du triangle
+                painter.drawPolygon(rectangle); //Colorie le triangle
+                QPolygonF petitRect;
+                petitRect << QPointF(l/20, 1) << QPointF(l/5 + l/20, 1) << QPointF(l/5 + l/20, h/5) << QPointF(l/20, h/5);
+                painter.drawPolygon(petitRect);
+            }
+
+            int radius = (h - 2)/15;
+            int centerX = 2 * l/5;
+            int centerY = (h-1)/8;
+
+            for(int i = 0; i < carte->getBonus().getNbBonus(); i++){
+                painter.drawEllipse(QPoint(centerX, centerY), radius, radius);
+                centerX += 2 * h/15;
+            }
+
+            if(carte->getBonus().getCouleur() != Couleur::BLANC){
+                painter.setPen(Qt::white); //Ajout le numero dans le triangle
+                painter.setFont(QFont("Arial", 12));
+                painter.drawText(l/10, h/6, QString::number(carte->getNbPtsPrivilege()));
+            }
+            else{
+                painter.setPen(Qt::black); //Ajout le numero dans le triangle
+                painter.setFont(QFont("Arial", 12));
+                painter.drawText(l/10, h/6, QString::number(carte->getNbPtsPrivilege()));
+            }
+
+            radius = h/10 - 2;
+            centerX = h/10 + 1;
+            centerY = h / 5 * 4 + h/10 + 1;
+
+            if(carte->getPrix().getBlanc() != 0){
+                painter.setBrush(couleurEnQ("blanc"));
+                painter.setPen(Qt::black);
+
+                painter.drawEllipse(QPoint(centerX, centerY), radius, radius);
+
+                QFont font("Arial", 12); // Définir la police et la taille de la police
+                painter.setFont(font);
+
+                QString texte = QString::number(carte->getPrix().getBlanc());
+                QFontMetrics metrics(font);
+                int textWidth = metrics.horizontalAdvance(texte);
+
+                // Calculer la position en x pour centrer le texte
+                int x = centerX - textWidth/2; // Position en x pour centrer le texte horizontalement
+                int y = centerY + radius/2; // Position en y
+
+                painter.drawText(x, y, texte);
+
+                centerY -= (h/5 - 4);
+            }
+
+            if(carte->getPrix().getBleu() != 0){
+                painter.setBrush(couleurEnQ("bleu"));
+                painter.setPen(Qt::white);
+
+                painter.drawEllipse(QPoint(centerX, centerY), radius, radius);
+
+                QFont font("Arial", 12); // Définir la police et la taille de la police
+                painter.setFont(font);
+
+                QString texte = QString::number(carte->getPrix().getBleu());
+                QFontMetrics metrics(font);
+                int textWidth = metrics.horizontalAdvance(texte);
+
+                // Calculer la position en x pour centrer le texte
+                int x = centerX - textWidth/2; // Position en x pour centrer le texte horizontalement
+                int y = centerY + radius/2; // Position en y
+
+                painter.drawText(x, y, texte);
+
+                centerY -= (h/5 - 4);
+            }
+
+
+            if(carte->getPrix().getVert() != 0){
+                painter.setBrush(couleurEnQ("vert"));
+                painter.setPen(Qt::white);
+
+                painter.drawEllipse(QPoint(centerX, centerY), radius, radius);
+
+                QFont font("Arial", 12); // Définir la police et la taille de la police
+                painter.setFont(font);
+
+                QString texte = QString::number(carte->getPrix().getVert());
+                QFontMetrics metrics(font);
+                int textWidth = metrics.horizontalAdvance(texte);
+
+                // Calculer la position en x pour centrer le texte
+                int x = centerX - textWidth/2; // Position en x pour centrer le texte horizontalement
+                int y = centerY + radius/2; // Position en y
+
+                painter.drawText(x, y, texte);
+
+                centerY -= (h/5 - 4);
+            }
+
+            if(carte->getPrix().getNoir() != 0){
+                painter.setBrush(Qt::black);
+                painter.setPen(Qt::white);
+
+                painter.drawEllipse(QPoint(centerX, centerY), radius, radius);
+
+                QFont font("Arial", 12); // Définir la police et la taille de la police
+                painter.setFont(font);
+
+                QString texte = QString::number(carte->getPrix().getNoir());
+                QFontMetrics metrics(font);
+                int textWidth = metrics.horizontalAdvance(texte);
+
+                // Calculer la position en x pour centrer le texte
+                int x = centerX - textWidth/2; // Position en x pour centrer le texte horizontalement
+                int y = centerY + radius/2; // Position en y
+
+                painter.drawText(x, y, texte);
+                painter.setPen(Qt::black);
+
+                centerY -= (h/5 - 4);
+            }
+
+            if(carte->getPrix().getRouge() != 0){
+                painter.setBrush(couleurEnQ("rouge"));
+                painter.setPen(Qt::white);
+
+                painter.drawEllipse(QPoint(centerX, centerY), radius, radius);
+
+                QFont font("Arial", 12); // Définir la police et la taille de la police
+                painter.setFont(font);
+
+                QString texte = QString::number(carte->getPrix().getRouge());
+                QFontMetrics metrics(font);
+                int textWidth = metrics.horizontalAdvance(texte);
+
+                // Calculer la position en x pour centrer le texte
+                int x = centerX - textWidth/2; // Position en x pour centrer le texte horizontalement
+                int y = centerY + radius/2; // Position en y
+
+                painter.drawText(x, y, texte);
+
+                centerY -= (h/5 - 4);
+            }
+
+            if(carte->getPrix().getPerle() != 0){
+                painter.setBrush(couleurEnQ("perle"));
+                painter.setPen(Qt::white);
+
+                painter.drawEllipse(QPoint(centerX, centerY), radius, radius);
+
+                QFont font("Arial", 12); // Définir la police et la taille de la police
+                painter.setFont(font);
+
+                QString texte = QString::number(carte->getPrix().getPerle());
+                QFontMetrics metrics(font);
+                int textWidth = metrics.horizontalAdvance(texte);
+
+                // Calculer la position en x pour centrer le texte
+                int x = centerX - textWidth/2; // Position en x pour centrer le texte horizontalement
+                int y = centerY + radius/2; // Position en y
+
+                painter.drawText(x, y, texte);
+
+                centerY -= (h/5 - 4);
+            }
+
+            centerX = l - l/5 - 2;
+            centerY = h/3.5 + 2;
+            int base = l/5;
+            int hauteur = h/5;
+            int nbTriangle = 5, x, y, baseT, hauteurT;
+            y = centerY;
+            for(int i = 0; i < carte->getNbCouronnes(); i++){
+                // Configurer la couleur et l'épaisseur du contour
+                painter.setPen(QPen(Qt::black, 0.5));
+                painter.setBrush(QColor("#FFD700")); // Couleur dorée
+
+                x = centerX;
+                y = centerY + hauteur*i/2;
+
+                baseT = (base/nbTriangle);
+
+                QPolygonF couronne;
+
+                // Dessiner la couronne de 5 triangles isocèles
+                for (int i = 0; i < nbTriangle; ++i) {
+
+                    QPolygonF triangle;
+
+
+                    if(i == nbTriangle/2){
+                        hauteurT = hauteur/4;
+                    }
+                    else if(i%2 == 1){
+                        hauteurT = hauteur/8;
+                    }
+                    else{
+                        hauteurT = hauteur/6;
+                    }
+
+                    couronne << QPointF(x + baseT*i, y); // Coin inférieur gauche
+                    if(i == 0){
+                        couronne << QPointF(x + baseT*i, y - hauteurT); // Sommet
+                    }
+                    else if(i == nbTriangle - 1){
+                        couronne << QPointF(x + baseT*(i+1), y - hauteurT); // Sommet
+                    }
+                    else{
+                        couronne << QPointF(x + baseT*i + baseT/2, y - hauteurT); // Sommet
+                    }
+                    couronne << QPointF(x + baseT*(i+1), y); // Coin inférieur droit
+                }
+
+                couronne << QPointF(x + baseT*(nbTriangle+1) - baseT, y + hauteur/5);
+                couronne << QPointF(centerX, y + hauteur/5);
+
+                painter.drawPolygon(couronne);
+            }
+
+            if(carte->getCapacite1() != Capacite::None){
+                y += hauteur;
+                painter.setBrush(QColor("#844383"));
+                painter.setPen(Qt::black);
+                painter.drawEllipse(QPoint(l - radius - 2, y), radius, radius);
+            }
+            if(carte->getCapacite2() != Capacite::None){
+                y += hauteur;
+                painter.setBrush(QColor("#844383"));
+                painter.setPen(Qt::black);
+                painter.drawEllipse(QPoint(l - radius - 2, y), radius, radius);
+            }
+        }
+        else if(estComplete && estReservee){
+            setFixedSize(l, h);
+
+            switch(carte->getType()){
+            case TypeCarte::Niv1:
+                painter.setBrush(QColor("#80A266")); //On definie la couleur du pinceau
+                painter.drawPolygon(rect()); //On colorie le polygone
+                break;
+            case TypeCarte::Niv2:
+                painter.setBrush(QColor("#A39437")); //On definie la couleur du pinceau
+                painter.drawPolygon(rect()); //On colorie le polygone
+                break;
+            case TypeCarte::Niv3:
+                painter.setBrush(QColor("#1D60AF")); //On definie la couleur du pinceau
+                painter.drawPolygon(rect()); //On colorie le polygone
+                break;
+            default:
+                painter.setBrush(Qt::white); //On definie la couleur du pinceau
+                painter.drawPolygon(rect()); //On colorie le polygone
+                break;
+            }
+
+            // Définir les dimensions pour la couronne
+            int margin = 10; // Marge entre les bords de la carte et la couronne
+            int lSansMarge = l - 2 * margin;
+
+            // Configurer la couleur et l'épaisseur du contour
+            painter.setPen(QPen(Qt::black, 2));
+            painter.setBrush(QColor("#FFD700")); // Couleur dorée
+
+            QPolygonF couronne;
+
+            // Dessiner la couronne de 5 triangles isocèles
+            int nbTriangle = 5, x, y, base, hauteur;
+
+            for (int i = 0; i < nbTriangle; ++i) {
+
+                QPolygonF triangle;
+                x = margin + lSansMarge/nbTriangle*i;
+                y = h/2;
+                base = lSansMarge/nbTriangle;
+
+                if(i == nbTriangle/2){
+                    hauteur = h/5;
+                }
+                else if(i%2 == 1){
+                    hauteur = h/10;
+                }
+                else{
+                    hauteur = h/7.5;
+                }
+
+                couronne << QPointF(x, y); // Coin inférieur gauche
+                if(i == 0){
+                    couronne << QPointF(x, y - hauteur); // Sommet
+                }
+                else if(i == nbTriangle - 1){
+                    couronne << QPointF(x + base, y - hauteur); // Sommet
+                }
+                else{
+                    couronne << QPointF(x + base / 2, y - hauteur); // Sommet
+                }
+                couronne << QPointF(x + base, y); // Coin inférieur droit
+            }
+
+            couronne << QPointF(x + base, y + h/7.5);
+            couronne << QPointF(margin, y + h/7.5);
+
+            painter.drawPolygon(couronne);
+        }
+
+        else{
+            setFixedSize(l, h/4);
+
+            if(carte->getBonus().getCouleur() != Couleur::INDT){
+                if(carte->getBonus().getCouleur() != Couleur::NOIR && carte->getBonus().getCouleur() != Couleur::BLANC){
+                    painter.setBrush(couleurEnQ(toStringCouleur(carte->getBonus().getCouleur()))); //On definie la couleur du pinceau en blanc
+                    painter.setPen(QPen(Qt::black, 1)); //On def le pinceau comme etant de couleur noir et de taille 2 (pour faire un rebord)
+                    painter.drawPolygon(rect()); //On colorie le polygone
+                    QPolygonF rectangle; //Creer un polygone Qt
+                    rectangle << QPointF(1, 1) << QPointF(l - 1, 1) << QPointF(l - 1, (h-1)/4) << QPointF(0, (h-1)/4); //Ajoute les points du triangle
+                    painter.setBrush(couleurEnQ(toStringCouleur(carte->getBonus().getCouleur())+"Fonce")); //Prend la couleur definit
+                    painter.drawPolygon(rectangle); //Colorie le triangle
+                    painter.setBrush(couleurEnQ(toStringCouleur(carte->getBonus().getCouleur()))); //Prend la couleur definit
+                    QPolygonF petitRect;
+                    petitRect << QPointF(l/20, 1) << QPointF(l/5 + l/20, 1) << QPointF(l/5 + l/20, h/5) << QPointF(l/20, h/5);
+                    painter.drawPolygon(petitRect);
+                }
+                else if(carte->getBonus().getCouleur() == Couleur::NOIR){
+                    painter.setBrush(Qt::black); //On definie la couleur du pinceau en blanc
+                    painter.setPen(QPen(Qt::white, 1)); //On def le pinceau comme etant de couleur noir et de taille 2 (pour faire un rebord)
+                    painter.drawPolygon(rect()); //On colorie le polygone
+                    QPolygonF rectangle; //Creer un polygone Qt
+                    rectangle << QPointF(1, 1) << QPointF(l - 1, 1) << QPointF(l - 1, (h-1)/4) << QPointF(0, (h-1)/4); //Ajoute les points du triangle
+                    painter.drawPolygon(rectangle); //Colorie le triangle
+                    painter.drawPolygon(rectangle); //Colorie le triangle
+                    QPolygonF petitRect;
+                    petitRect << QPointF(l/20, 1) << QPointF(l/5 + l/20, 1) << QPointF(l/5 + l/20, h/5) << QPointF(l/20, h/5);
+                    painter.drawPolygon(petitRect);
+                }
+                else if(carte->getBonus().getCouleur() == Couleur::BLANC){
+                    painter.setBrush(Qt::white); //On definie la couleur du pinceau en blanc
+                    painter.setPen(QPen(Qt::black, 1)); //On def le pinceau comme etant de couleur noir et de taille 2 (pour faire un rebord)
+                    painter.drawPolygon(rect()); //On colorie le polygone
+                    QPolygonF rectangle; //Creer un polygone Qt
+                    rectangle << QPointF(1, 1) << QPointF(l - 1, 1) << QPointF(l - 1, (h-1)/4) << QPointF(0, (h-1)/4); //Ajoute les points du triangle
+                    painter.drawPolygon(rectangle); //Colorie le triangle
+                    painter.drawPolygon(rectangle); //Colorie le triangle
+                    QPolygonF petitRect;
+                    petitRect << QPointF(l/20, 1) << QPointF(l/5 + l/20, 1) << QPointF(l/5 + l/20, h/5) << QPointF(l/20, h/5);
+                    painter.drawPolygon(petitRect);
+                }
+            }
+            else{
+                painter.setBrush(Qt::gray); //On definie la couleur du pinceau en blanc
+                painter.setPen(QPen(Qt::black, 1)); //On def le pinceau comme etant de couleur noir et de taille 2 (pour faire un rebord)
+                painter.drawPolygon(rect()); //On colorie le polygone
+                QPolygonF rectangle; //Creer un polygone Qt
+                rectangle << QPointF(1, 1) << QPointF(l - 1, 1) << QPointF(l - 1, (h-1)/4) << QPointF(0, (h-1)/4); //Ajoute les points du triangle
+                painter.drawPolygon(rectangle); //Colorie le triangle
+                QPolygonF petitRect;
+                petitRect << QPointF(l/20, 1) << QPointF(l/5 + l/20, 1) << QPointF(l/5 + l/20, h/5) << QPointF(l/20, h/5);
+                painter.drawPolygon(petitRect);
+            }
+
+            int radius = (h - 2)/15;
+            int centerX = 2 * l/5;
+            int centerY = (h-1)/8;
+
+            for(int i = 0; i < carte->getBonus().getNbBonus(); i++){
+                painter.drawEllipse(QPoint(centerX, centerY), radius, radius);
+                centerX += 2 * h/15;
+            }
+
+            if(carte->getBonus().getCouleur() != Couleur::BLANC){
+                painter.setPen(Qt::white); //Ajout le numero dans le triangle
+                painter.setFont(QFont("Arial", 12));
+                painter.drawText(l/10, h/6, QString::number(carte->getNbPtsPrivilege()));
+            }
+            else{
+                painter.setPen(Qt::black); //Ajout le numero dans le triangle
+                painter.setFont(QFont("Arial", 12));
+                painter.drawText(l/10, h/6, QString::number(carte->getNbPtsPrivilege()));
+            }
+        }
+    }
+    else{
+        hide();
+    }
+}

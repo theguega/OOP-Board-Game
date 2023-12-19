@@ -1,31 +1,99 @@
 #include "pageJoueur.h"
 
-pageJoueur::pageJoueur(QWidget* parent, Joueur* joueur, int h, int l) : QWidget(parent), hP(h), lP(l){
+pageJoueur::pageJoueur(QWidget* parent, Joueur* joueur, int hP, int lP, int hC, int lC) :
+    QWidget(parent), hP(hP), lP(lP), hC(hC), lC(lC){
     cartesReserveesLayout = new QVBoxLayout;
     cartesPossedeesLayout = new QVBoxLayout;
     jetonsPossedesLayout = new QVBoxLayout;
     informations = new QHBoxLayout;
-    layout = new QHBoxLayout;
+    layoutBas = new QHBoxLayout;
+    layout = new QVBoxLayout;
 
-    layout->addLayout(cartesReserveesLayout);
-    layout->addLayout(cartesPossedeesLayout);
-    layout->addLayout(jetonsPossedesLayout);
+    afficheCouronnes = new QLabel;
+    affichePtPrestiges = new QLabel;
 
     for(int i = 0; i < 3; i++){
-        listePrivileges.push_back(new vuePrivilege(h, l));
+        listePrivileges.push_back(new vuePrivilege(hP, lP));
         informations->addWidget(listePrivileges[i]);
     }
+
+    for(int i = 0; i < 3; i++){
+        cartesReservees.push_back(new vueCarteJoueur(nullptr, hC, lC, nullptr));
+        cartesReserveesLayout->addWidget(cartesReservees[i]);
+    }
+
+    informations->addWidget(afficheCouronnes);
+    informations->addWidget(affichePtPrestiges);
+
+    layoutBas->addLayout(cartesReserveesLayout);
+    layoutBas->addLayout(cartesPossedeesLayout);
+    layoutBas->addLayout(jetonsPossedesLayout);
+
+    layout->addLayout(informations);
+    layout->addLayout(layoutBas);
 
     setLayout(layout);
 }
 
 void pageJoueur::refreshJoueur(Joueur* joueurCourant){
-    for(int i = 0; i < joueur->getNbPrivileges(); i++){
+
+    for(size_t i = 0; i < joueur->getNbPrivileges(); i++){
         listePrivileges[i]->show();
     }
-    for(int i = joueur->getNbPrivileges(); i < 3; i++){
+    for(size_t i = joueur->getNbPrivileges(); i < 3; i++){
         listePrivileges[i]->hide();
     }
+
+    setAfficherCouronnes();
+    setAfficherPtPrestiges();
+
+    for(const auto& couleur : Couleurs){
+        if(couleur != Couleur::OR){
+            for(size_t i = 0; i < joueur->getNbCartes(couleur); i++){
+                const Carte* temp = &joueur->getCarte(couleur, i);
+                if(!estDansCartes(temp)){
+                    vueCarteJoueur* vcj = new vueCarteJoueur(nullptr, hC, lC, temp);
+                    vcj->setPasReserver();
+                    vcj->setComplete();
+                    cartesPossedees.push_back(vcj);
+                    cartesPossedeesLayout->addWidget(vcj);
+                }
+            }
+        }
+    }
+    for(size_t i = 0; i < cartesPossedees.size(); i++){
+        if(i == cartesPossedees.size() - 1){
+            cartesPossedees[i]->setComplete();
+        }
+        else{
+            cartesPossedees[i]->setIncomplete();
+        }
+    }
+
+    int k = 0;
+    for(const auto& couleur : Couleurs){
+        if(couleur != Couleur::OR){
+            for(size_t i = 0; i < joueur->getNbCartesReservees(couleur); i++){
+                const Carte* temp = &joueur->getCarteReservee(couleur, i);
+                cartesReservees[k]->setCarte(temp);
+                k++;
+            }
+        }
+    }
+    for(int i = k; i < 3; i++){
+        cartesReservees[i]->setCarte(nullptr);
+    }
+
+    update();
+}
+
+bool pageJoueur::estDansCartes(const Carte* c){
+    for(size_t i = 0; i < cartesPossedees.size(); i++){
+        if(cartesPossedees[i]->getCarte() == c){
+            return true;
+        }
+    }
+    return false;
 }
 
 void vuePrivilege::paintEvent(QPaintEvent *event){

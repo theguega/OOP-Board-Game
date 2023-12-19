@@ -107,4 +107,24 @@ public:
     int getNbCartes(){return pioche->getNbCartes();}
 };
 
+class vueCarteJoueur : public QWidget{
+private:
+    int h;
+    int l;
+
+    const Carte* carte;
+    bool estComplete;
+    bool estReservee;
+public:
+    vueCarteJoueur(QWidget* parent, int hauteur, int largeur, const Carte* c);
+    void setIncomplete(){estComplete = false;}
+    void setComplete(){estComplete = true;}
+    void setReserver(){estReservee = true; estComplete = true;}
+    void setPasReserver(){estReservee = false;}
+    void setCarte(const Carte* c){carte = c;}
+    const Carte* getCarte(){return carte;}
+protected:
+    void paintEvent(QPaintEvent *event);
+};
+
 #endif // VUECARTE_H

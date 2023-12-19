@@ -43,6 +43,22 @@ protected:
     void paintEvent(QPaintEvent *event);
 };
 
+class vueJetonJoueur : public QWidget{
+private:
+    int n;
+    int tailleJeton;
+
+    QColor Qcouleur;
+    QColor QcouleurClair;
+    QColor couleurContour;
+
+    Jeton* jeton;
+public:
+    vueJetonJoueur(QWidget* parent, Jeton* j, int tj, int n);
+protected:
+    void paintEvent(QPaintEvent *event);
+};
+
 QColor couleurEnQ(std::string c);
 
 #endif // VUEJETON_H

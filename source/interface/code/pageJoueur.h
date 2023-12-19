@@ -9,6 +9,8 @@
 #include "vueJeton.h"
 #include "vueCarte.h"
 #include "back-end/joueur.hpp"
+#include "back-end/carte.hpp"
+#include "back-end/jetons.hpp"
 
 
 class vuePrivilege : public QWidget{
@@ -29,19 +31,26 @@ private:
     QVBoxLayout* cartesPossedeesLayout; //Layout avec les cartes possedees
     QVBoxLayout* jetonsPossedesLayout; //Layout avec les jeton possedes
     QHBoxLayout* informations;
-    QHBoxLayout* layout; //Layout principal
+    QHBoxLayout* layoutBas;
+    QVBoxLayout* layout; //Layout principal
+
+    QLabel* afficheCouronnes;
+    QLabel* affichePtPrestiges;
 
     Joueur* joueur;
 
-    int hP, lP; //hauteur et largeur des privilèges;
+    int hP, lP, hC, lC; //hauteur et largeur des privilèges;
     std::vector<vuePrivilege*> listePrivileges;
 
-    std::vector<vueCarte*> cartesReservees; //Vecteur avec les cartes reservees
-    std::vector<vueCarte*> cartesPossedees; //Vecteur avec les cartes possedees
-    std::vector<vueJeton*> jetonsPossedes; //Vecteur avec les jeton possedes
+    std::vector<vueCarteJoueur*> cartesReservees; //Vecteur avec les cartes reservees
+    std::vector<vueCarteJoueur*> cartesPossedees; //Vecteur avec les cartes possedees
+    std::vector<vueJetonJoueur*> jetonsPossedes; //Vecteur avec les jeton possedes
 public:
-    pageJoueur(QWidget* parent, Joueur* joueur, int hP, int lP);
+    pageJoueur(QWidget* parent, Joueur* joueur, int hP, int lP, int hC, int lC);
     void refreshJoueur(Joueur* joueurCourant);
+    void setAfficherCouronnes(){afficheCouronnes->setText("NbCouronnes: " + QString::number(joueur->getNbCouronnes()));}
+    void setAfficherPtPrestiges(){affichePtPrestiges->setText("NbPtPrestiges: " + QString::number(joueur->getptsPrestige()));}
+    bool estDansCartes(const Carte* c);
 };
 
 #endif // PAGEJOUEUR_H

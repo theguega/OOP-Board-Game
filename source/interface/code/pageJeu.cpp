@@ -17,12 +17,14 @@ pageJeu::pageJeu(QString statut_partie, QString pseudo_j_1, type type_j_1, QStri
     tailleHauteur = tailleEcran.height();
 
     vPlateau = new vuePlateau(nullptr, tailleHauteur - 150, (tailleLargeur-150) / 2, control->getPlateau());
-    joueur1 = new pageJoueur(nullptr, control->getPartie().getJoueur1(), (vPlateau->height() - 130)/4, 30);
-    joueur2 = new pageJoueur(nullptr, control->getPartie().getJoueur2(), (vPlateau->height() - 130)/4, 30);
     vPyramide = new vuePyramide(nullptr, tailleHauteur - 100, (tailleLargeur-30) / 2, control->getPyramide());
+    joueur1 = new pageJoueur(nullptr, control->getPartie().getJoueur1(), (vPlateau->height() - 130)/4, 30, vPyramide->height()/(vPyramide->getHauteur() + 1), vPyramide->width()/(vPyramide->getHauteur() + 4));
+    joueur2 = new pageJoueur(nullptr, control->getPartie().getJoueur2(), (vPlateau->height() - 130)/4, 30, vPyramide->height()/(vPyramide->getHauteur() + 1), vPyramide->width()/(vPyramide->getHauteur() + 4));
 
-    afficherJ1 = new QPushButton("Afficher Joueur 1");
-    afficherJ2 = new QPushButton("Afficher Joueur 1");
+    //std::string texteBoutonJ1 = "Afficher " + control->getPartie().getJoueur1()->getPseudo();
+    //std::string texteBoutonJ2 = "Afficher " + control->getPartie().getJoueur2()->getPseudo();
+    afficherJ1 = new QPushButton("Afficher joueur 1");
+    afficherJ2 = new QPushButton("Afficher joueur 2");
 
     connect(afficherJ1, &QPushButton::clicked, this, [this]() {
         this->joueur1->show();
@@ -78,7 +80,8 @@ pageJeu::pageJeu(QString statut_partie, QString pseudo_j_1, type type_j_1, QStri
     connect(vPlateau, &vuePlateau::signalValiderAppuye, this, &pageJeu::validerSelectionJeton);
     connect(vPyramide, &vuePyramide::cardClicked, this, &pageJeu::validerSelectionCarte);
 
-    afficherPrivileges();
+    refresh();
+
 }
 
 
@@ -92,10 +95,9 @@ void pageJeu::validerSelectionJeton()
     // Traiter le résultat de la validation
     if(isValid){
         control->recupererJetons(vPlateau->getSelectionJetons());
-        vPlateau->changerPointeurs();
         control->changerJoueurCourant();
-        setLabelJC();
-        update();
+
+        refresh();
     }
     else{
         popUpInfo* infos = new popUpInfo(nullptr, message.toStdString());
@@ -119,7 +121,7 @@ void pageJeu::validerSelectionCarte(position* pos){
         }
         delete validation;
 
-        vPyramide->changerPointeurs();
+        refresh();
     }
     else{
         popUpInfo* infos = new popUpInfo(nullptr, message.toStdString());
@@ -229,4 +231,13 @@ void pageJeu::afficherPrivileges(){
     for(int i = control->getPlateau().getNbPrivileges(); i < listePrivileges.size(); i++){
         listePrivileges[i] -> hide();
     }
+}
+
+void pageJeu::refresh(){
+    afficherPrivileges();
+    vPyramide->changerPointeurs();
+    joueur1->refreshJoueur(&control->getJoueurCourant());
+    joueur2->refreshJoueur(&control->getJoueurCourant());
+    setLabelJC();
+    vPlateau->changerPointeurs();
 }
