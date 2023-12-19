@@ -310,6 +310,10 @@ carteInfo::carteInfo(QWidget* parent, int hauteur, int largeur, std::string text
     labelInfo = new QLabel;
     labelInfo->setText(QString::fromStdString(texte)); //Def le texte du QLabel
 
+    QPalette palette;
+    palette.setColor(QPalette::WindowText, Qt::black);
+    labelInfo->setPalette(palette);
+
     layout = new QVBoxLayout;
     layout->addWidget(labelInfo);
     setLayout(layout);
