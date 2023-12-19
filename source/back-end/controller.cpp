@@ -184,15 +184,17 @@ void Controller::setJoueurCourant(int n) {
 
 void Controller::changerJoueurCourant() {
     //changement du joueur courant
-    if (joueurCourant == partie->getJoueur1())
-        joueurCourant = partie->getJoueur2();
-    else
-        joueurCourant = partie->getJoueur1();
+    if(!nouveau_tour){
+        if (joueurCourant == partie->getJoueur1())
+            joueurCourant = partie->getJoueur2();
+        else
+            joueurCourant = partie->getJoueur1();
 
-    if (joueurCourant->getTypeDeJoueur() == type::IA)
-        strategy_courante = &strategy_IA;
-    else
-        strategy_courante = &strategy_Humain;
+        if (joueurCourant->getTypeDeJoueur() == type::IA)
+            strategy_courante = &strategy_IA;
+        else
+            strategy_courante = &strategy_Humain;
+    }
 }
 
 

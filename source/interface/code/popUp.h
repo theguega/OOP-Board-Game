@@ -87,6 +87,7 @@ class popUpChoixCouleur : public QDialog {
         Controller* control;
         QSignalMapper* signalMapper;
         QString selectedColor;
+        QLabel* label;
 };
 
 #endif

@@ -88,7 +88,9 @@ void modalPopup::handleOuiButtonClicked()
 popUpChoixCouleur::popUpChoixCouleur(Controller* control, QWidget* parent) : QDialog(parent), control(control) {
     QVBoxLayout* layout = new QVBoxLayout(this);
     signalMapper = new QSignalMapper(this);
-
+    label = new QLabel("La capacité de la carte permet d'associer son bonus à la couleur de votre choix. Veuillez choisir une couleur parmi celles disponibles :", this);
+    label->setWordWrap(true);
+    layout->addWidget(label);
     // Example colors
     QStringList colors = {"blanc", "bleu", "rouge", "vert", "noir", "perle"};
 

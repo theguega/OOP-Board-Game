@@ -120,6 +120,8 @@ void pageJeu::validerSelectionCarte(position* pos){
         delete validation;
 
         vPyramide->changerPointeurs();
+        setLabelJC();
+        update();
     }
     else{
         popUpInfo* infos = new popUpInfo(nullptr, message.toStdString());
@@ -131,29 +133,38 @@ void pageJeu::validerSelectionCarte(position* pos){
 void pageJeu::handleValidationCarte(position* p){
     std::pair<int, int> coord = std::make_pair(p->getx(), p->gety());
     const Carte* carte_tmp = control->getPyramide().getCarte(coord.first, coord.second);
-    control->acheterCarteJoaillerie(coord);
+    bool next = true;
     if(carte_tmp->getCapacite1()!=Capacite::None || carte_tmp->getCapacite2()!=Capacite::None){
-        handleCapa(carte_tmp->getCapacite1(), carte_tmp->getCapacite2());
+        next = handleCapa(carte_tmp->getCapacite1(), carte_tmp->getCapacite2());
+    }
+    if(next){
+        control->acheterCarteJoaillerie(coord);
+        control->changerJoueurCourant();
+        control->setNouveauTour(false);
     }
 }
 
 
 
-void pageJeu::handleCapa(Capacite capa1, Capacite capa2){
-    popUpInfo* info;
-    popUpChoixCouleur dialog(control);
+bool pageJeu::handleCapa(Capacite capa1, Capacite capa2){
+    popUpInfo* info_nouveau_tour = new popUpInfo(nullptr, "La capacité de la carte vous permetd e joueur un nouveau tour");
+    popUpChoixCouleur choixCouleur(control);
+    int valid;
     switch(capa1){
     case Capacite::AssociationBonus:
-        dialog.exec();
+        valid = choixCouleur.exec();
+        if(valid==QDialog::Accepted){
+            return true;
+        }
         break;
     case Capacite::NewTurn:
-        break;
+        info_nouveau_tour->show();
+        control->setNouveauTour(true);
+        return true;
     case Capacite::TakeJetonFromBonus:
-
-        break;
+        return true;
     case Capacite::TakeJetonToAdv:
-
-        break;
+        return true;
     case Capacite::TakePrivilege:
         if (control->getPlateau().getNbPrivileges()==0){
             //si il n'y a plus de privileges sur le plateau
@@ -166,26 +177,27 @@ void pageJeu::handleCapa(Capacite capa1, Capacite capa2){
 
             control->getJoueurCourant().addPrivilege(control->getPlateau().recupererPrivilege());
         }
-        break;
+        return true;
     case Capacite::None:
-        break;
+        return true;
     default:
-        break;
+        return true;
     }
     switch(capa2){
     case Capacite::AssociationBonus:
-        dialog.exec();
-
+        valid = choixCouleur.exec();
+        if(valid==QDialog::Accepted){
+            return true;
+        }
         break;
     case Capacite::NewTurn:
-
-        break;
+        info_nouveau_tour->show();
+        control->setNouveauTour(true);
+        return true;
     case Capacite::TakeJetonFromBonus:
-
-        break;
+        return true;
     case Capacite::TakeJetonToAdv:
-
-        break;
+        return true;
     case Capacite::TakePrivilege:
         if (control->getPlateau().getNbPrivileges()==0){
             //si il n'y a plus de privileges sur le plateau
@@ -198,12 +210,13 @@ void pageJeu::handleCapa(Capacite capa1, Capacite capa2){
 
             control->getJoueurCourant().addPrivilege(control->getPlateau().recupererPrivilege());
         }
-        break;
+        return true;
     case Capacite::None:
-        break;
+        return true;
     default:
-        break;
+        return true;
     }
+    return false;
 }
 
 

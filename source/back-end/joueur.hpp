@@ -66,7 +66,6 @@ public:
     const Carte& getCarteNoble(size_t i) const { return *cartesNobles[i]; }
     unsigned int getNbCouronnes ()const { return nbCouronnes; }
 
-
     // Setters et updater
     void updatePtsPrestige(int pts) { ptsPrestige += pts; }
     void updateNbCouronnes(int couronnes) { nbCouronnes += couronnes; }

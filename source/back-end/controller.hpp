@@ -56,7 +56,9 @@ public:
     EspaceJeux& getEspaceJeux() const{return partie->getEspaceJeux();}
 	// setters
 	void setJoueurCourant(int n);
-
+    void setNouveauTour(bool val){
+        nouveau_tour = val;
+    }
 	// actions partie
 	void lancerPartie();
     void changerJoueurCourant();
