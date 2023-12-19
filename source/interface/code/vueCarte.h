@@ -66,10 +66,10 @@ protected:
     void mousePressEvent(QMouseEvent *event) override {
         if (event->button() == Qt::LeftButton) {
             qDebug() << "Clic gauche detecte sur le widget.";
-            emit carteReservee();
+            emit carteAchetee(pos);
         } else if (event->button() == Qt::RightButton) {
             qDebug() << "Clic droit detecte sur le widget.";
-            emit carteAchetee(pos);
+            emit carteReservee();
         }
     }
 public:
@@ -78,6 +78,8 @@ public:
     position* getPosition(){return pos;}
     void cacherInfo(){affichageInfo = false;}
     void afficherInfo(){affichageInfo = true;}
+    void setCarte(const Carte* c){carte = c; update();}
+    const Carte* getCarte(){return carte;}
 signals:
     void carteReservee();
     void carteAchetee(position* position);

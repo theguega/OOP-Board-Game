@@ -53,29 +53,6 @@ void vuePyramide::boutonAfficherInfoClique(){
 }
 
 void vuePyramide::placerCartes(){
-    for (auto pt : cartesPyramide) {
-        delete pt;
-    }
-    if (layoutPyrVer != nullptr) {
-        for (int i = 0; i < hauteur; ++i) {
-            QLayoutItem *itemToRemove = layoutPyrVer->takeAt(0);
-            if (itemToRemove != nullptr) {
-                QLayout *layoutToRemove = itemToRemove->layout();
-                delete itemToRemove;
-                // Si nécessaire, supprimez également le layout associé
-                if (layoutToRemove != nullptr) {
-                    delete layoutToRemove;
-                }
-            }
-        }
-    }
-//    for (int i = 0; i < hauteur; ++i) {
-//        QLayout *layoutToRemove = layoutPyrVer->takeAt(0)->layout();
-//        if (layoutToRemove != nullptr) {
-//            delete layoutToRemove;
-//        }
-//    }
-    cartesPyramide.clear();
     for(int i = 0; i < hauteur; i++){
         QHBoxLayout* layoutPyrHor = new QHBoxLayout;
         for(int j = 0; j < pyramide.getNbCartesNiv(i); j++){
@@ -89,6 +66,22 @@ void vuePyramide::placerCartes(){
     }
 }
 
-/*void vuePyramide::insererCarte(position* pos){
+vueCarte* vuePyramide::getCartePosition(int i, int j){
+    for (vueCarte* carte : cartesPyramide) {
+        position* pos = carte->getPosition();
+        if (pos != nullptr && pos->getx() == i && pos->gety() == j) {
+            return carte; // Retourne la carte correspondant à la position spécifiée
+        }
+    }
+    return nullptr; // Retourne nullptr si aucune carte correspondante n'est trouvée
+}
 
-}*/
+void vuePyramide::changerPointeurs(){
+    for(size_t i = 0; i < hauteur; i++){
+        for(size_t j = 0; j < pyramide.getNbCartesNiv(i); j++){
+            vueCarte* temp = getCartePosition(i, j);
+            temp->setCarte(pyramide.getCarte(i, j));
+        }
+    }
+    update();
+}

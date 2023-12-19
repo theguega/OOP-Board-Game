@@ -270,7 +270,7 @@ void vuePlateau::cacherElements(){
     info -> close();
 }
 
-void vuePlateau::paintEvent(QPaintEvent *event){
+/*void vuePlateau::paintEvent(QPaintEvent *event){
     QWidget::paintEvent(event); // Appel a la methode paintEvent de la classe de base
 
     QPainter painter(boutonValider);
@@ -279,7 +279,7 @@ void vuePlateau::paintEvent(QPaintEvent *event){
     painter.setBrush(Qt::red);
     painter.drawRect(boutonValider->rect());
 
-}
+}*/
 
 
 std::vector<std::pair<int, int>> vuePlateau::getSelectionJetons() const {

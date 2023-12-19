@@ -118,7 +118,10 @@ void pageJeu::validerSelectionCarte(position* pos){
             pageJeu::handleValidationCarte(pos);
         }
         delete validation;
-    } else{
+
+        vPyramide->changerPointeurs();
+    }
+    else{
         popUpInfo* infos = new popUpInfo(nullptr, message.toStdString());
         infos->show();
     }

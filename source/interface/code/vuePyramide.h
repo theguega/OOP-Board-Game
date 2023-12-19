@@ -28,6 +28,8 @@ public:
     void afficherCartes();
     void boutonAfficherInfoClique();
     void placerCartes();
+    vueCarte* getCartePosition(int i, int j);
+    void changerPointeurs();
 signals:
     void cardClicked(position* pos);
 };
