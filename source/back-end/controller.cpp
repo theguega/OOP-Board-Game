@@ -1418,6 +1418,12 @@ void Controller::verifTroisCarteReserve(){
         throw SplendorException("\nVous avez deja 3 cartes reservees\n");
 }
 
+bool Controller::verifTroisCarteReserveBool(){
+    if(joueurCourant->getNbCartesReservees() == 3)
+        return true;
+    return false;
+}
+
 void Controller::verifJetonSupDix(){
     qDebug()  << "Verification que le joueur courant n'a pas plus de 10 jetons dans sa main\n";
     while(joueurCourant->getNbJetons() > 10){
@@ -1603,6 +1609,22 @@ std::pair<bool, QString> Controller::verifJetons(const std::vector<std::pair<int
     return output;
 }
 
+std::pair<bool, QString> Controller::verifReservationCarte(std::pair<int, int> coord){
+    const Carte* carte = getPyramide().getCarte(coord.first, coord.second);
+
+    verifTroisCarteReserve();
+    verifOrSurPlateau();
+
+    if(verifTroisCarteReserveBool() ){
+        return std::make_pair(false, "Vous ne pouvez resever la carte avec vous avez deja 3 cartes dans votre reserve");
+    }
+    // A modifier pour vois si on a bien un jeton Or
+    if(verifTroisCarteReserveBool() ){
+        return std::make_pair(false, "Vous ne pouvez resever la carte avec vous avez deja 3 cartes dans votre reserve");
+    }
+
+    return std::make_pair(true, "Vous pouvez reserver cette carte !");
+}
 
 
 
