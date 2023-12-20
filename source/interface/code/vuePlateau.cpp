@@ -213,6 +213,7 @@ void vuePlateau::changerPointeurs(){
         jetonSelection[i] = nullptr;
     }
     nbJetonSelection = 0;
+    update();
 }
 
 void vuePlateau::boutonClique(int i){

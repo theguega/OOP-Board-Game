@@ -42,8 +42,8 @@ int main(int argc, char * argv[]) {
 //###### Partie en mode Terminal #####
 //####################################
 
-/*
-int main(void) {
+
+/*int main(void) {
     try {
         Controller control;
         if(control.getStatutPartie()=="New")
