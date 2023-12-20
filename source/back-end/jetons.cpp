@@ -55,14 +55,14 @@ QDebug operator<<(QDebug f, const Couleur* c) {
 }
 
 std::map<std::string, Couleur> stringToCouleurMap = {
-        {"blanc", Couleur::BLANC},
-        {"bleu", Couleur::BLEU},
-        {"vert", Couleur::VERT},
-        {"noir", Couleur::NOIR},
-        {"rouge", Couleur::ROUGE},
-        {"perle", Couleur::PERLE},
-        {"or", Couleur::OR},
-        {"indt", Couleur::INDT}
+    {"blanc", Couleur::BLANC},
+    {"bleu", Couleur::BLEU},
+    {"vert", Couleur::VERT},
+    {"noir", Couleur::NOIR},
+    {"rouge", Couleur::ROUGE},
+    {"perle", Couleur::PERLE},
+    {"or", Couleur::OR},
+    {"indt", Couleur::INDT}
 };
 
 Couleur StringToCouleur(const std::string& couleurStr) {
@@ -277,42 +277,42 @@ void Plateau::positionerJeton(const Jeton& jeton) {
     size_t direction = 0, avancement = 0;
     while (jetons[i][j] != nullptr && i <= jetons.size()-1 && j <= jetons.size()-1) {
         switch (direction) {
-            case 0:  // Vers le haut
-                i--;
-                avancement++;
-                if (avancement == h){
-                    avancement = 0;
-                    direction = 1;
-                    h += 2;
-                }
-                break;
-            case 1:  // Vers la droite
-                j++;
-                avancement++;
-                if (avancement == d){
-                    avancement = 0;
-                    direction = 2;
-                    d += 2;
-                }
-                break;
-            case 2:  // Vers le bas
-                i++;
-                avancement++;
-                if (avancement == b){
-                    avancement = 0;
-                    direction = 3;
-                    b += 2;
-                }
-                break;
-            case 3:  // Vers la gauche
-                j--;
-                avancement++;
-                if (avancement == g){
-                    avancement = 0;
-                    direction = 0;
-                    g += 2;
-                }
-                break;
+        case 0:  // Vers le haut
+            i--;
+            avancement++;
+            if (avancement == h){
+                avancement = 0;
+                direction = 1;
+                h += 2;
+            }
+            break;
+        case 1:  // Vers la droite
+            j++;
+            avancement++;
+            if (avancement == d){
+                avancement = 0;
+                direction = 2;
+                d += 2;
+            }
+            break;
+        case 2:  // Vers le bas
+            i++;
+            avancement++;
+            if (avancement == b){
+                avancement = 0;
+                direction = 3;
+                b += 2;
+            }
+            break;
+        case 3:  // Vers la gauche
+            j--;
+            avancement++;
+            if (avancement == g){
+                avancement = 0;
+                direction = 0;
+                g += 2;
+            }
+            break;
         }
     }
 

@@ -126,9 +126,7 @@ void pageJeu::validerSelectionJetonPrivi()
         if(control->getJoueurCourant().getNbPrivileges() >= vPlateau->getSelectionJetons().size()) {
 
             for (int i = 1; i <= vPlateau->getSelectionJetons().size();i++){
-
-                control -> getJoueurCourant().supPrivilege();
-
+                control -> getEspaceJeux().getPlateau().poserPrivilege(control -> getJoueurCourant().supPrivilege());
             }
 
             control->recupererJetons(vPlateau->getSelectionJetons());
@@ -175,17 +173,17 @@ void pageJeu::validerSelectionCarte(position* pos){
 
 void pageJeu::validerResaCarte(position* pos){
     bool isValidOr;
-    QString messageOr = "oui";
+    QString messageOr;
 
     if(!vPlateau->selecteOr()){
         isValidOr = false;
-        messageOr = QString("Sélectionner un jeton Or.");
+        messageOr = QString("Sélectionnez un jeton Or.");
 
     }
     else {
-    std::pair<bool, QString> validationResultJeton = control->verifJetonOr(std::make_pair(vPlateau->selecteOr()->getx(), vPlateau->selecteOr()->gety()));
-    isValidOr = validationResultJeton.first;
-    //messageOr = validationResultJeton.second;
+        std::pair<bool, QString> validationResultJeton = control->verifJetonOr(std::make_pair(vPlateau->selecteOr()->getx(), vPlateau->selecteOr()->gety()));
+        isValidOr = validationResultJeton.first;
+        messageOr = validationResultJeton.second;
     }
 
 
@@ -205,7 +203,11 @@ void pageJeu::validerResaCarte(position* pos){
         }
         delete validation;
     }
-    else{
+    else if (!isValid){
+        popUpInfo* infos = new popUpInfo(nullptr, message.toStdString());
+        infos->show();
+    }
+    else if (!isValidOr){
         popUpInfo* infos = new popUpInfo(nullptr, messageOr.toStdString());
         infos->show();
     }
@@ -248,10 +250,16 @@ void pageJeu::handleValidationCarte(position* p){
 
 
 
+<<<<<<< HEAD
 bool pageJeu::handleCapa(const Carte* c, Capacite capa1, Capacite capa2){
     popUpInfo* info_nouveau_tour = new popUpInfo(nullptr, "La capacité de la carte vous permet de joueur un nouveau tour");
     popUpInfo* info_take_jeton_from_bonus = new popUpInfo(nullptr, "La capacité de la carte vous permet de recuperer un jeton de la couleur du bonus de la carte");
     popUpChoixCouleur choixCouleur(control);
+=======
+bool pageJeu::handleCapa(Capacite capa1, Capacite capa2){
+    popUpInfo* info_nouveau_tour = new popUpInfo(nullptr, "La capacité de la carte vous permetd e joueur un nouveau tour");
+        popUpChoixCouleur choixCouleur(control);
+>>>>>>> 3a3dec68e02a35de7e9fd8a0945fc5e47d40fbf2
     int valid;
 
     switch(capa1){
