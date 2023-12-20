@@ -49,7 +49,7 @@ pageJeu::pageJeu(QString statut_partie, QString pseudo_j_1, type type_j_1, QStri
 
     bSac = new boutonSac(nullptr, (vPlateau->height() - 130)/4, 30);
     layoutPrivileges->addWidget(bSac);
-    connect(bSac, &QPushButton::clicked, this, &pageJeu::remplirPlateau);
+
 
 
 
@@ -84,6 +84,7 @@ pageJeu::pageJeu(QString statut_partie, QString pseudo_j_1, type type_j_1, QStri
     connect(vPlateau, &vuePlateau::signalValiderAppuye, this, &pageJeu::validerSelectionJeton);
     connect(vPyramide, &vuePyramide::cardClicked, this, &pageJeu::validerSelectionCarte);
     connect(vPyramide, &vuePyramide::cardClickedResa, this, &pageJeu::validerResaCarte);
+    connect(bSac, &QPushButton::clicked, this, &pageJeu::remplirPlateau);
 
 
     refresh();
@@ -289,6 +290,7 @@ void pageJeu::afficherPrivileges(){
     }
 }
 
+
 void pageJeu::refresh(){
     afficherPrivileges();
     vPyramide->changerPointeurs();
@@ -298,6 +300,7 @@ void pageJeu::refresh(){
     vPlateau->changerPointeurs();
     update();
 }
+
 
 void pageJeu::remplirPlateau() {
     //verification si le sac est vide
@@ -319,5 +322,6 @@ void pageJeu::remplirPlateau() {
         infos->show();
         return;
     }
-    refresh();
+//    refresh();
+//    update();
 }
