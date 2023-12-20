@@ -117,9 +117,6 @@ public:
     void orReserverCarte(std::pair<int, int> coord);
 
 
-    bool verifTroisCarteReserveBool();
-
-
 };
 
 #endif
