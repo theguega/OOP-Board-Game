@@ -133,6 +133,8 @@ void pageJeu::validerSelectionCarte(position* pos){
 }
 
 void pageJeu::validerResaCarte(position* pos){
+    std::pair<bool, QString> validationResultJeton = control->verifJetons(vPlateau->getSelectionJetons());
+
     std::pair<bool, QString> validationResult = control->verifReservationCarte(std::make_pair(pos->getx(), pos->gety()));
     bool isValid = validationResult.first;
     const QString& message = validationResult.second;
