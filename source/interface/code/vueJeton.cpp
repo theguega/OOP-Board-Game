@@ -139,6 +139,111 @@ void vueJeton::paintEvent(QPaintEvent *event) {
     }
 }
 
+vueJetonJoueur::vueJetonJoueur(QWidget* parent, Jeton* j, int tj, int n) :
+    QWidget(parent), jeton(j), tailleJeton(tj), n(n){
+    setFixedSize(tailleJeton + 30, tailleJeton);
+
+    switch(jeton->getCouleur()){
+    case Couleur::BLANC:
+        Qcouleur = QColor("white");
+        QcouleurClair = QColor("white");
+        couleurContour = QColor("black");
+        break;
+
+    case Couleur::NOIR:
+        Qcouleur = QColor("black");
+        QcouleurClair = QColor("black");
+        couleurContour = QColor("white");
+        break;
+
+    default:
+        Qcouleur = couleurEnQ(toStringCouleur(jeton->getCouleur())+"Fonce");
+        QcouleurClair = couleurEnQ(toStringCouleur(jeton->getCouleur()));
+        couleurContour = QColor("white");
+        break;
+    }
+}
+
+void vueJetonJoueur::paintEvent(QPaintEvent *event){
+    QWidget::paintEvent(event); // Appel a la methode paintEvent de la classe de base
+
+    QPainter painter(this);
+    painter.setRenderHint(QPainter::Antialiasing); // Pour des bords plus lisses
+
+    int side = tailleJeton; // Taille minimale entre largeur et hauteur pour un carre
+    QPoint center = QPoint(tailleJeton/2, tailleJeton/2); // Centre du bouton
+
+    painter.setPen(QPen(couleurContour, 3)); // Contours noirs de largeur 1 pixel
+
+    // Dessin du cercle au centre du bouton
+    int circleRadius = side / 2; // Rayon du cercle pour qu'il soit centre
+    painter.setBrush(QBrush(QcouleurClair)); // Utilisation de la couleur definie
+    painter.drawEllipse(center, circleRadius - 3, circleRadius - 3);
+
+    // Definition des points pour creer le grand losange
+    QVector<QPoint> bigDiamondShape;
+    const int bigWidth = side * 2 / 3;
+    const int bigHeight = side * 3 / 4;
+
+    bigDiamondShape << QPoint(center.x(), center.y() - bigHeight / 2); // Point superieur
+    bigDiamondShape << QPoint(center.x() + bigWidth / 2, center.y()); // Point droit
+    bigDiamondShape << QPoint(center.x(), center.y() + bigHeight / 2); // Point inferieur
+    bigDiamondShape << QPoint(center.x() - bigWidth / 2, center.y()); // Point gauche
+
+    // Dessin du grand losange
+    painter.setPen(QPen(couleurContour, 2)); // Contours noirs de largeur 2 pixels
+    painter.setBrush(Qcouleur); // Couleur bleue pour le grand losange
+    painter.drawPolygon(bigDiamondShape);
+
+    // Definition des points pour creer le petit losange (effet 3D)
+    QVector<QPoint> smallDiamondShape;
+    const int smallWidth = side / 4;
+    const int smallHeight = side / 3;
+
+    smallDiamondShape << QPoint(center.x(), center.y() - smallHeight / 2); // Point superieur
+    smallDiamondShape << QPoint(center.x() + smallWidth / 2, center.y()); // Point droit
+    smallDiamondShape << QPoint(center.x(), center.y() + smallHeight / 2); // Point inferieur
+    smallDiamondShape << QPoint(center.x() - smallWidth / 2, center.y()); // Point gauche
+
+    // Dessin du petit losange (effet 3D)
+    QRadialGradient gradient(center, side / 4, center); // Gradient radial pour l'effet 3D
+    gradient.setColorAt(0, QColor(255, 255, 255, 0)); // Couleur transparente au centre
+    gradient.setColorAt(0.5, QColor(255, 255, 255, 60)); // Couleur semi-opaque au milieu
+    gradient.setColorAt(1, QColor(255, 255, 255, 120)); // Couleur plus opaque a l'exterieur
+
+    painter.setBrush(gradient);
+    painter.setPen(Qt::NoPen);
+    painter.drawPolygon(smallDiamondShape);
+
+    // Dessin des lignes reliant les coins des deux losanges (plus fins)
+    painter.setPen(QPen(couleurContour, 1)); // Lignes noires plus fines
+    painter.drawLine(bigDiamondShape[0], smallDiamondShape[0]);
+    painter.drawLine(bigDiamondShape[1], smallDiamondShape[1]);
+    painter.drawLine(bigDiamondShape[2], smallDiamondShape[2]);
+    painter.drawLine(bigDiamondShape[3], smallDiamondShape[3]);
+
+    // Dessin des contours du losange central en noir
+    painter.setPen(QPen(couleurContour, 2)); // Contours noirs de largeur 2 pixels
+    painter.drawPolygon(smallDiamondShape);
+
+    painter.setPen(Qt::black);
+    QFont font("Arial", 12); // Définir la police et la taille de la police
+    font.setWeight(QFont::Bold); // Mettre la police en gras
+
+    painter.setFont(font);
+
+    QString texte = " : " + QString::number(n);
+    QFontMetrics metrics(font);
+    int textWidth = metrics.horizontalAdvance(texte);
+    int textHeight = metrics.height();
+
+    // Calculer la position en x pour centrer le texte
+    int x = tailleJeton + 5; // Position en x pour centrer le texte horizontalement
+    int y = tailleJeton / 2 + textHeight / 2; // Position en y pour centrer le texte verticalement
+
+    painter.drawText(x, y, texte);
+}
+
 QColor couleurEnQ(std::string c) {
     if (c == "bleu") {
         return QColor("#2FC5FF");

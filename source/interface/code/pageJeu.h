@@ -75,7 +75,7 @@ public:
         QWidget::mousePressEvent(event);
     }
     void setLabelJC(){labelJC->setText(QString::fromStdString("C'est au tour de " + control->getJoueurCourant().getPseudo()));}
-
+    void refresh();
 public slots:
     void validerSelectionCarte(position* p);
     void validerResaCarte(position* p);

@@ -30,6 +30,7 @@ public:
     void placerCartes();
     vueCarte* getCartePosition(int i, int j);
     void changerPointeurs();
+    int getHauteur(){return hauteur;}
 signals:
     void cardClicked(position* pos);
     void cardClickedResa(position* pos);
