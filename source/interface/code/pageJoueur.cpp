@@ -110,6 +110,9 @@ void pageJoueur::refreshJoueur(Joueur* joueurCourant){
             }
         }
     }
+
+    qDebug() << k;
+
     for(int i = k; i < 3; i++){
         cartesReservees[i]->setCarte(nullptr);
     }

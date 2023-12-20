@@ -36,7 +36,7 @@ public:
     void changeAfficherCroix();
     void enleverCroix();
     position* getPosition(){return pos;}
-    void setJeton(const Jeton* j){jeton = j;}
+    void setJeton(const Jeton* j){jeton = j; update();}
     const Jeton* getJeton(){return jeton;}
     ~vueJeton(){delete pos;}
 protected:
