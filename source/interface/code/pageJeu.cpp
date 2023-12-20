@@ -9,6 +9,9 @@
 
 
 pageJeu::pageJeu(QString statut_partie, QString pseudo_j_1, type type_j_1, QString pseudo_j_2, type type_j_2, QWidget *parent) : QWidget(parent) {
+    setWindowIcon(QIcon("gif/splendor.jpg"));
+    setWindowTitle("SplendorDuel");
+
     control = new Controller(statut_partie, pseudo_j_1, type_j_1, pseudo_j_2, type_j_2);
     control->lancerPartie();
     ecran = QGuiApplication::primaryScreen();
@@ -249,17 +252,10 @@ void pageJeu::handleValidationCarte(position* p){
 }
 
 
-
-<<<<<<< HEAD
 bool pageJeu::handleCapa(const Carte* c, Capacite capa1, Capacite capa2){
     popUpInfo* info_nouveau_tour = new popUpInfo(nullptr, "La capacité de la carte vous permet de joueur un nouveau tour");
     popUpInfo* info_take_jeton_from_bonus = new popUpInfo(nullptr, "La capacité de la carte vous permet de recuperer un jeton de la couleur du bonus de la carte");
     popUpChoixCouleur choixCouleur(control);
-=======
-bool pageJeu::handleCapa(Capacite capa1, Capacite capa2){
-    popUpInfo* info_nouveau_tour = new popUpInfo(nullptr, "La capacité de la carte vous permetd e joueur un nouveau tour");
-        popUpChoixCouleur choixCouleur(control);
->>>>>>> 3a3dec68e02a35de7e9fd8a0945fc5e47d40fbf2
     int valid;
 
     switch(capa1){
