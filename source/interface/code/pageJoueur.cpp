@@ -15,7 +15,8 @@ pageJoueur::pageJoueur(QWidget* parent, Joueur* joueur, int hP, int lP, int hC, 
 
     afficheCouronnes = new QLabel;
     affichePtPrestiges = new QLabel;
-    affichePseudo = new QLabel(QString::fromStdString("Joueur: " + joueur->getPseudo()));
+    affichePseudo = new QLabel(QString::fromStdString("Joueur : " + joueur->getPseudo()));
+    affichePseudo->setAlignment(Qt::AlignCenter);
 
     for(int i = 0; i < 3; i++){
         listePrivileges.push_back(new vuePrivilege(hP, lP));

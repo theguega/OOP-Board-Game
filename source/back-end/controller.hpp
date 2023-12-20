@@ -114,6 +114,8 @@ public:
 
     std::pair<bool, QString> verifReservationCarte(std::pair<int, int> coord);
 
+    bool verifTroisCarteReserveBool();
+
 
 };
 

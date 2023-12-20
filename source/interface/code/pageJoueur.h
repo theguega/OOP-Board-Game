@@ -50,8 +50,8 @@ private:
 public:
     pageJoueur(QWidget* parent, Joueur* joueur, int hP, int lP, int hC, int lC, int tj);
     void refreshJoueur(Joueur* joueurCourant);
-    void setAfficherCouronnes(){afficheCouronnes->setText("NbCouronnes: " + QString::number(joueur->getNbCouronnes()));}
-    void setAfficherPtPrestiges(){affichePtPrestiges->setText("NbPtPrestiges: " + QString::number(joueur->getptsPrestige()));}
+    void setAfficherCouronnes(){afficheCouronnes->setText("Couronnes : " + QString::number(joueur->getNbCouronnes()));}
+    void setAfficherPtPrestiges(){affichePtPrestiges->setText("Prestiges : " + QString::number(joueur->getptsPrestige()));}
     bool estDansCartes(const Carte* c);
 };
 

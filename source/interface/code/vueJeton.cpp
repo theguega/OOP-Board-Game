@@ -232,7 +232,7 @@ void vueJetonJoueur::paintEvent(QPaintEvent *event){
 
     painter.setFont(font);
 
-    QString texte = " :" + QString::number(n);
+    QString texte = " : " + QString::number(n);
     QFontMetrics metrics(font);
     int textWidth = metrics.horizontalAdvance(texte);
     int textHeight = metrics.height();
