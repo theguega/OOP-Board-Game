@@ -126,9 +126,7 @@ void pageJeu::validerSelectionJetonPrivi()
         if(control->getJoueurCourant().getNbPrivileges() >= vPlateau->getSelectionJetons().size()) {
 
             for (int i = 1; i <= vPlateau->getSelectionJetons().size();i++){
-
-                control -> getJoueurCourant().supPrivilege();
-
+                control -> getEspaceJeux().getPlateau().poserPrivilege(control -> getJoueurCourant().supPrivilege());
             }
 
             control->recupererJetons(vPlateau->getSelectionJetons());
