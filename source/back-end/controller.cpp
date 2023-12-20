@@ -1697,12 +1697,12 @@ std::pair<bool, QString> Controller::verifAchatCarte(std::pair<int, int> coord){
         return std::make_pair(false, "Vous ne pouvez pas acheter une carte avce la capacité Association Bonus tant que vous n'avez pas de carte au bonus défini");
     }
     // recup des points necessaires pour acheter la carte
-    unsigned int needBlanc =  carte->getPrix().getBlanc() ;
-    unsigned int needBleu =  carte->getPrix().getBleu();
-    unsigned int needVert =  carte->getPrix().getVert();
-    unsigned int needRouge =  carte->getPrix().getRouge();
-    unsigned int needNoir =  carte->getPrix().getNoir();
-    unsigned int needPerle = carte->getPrix().getPerle();
+    int needBlanc =  carte->getPrix().getBlanc() ;
+    int needBleu =  carte->getPrix().getBleu();
+    int needVert =  carte->getPrix().getVert();
+    int needRouge =  carte->getPrix().getRouge();
+    int needNoir =  carte->getPrix().getNoir();
+    int needPerle = carte->getPrix().getPerle();
 
     // recup des nb de jetons du joueur
 
