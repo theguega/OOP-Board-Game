@@ -100,6 +100,8 @@ void LastPartieBuilder::setCartesJoueurs() const {
             int id_carte = query2.value(1).toInt();
             int noble = query2.value(2).toInt();
             int reserve = query2.value(3).toInt();
+            int int_coul_asso = query2.value(4).toInt();
+            Couleur couleur_associe = static_cast<Couleur>(int_coul_asso);
 
             // Nobles
             if (noble == 1) {
@@ -110,27 +112,54 @@ void LastPartieBuilder::setCartesJoueurs() const {
             else if (1 <= id_carte && id_carte <= nb_cartes_nv1) {
                 const Carte &carte = this->partie->espaceJeux->getPyramide().getPioche1().piocher(id_carte);
                 Couleur c = carte.getBonus().getCouleur();
-                if (reserve == 0)
+                if (reserve == 0) {
+                    //Si le joueur a la carte
+                    if(carte.getCapacite1() == Capacite::AssociationBonus || carte.getCapacite2() == Capacite::AssociationBonus){
+                        //Rangement dans le bon vecteur si la carte etait associe a une couleur
+                        this->partie->joueurs[i]->addBonus(couleur_associe, 1);
+                        this->partie->joueurs[i]->cartes[couleur_associe].push_back(&carte);
+                    } else {
                     this->partie->joueurs[i]->addCarte(carte);
-                else
+                    this->partie->joueurs[i]->addBonus(carte.getBonus().getCouleur(), carte.getBonus().getNbBonus());
+                    }
+                } else
+                    //Si le joueur a reserver la carte
                     this->partie->joueurs[i]->addCarteReservee(carte);
             }
             // Niveau 2
             else if (nb_cartes_nv1 < id_carte && id_carte <= nb_cartes_nv1 + nb_cartes_nv2) {
                 const Carte &carte = this->partie->espaceJeux->getPyramide().getPioche2().piocher(id_carte);
                 Couleur c = carte.getBonus().getCouleur();
-                if (reserve == 0)
+                if (reserve == 0) {
+                    //Si le joueur a la carte
+                    if(carte.getCapacite1() == Capacite::AssociationBonus || carte.getCapacite2() == Capacite::AssociationBonus){
+                    //Rangement dans le bon vecteur si la carte etait associe a une couleur
+                    this->partie->joueurs[i]->addBonus(couleur_associe, 1);
+                    this->partie->joueurs[i]->cartes[couleur_associe].push_back(&carte);
+                    } else {
                     this->partie->joueurs[i]->addCarte(carte);
-                else
+                    this->partie->joueurs[i]->addBonus(carte.getBonus().getCouleur(), carte.getBonus().getNbBonus());
+                    }
+                } else
+                    //Si le joueur a reserver la carte
                     this->partie->joueurs[i]->addCarteReservee(carte);
             }
             // Niveau 3
             else if (nb_cartes_nv1 + nb_cartes_nv2 < id_carte && id_carte <= nb_cartes_nv1 + nb_cartes_nv2 + nb_cartes_nv3) {
                 const Carte &carte = this->partie->espaceJeux->getPyramide().getPioche3().piocher(id_carte);
                 Couleur c = carte.getBonus().getCouleur();
-                if (reserve == 0)
+                if (reserve == 0) {
+                    //Si le joueur a la carte
+                    if(carte.getCapacite1() == Capacite::AssociationBonus || carte.getCapacite2() == Capacite::AssociationBonus){
+                    //Rangement dans le bon vecteur si la carte etait associe a une couleur
+                    this->partie->joueurs[i]->addBonus(couleur_associe, 1);
+                    this->partie->joueurs[i]->cartes[couleur_associe].push_back(&carte);
+                    } else {
                     this->partie->joueurs[i]->addCarte(carte);
-                else
+                    this->partie->joueurs[i]->addBonus(carte.getBonus().getCouleur(), carte.getBonus().getNbBonus());
+                    }
+                } else
+                    //Si le joueur a reserver la carte
                     this->partie->joueurs[i]->addCarteReservee(carte);
             }
         }
@@ -262,7 +291,7 @@ void LastPartieBuilder::setInfosPartie() const {
     // Restitution des infos de la partie
     if (query.next()) {
         int tours = query.value(0).toInt();
-        partie->tour = tours;
+        partie->setTour(tours);
     }
 
     db.close();
