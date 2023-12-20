@@ -136,17 +136,17 @@ void pageJeu::validerSelectionCarte(position* pos){
 
 void pageJeu::validerResaCarte(position* pos){
     bool isValidOr;
-    QString messageOr = "oui";
+    QString messageOr;
 
     if(!vPlateau->selecteOr()){
         isValidOr = false;
-        messageOr = QString("Sélectionner un jeton Or.");
+        messageOr = QString("Sélectionnez un jeton Or.");
 
     }
     else {
     std::pair<bool, QString> validationResultJeton = control->verifJetonOr(std::make_pair(vPlateau->selecteOr()->getx(), vPlateau->selecteOr()->gety()));
     isValidOr = validationResultJeton.first;
-    //messageOr = validationResultJeton.second;
+    messageOr = validationResultJeton.second;
     }
 
 
@@ -166,7 +166,11 @@ void pageJeu::validerResaCarte(position* pos){
         }
         delete validation;
     }
-    else{
+    else if (!isValid){
+        popUpInfo* infos = new popUpInfo(nullptr, message.toStdString());
+        infos->show();
+    }
+    else if (!isValidOr){
         popUpInfo* infos = new popUpInfo(nullptr, messageOr.toStdString());
         infos->show();
     }
