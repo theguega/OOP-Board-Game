@@ -321,6 +321,6 @@ void pageJeu::remplirPlateau() {
         infos->show();
         return;
     }
-//    refresh();
-//    update();
+    refresh();
+    update();
 }
