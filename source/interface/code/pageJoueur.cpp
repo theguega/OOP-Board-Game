@@ -1,31 +1,125 @@
 #include "pageJoueur.h"
 
-pageJoueur::pageJoueur(QWidget* parent, Joueur* joueur, int h, int l) : QWidget(parent), hP(h), lP(l){
+pageJoueur::pageJoueur(QWidget* parent, Joueur* joueur, int hP, int lP, int hC, int lC, int tj) :
+    QWidget(parent), hP(hP), lP(lP), hC(hC), lC(lC), tailleJeton(tj), joueur(joueur){
     cartesReserveesLayout = new QVBoxLayout;
+    cartesReserveesLayout->setAlignment(Qt::AlignTop);
     cartesPossedeesLayout = new QVBoxLayout;
+    cartesPossedeesLayout->setAlignment(Qt::AlignTop);
+    cartesPossedeesLayout->setSpacing(0);
     jetonsPossedesLayout = new QVBoxLayout;
+    jetonsPossedesLayout->setAlignment(Qt::AlignTop);
     informations = new QHBoxLayout;
-    layout = new QHBoxLayout;
+    layoutBas = new QHBoxLayout;
+    layout = new QVBoxLayout;
 
-    layout->addLayout(cartesReserveesLayout);
-    layout->addLayout(cartesPossedeesLayout);
-    layout->addLayout(jetonsPossedesLayout);
+    afficheCouronnes = new QLabel;
+    affichePtPrestiges = new QLabel;
+    affichePseudo = new QLabel(QString::fromStdString("Joueur: " + joueur->getPseudo()));
 
     for(int i = 0; i < 3; i++){
-        listePrivileges.push_back(new vuePrivilege(h, l));
+        listePrivileges.push_back(new vuePrivilege(hP, lP));
         informations->addWidget(listePrivileges[i]);
     }
+
+    for(int i = 0; i < 3; i++){
+        cartesReservees.push_back(new vueCarteJoueur(nullptr, hC, lC, nullptr));
+        cartesReserveesLayout->addWidget(cartesReservees[i]);
+    }
+
+    for(const auto& couleur : Couleurs){
+        if(couleur != Couleur::INDT){
+            vueJetonJoueur* temp = new vueJetonJoueur(nullptr, new Jeton(couleur), tailleJeton, 0);
+            jetonsPossedes[couleur] = temp;
+            jetonsPossedesLayout->addWidget(temp);
+        }
+    }
+
+    informations->addWidget(afficheCouronnes);
+    informations->addWidget(affichePtPrestiges);
+
+    layoutBas->addLayout(cartesReserveesLayout);
+    layoutBas->addLayout(cartesPossedeesLayout);
+    layoutBas->addLayout(jetonsPossedesLayout);
+
+    informations->setAlignment(Qt::AlignCenter);
+    layoutBas->setAlignment(Qt::AlignCenter);
+
+    layout->addWidget(affichePseudo);
+    layout->addLayout(informations);
+    layout->addLayout(layoutBas);
+    layout->setAlignment(Qt::AlignCenter);
 
     setLayout(layout);
 }
 
 void pageJoueur::refreshJoueur(Joueur* joueurCourant){
-    for(int i = 0; i < joueur->getNbPrivileges(); i++){
-        listePrivileges[i]->show();
+
+    if(joueur->getNbPrivileges() != 0){
+        for(size_t i = 0; i < joueur->getNbPrivileges(); i++){
+            listePrivileges[i]->show();
+        }
     }
-    for(int i = joueur->getNbPrivileges(); i < 3; i++){
+    for(size_t i = joueur->getNbPrivileges(); i < 3; i++){
         listePrivileges[i]->hide();
     }
+
+    setAfficherCouronnes();
+    setAfficherPtPrestiges();
+
+    for(const auto& couleur : Couleurs){
+        if(couleur != Couleur::OR){
+            for(size_t i = 0; i < joueur->getNbCartes(couleur); i++){
+                const Carte* temp = &joueur->getCarte(couleur, i);
+                if(!estDansCartes(temp)){
+                    vueCarteJoueur* vcj = new vueCarteJoueur(nullptr, hC, lC, temp);
+                    vcj->setPasReserver();
+                    vcj->setComplete();
+                    cartesPossedees.push_back(vcj);
+                    cartesPossedeesLayout->addWidget(vcj);
+                }
+            }
+        }
+    }
+    for(size_t i = 0; i < cartesPossedees.size(); i++){
+        if(i == cartesPossedees.size() - 1){
+            cartesPossedees[i]->setComplete();
+        }
+        else{
+            cartesPossedees[i]->setIncomplete();
+        }
+    }
+
+    int k = 0;
+    for(const auto& couleur : Couleurs){
+        if(couleur != Couleur::OR){
+            for(size_t i = 0; i < joueur->getNbCartesReservees(couleur); i++){
+                const Carte* temp = &joueur->getCarteReservee(couleur, i);
+                cartesReservees[k]->setCarte(temp);
+                k++;
+            }
+        }
+    }
+    for(int i = k; i < 3; i++){
+        cartesReservees[i]->setCarte(nullptr);
+    }
+
+    for(const auto& couleur : Couleurs){
+        if(couleur != Couleur::INDT){
+            jetonsPossedes[couleur]->setN(joueur->getNbJetons(couleur));
+        }
+    }
+
+    update();
+}
+
+bool pageJoueur::estDansCartes(const Carte* c){
+    for(size_t i = 0; i < cartesPossedees.size(); i++){
+        if(cartesPossedees[i]->getCarte() == c){
+            return true;
+        }
+    }
+    return false;
 }
 
 void vuePrivilege::paintEvent(QPaintEvent *event){

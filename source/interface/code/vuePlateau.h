@@ -69,6 +69,7 @@ public:
     void placerJetons();
     std::vector<std::pair<int, int>> getSelectionJetons() const;
     void changerPointeurs();
+    int getTailleJeton() const{return tailleJeton;}
     //vueJeton* recupererBouton(Jeton* jeton);
     //void remplirPlateau();
 signals:
