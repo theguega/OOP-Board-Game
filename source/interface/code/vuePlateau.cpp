@@ -9,7 +9,7 @@
 #include "vueJeton.h"
 
 grilleJetons::grilleJetons(QWidget* parent, int hauteur, int largeur, int nbJ, int tJ, std::vector<vueJeton*>* pt) :
-    QWidget(parent), h(hauteur), l(largeur), nbJetons(nbJ), tailleJeton(tJ), ptListeJetons(pt){
+    QWidget(parent), ptListeJetons(pt), nbJetons(nbJ), h(hauteur), l(largeur), tailleJeton(tJ){
 
     rnbJetons = static_cast<int>(sqrt(nbJetons));
     for(int i = 0; i < rnbJetons; i++){
@@ -186,17 +186,17 @@ vuePlateau::vuePlateau(QWidget* parent, int hauteur, int largeur, Plateau& plat)
 }
 
 void vuePlateau::placerJetons(){
-    for(int i = 0; i < rnbJetons; i++){
+    for(unsigned int i = 0; i < rnbJetons; i++){
         for(int j = 0; j < rnbJetons; j++){
             grille->placerJeton(plateau.getJeton(i,j), i , j);
         }
     }
-    for(int i = 0; i < listeJetons.size(); i++){
+    for(unsigned int i = 0; i < listeJetons.size(); i++){
         QObject::connect(listeJetons[i], &vueJeton::clicked, [this, i]() {
             boutonClique(i); //Permet d'appeler la fonction boutonClique(int i) lorsque le bouton i est clique
         });
     }
-    for(int i = 0; i < 3; i++){
+    for(unsigned int i = 0; i < 3; i++){
         jetonSelection[i] = nullptr; //Initialise jetonSelection avec nullptr
     }
     update();

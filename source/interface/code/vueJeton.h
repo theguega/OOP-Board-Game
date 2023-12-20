@@ -3,7 +3,7 @@
 
 #include <QWidget>
 #include <QPushButton>
-#include <Qpainter>
+#include <QPainter>
 #include "back-end/jetons.hpp"
 
 class position{

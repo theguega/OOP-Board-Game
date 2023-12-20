@@ -58,7 +58,7 @@ void vuePyramide::boutonAfficherInfoClique(){
 void vuePyramide::placerCartes(){
     for(int i = 0; i < hauteur; i++){
         QHBoxLayout* layoutPyrHor = new QHBoxLayout;
-        for(int j = 0; j < pyramide.getNbCartesNiv(i); j++){
+        for(unsigned int j = 0; j < pyramide.getNbCartesNiv(i); j++){
             vueCarte* temp = new vueCarte(nullptr, h/(this->hauteur + 1), l/(this->hauteur + 4), pyramide.getCarte(i, j));
             temp->setPosition(new position(i, j));
             cartesPyramide.push_back(temp);
@@ -80,8 +80,8 @@ vueCarte* vuePyramide::getCartePosition(int i, int j){
 }
 
 void vuePyramide::changerPointeurs(){
-    for(size_t i = 0; i < hauteur; i++){
-        for(size_t j = 0; j < pyramide.getNbCartesNiv(i); j++){
+    for(unsigned int i = 0; i < hauteur; i++){
+        for(unsigned int j = 0; j < pyramide.getNbCartesNiv(i); j++){
             vueCarte* temp = getCartePosition(i, j);
             temp->setCarte(pyramide.getCarte(i, j));
         }

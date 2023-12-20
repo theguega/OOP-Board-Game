@@ -281,10 +281,10 @@ void pageJeu::paintEvent(QPaintEvent *event){
 }
 
 void pageJeu::afficherPrivileges(){
-    for(int i = 0; i < control->getPlateau().getNbPrivileges(); i++){
+    for(unsigned int i = 0; i < control->getPlateau().getNbPrivileges(); i++){
         listePrivileges[i] -> show();
     }
-    for(int i = control->getPlateau().getNbPrivileges(); i < listePrivileges.size(); i++){
+    for(unsigned int i = control->getPlateau().getNbPrivileges(); i < listePrivileges.size(); i++){
         listePrivileges[i] -> hide();
     }
 }
