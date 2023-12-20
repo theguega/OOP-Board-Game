@@ -83,6 +83,16 @@ protected:
     void boutonNonPresse(){ //Connecte le bouton non du PopUpValider
         pop -> hide();
     }
+    bool event(QEvent *event) override {
+        if (event->type() == QEvent::KeyPress) {
+            QKeyEvent *keyEvent = static_cast<QKeyEvent*>(event);
+            if (keyEvent->key() == Qt::Key_Return || keyEvent->key() == Qt::Key_Enter) {
+                boutonOuiPresse();
+                return true; // Indique que l'événement a été traité
+            }
+        }
+        return QWidget::event(event);
+    }
 public:
     pageCreation(QWidget* parent = nullptr);
     QPushButton* getRetourMenu(){return retourMenu;}
