@@ -63,7 +63,7 @@ protected:
     void rester(){ //Permet de restetr sur la page
         aSauvegarde -> close();
     }
-    void paintEvent(QPaintEvent *event);
+    void paintEvent(QPaintEvent *event) override;
 public:
     pageJeu(QString statut_partie, QString pseudo_j_1, type type_j_1, QString pseudo_j_2, type type_j_2, QWidget *parent = nullptr);
     ~pageJeu() = default;

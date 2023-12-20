@@ -101,7 +101,7 @@ protected:
             qDebug() << "Clic gauche detecte sur le widget.";
         }
     }
-    void paintEvent(QPaintEvent* event);
+    void paintEvent(QPaintEvent* event) override;
 public:
     vuePaquet(Pioche& p, int hauteur=0, int largeur=0, QWidget* parent = nullptr): QWidget(parent), h(hauteur), l(largeur), niveau(p.getTypeCarte()), pioche(&p){setFixedSize(l, h);}
     int getNbCartes(){return pioche->getNbCartes();}
@@ -138,7 +138,7 @@ public:
     vueCarteNoble(QWidget* parent, int hauteur, int largeur, const Carte* c) :
         QWidget(parent), h(hauteur), l(largeur), carte(c){setFixedSize(l, h);}
 protected:
-    void paintEvent(QPaintEvent *event);
+    void paintEvent(QPaintEvent *event) override;
     void mousePressEvent(QMouseEvent *event) override {
         if (event->button() == Qt::LeftButton) {
             qDebug() << "Clic gauche detecte sur le widget.";
