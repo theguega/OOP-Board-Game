@@ -50,6 +50,8 @@ private:
     int tailleJeton;
 
     QPushButton* boutonValider;
+    QPushButton* boutonValiderPrivilege;
+;
     popUpInfo* info;
 
     QVBoxLayout* layout;
@@ -75,6 +77,7 @@ public:
     //void remplirPlateau();
 signals:
     void signalValiderAppuye();
+    void signalValiderPrivilegeAppuye();
 };
 
 class boutonSac : public QPushButton{

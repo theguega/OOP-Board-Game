@@ -172,18 +172,24 @@ vuePlateau::vuePlateau(QWidget* parent, int hauteur, int largeur, Plateau& plat)
     placerJetons();
 
     boutonValider = new QPushButton("Valider le choix des jetons"); //Creer le bouton valider (pour la selection des jetons)
+    boutonValiderPrivilege = new QPushButton("Utiliser un privilege");
+
     boutonValider->setStyleSheet("color blue;");
+    boutonValiderPrivilege->setStyleSheet("color blue;");
 
     layout = new QVBoxLayout; //Layout pour mettre le Grid + les boutons en dessous
 
     layout -> addWidget(grille); //Ajoute layoutJetons au layout vertical
-    layout -> addWidget(boutonValider); //Ajoute layoutJetons au layout vertical (faire un QHBoxLayout pour ajouter aussi un bouton desselctionner)
-
+    layout -> addWidget(boutonValider); //Ajoute layoutJetons au layout vertical (faire un QHBoxLayout pour ajouter aussi un bouton desselctionner) 
+    layout -> addWidget(boutonValiderPrivilege);
     setLayout(layout); //Set le layout
 
     //connect(boutonValider, &QPushButton::clicked, this, &vuePlateau::validerJetons); //connect boutonValider avec valliderJetons
     connect(boutonValider, &QPushButton::clicked, this, &vuePlateau::signalValiderAppuye);
+    connect(boutonValiderPrivilege, &QPushButton::clicked, this, &vuePlateau::signalValiderPrivilegeAppuye);
     info = new popUpInfo(nullptr, "Vos jetons ont bien ete ajoute");
+
+
 }
 
 void vuePlateau::placerJetons(){
@@ -216,6 +222,7 @@ void vuePlateau::changerPointeurs(){
         jetonSelection[i] = nullptr;
     }
     nbJetonSelection = 0;
+    update();
 }
 
 void vuePlateau::boutonClique(int i){

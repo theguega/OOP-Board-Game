@@ -1686,7 +1686,7 @@ std::pair<bool, QString> Controller::verifReservationCarte(std::pair<int, int> c
     //verifOrSurPlateau();
 
     if(verifTroisCarteReserveBool() ){
-        return std::make_pair(false, "Vous ne pouvez resever la carte avec vous avez deja 3 cartes dans votre reserve");
+        return std::make_pair(false, "Vous ne pouvez resever la carte, vous avez deja 3 cartes dans votre reserve");
     }
     // A modifier pour vois si on a bien un jeton Or
     if(verifTroisCarteReserveBool() ){
