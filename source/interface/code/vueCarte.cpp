@@ -474,8 +474,6 @@ void vueCarteJoueur::paintEvent(QPaintEvent* event){
 
     if(carte != nullptr){
 
-        show();
-
         if((estComplete && !estReservee) || (estReservee && estRetournee)){
 
             setFixedSize(l, h);
@@ -755,7 +753,7 @@ void vueCarteJoueur::paintEvent(QPaintEvent* event){
                 painter.drawEllipse(QPoint(l - radius - 2, y), radius, radius);
             }
         }
-        else if(estComplete && estReservee){
+        else if(estReservee){
             setFixedSize(l, h);
 
             switch(carte->getType()){

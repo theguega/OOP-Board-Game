@@ -9,6 +9,12 @@ pageCreation::pageCreation(QWidget *parent) : QWidget(parent){
     choixPossibles1 = new QComboBox;
     choixPossibles2 = new QComboBox;
 
+    choix1 << "Nouveaux Joueur";
+    choix2 << "Nouveaux Joueur";
+
+    choixPossibles1 -> addItems(choix1);
+    choixPossibles2 -> addItems(choix2);
+
     QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
     db.setDatabaseName("data/score.sqlite");
     if (!db.open()) {
@@ -22,21 +28,13 @@ pageCreation::pageCreation(QWidget *parent) : QWidget(parent){
         throw std::runtime_error("Erreur lors de l'ouverture de la base de données: " + db.lastError().text().toStdString());
     }
 
-    // Ajouter un élément par défaut (si besoin)
-    choixPossibles1->addItem("Nouveau Joueur");
-    choixPossibles2->addItem("Nouveau Joueur");
-
     while (query.next()) {
         // Récupération du nom depuis la première colonne
         QString nom = query.value(1).toString();
-        choixPossibles1->addItem(nom);
-        choixPossibles2->addItem(nom);
+        choixPossibles1 -> addItem(nom);
+        choixPossibles2 -> addItem(nom);
     }
     db.close();
-
-    // Définir le texte initial
-    choixPossibles1->setCurrentIndex(0);
-    choixPossibles2->setCurrentIndex(0);
 
     nom1Edit = new QLineEdit;
     nom2Edit = new QLineEdit;
@@ -54,10 +52,12 @@ pageCreation::pageCreation(QWidget *parent) : QWidget(parent){
 
     setLayout(layout);
 
+    index1 = 0;
+    index2 = 0;
+
     QObject::connect(choixPossibles1, QOverload<int>::of(&QComboBox::activated), this, &pageCreation::comboBox1Active);
     QObject::connect(choixPossibles2, QOverload<int>::of(&QComboBox::activated), this, &pageCreation::comboBox2Active);
     QObject::connect(boutonValider, &QPushButton::clicked, this, &pageCreation::valider);
-
 
     pop = new popUpValider(nullptr, "valider", "", "oui");
     QObject::connect(pop -> getBoutonOui(), &QPushButton::clicked, this, &pageCreation::boutonOuiPresse);
