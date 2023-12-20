@@ -79,6 +79,7 @@ public:
 public slots:
     void validerSelectionCarte(position* p);
     void afficherPrivileges();
+    void remplirPlateau();
 
 private slots:
     void validerSelectionJeton();
