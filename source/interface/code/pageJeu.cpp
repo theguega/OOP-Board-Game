@@ -183,9 +183,9 @@ void pageJeu::validerResaCarte(position* pos){
 
     }
     else {
-    std::pair<bool, QString> validationResultJeton = control->verifJetonOr(std::make_pair(vPlateau->selecteOr()->getx(), vPlateau->selecteOr()->gety()));
-    isValidOr = validationResultJeton.first;
-    messageOr = validationResultJeton.second;
+        std::pair<bool, QString> validationResultJeton = control->verifJetonOr(std::make_pair(vPlateau->selecteOr()->getx(), vPlateau->selecteOr()->gety()));
+        isValidOr = validationResultJeton.first;
+        messageOr = validationResultJeton.second;
     }
 
 
@@ -254,7 +254,7 @@ void pageJeu::handleValidationCarte(position* p){
 
 bool pageJeu::handleCapa(Capacite capa1, Capacite capa2){
     popUpInfo* info_nouveau_tour = new popUpInfo(nullptr, "La capacité de la carte vous permetd e joueur un nouveau tour");
-    popUpChoixCouleur choixCouleur(control);
+        popUpChoixCouleur choixCouleur(control);
     int valid;
     switch(capa1){
     case Capacite::AssociationBonus:

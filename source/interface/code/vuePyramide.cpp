@@ -18,7 +18,6 @@ vuePyramide::vuePyramide(QWidget* parent, int hauteur, int largeur, Pyramide& py
         connect(carte, &vueCarte::carteAchetee, this, &vuePyramide::cardClicked);
 
         connect(carte, &vueCarte::carteReservee, this, &vuePyramide::cardClickedResa);
-
     }
 
     // initialisation des paquets

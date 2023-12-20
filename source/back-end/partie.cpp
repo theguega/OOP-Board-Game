@@ -92,7 +92,7 @@ void LastPartieBuilder::setCartesJoueurs() const {
         QSqlQuery query2(db);
         if (!query2.exec(sql2)) {
             std::cerr << "Erreur de preparation de la requête joueur 3 : " << query2.lastError().text().toStdString() << std::endl;
-            db.close();
+                                                                                                                             db.close();
             return;
         }
 
@@ -119,8 +119,8 @@ void LastPartieBuilder::setCartesJoueurs() const {
                         this->partie->joueurs[i]->addBonus(couleur_associe, 1);
                         this->partie->joueurs[i]->cartes[couleur_associe].push_back(&carte);
                     } else {
-                    this->partie->joueurs[i]->addCarte(carte);
-                    this->partie->joueurs[i]->addBonus(carte.getBonus().getCouleur(), carte.getBonus().getNbBonus());
+                        this->partie->joueurs[i]->addCarte(carte);
+                        this->partie->joueurs[i]->addBonus(carte.getBonus().getCouleur(), carte.getBonus().getNbBonus());
                     }
                 } else
                     //Si le joueur a reserver la carte
@@ -133,12 +133,12 @@ void LastPartieBuilder::setCartesJoueurs() const {
                 if (reserve == 0) {
                     //Si le joueur a la carte
                     if(carte.getCapacite1() == Capacite::AssociationBonus || carte.getCapacite2() == Capacite::AssociationBonus){
-                    //Rangement dans le bon vecteur si la carte etait associe a une couleur
-                    this->partie->joueurs[i]->addBonus(couleur_associe, 1);
-                    this->partie->joueurs[i]->cartes[couleur_associe].push_back(&carte);
+                        //Rangement dans le bon vecteur si la carte etait associe a une couleur
+                        this->partie->joueurs[i]->addBonus(couleur_associe, 1);
+                        this->partie->joueurs[i]->cartes[couleur_associe].push_back(&carte);
                     } else {
-                    this->partie->joueurs[i]->addCarte(carte);
-                    this->partie->joueurs[i]->addBonus(carte.getBonus().getCouleur(), carte.getBonus().getNbBonus());
+                        this->partie->joueurs[i]->addCarte(carte);
+                        this->partie->joueurs[i]->addBonus(carte.getBonus().getCouleur(), carte.getBonus().getNbBonus());
                     }
                 } else
                     //Si le joueur a reserver la carte
@@ -151,12 +151,12 @@ void LastPartieBuilder::setCartesJoueurs() const {
                 if (reserve == 0) {
                     //Si le joueur a la carte
                     if(carte.getCapacite1() == Capacite::AssociationBonus || carte.getCapacite2() == Capacite::AssociationBonus){
-                    //Rangement dans le bon vecteur si la carte etait associe a une couleur
-                    this->partie->joueurs[i]->addBonus(couleur_associe, 1);
-                    this->partie->joueurs[i]->cartes[couleur_associe].push_back(&carte);
+                        //Rangement dans le bon vecteur si la carte etait associe a une couleur
+                        this->partie->joueurs[i]->addBonus(couleur_associe, 1);
+                        this->partie->joueurs[i]->cartes[couleur_associe].push_back(&carte);
                     } else {
-                    this->partie->joueurs[i]->addCarte(carte);
-                    this->partie->joueurs[i]->addBonus(carte.getBonus().getCouleur(), carte.getBonus().getNbBonus());
+                        this->partie->joueurs[i]->addCarte(carte);
+                        this->partie->joueurs[i]->addBonus(carte.getBonus().getCouleur(), carte.getBonus().getNbBonus());
                     }
                 } else
                     //Si le joueur a reserver la carte
@@ -296,38 +296,3 @@ void LastPartieBuilder::setInfosPartie() const {
 
     db.close();
 }
-
-
-// ###########   fin des methodes Builder   #############
-
-
-
-// ##### Methodes pour le singleton #####
-/*
-Partie& Partie::getInstance() {
-    if (instance == nullptr) {
-        instance = new Partie();
-    }
-    return *instance;
-}
-
-Partie& Partie::getInstance(std::string nomJoueur1, std::string prenomJoueur1) {
-    if (instance == nullptr) {
-        instance = new Partie(nomJoueur1, prenomJoueur1);
-    }
-    return *instance;
-}
-Partie& Partie::getInstance(std::string nomJoueur1, std::string prenomJoueur1, std::string nomJoueur2, std::string prenomJoueur2) {
-    if (instance == nullptr) {
-        instance = new Partie(nomJoueur1, prenomJoueur1, nomJoueur2, prenomJoueur2);
-    }
-    return *instance;
-}
-
-void Partie::libererInstance() {
-    if (instance != nullptr) {
-        delete instance;
-        instance = nullptr;
-    }
-}*/
-

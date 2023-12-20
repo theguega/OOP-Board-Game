@@ -103,7 +103,6 @@ Controller::Controller() {
 
 
 
-
 //Surcharge du constructeur du controller pour la partie graphique
 Controller::Controller(QString statut_partie, QString pseudo_j_1, type type_j_1, QString pseudo_j_2, type type_j_2){
     Director* director = new Director();
