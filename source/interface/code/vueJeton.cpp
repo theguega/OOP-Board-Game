@@ -141,7 +141,7 @@ void vueJeton::paintEvent(QPaintEvent *event) {
 
 vueJetonJoueur::vueJetonJoueur(QWidget* parent, Jeton* j, int tj, int n) :
     QWidget(parent), jeton(j), tailleJeton(tj), n(n){
-    setFixedSize(tailleJeton, tailleJeton);
+    setFixedSize(tailleJeton + 30, tailleJeton);
 
     switch(jeton->getCouleur()){
     case Couleur::BLANC:
@@ -170,8 +170,8 @@ void vueJetonJoueur::paintEvent(QPaintEvent *event){
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing); // Pour des bords plus lisses
 
-    int side = qMin(width(), height()); // Taille minimale entre largeur et hauteur pour un carre
-    QPoint center = rect().center(); // Centre du bouton
+    int side = tailleJeton; // Taille minimale entre largeur et hauteur pour un carre
+    QPoint center = QPoint(tailleJeton/2, tailleJeton/2); // Centre du bouton
 
     painter.setPen(QPen(couleurContour, 3)); // Contours noirs de largeur 1 pixel
 
@@ -226,17 +226,20 @@ void vueJetonJoueur::paintEvent(QPaintEvent *event){
     painter.setPen(QPen(couleurContour, 2)); // Contours noirs de largeur 2 pixels
     painter.drawPolygon(smallDiamondShape);
 
-    painter.setPen(couleurContour);
+    painter.setPen(Qt::black);
     QFont font("Arial", 12); // Définir la police et la taille de la police
+    font.setWeight(QFont::Bold); // Mettre la police en gras
+
     painter.setFont(font);
 
-    QString texte = QString::number(n);
+    QString texte = " :" + QString::number(n);
     QFontMetrics metrics(font);
     int textWidth = metrics.horizontalAdvance(texte);
+    int textHeight = metrics.height();
 
     // Calculer la position en x pour centrer le texte
-    int x = width()/2 - textWidth/2; // Position en x pour centrer le texte horizontalement
-    int y = height(); // Position en y
+    int x = tailleJeton + 5; // Position en x pour centrer le texte horizontalement
+    int y = tailleJeton / 2 + textHeight / 2; // Position en y pour centrer le texte verticalement
 
     painter.drawText(x, y, texte);
 }

@@ -18,18 +18,20 @@ pageJeu::pageJeu(QString statut_partie, QString pseudo_j_1, type type_j_1, QStri
 
     vPlateau = new vuePlateau(nullptr, tailleHauteur - 150, (tailleLargeur-150) / 2, control->getPlateau());
     vPyramide = new vuePyramide(nullptr, tailleHauteur - 100, (tailleLargeur-30) / 2, control->getPyramide());
-    joueur1 = new pageJoueur(nullptr, control->getPartie().getJoueur1(), (vPlateau->height() - 130)/4, 30, vPyramide->height()/(vPyramide->getHauteur() + 1), vPyramide->width()/(vPyramide->getHauteur() + 4));
-    joueur2 = new pageJoueur(nullptr, control->getPartie().getJoueur2(), (vPlateau->height() - 130)/4, 30, vPyramide->height()/(vPyramide->getHauteur() + 1), vPyramide->width()/(vPyramide->getHauteur() + 4));
+    joueur1 = new pageJoueur(nullptr, control->getPartie().getJoueur1(), (vPlateau->height() - 130)/4, 30, vPyramide->height()/(vPyramide->getHauteur() + 1), vPyramide->width()/(vPyramide->getHauteur() + 4), vPlateau->getTailleJeton());
+    joueur2 = new pageJoueur(nullptr, control->getPartie().getJoueur2(), (vPlateau->height() - 130)/4, 30, vPyramide->height()/(vPyramide->getHauteur() + 1), vPyramide->width()/(vPyramide->getHauteur() + 4), vPlateau->getTailleJeton());
 
-    //std::string texteBoutonJ1 = "Afficher " + control->getPartie().getJoueur1()->getPseudo();
-    //std::string texteBoutonJ2 = "Afficher " + control->getPartie().getJoueur2()->getPseudo();
-    afficherJ1 = new QPushButton("Afficher joueur 1");
-    afficherJ2 = new QPushButton("Afficher joueur 2");
+    std::string texteBoutonJ1 = "Afficher " + control->getPartie().getJoueur1()->getPseudo();
+    std::string texteBoutonJ2 = "Afficher " + control->getPartie().getJoueur2()->getPseudo();
+    afficherJ1 = new QPushButton(QString::fromStdString(texteBoutonJ1));
+    afficherJ2 = new QPushButton(QString::fromStdString(texteBoutonJ2));
 
     connect(afficherJ1, &QPushButton::clicked, this, [this]() {
+        this->joueur1->hide();
         this->joueur1->show();
     });
     connect(afficherJ2, &QPushButton::clicked, this, [this]() {
+        this->joueur1->hide();
         this->joueur2->show();
     });
 

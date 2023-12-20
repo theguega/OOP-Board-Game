@@ -1,9 +1,10 @@
 #include "pageJoueur.h"
 
-pageJoueur::pageJoueur(QWidget* parent, Joueur* joueur, int hP, int lP, int hC, int lC) :
-    QWidget(parent), hP(hP), lP(lP), hC(hC), lC(lC), joueur(joueur){
+pageJoueur::pageJoueur(QWidget* parent, Joueur* joueur, int hP, int lP, int hC, int lC, int tj) :
+    QWidget(parent), hP(hP), lP(lP), hC(hC), lC(lC), tailleJeton(tj), joueur(joueur){
     cartesReserveesLayout = new QVBoxLayout;
     cartesPossedeesLayout = new QVBoxLayout;
+    cartesPossedeesLayout->setAlignment(Qt::AlignTop);
     jetonsPossedesLayout = new QVBoxLayout;
     informations = new QHBoxLayout;
     layoutBas = new QHBoxLayout;
@@ -11,6 +12,7 @@ pageJoueur::pageJoueur(QWidget* parent, Joueur* joueur, int hP, int lP, int hC, 
 
     afficheCouronnes = new QLabel;
     affichePtPrestiges = new QLabel;
+    affichePseudo = new QLabel(QString::fromStdString("Joueur: " + joueur->getPseudo()));
 
     for(int i = 0; i < 3; i++){
         listePrivileges.push_back(new vuePrivilege(hP, lP));
@@ -22,6 +24,14 @@ pageJoueur::pageJoueur(QWidget* parent, Joueur* joueur, int hP, int lP, int hC, 
         cartesReserveesLayout->addWidget(cartesReservees[i]);
     }
 
+    for(const auto& couleur : Couleurs){
+        if(couleur != Couleur::INDT){
+            vueJetonJoueur* temp = new vueJetonJoueur(nullptr, new Jeton(couleur), tailleJeton, 0);
+            jetonsPossedes[couleur] = temp;
+            jetonsPossedesLayout->addWidget(temp);
+        }
+    }
+
     informations->addWidget(afficheCouronnes);
     informations->addWidget(affichePtPrestiges);
 
@@ -29,8 +39,13 @@ pageJoueur::pageJoueur(QWidget* parent, Joueur* joueur, int hP, int lP, int hC, 
     layoutBas->addLayout(cartesPossedeesLayout);
     layoutBas->addLayout(jetonsPossedesLayout);
 
+    informations->setAlignment(Qt::AlignCenter);
+    layoutBas->setAlignment(Qt::AlignCenter);
+
+    layout->addWidget(affichePseudo);
     layout->addLayout(informations);
     layout->addLayout(layoutBas);
+    layout->setAlignment(Qt::AlignCenter);
 
     setLayout(layout);
 }
@@ -84,6 +99,12 @@ void pageJoueur::refreshJoueur(Joueur* joueurCourant){
     }
     for(int i = k; i < 3; i++){
         cartesReservees[i]->setCarte(nullptr);
+    }
+
+    for(const auto& couleur : Couleurs){
+        if(couleur != Couleur::INDT){
+            jetonsPossedes[couleur]->setN(joueur->getNbJetons(couleur));
+        }
     }
 
     update();

@@ -55,6 +55,7 @@ private:
     Jeton* jeton;
 public:
     vueJetonJoueur(QWidget* parent, Jeton* j, int tj, int n);
+    void setN(int n){this->n = n;}
 protected:
     void paintEvent(QPaintEvent *event);
 };

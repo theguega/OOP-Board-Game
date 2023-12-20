@@ -5,6 +5,7 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <vector>
+#include <unordered_map>
 #include "vuePlateau.h"
 #include "vueJeton.h"
 #include "vueCarte.h"
@@ -36,17 +37,18 @@ private:
 
     QLabel* afficheCouronnes;
     QLabel* affichePtPrestiges;
+    QLabel* affichePseudo;
 
     Joueur* joueur;
 
-    int hP, lP, hC, lC; //hauteur et largeur des privilèges;
+    int hP, lP, hC, lC, tailleJeton; //hauteur et largeur des privilèges, cartes et jeton;
     std::vector<vuePrivilege*> listePrivileges;
 
     std::vector<vueCarteJoueur*> cartesReservees; //Vecteur avec les cartes reservees
     std::vector<vueCarteJoueur*> cartesPossedees; //Vecteur avec les cartes possedees
-    std::vector<vueJetonJoueur*> jetonsPossedes; //Vecteur avec les jeton possedes
+    std::unordered_map<Couleur, vueJetonJoueur*> jetonsPossedes; //Vecteur avec les jeton possedes
 public:
-    pageJoueur(QWidget* parent, Joueur* joueur, int hP, int lP, int hC, int lC);
+    pageJoueur(QWidget* parent, Joueur* joueur, int hP, int lP, int hC, int lC, int tj);
     void refreshJoueur(Joueur* joueurCourant);
     void setAfficherCouronnes(){afficheCouronnes->setText("NbCouronnes: " + QString::number(joueur->getNbCouronnes()));}
     void setAfficherPtPrestiges(){affichePtPrestiges->setText("NbPtPrestiges: " + QString::number(joueur->getptsPrestige()));}
