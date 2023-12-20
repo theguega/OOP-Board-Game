@@ -45,11 +45,11 @@ int main(int argc, char * argv[]) {
     //plateau -> show();
 
 
-    //toutesPages* page = new toutesPages(nullptr, &app);
-    //page->show();
+    toutesPages* page = new toutesPages(nullptr, &app);
+    page->show();
 
-    vueCarteNoble* noble = new vueCarteNoble(nullptr, 300, 200, new Carte(TypeCarte::Noble, Capacite::NewTurn, 10, 5));
-    noble->show();
+    //vueCarteNoble* noble = new vueCarteNoble(nullptr, 300, 200, new Carte(TypeCarte::Noble, Capacite::NewTurn, 10, 5));
+    //noble->show();
 
     return app.exec();
 }
