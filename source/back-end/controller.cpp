@@ -969,6 +969,67 @@ bool Controller::acheterCarteJoaillerie (EspaceJeux& espaceJeux){
     }
 }
 
+void Controller::orReserverCarte (std::pair<int, int> coord){
+    /*verifTroisCarteReserve();
+    verifOrSurPlateau();
+    qDebug()  << "Commencez par choisir un jeton Or : \n";
+    qDebug()  <<  getPlateau();
+
+
+    qDebug() << "Voici les jetons disponibles: \n";
+
+    std::vector<std::pair<int, int>> jetonsOrDispo = getEspaceJeux().getPlateau().getVectorOrDispo();
+
+    if(jetonsOrDispo.size() == 0){
+        //getEspaceJeux().getPlateau().remplirPlateau(getEspaceJeux().getSac());
+        throw SplendorException("Plus de Jetons Or disponibles");
+    }
+
+    for (int i =0; i<jetonsOrDispo.size(); i++) {
+        qDebug() << "(" << jetonsOrDispo[i].first << "," << jetonsOrDispo[i].second << ") (" << i + 1 << ")";
+    }
+
+    int ChoixOrDispo = strategy_courante->choix_min_max(1, jetonsOrDispo.size());
+
+    qDebug()  << "Voulez-vous reserver une carte de la pyramide (0) ou celle d'une pioche (1, 2, 3) ?\n";
+    unsigned int choix = strategy_courante->choix_min_max(0, 3);
+
+    if (choix == 0){
+        // Reservation de la carte
+        qDebug() << "Voici les cartes de la pyramide : \n";
+
+        getPyramide().afficherPyramide();
+
+        qDebug()  << "rentrez le niveau de la carte souhaitee : \n";
+        unsigned int niveau = strategy_courante->choix_min_max(1, 3)-1;
+        qDebug()  << "rentrez le numero de la carte souhaitee : \n";
+        unsigned int num_carte = strategy_courante->choix_min_max(1, getPyramide().getNbCartesNiv(niveau))-1;
+
+        const Carte& carte = pyramide.acheterCarte(niveau, num_carte);
+        joueurCourant->addCarteReservee(carte);
+    }
+    else if (choix == 1 || choix == 2 || choix == 3){
+        // Reservation de la carte
+        const Carte& carte = pyramide.ReserverCartePioche(choix);
+        joueurCourant->addCarteReservee(carte);
+    }*/
+
+    // Voir resa carte de la pioche
+    //const Carte& carte = partie->getEspaceJeux().getPyramide().ReserverCartePioche(choix);
+
+
+    const Carte& carte = partie->getEspaceJeux().getPyramide().acheterCarte(coord.first, coord.second);
+    joueurCourant->addCarteReservee(carte);
+
+
+    // Voir achat jeton or
+    //const Jeton& jeton = plateau.recupererJeton( jetonsOrDispo[ChoixOrDispo-1].first,  jetonsOrDispo[ChoixOrDispo-1].second);
+    //joueurCourant->addJeton(jeton);
+
+    qDebug()  << "Etat du joueur apres l'action : \n";
+    //joueurCourant->afficherJoueur();
+}
+
 void Controller::acheterCarteJoaillerie(std::pair<int, int> coord){
 
     //on peut alors l'acheter, elle sera directement remplacer par une nouvelle

@@ -103,7 +103,6 @@ void pageJeu::validerSelectionJeton()
     }
 }
 
-
 void pageJeu::validerSelectionCarte(position* pos){
     std::pair<bool, QString> validationResult = control->verifAchatCarte(std::make_pair(pos->getx(), pos->gety()));
     bool isValid = validationResult.first;
@@ -129,6 +128,46 @@ void pageJeu::validerSelectionCarte(position* pos){
     }
 }
 
+void pageJeu::validerResaCarte(position* pos){
+    std::pair<bool, QString> validationResult = control->verifReservationCarte(std::make_pair(pos->getx(), pos->gety()));
+    bool isValid = validationResult.first;
+    const QString& message = validationResult.second;
+
+    if(isValid){
+        modalPopup* validation = new modalPopup(this, message, "Voulez-vous valider ?");
+        int result =validation->exec();
+
+        // Check the result (optional).
+        if (result == QDialog::Accepted){
+            // Modification
+            pageJeu::handleReservationCarte(pos);
+        }
+        delete validation;
+
+        vPyramide->changerPointeurs();
+        setLabelJC();
+        update();
+    }
+    else{
+        popUpInfo* infos = new popUpInfo(nullptr, message.toStdString());
+        infos->show();
+    }
+}
+
+
+void pageJeu::handleReservationCarte(position* p){
+    // Ajouter achat jeton
+
+    std::pair<int, int> coord = std::make_pair(p->getx(), p->gety());
+    //const Carte* carte_tmp = control->getPyramide().getCarte(coord.first, coord.second);
+    bool next = true;
+
+    if(next){
+        control->acheterCarteJoaillerie(coord);
+        control->changerJoueurCourant();
+        control->setNouveauTour(false);
+    }
+}
 
 void pageJeu::handleValidationCarte(position* p){
     std::pair<int, int> coord = std::make_pair(p->getx(), p->gety());
@@ -138,7 +177,7 @@ void pageJeu::handleValidationCarte(position* p){
         next = handleCapa(carte_tmp->getCapacite1(), carte_tmp->getCapacite2());
     }
     if(next){
-        control->acheterCarteJoaillerie(coord);
+        control->orReserverCarte(coord);
         control->changerJoueurCourant();
         control->setNouveauTour(false);
     }

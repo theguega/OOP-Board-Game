@@ -100,6 +100,7 @@ public:
     void verifSacvide();
     void verifOrSurPlateau();
     void verifTroisCarteReserve();
+    bool verifTroisCarteReserveBool();
     void verifJetonSupDix();
     bool verifAchatCarte(const Carte* carte);
     vector<pair<int, int>> GenereCartePyramideDispo();
@@ -113,6 +114,8 @@ public:
     void acheterCarteJoaillerie(std::pair<int, int> coord);
 
     std::pair<bool, QString> verifReservationCarte(std::pair<int, int> coord);
+    void orReserverCarte(std::pair<int, int> coord);
+
 
 
 };

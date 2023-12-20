@@ -78,12 +78,16 @@ public:
 
 public slots:
     void validerSelectionCarte(position* p);
+    void validerResaCarte(position* p);
+
     void afficherPrivileges();
 
 private slots:
     void validerSelectionJeton();
 
     void handleValidationCarte(position* p);
+    void handleReservationCarte(position* p);
+
     bool handleCapa(Capacite capa1, Capacite capa2);
 };
 
