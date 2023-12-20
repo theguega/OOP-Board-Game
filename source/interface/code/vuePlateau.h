@@ -75,6 +75,7 @@ public:
     position* selecteOr();
     //vueJeton* recupererBouton(Jeton* jeton);
     //void remplirPlateau();
+    QPushButton* getBoutonValiderPriv() const {return boutonValiderPrivilege; }
 signals:
     void signalValiderAppuye();
     void signalValiderPrivilegeAppuye();

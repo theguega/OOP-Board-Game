@@ -143,7 +143,9 @@ class Plateau {
         bool estVide() const;
         bool caseVide(unsigned int i, unsigned int j) const;
         bool caseOr(unsigned int i, unsigned int j) const;
+        bool caseCouleur(Couleur couleur, unsigned int i, unsigned int j) const;
         bool contientOr()const;
+        bool contientCouleur(Couleur coul);
         bool contientOnlyOr() const;
         size_t getLargeurMatrice() const { return jetons.size(); }
         size_t getNbJetons() const;

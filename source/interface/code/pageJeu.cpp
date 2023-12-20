@@ -237,7 +237,7 @@ void pageJeu::handleValidationCarte(position* p){
     const Carte* carte_tmp = control->getPyramide().getCarte(coord.first, coord.second);
     bool next = true;
     if(carte_tmp->getCapacite1()!=Capacite::None || carte_tmp->getCapacite2()!=Capacite::None){
-        next = handleCapa(carte_tmp->getCapacite1(), carte_tmp->getCapacite2());
+        next = handleCapa(carte_tmp, carte_tmp->getCapacite1(), carte_tmp->getCapacite2());
     }
     if(next){
         control->acheterCarteJoaillerie(coord);
@@ -248,25 +248,38 @@ void pageJeu::handleValidationCarte(position* p){
 
 
 
-bool pageJeu::handleCapa(Capacite capa1, Capacite capa2){
-    popUpInfo* info_nouveau_tour = new popUpInfo(nullptr, "La capacité de la carte vous permetd e joueur un nouveau tour");
+bool pageJeu::handleCapa(const Carte* c, Capacite capa1, Capacite capa2){
+    popUpInfo* info_nouveau_tour = new popUpInfo(nullptr, "La capacité de la carte vous permet de joueur un nouveau tour");
+    popUpInfo* info_take_jeton_from_bonus = new popUpInfo(nullptr, "La capacité de la carte vous permet de recuperer un jeton de la couleur du bonus de la carte");
     popUpChoixCouleur choixCouleur(control);
     int valid;
+
     switch(capa1){
+
     case Capacite::AssociationBonus:
         valid = choixCouleur.exec();
         if(valid==QDialog::Accepted){
             return true;
         }
         break;
+
     case Capacite::NewTurn:
         info_nouveau_tour->show();
         control->setNouveauTour(true);
         return true;
+
     case Capacite::TakeJetonFromBonus:
+        if(control->getPlateau().contientCouleur(c->getBonus().getCouleur())){
+            info_take_jeton_from_bonus->show();
+            capa_en_cours = std::make_pair(true, c->getBonus().getCouleur());
+            vPyramide->setEnabled(false);
+            vPlateau->getBoutonValiderPriv()->setEnabled(false);
+        }
         return true;
+
     case Capacite::TakeJetonToAdv:
         return true;
+
     case Capacite::TakePrivilege:
         if (control->getPlateau().getNbPrivileges()==0){
             //si il n'y a plus de privileges sur le plateau

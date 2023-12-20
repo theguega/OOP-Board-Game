@@ -401,7 +401,15 @@ bool Plateau::caseOr(unsigned int i, unsigned int j) const{
     if(jetons[i][j]->getCouleur() == Couleur::OR)
         return true;
     return false;
-};
+}
+
+
+bool Plateau::caseCouleur(Couleur couleur, unsigned int i, unsigned int j) const{
+    if(jetons[i][j]->getCouleur() == couleur)
+        return true;
+    return false;
+}
+
 
 bool Plateau::contientOr() const {
     for(int i =0; i <5; i++){
@@ -412,6 +420,18 @@ bool Plateau::contientOr() const {
     }
     return false;
 }
+
+
+bool Plateau::contientCouleur(Couleur coul){
+    for(int i =0; i <5; i++){
+        for(int j = 0; j<5; j++){
+            if(!caseVide(i, j) && caseCouleur(coul, i, j))
+                return true;
+        }
+    }
+    return false;
+}
+
 
 bool Plateau::contientOnlyOr() const{
     for(int i =0; i <5; i++){
