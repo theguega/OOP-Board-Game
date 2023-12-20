@@ -74,8 +74,9 @@ void pageJoueur::refreshJoueur(Joueur* joueurCourant){
                 const Carte* temp = &joueur->getCarte(couleur, i);
                 if(!estDansCartes(temp)){
                     vueCarteJoueur* vcj = new vueCarteJoueur(nullptr, hC, lC, temp);
-                    vcj->setPasReserver();
-                    vcj->setComplete();
+                    vcj->setEstReservee(false);
+                    vcj->setEstRetournee(true);
+                    vcj->setEstComplete(true);
                     cartesPossedees.push_back(vcj);
                     cartesPossedeesLayout->addWidget(vcj);
                 }
@@ -84,10 +85,10 @@ void pageJoueur::refreshJoueur(Joueur* joueurCourant){
     }
     for(size_t i = 0; i < cartesPossedees.size(); i++){
         if(i == cartesPossedees.size() - 1){
-            cartesPossedees[i]->setComplete();
+            cartesPossedees[i]->setEstComplete(true);
         }
         else{
-            cartesPossedees[i]->setIncomplete();
+            cartesPossedees[i]->setEstComplete(false);
         }
     }
 
@@ -97,11 +98,13 @@ void pageJoueur::refreshJoueur(Joueur* joueurCourant){
             for(size_t i = 0; i < joueur->getNbCartesReservees(couleur); i++){
                 const Carte* temp = &joueur->getCarteReservee(couleur, i);
                 cartesReservees[k]->setCarte(temp);
+                cartesReservees[k]->setEstComplete(true);
+                cartesReservees[k]->setEstReservee(true);
                 if(joueurCourant == joueur){
-                    cartesReservees[k]->setComplete();
+                    cartesReservees[k]->setEstRetournee(true);
                 }
                 else{
-                    cartesReservees[k]->setIncomplete();
+                    cartesReservees[k]->setEstRetournee(false);
                 }
                 k++;
             }

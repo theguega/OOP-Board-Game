@@ -322,11 +322,11 @@ position* vuePlateau::selecteOr(){
     int nbOr = 0;
     for(int i = 0; i < 3; i++){
         if(jetonSelection[i] != nullptr){
-            if(jetonSelection[i]->getJeton()->getCouleur() == OR){
+            if(jetonSelection[i]->getJeton()->getCouleur() == Couleur::OR){
                 nbOr += 1;
             }
             else{
-                return nullptr
+                return nullptr;
             }
         }
     }
