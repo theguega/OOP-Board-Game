@@ -115,12 +115,12 @@ private:
     const Carte* carte;
     bool estComplete;
     bool estReservee;
+    bool estRetournee;
 public:
     vueCarteJoueur(QWidget* parent, int hauteur, int largeur, const Carte* c);
-    void setIncomplete(){estComplete = false;}
-    void setComplete(){estComplete = true;}
-    void setReserver(){estReservee = true; estComplete = true;}
-    void setPasReserver(){estReservee = false;}
+    void setEstReservee(bool b){estReservee = b;}
+    void setEstComplete(bool b){estComplete = b;}
+    void setEstRetournee(bool b){estRetournee = b;}
     void setCarte(const Carte* c){carte = c;}
     const Carte* getCarte(){return carte;}
 protected:
