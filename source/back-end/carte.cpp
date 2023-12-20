@@ -216,60 +216,61 @@ QDebug operator<<(QDebug f, const Carte & c) {
     return f;
 }
 
-string Carte::getInfos() const {
+std::string Carte::getInfos() const {
     std::ostringstream oss;
-    oss << "Capacites : \n";
-    if(getCapacite1() == Capacite::None && getCapacite2() == Capacite::None){
-        oss << "Aucune capacite\n";
+
+    if (getCapacite1() == Capacite::None && getCapacite2() == Capacite::None) {
+        oss << "Aucune capacite(s) ";
         return oss.str();
     }
-    if (getCapacite1() != Capacite::None){
-        oss << CapacitetoShort(getCapacite1());
-        switch(getCapacite1()){
+
+    if (getCapacite1() != Capacite::None) {
+        switch (getCapacite1()) {
         case Capacite::NewTurn:
-            oss << "\nJouer un \nnouveau tour\n";
+            oss << "Rejouer";
             break;
         case Capacite::TakePrivilege:
-            oss << "\nPrendre \n1 Privilege\n";
-            break;
+            oss << "Prendre 1 Privilège";
+                break;
         case Capacite::TakeJetonFromBonus:
-            oss << "\nPrendre sur le \nplateau 1 jeton\nde la couleur du \nbonus de cette \ncarte\n";
+            oss << "Prendre 1 jeton de la couleur de la carte";
             break;
         case Capacite::TakeJetonToAdv:
-            oss << "\nPrendre 1 jeton \na l'adversaire \n(sauf jeton Or)\n";
+            oss << "Prendre un jeton de l'adversaire";
             break;
         case Capacite::AssociationBonus:
-            oss << "\nCopier la couleur \nd'un bonus deja \nacquis\n";
+            oss << "Copier la couleur d'une de vos cartes";
             break;
         default:
             throw SplendorException("Capacite inconnue");
         }
     }
 
-    if (getCapacite2() != Capacite::None){
-        oss << CapacitetoShort(getCapacite2());
-        switch(getCapacite2()){
+    if (getCapacite2() != Capacite::None) {
+        oss << " Et ";
+        switch (getCapacite2()) {
         case Capacite::NewTurn:
-            oss << "\nJouer un \nnouveau tour\n";
+            oss << "Rejouer ";
             break;
         case Capacite::TakePrivilege:
-            oss << "\nPrendre \n1 Privilege\n";
-            break;
+            oss << "Prendre 1 Privilège";
+                break;
         case Capacite::TakeJetonFromBonus:
-            oss << "\nPrendre sur le \nplateau 1 jeton\nde la couleur du \nbonus de cette \ncarte\n";
+            oss << "Prendre 1 jeton de la couleur de la carte";
             break;
         case Capacite::TakeJetonToAdv:
-            oss << "\nPrendre 1 jeton \na l'adversaire \n(sauf jeton Or)\n";
+            oss << "Prendre un jeton de l'adversaire";
             break;
         case Capacite::AssociationBonus:
-            oss << "\nCopier la couleur \nd'un bonus deja \nacquis\n";
+            oss << "Copier la couleur d'une de vos cartes";
             break;
         default:
             throw SplendorException("Capacite inconnue");
         }
     }
+
     return oss.str();
-};
+}
 
 
 

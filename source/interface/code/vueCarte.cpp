@@ -314,6 +314,9 @@ carteInfo::carteInfo(QWidget* parent, int hauteur, int largeur, std::string text
     palette.setColor(QPalette::WindowText, Qt::black);
     labelInfo->setPalette(palette);
 
+    labelInfo->setWordWrap(true); //pour que ça deborde pas de la carte
+    labelInfo->setAlignment(Qt::AlignCenter);
+
     layout = new QVBoxLayout;
     layout->addWidget(labelInfo);
     setLayout(layout);
