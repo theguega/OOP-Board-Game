@@ -1673,8 +1673,8 @@ std::pair<bool, QString> Controller::verifJetons(const std::vector<std::pair<int
 std::pair<bool, QString> Controller::verifReservationCarte(std::pair<int, int> coord){
     const Carte* carte = getPyramide().getCarte(coord.first, coord.second);
 
-    verifTroisCarteReserve();
-    verifOrSurPlateau();
+    //verifTroisCarteReserve();
+    //verifOrSurPlateau();
 
     if(verifTroisCarteReserveBool() ){
         return std::make_pair(false, "Vous ne pouvez resever la carte avec vous avez deja 3 cartes dans votre reserve");

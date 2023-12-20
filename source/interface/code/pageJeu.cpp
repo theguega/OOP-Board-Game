@@ -168,7 +168,7 @@ void pageJeu::handleReservationCarte(position* p){
     bool next = true;
 
     if(next){
-        control->acheterCarteJoaillerie(coord);
+        control->orReserverCarte(coord);
         control->changerJoueurCourant();
         control->setNouveauTour(false);
     }
