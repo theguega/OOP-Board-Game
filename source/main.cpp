@@ -22,34 +22,21 @@
 
 
 int main(int argc, char * argv[]) {
-    QApplication app(argc, argv);
-    toutesPages* page = new toutesPages(nullptr, &app);
-    page->show();
-    return app.exec();
+    int choix;
+    std::cout<<"\033[1;33mMode Console (1) ou Graphique (2) ?\n";
+    std::cin>>choix;
+    if (choix==1) {
+        try {
+            Controller control;
+            if(control.getStatutPartie()=="New")
+                control.lancerPartie();
+            control.jouer();
+        } catch (SplendorException& e) {qWarning() << e.getInfo() ;};
+        return 0;
+    } else {
+        QApplication app(argc, argv);
+        toutesPages* page = new toutesPages(nullptr, &app);
+        page->show();
+        return app.exec();
+    }
 }
-
-
-
-
-
-
-
-
-
-
-
-//####################################
-//###### Partie en mode Terminal #####
-//####################################
-
-
-/*int main(void) {
-    try {
-        Controller control;
-        if(control.getStatutPartie()=="New")
-            control.lancerPartie();
-        control.jouer();
-    } catch (SplendorException& e) {qWarning() << e.getInfo() ;};
-
-    return 0;
-}*/
