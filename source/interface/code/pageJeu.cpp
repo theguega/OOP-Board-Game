@@ -183,7 +183,7 @@ void pageJeu::handleValidationCarte(position* p){
         next = handleCapa(carte_tmp->getCapacite1(), carte_tmp->getCapacite2());
     }
     if(next){
-        control->orReserverCarte(coord);
+        control->acheterCarteJoaillerie(coord);
         control->changerJoueurCourant();
         control->setNouveauTour(false);
     }
