@@ -5,7 +5,9 @@ pageJoueur::pageJoueur(QWidget* parent, Joueur* joueur, int hP, int lP, int hC, 
     cartesReserveesLayout = new QVBoxLayout;
     cartesPossedeesLayout = new QVBoxLayout;
     cartesPossedeesLayout->setAlignment(Qt::AlignTop);
+    cartesPossedeesLayout->setSpacing(0);
     jetonsPossedesLayout = new QVBoxLayout;
+    jetonsPossedesLayout->setAlignment(Qt::AlignTop);
     informations = new QHBoxLayout;
     layoutBas = new QHBoxLayout;
     layout = new QVBoxLayout;
