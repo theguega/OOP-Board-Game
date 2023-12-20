@@ -473,7 +473,10 @@ void vueCarteJoueur::paintEvent(QPaintEvent* event){
     painter.setRenderHint(QPainter::Antialiasing);
 
     if(carte != nullptr){
-        if(estComplete && !estReservee){
+
+        show();
+
+        if((estComplete && !estReservee) || (estReservee && estRetournee)){
 
             setFixedSize(l, h);
 
