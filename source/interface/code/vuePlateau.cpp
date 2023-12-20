@@ -317,3 +317,28 @@ void boutonSac::paintEvent(QPaintEvent *event){
     painter.drawLine(l * 0.65, h * 0.1, l * 1.1, h * 0.25); // Corde droite
 
 }
+
+position* vuePlateau::selecteOr(){
+    int nbOr = 0;
+    for(int i = 0; i < 3; i++){
+        if(jetonSelection[i] != nullptr){
+            if(jetonSelection[i]->getJeton()->getCouleur() == OR){
+                nbOr += 1;
+            }
+            else{
+                return nullptr
+            }
+        }
+    }
+    if(nbOr != 1){
+        return nullptr;
+    }
+    else{
+        for(int i = 0; i < 3; i++){
+            if(jetonSelection[i] != nullptr){
+                return jetonSelection[i]->getPosition();
+            }
+        }
+    }
+    return nullptr;
+}
