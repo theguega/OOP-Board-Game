@@ -150,15 +150,13 @@ void pageJeu::validerResaCarte(position* pos){
             pageJeu::handleReservationCarte(pos);
         }
         delete validation;
-
-        vPyramide->changerPointeurs();
-        setLabelJC();
-        update();
     }
     else{
         popUpInfo* infos = new popUpInfo(nullptr, message.toStdString());
         infos->show();
     }
+
+    refresh();
 }
 
 
