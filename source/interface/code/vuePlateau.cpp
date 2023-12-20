@@ -206,6 +206,8 @@ void vuePlateau::changerPointeurs(){
     for(int i = 0; i < rnbJetons; i++){
         for(int j = 0; j < rnbJetons; j++){
             int k = i  * rnbJetons + j;
+            listeJetons[k]->show();
+            listeJetons[k]->enleverCroix();
             listeJetons[k]->setJeton(plateau.getJeton(i,j));
         }
     }
