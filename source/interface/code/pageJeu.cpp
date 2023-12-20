@@ -48,6 +48,7 @@ pageJeu::pageJeu(QString statut_partie, QString pseudo_j_1, type type_j_1, QStri
 
     bSac = new boutonSac(nullptr, (vPlateau->height() - 130)/4, 30);
     layoutPrivileges->addWidget(bSac);
+    connect(bSac, &QPushButton::clicked, this, &pageJeu::remplirPlateau);
 
 
 
@@ -295,4 +296,27 @@ void pageJeu::refresh(){
     setLabelJC();
     vPlateau->changerPointeurs();
     update();
+}
+
+void pageJeu::remplirPlateau() {
+    //verification si le sac est vide
+    if(!control->getPartie().getEspaceJeux().getSac().estVide()) {
+        //verification si le joueur a des privilege
+        if(control->getJoueurCourant().getNbPrivileges()!=0) {
+            //remplir le plateau
+            control->getEspaceJeux().getPlateau().remplirPlateau(control->getEspaceJeux().getSac());
+
+            //refresh
+            refresh();
+        } else {
+            popUpInfo* infos = new popUpInfo(nullptr, "Vous n'avez pas de privilege");
+            infos->show();
+            return;
+        }
+    } else{
+        popUpInfo* infos = new popUpInfo(nullptr, "Le sac est vide, vous ne pouvez pas remplir le plateau");
+        infos->show();
+        return;
+    }
+    refresh();
 }
