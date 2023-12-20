@@ -895,3 +895,96 @@ void vueCarteJoueur::paintEvent(QPaintEvent* event){
         hide();
     }
 }
+
+void vueCarteNoble::paintEvent(QPaintEvent *event){
+    QWidget::paintEvent(event);
+    QPainter painter(this);
+
+    painter.setRenderHint(QPainter::Antialiasing);
+
+    painter.setBrush(QColor("#FFC9A7"));
+    painter.setPen(QPen(Qt::black, 2));
+
+    painter.drawRect(rect());
+
+    QPolygonF rectangle; //Creer un polygone Qt
+    rectangle << QPointF(1, 1) << QPointF(l - 1, 1) << QPointF(l - 1, (h-1)/4) << QPointF(0, (h-1)/4); //Ajoute les points du triangle
+    painter.setBrush(QColor("#DE474E")); //Prend la couleur definit
+    painter.drawPolygon(rectangle); //Colorie le triangle
+    painter.setBrush(QColor("#9E251E")); //Prend la couleur definit
+    QPolygonF petitRect;
+    petitRect << QPointF(l/20, 1) << QPointF(l/5 + l/20, 1) << QPointF(l/5 + l/20, h/5) << QPointF(l/20, h/5);
+    painter.drawPolygon(petitRect);
+
+    painter.setBrush(QColor("#65617A"));
+    painter.drawEllipse(QPoint(l/2, 2*h/3 - 10), l/4, h/3);
+
+    painter.setBrush(QColor("#E9C6C4"));
+    painter.drawEllipse(QPoint(l/2, h / 3), h / 7, h / 7);
+
+    int radius = (h - 2)/15;
+    int centerX = 4 * l/5;
+    int centerY = (h-1)/8;
+    painter.setBrush(QColor("#844383"));
+
+    if(carte->getCapacite1() != Capacite::None){
+        painter.drawEllipse(QPoint(centerX, centerY), radius, radius);
+    }
+
+    painter.setPen(Qt::black); //Ajout le numero dans le triangle
+    painter.setFont(QFont("Arial", 12));
+    painter.drawText(l/10, h/6, QString::number(carte->getNbPtsPrivilege()));
+
+    QPolygonF couronne;
+
+    int hauteur = h/4;
+    centerX = l/2 + 1;
+    centerY = h/5.5;
+    int temp = h/3 - (h-1)/4;
+    int base = 2 * static_cast<int>(sqrt(radius*radius + temp * temp));
+    //int base = h/5;
+    int nbTriangle = 5, x, y, baseT, hauteurT;
+
+    // Configurer la couleur et l'épaisseur du contour
+    painter.setPen(QPen(Qt::black, 1));
+    painter.setBrush(QColor("#FFD700")); // Couleur dorée
+
+    x = centerX - base/2;
+    y = centerY;
+
+    baseT = (base/nbTriangle);
+
+    // Dessiner la couronne de 5 triangles isocèles
+    for (int i = 0; i < nbTriangle; ++i) {
+
+        QPolygonF triangle;
+
+
+        if(i == nbTriangle/2){
+            hauteurT = hauteur/4;
+        }
+        else if(i%2 == 1){
+            hauteurT = hauteur/8;
+        }
+        else{
+            hauteurT = hauteur/6;
+        }
+
+        couronne << QPointF(x + baseT*i, y); // Coin inférieur gauche
+        if(i == 0){
+            couronne << QPointF(x + baseT*i, y - hauteurT); // Sommet
+        }
+        else if(i == nbTriangle - 1){
+            couronne << QPointF(x + baseT*(i+1), y - hauteurT); // Sommet
+        }
+        else{
+            couronne << QPointF(x + baseT*i + baseT/2, y - hauteurT); // Sommet
+        }
+        couronne << QPointF(x + baseT*(i+1), y); // Coin inférieur droit
+    }
+
+    couronne << QPointF(x + baseT*(nbTriangle+1) - baseT, y + hauteur/5);
+    couronne << QPointF(x, y + hauteur/5);
+
+    painter.drawPolygon(couronne);
+}

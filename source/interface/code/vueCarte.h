@@ -127,4 +127,26 @@ protected:
     void paintEvent(QPaintEvent *event);
 };
 
+class vueCarteNoble : public QWidget{
+    Q_OBJECT
+private:
+    int h;
+    int l;
+
+    const Carte* carte;
+public:
+    vueCarteNoble(QWidget* parent, int hauteur, int largeur, const Carte* c) :
+        QWidget(parent), h(hauteur), l(largeur), carte(c){setFixedSize(l, h);}
+protected:
+    void paintEvent(QPaintEvent *event);
+    void mousePressEvent(QMouseEvent *event) override {
+        if (event->button() == Qt::LeftButton) {
+            qDebug() << "Clic gauche detecte sur le widget.";
+            emit nobleClique();
+        }
+    }
+signals:
+    void nobleClique();
+};
+
 #endif // VUECARTE_H
