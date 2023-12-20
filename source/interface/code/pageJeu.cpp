@@ -164,15 +164,13 @@ void pageJeu::validerResaCarte(position* pos){
             pageJeu::handleReservationCarte(pos, vPlateau->selecteOr());
         }
         delete validation;
-
-        vPyramide->changerPointeurs();
-        setLabelJC();
-        update();
     }
     else{
         popUpInfo* infos = new popUpInfo(nullptr, message.toStdString());
         infos->show();
     }
+
+    refresh();
 }
 
 
@@ -321,18 +319,17 @@ void pageJeu::refresh(){
 void pageJeu::remplirPlateau() {
     //verification si le sac est vide
     if(!control->getPartie().getEspaceJeux().getSac().estVide()) {
-        //verification si le joueur a des privilege
-        if(control->getJoueurCourant().getNbPrivileges()!=0) {
-            //remplir le plateau
-            control->getEspaceJeux().getPlateau().remplirPlateau(control->getEspaceJeux().getSac());
+        Plateau& plateau = control->getPartie().getEspaceJeux().getPlateau();
+        Sac& sac = control->getPartie().getEspaceJeux().getSac();
 
-            //refresh
-            refresh();
-        } else {
-            popUpInfo* infos = new popUpInfo(nullptr, "Vous n'avez pas de privilege");
-            infos->show();
-            return;
-        }
+        qDebug()<<"Le joueur rempli le plateau :\n" << plateau << '\n';
+
+        //on donne un privilege au joueur adverse
+        control->donPrivilegeAdverse();
+        //on remplit le plateau
+        plateau.remplirPlateau(sac);
+
+        qDebug()<<"Nouveau plateau : \n" << plateau;
     } else{
         popUpInfo* infos = new popUpInfo(nullptr, "Le sac est vide, vous ne pouvez pas remplir le plateau");
         infos->show();

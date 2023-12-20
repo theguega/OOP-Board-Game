@@ -7,10 +7,10 @@
 
 pageCreation::pageCreation(QWidget *parent) : QWidget(parent){
     choixPossibles1 = new QComboBox;
-    choixPossibles2 = new QComboBox;    
+    choixPossibles2 = new QComboBox;
 
-    choix1 << "Nouvelle Personne" << "IA 1" << "IA 2";
-    choix2 << "Nouvelle Personne" << "IA 1" << "IA 2";
+    choix1 << "Nouveaux Joueur";
+    choix2 << "Nouveaux Joueur";
 
     choixPossibles1 -> addItems(choix1);
     choixPossibles2 -> addItems(choix2);

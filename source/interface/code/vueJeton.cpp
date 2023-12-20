@@ -62,8 +62,6 @@ void vueJeton::paintEvent(QPaintEvent *event) {
     painter.setRenderHint(QPainter::Antialiasing); // Pour des bords plus lisses
 
     if(jeton != nullptr){
-        show();
-
         int side = qMin(width(), height()); // Taille minimale entre largeur et hauteur pour un carre
         QPoint center = rect().center(); // Centre du bouton
 

@@ -98,6 +98,7 @@ void pageJoueur::refreshJoueur(Joueur* joueurCourant){
             for(size_t i = 0; i < joueur->getNbCartesReservees(couleur); i++){
                 const Carte* temp = &joueur->getCarteReservee(couleur, i);
                 cartesReservees[k]->setCarte(temp);
+                cartesReservees[k]->show();
                 cartesReservees[k]->setEstComplete(true);
                 cartesReservees[k]->setEstReservee(true);
                 if(joueurCourant == joueur){
@@ -110,6 +111,7 @@ void pageJoueur::refreshJoueur(Joueur* joueurCourant){
             }
         }
     }
+
     for(int i = k; i < 3; i++){
         cartesReservees[i]->setCarte(nullptr);
     }
