@@ -77,6 +77,8 @@ pageJeu::pageJeu(QString statut_partie, QString pseudo_j_1, type type_j_1, QStri
     connect(aSauvegarde -> getBoutonNon(), &QPushButton::clicked, this, &pageJeu::rester);
     connect(vPlateau, &vuePlateau::signalValiderAppuye, this, &pageJeu::validerSelectionJeton);
     connect(vPyramide, &vuePyramide::cardClicked, this, &pageJeu::validerSelectionCarte);
+    connect(vPyramide, &vuePyramide::cardClickedResa, this, &pageJeu::validerResaCarte);
+
 
     afficherPrivileges();
 }

@@ -32,6 +32,7 @@ public:
     void changerPointeurs();
 signals:
     void cardClicked(position* pos);
+    void cardClickedResa(position* pos);
 };
 
 #endif // VUEPYRAMIDE_H

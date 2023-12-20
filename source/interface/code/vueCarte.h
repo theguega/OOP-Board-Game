@@ -71,7 +71,7 @@ protected:
             emit carteAchetee(pos);
         } else if (event->button() == Qt::RightButton) {
             qDebug() << "Clic droit detecte sur le widget.";
-            emit carteReservee();
+            emit carteReservee(pos);
         }
     }
 public:
@@ -83,7 +83,7 @@ public:
     void setCarte(const Carte* c){carte = c; visu->setCarte(c); info->setInfo(c->getInfos()); update();}
     const Carte* getCarte(){return carte;}
 signals:
-    void carteReservee();
+    void carteReservee(position* position);
     void carteAchetee(position* position);
 };
 

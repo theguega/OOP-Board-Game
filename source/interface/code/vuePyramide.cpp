@@ -16,6 +16,9 @@ vuePyramide::vuePyramide(QWidget* parent, int hauteur, int largeur, Pyramide& py
     {
         // Connect the cardClicked signal of each VueCarte to the cardClicked signal of VuePyramide.
         connect(carte, &vueCarte::carteAchetee, this, &vuePyramide::cardClicked);
+
+        connect(carte, &vueCarte::carteReservee, this, &vuePyramide::cardClickedResa);
+
     }
 
     // initialisation des paquets
