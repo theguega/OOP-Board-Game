@@ -49,7 +49,7 @@ pageJeu::pageJeu(QString statut_partie, QString pseudo_j_1, type type_j_1, QStri
 
     bSac = new boutonSac(nullptr, (vPlateau->height() - 130)/4, 30);
     layoutPrivileges->addWidget(bSac);
-    connect(bSac, &QPushButton::clicked, this, &pageJeu::remplirPlateau);
+
 
 
 
@@ -82,8 +82,10 @@ pageJeu::pageJeu(QString statut_partie, QString pseudo_j_1, type type_j_1, QStri
     connect(aSauvegarde -> getBoutonOui(), &QPushButton::clicked, this, &pageJeu::quitter);
     connect(aSauvegarde -> getBoutonNon(), &QPushButton::clicked, this, &pageJeu::rester);
     connect(vPlateau, &vuePlateau::signalValiderAppuye, this, &pageJeu::validerSelectionJeton);
+    connect(vPlateau, &vuePlateau::signalValiderPrivilegeAppuye, this, &pageJeu::validerSelectionJetonPrivi);
     connect(vPyramide, &vuePyramide::cardClicked, this, &pageJeu::validerSelectionCarte);
     connect(vPyramide, &vuePyramide::cardClickedResa, this, &pageJeu::validerResaCarte);
+    connect(bSac, &QPushButton::clicked, this, &pageJeu::remplirPlateau);
 
 
     refresh();
@@ -111,6 +113,43 @@ void pageJeu::validerSelectionJeton()
     }
 }
 
+
+void pageJeu::validerSelectionJetonPrivi()
+{
+    // Appeler la méthode verifJetons avec la sélection actuelle de la vue
+    std::pair<bool, QString> validationResult = control->verifJetons(vPlateau->getSelectionJetons());
+    bool isValid = validationResult.first;
+    const QString& message = validationResult.second;
+
+    // Traiter le résultat de la validation
+    if(isValid){
+        if(control->getJoueurCourant().getNbPrivileges() >= vPlateau->getSelectionJetons().size()) {
+
+            for (int i = 1; i <= vPlateau->getSelectionJetons().size();i++){
+
+                control -> getJoueurCourant().supPrivilege();
+
+            }
+
+            control->recupererJetons(vPlateau->getSelectionJetons());
+
+            refresh();
+
+        }
+        else{
+            const QString& message = " Pas assez de privileges ! ";
+            popUpInfo* infos = new popUpInfo(nullptr, message.toStdString());
+            infos->show();
+        }
+
+    }
+    else{
+        popUpInfo* infos = new popUpInfo(nullptr, message.toStdString());
+        infos->show();
+    }
+}
+
+
 void pageJeu::validerSelectionCarte(position* pos){
     std::pair<bool, QString> validationResult = control->verifAchatCarte(std::make_pair(pos->getx(), pos->gety()));
     bool isValid = validationResult.first;
@@ -135,23 +174,43 @@ void pageJeu::validerSelectionCarte(position* pos){
 }
 
 void pageJeu::validerResaCarte(position* pos){
+    bool isValidOr;
+    QString messageOr;
+
+    if(!vPlateau->selecteOr()){
+        isValidOr = false;
+        messageOr = QString("Sélectionnez un jeton Or.");
+
+    }
+    else {
+    std::pair<bool, QString> validationResultJeton = control->verifJetonOr(std::make_pair(vPlateau->selecteOr()->getx(), vPlateau->selecteOr()->gety()));
+    isValidOr = validationResultJeton.first;
+    messageOr = validationResultJeton.second;
+    }
+
+
+
     std::pair<bool, QString> validationResult = control->verifReservationCarte(std::make_pair(pos->getx(), pos->gety()));
     bool isValid = validationResult.first;
     const QString& message = validationResult.second;
 
-    if(isValid){
+    if(isValid && isValidOr){
         modalPopup* validation = new modalPopup(this, message, "Voulez-vous valider ?");
         int result =validation->exec();
 
         // Check the result (optional).
         if (result == QDialog::Accepted){
             // Modification
-            pageJeu::handleReservationCarte(pos);
+            pageJeu::handleReservationCarte(pos, vPlateau->selecteOr());
         }
         delete validation;
     }
-    else{
+    else if (!isValid){
         popUpInfo* infos = new popUpInfo(nullptr, message.toStdString());
+        infos->show();
+    }
+    else if (!isValidOr){
+        popUpInfo* infos = new popUpInfo(nullptr, messageOr.toStdString());
         infos->show();
     }
 
@@ -159,8 +218,11 @@ void pageJeu::validerResaCarte(position* pos){
 }
 
 
-void pageJeu::handleReservationCarte(position* p){
+void pageJeu::handleReservationCarte(position* p, position* pJ){
     // Ajouter achat jeton
+    std::pair<int, int> coordJeton  = std::make_pair(pJ->getx(), pJ->gety());
+    std::vector<std::pair<int, int>> tmp;
+    tmp.push_back(coordJeton);
 
     std::pair<int, int> coord = std::make_pair(p->getx(), p->gety());
     //const Carte* carte_tmp = control->getPyramide().getCarte(coord.first, coord.second);
@@ -168,6 +230,7 @@ void pageJeu::handleReservationCarte(position* p){
 
     if(next){
         control->orReserverCarte(coord);
+        control->recupererJetons(tmp);
         control->changerJoueurCourant();
         control->setNouveauTour(false);
     }
@@ -287,6 +350,7 @@ void pageJeu::afficherPrivileges(){
     }
 }
 
+
 void pageJeu::refresh(){
     afficherPrivileges();
     vPyramide->changerPointeurs();
@@ -296,6 +360,7 @@ void pageJeu::refresh(){
     vPlateau->changerPointeurs();
     update();
 }
+
 
 void pageJeu::remplirPlateau() {
     //verification si le sac est vide
@@ -317,4 +382,5 @@ void pageJeu::remplirPlateau() {
         return;
     }
     refresh();
+    update();
 }

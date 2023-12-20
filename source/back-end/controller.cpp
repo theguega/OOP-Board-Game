@@ -1529,6 +1529,15 @@ vector<int> Controller::verifActionsImpossibles(){
 ///////////// Verif de la partie graphique ///////////////////
 //////////////////////////////////////////////////////////////
 
+std::pair<bool, QString> Controller::verifJetonOr(std::pair<int, int> coord){
+    if(!coord.first && !coord.second){
+        auto output = std::make_pair(false, "Veuillez selectionner UN jeton or.");
+        return output;
+    }
+    auto output = std::make_pair(true, "");
+    return output;
+}
+
 //TODO
 std::pair<bool, QString> Controller::verifJetons(const std::vector<std::pair<int, int>>& coord, bool capa, Couleur coulBonus){
     std::vector<std::pair<int, int>> coord_tmp = coord;
@@ -1676,7 +1685,7 @@ std::pair<bool, QString> Controller::verifReservationCarte(std::pair<int, int> c
     //verifOrSurPlateau();
 
     if(verifTroisCarteReserveBool() ){
-        return std::make_pair(false, "Vous ne pouvez resever la carte avec vous avez deja 3 cartes dans votre reserve");
+        return std::make_pair(false, "Vous ne pouvez resever la carte, vous avez deja 3 cartes dans votre reserve");
     }
     // A modifier pour vois si on a bien un jeton Or
     if(verifTroisCarteReserveBool() ){
