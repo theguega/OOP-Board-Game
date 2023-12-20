@@ -115,6 +115,8 @@ public:
 
     std::pair<bool, QString> verifReservationCarte(std::pair<int, int> coord);
     void orReserverCarte(std::pair<int, int> coord);
+    std::pair<bool, QString> verifJetonOr(std::pair<int, int> coord);
+
 
 
 };

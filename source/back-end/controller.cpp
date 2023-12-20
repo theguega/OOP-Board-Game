@@ -1530,6 +1530,15 @@ vector<int> Controller::verifActionsImpossibles(){
 ///////////// Verif de la partie graphique ///////////////////
 //////////////////////////////////////////////////////////////
 
+std::pair<bool, QString> Controller::verifJetonOr(std::pair<int, int> coord){
+    if(!coord.first && !coord.second){
+        auto output = std::make_pair(false, "Veuillez selectionner UN jeton or.");
+        return output;
+    }
+    auto output = std::make_pair(true, "");
+    return output;
+}
+
 //TODO
 std::pair<bool, QString> Controller::verifJetons(const std::vector<std::pair<int, int>>& coord, bool capa, Couleur coulBonus){
     std::vector<std::pair<int, int>> coord_tmp = coord;
