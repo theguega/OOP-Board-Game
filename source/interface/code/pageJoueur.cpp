@@ -3,6 +3,7 @@
 pageJoueur::pageJoueur(QWidget* parent, Joueur* joueur, int hP, int lP, int hC, int lC, int tj) :
     QWidget(parent), hP(hP), lP(lP), hC(hC), lC(lC), tailleJeton(tj), joueur(joueur){
     cartesReserveesLayout = new QVBoxLayout;
+    cartesReserveesLayout->setAlignment(Qt::AlignTop);
     cartesPossedeesLayout = new QVBoxLayout;
     cartesPossedeesLayout->setAlignment(Qt::AlignTop);
     cartesPossedeesLayout->setSpacing(0);
