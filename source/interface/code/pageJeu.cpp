@@ -135,23 +135,39 @@ void pageJeu::validerSelectionCarte(position* pos){
 }
 
 void pageJeu::validerResaCarte(position* pos){
+    bool isValidOr;
+    QString messageOr = "oui";
+
+    if(!vPlateau->selecteOr()){
+        isValidOr = false;
+        messageOr = QString("Sélectionner un jeton Or.");
+
+    }
+    else {
+    std::pair<bool, QString> validationResultJeton = control->verifJetonOr(std::make_pair(vPlateau->selecteOr()->getx(), vPlateau->selecteOr()->gety()));
+    isValidOr = validationResultJeton.first;
+    //messageOr = validationResultJeton.second;
+    }
+
+
+
     std::pair<bool, QString> validationResult = control->verifReservationCarte(std::make_pair(pos->getx(), pos->gety()));
     bool isValid = validationResult.first;
     const QString& message = validationResult.second;
 
-    if(isValid){
+    if(isValid && isValidOr){
         modalPopup* validation = new modalPopup(this, message, "Voulez-vous valider ?");
         int result =validation->exec();
 
         // Check the result (optional).
         if (result == QDialog::Accepted){
             // Modification
-            pageJeu::handleReservationCarte(pos);
+            pageJeu::handleReservationCarte(pos, vPlateau->selecteOr());
         }
         delete validation;
     }
     else{
-        popUpInfo* infos = new popUpInfo(nullptr, message.toStdString());
+        popUpInfo* infos = new popUpInfo(nullptr, messageOr.toStdString());
         infos->show();
     }
 
@@ -159,8 +175,11 @@ void pageJeu::validerResaCarte(position* pos){
 }
 
 
-void pageJeu::handleReservationCarte(position* p){
+void pageJeu::handleReservationCarte(position* p, position* pJ){
     // Ajouter achat jeton
+    std::pair<int, int> coordJeton  = std::make_pair(pJ->getx(), pJ->gety());
+    std::vector<std::pair<int, int>> tmp;
+    tmp.push_back(coordJeton);
 
     std::pair<int, int> coord = std::make_pair(p->getx(), p->gety());
     //const Carte* carte_tmp = control->getPyramide().getCarte(coord.first, coord.second);
@@ -168,6 +187,7 @@ void pageJeu::handleReservationCarte(position* p){
 
     if(next){
         control->orReserverCarte(coord);
+        control->recupererJetons(tmp);
         control->changerJoueurCourant();
         control->setNouveauTour(false);
     }
