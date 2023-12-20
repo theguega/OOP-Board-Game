@@ -238,7 +238,7 @@ void Joueur::supCarteNoble(const Carte& carte){
 
 
 void::Joueur::supJeton(Jeton *jeton, EspaceJeux& espaceJeux) {
-    for (size_t i = 0; i < jetons[jeton->getCouleur()].size(); i++) {
+    for (int i = 0; i < jetons[jeton->getCouleur()].size(); i++) {
         if (jetons[jeton->getCouleur()][i] == jeton) {
             // On rajoute le jeton dans le sac
             espaceJeux.getSac().ajouterJeton(*jetons[jeton->getCouleur()][i]);
@@ -251,7 +251,7 @@ void::Joueur::supJeton(Jeton *jeton, EspaceJeux& espaceJeux) {
 
 
 void Joueur::supJetonNb(unsigned int nb, Couleur c, EspaceJeux& espaceJeux){
-    for (size_t i = 0; i < nb; i++) {
+    for (int i = 0; i < nb; i++) {
         // On rajoute le jeton dans le sac
         espaceJeux.getSac().ajouterJeton(*jetons[c].back());
         // On supprime le jeton du joueur

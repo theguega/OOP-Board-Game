@@ -1082,12 +1082,12 @@ void Controller::acheterCarteJoaillerie(std::pair<int, int> coord){
 
 
 void Controller::paiementCarte(const Carte &carte, EspaceJeux& espaceJeux){
-    unsigned int needBlanc =  carte.getPrix().getBlanc() ;
-    unsigned int needBleu =  carte.getPrix().getBleu();
-    unsigned int needVert =  carte.getPrix().getVert();
-    unsigned int needRouge =  carte.getPrix().getRouge();
-    unsigned int needNoir =  carte.getPrix().getNoir();
-    unsigned int needPerle = carte.getPrix().getPerle();
+    int needBlanc =  carte.getPrix().getBlanc() ;
+    int needBleu =  carte.getPrix().getBleu();
+    int needVert =  carte.getPrix().getVert();
+    int needRouge =  carte.getPrix().getRouge();
+    int needNoir =  carte.getPrix().getNoir();
+    int needPerle = carte.getPrix().getPerle();
 
 
     unsigned int nbBlanc = 0;
@@ -1173,7 +1173,7 @@ void Controller::paiementCarte(const Carte &carte, EspaceJeux& espaceJeux){
     unsigned int jetonsOrUtilises = 0;
 
     // Fonction pour ajouter des jetons or a une couleur donnee
-    auto ajouterJetonsOr = [&jetonsOrUtilises, &nbOr](unsigned int& nbCouleur, unsigned int& besoin) {
+    auto ajouterJetonsOr = [&jetonsOrUtilises, &nbOr](unsigned int& nbCouleur, int& besoin) {
         while (nbOr > 0 && besoin > nbCouleur) {
             // Utiliser un jeton or pour completer le besoin
             nbOr--;
@@ -1316,12 +1316,12 @@ vector<pair<Couleur, int>> Controller::GenereCarteResaDispo(){
 
 bool Controller::verifAchatCarte(const Carte* carte) {
     // recup des points necessaires pour acheter la carte
-    unsigned int needBlanc =  carte->getPrix().getBlanc() ;
-    unsigned int needBleu =  carte->getPrix().getBleu();
-    unsigned int needVert =  carte->getPrix().getVert();
-    unsigned int needRouge =  carte->getPrix().getRouge();
-    unsigned int needNoir =  carte->getPrix().getNoir();
-    unsigned int needPerle = carte->getPrix().getPerle();
+    int needBlanc =  carte->getPrix().getBlanc() ;
+    int needBleu =  carte->getPrix().getBleu();
+    int needVert =  carte->getPrix().getVert();
+    int needRouge =  carte->getPrix().getRouge();
+    int needNoir =  carte->getPrix().getNoir();
+    int needPerle = carte->getPrix().getPerle();
 
     // recup des nb de jetons du joueur
 
@@ -1413,7 +1413,7 @@ bool Controller::verifAchatCarte(const Carte* carte) {
     unsigned int jetonsOrUtilises = 0;
 
     // Fonction pour ajouter des jetons or a une couleur donnee
-    auto ajouterJetonsOr = [&jetonsOrUtilises, &nbOr](unsigned int& nbCouleur, unsigned int& besoin) {
+    auto ajouterJetonsOr = [&jetonsOrUtilises, &nbOr](unsigned int& nbCouleur, int& besoin) {
         while (nbOr > 0 && besoin > nbCouleur) {
             // Utiliser un jeton or pour completer le besoin
             nbOr--;
@@ -1697,12 +1697,12 @@ std::pair<bool, QString> Controller::verifAchatCarte(std::pair<int, int> coord){
         return std::make_pair(false, "Vous ne pouvez pas acheter une carte avce la capacité Association Bonus tant que vous n'avez pas de carte au bonus défini");
     }
     // recup des points necessaires pour acheter la carte
-    unsigned int needBlanc =  carte->getPrix().getBlanc() ;
-    unsigned int needBleu =  carte->getPrix().getBleu();
-    unsigned int needVert =  carte->getPrix().getVert();
-    unsigned int needRouge =  carte->getPrix().getRouge();
-    unsigned int needNoir =  carte->getPrix().getNoir();
-    unsigned int needPerle = carte->getPrix().getPerle();
+    int needBlanc =  carte->getPrix().getBlanc() ;
+    int needBleu =  carte->getPrix().getBleu();
+    int needVert =  carte->getPrix().getVert();
+    int needRouge =  carte->getPrix().getRouge();
+    int needNoir =  carte->getPrix().getNoir();
+    int needPerle = carte->getPrix().getPerle();
 
     // recup des nb de jetons du joueur
 
@@ -1794,7 +1794,7 @@ std::pair<bool, QString> Controller::verifAchatCarte(std::pair<int, int> coord){
     unsigned int jetonsOrUtilises = 0;
 
     // Fonction pour ajouter des jetons or a une couleur donnee
-    auto ajouterJetonsOr = [&jetonsOrUtilises, &nbOr](unsigned int& nbCouleur, unsigned int& besoin) {
+    auto ajouterJetonsOr = [&jetonsOrUtilises, &nbOr](unsigned int& nbCouleur, int& besoin) {
         while (nbOr > 0 && besoin > nbCouleur) {
             // Utiliser un jeton or pour completer le besoin
             nbOr--;
