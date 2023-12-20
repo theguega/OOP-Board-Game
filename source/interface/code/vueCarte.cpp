@@ -532,7 +532,7 @@ void vueCarteJoueur::paintEvent(QPaintEvent* event){
             int centerX = 2 * l/5;
             int centerY = (h-1)/8;
 
-            for(int i = 0; i < carte->getBonus().getNbBonus(); i++){
+            for(unsigned int i = 0; i < carte->getBonus().getNbBonus(); i++){
                 painter.drawEllipse(QPoint(centerX, centerY), radius, radius);
                 centerX += 2 * h/15;
             }
@@ -692,7 +692,7 @@ void vueCarteJoueur::paintEvent(QPaintEvent* event){
             int hauteur = h/5;
             int nbTriangle = 5, x, y, baseT, hauteurT;
             y = centerY;
-            for(int i = 0; i < carte->getNbCouronnes(); i++){
+            for(unsigned int i = 0; i < carte->getNbCouronnes(); i++){
                 // Configurer la couleur et l'épaisseur du contour
                 painter.setPen(QPen(Qt::black, 0.5));
                 painter.setBrush(QColor("#FFD700")); // Couleur dorée
@@ -881,7 +881,7 @@ void vueCarteJoueur::paintEvent(QPaintEvent* event){
             int centerX = 2 * l/5;
             int centerY = (h-1)/8;
 
-            for(int i = 0; i < carte->getBonus().getNbBonus(); i++){
+            for(unsigned int i = 0; i < carte->getBonus().getNbBonus(); i++){
                 painter.drawEllipse(QPoint(centerX, centerY), radius, radius);
                 centerX += 2 * h/15;
             }

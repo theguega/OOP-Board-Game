@@ -9,7 +9,7 @@
 #include "vueJeton.h"
 
 grilleJetons::grilleJetons(QWidget* parent, int hauteur, int largeur, int nbJ, int tJ, std::vector<vueJeton*>* pt) :
-    QWidget(parent), h(hauteur), l(largeur), nbJetons(nbJ), tailleJeton(tJ), ptListeJetons(pt){
+    QWidget(parent), ptListeJetons(pt), nbJetons(nbJ), h(hauteur), l(largeur), tailleJeton(tJ){
 
     rnbJetons = static_cast<int>(sqrt(nbJetons));
     for(int i = 0; i < rnbJetons; i++){
@@ -186,17 +186,17 @@ vuePlateau::vuePlateau(QWidget* parent, int hauteur, int largeur, Plateau& plat)
 }
 
 void vuePlateau::placerJetons(){
-    for(int i = 0; i < rnbJetons; i++){
+    for(unsigned int i = 0; i < rnbJetons; i++){
         for(int j = 0; j < rnbJetons; j++){
             grille->placerJeton(plateau.getJeton(i,j), i , j);
         }
     }
-    for(int i = 0; i < listeJetons.size(); i++){
+    for(unsigned int i = 0; i < listeJetons.size(); i++){
         QObject::connect(listeJetons[i], &vueJeton::clicked, [this, i]() {
             boutonClique(i); //Permet d'appeler la fonction boutonClique(int i) lorsque le bouton i est clique
         });
     }
-    for(int i = 0; i < 3; i++){
+    for(unsigned int i = 0; i < 3; i++){
         jetonSelection[i] = nullptr; //Initialise jetonSelection avec nullptr
     }
     update();
@@ -316,4 +316,29 @@ void boutonSac::paintEvent(QPaintEvent *event){
     painter.drawLine(l * 0.65, h * 0.1, l * -1.2, h * 0.25); // Corde gauche
     painter.drawLine(l * 0.65, h * 0.1, l * 1.1, h * 0.25); // Corde droite
 
+}
+
+position* vuePlateau::selecteOr(){
+    int nbOr = 0;
+    for(int i = 0; i < 3; i++){
+        if(jetonSelection[i] != nullptr){
+            if(jetonSelection[i]->getJeton()->getCouleur() == OR){
+                nbOr += 1;
+            }
+            else{
+                return nullptr
+            }
+        }
+    }
+    if(nbOr != 1){
+        return nullptr;
+    }
+    else{
+        for(int i = 0; i < 3; i++){
+            if(jetonSelection[i] != nullptr){
+                return jetonSelection[i]->getPosition();
+            }
+        }
+    }
+    return nullptr;
 }

@@ -572,7 +572,7 @@ void Controller::utiliserPrivilege(Plateau& plateau){
             throw SplendorException("\n Plus de Jetons disponibles");
         }
 
-        for (int i =0; i<jetonsDispo.size(); i++) {
+        for (unsigned int i =0; i<jetonsDispo.size(); i++) {
             qDebug() << "(" << jetonsDispo[i].first << "," << jetonsDispo[i].second << ") (" << i << ")";
         }
 
@@ -678,7 +678,7 @@ void Controller::recupererJetons(bool capacite,Couleur coulBonus){
             throw SplendorException("\n Plus de Jetons disponibles");
         }
 
-        for (int i =0; i<jetonsDispo.size(); i++) {
+        for (unsigned int i =0; i<jetonsDispo.size(); i++) {
             qDebug() << "(" << jetonsDispo[i].first << "," << jetonsDispo[i].second << ") (" << i+1 << ")";
         }
 
@@ -853,7 +853,7 @@ bool Controller::acheterCarteJoaillerie (EspaceJeux& espaceJeux){
 
         qDebug() << "Voici les cartes reservees que vous pouvez acheter: \n";
 
-        for (int i =0; i < resa_dispo.size(); i++){
+        for (unsigned int i =0; i < resa_dispo.size(); i++){
             qDebug() << i+1 << " : \n" << joueurCourant->getCarteReservee(resa_dispo[i].first, resa_dispo[i].second) << "\n\n\n";
         }
 
@@ -918,7 +918,7 @@ bool Controller::acheterCarteJoaillerie (EspaceJeux& espaceJeux){
             throw SplendorException("Vous ne pouvez pas acheter de carte de la pyramide\n");
 
         qDebug() << "Voici les cartes que vous pouvez acheter : \n";
-        for (int i = 0; i < cartes_dispo.size(); i++)
+        for (unsigned int i = 0; i < cartes_dispo.size(); i++)
             qDebug() << i+1 << " : \n" <<  *getPyramide().getCarte(cartes_dispo[i].first, cartes_dispo[i].second) << "\n\n\n";
         unsigned int choix = strategy_courante->choix_min_max(1, cartes_dispo.size())-1;
 
@@ -1082,12 +1082,12 @@ void Controller::acheterCarteJoaillerie(std::pair<int, int> coord){
 
 
 void Controller::paiementCarte(const Carte &carte, EspaceJeux& espaceJeux){
-    int needBlanc =  carte.getPrix().getBlanc() ;
-    int needBleu =  carte.getPrix().getBleu();
-    int needVert =  carte.getPrix().getVert();
-    int needRouge =  carte.getPrix().getRouge();
-    int needNoir =  carte.getPrix().getNoir();
-    int needPerle = carte.getPrix().getPerle();
+    unsigned int needBlanc =  carte.getPrix().getBlanc() ;
+    unsigned int needBleu =  carte.getPrix().getBleu();
+    unsigned int needVert =  carte.getPrix().getVert();
+    unsigned int needRouge =  carte.getPrix().getRouge();
+    unsigned int needNoir =  carte.getPrix().getNoir();
+    unsigned int needPerle = carte.getPrix().getPerle();
 
 
     unsigned int nbBlanc = 0;
@@ -1173,7 +1173,7 @@ void Controller::paiementCarte(const Carte &carte, EspaceJeux& espaceJeux){
     unsigned int jetonsOrUtilises = 0;
 
     // Fonction pour ajouter des jetons or a une couleur donnee
-    auto ajouterJetonsOr = [&jetonsOrUtilises, &nbOr](unsigned int& nbCouleur, int& besoin) {
+    auto ajouterJetonsOr = [&jetonsOrUtilises, &nbOr](unsigned int& nbCouleur, unsigned int& besoin) {
         while (nbOr > 0 && besoin > nbCouleur) {
             // Utiliser un jeton or pour completer le besoin
             nbOr--;
@@ -1233,7 +1233,7 @@ void Controller::orReserverCarte (Pyramide& pyramide, Plateau& plateau){
         throw SplendorException("Plus de Jetons Or disponibles");
     }
 
-    for (int i =0; i<jetonsOrDispo.size(); i++) {
+    for (unsigned int i =0; i<jetonsOrDispo.size(); i++) {
         qDebug() << "(" << jetonsOrDispo[i].first << "," << jetonsOrDispo[i].second << ") (" << i + 1 << ")";
     }
 
@@ -1275,7 +1275,7 @@ void Controller::orReserverCarte (Pyramide& pyramide, Plateau& plateau){
 vector<pair<int, int>> Controller::GenereCartePyramideDispo(){
     vector<pair<int, int>> vect_tmp;
     for(int i = 0; i < 3; i++){
-        for(int j =0; j < getPyramide().getNbCartesNiv(i); j++){
+        for(unsigned int j =0; j < getPyramide().getNbCartesNiv(i); j++){
             if (getPyramide().getCarte(i, j)!=nullptr) {
                 if(verifAchatCarte(getPyramide().getCarte(i, j)))
                     vect_tmp.push_back(std::make_pair(i, j));
@@ -1294,7 +1294,7 @@ vector<pair<Couleur, int>> Controller::GenereCarteResaDispo(){
         Couleur couleur = couleurCartesPair.first;
         if (couleur != Couleur::OR) {
             const std::vector<const Carte*>& cartes = couleurCartesPair.second;
-            for (int i = 0; i < cartes.size(); i++) {
+            for (unsigned int i = 0; i < cartes.size(); i++) {
                 if (verifAchatCarte(cartes[i])) {
                     vect_tmp.push_back(std::make_pair(couleur, i));
                 }
@@ -1316,12 +1316,12 @@ vector<pair<Couleur, int>> Controller::GenereCarteResaDispo(){
 
 bool Controller::verifAchatCarte(const Carte* carte) {
     // recup des points necessaires pour acheter la carte
-    int needBlanc =  carte->getPrix().getBlanc() ;
-    int needBleu =  carte->getPrix().getBleu();
-    int needVert =  carte->getPrix().getVert();
-    int needRouge =  carte->getPrix().getRouge();
-    int needNoir =  carte->getPrix().getNoir();
-    int needPerle = carte->getPrix().getPerle();
+    unsigned int needBlanc =  carte->getPrix().getBlanc() ;
+    unsigned int needBleu =  carte->getPrix().getBleu();
+    unsigned int needVert =  carte->getPrix().getVert();
+    unsigned int needRouge =  carte->getPrix().getRouge();
+    unsigned int needNoir =  carte->getPrix().getNoir();
+    unsigned int needPerle = carte->getPrix().getPerle();
 
     // recup des nb de jetons du joueur
 
@@ -1413,7 +1413,7 @@ bool Controller::verifAchatCarte(const Carte* carte) {
     unsigned int jetonsOrUtilises = 0;
 
     // Fonction pour ajouter des jetons or a une couleur donnee
-    auto ajouterJetonsOr = [&jetonsOrUtilises, &nbOr](unsigned int& nbCouleur, int& besoin) {
+    auto ajouterJetonsOr = [&jetonsOrUtilises, &nbOr](unsigned int& nbCouleur, unsigned int& besoin) {
         while (nbOr > 0 && besoin > nbCouleur) {
             // Utiliser un jeton or pour completer le besoin
             nbOr--;
@@ -1671,7 +1671,7 @@ std::pair<bool, QString> Controller::verifJetons(const std::vector<std::pair<int
 }
 
 std::pair<bool, QString> Controller::verifReservationCarte(std::pair<int, int> coord){
-    const Carte* carte = getPyramide().getCarte(coord.first, coord.second);
+    //const Carte* carte = getPyramide().getCarte(coord.first, coord.second);
 
     //verifTroisCarteReserve();
     //verifOrSurPlateau();
@@ -1697,12 +1697,12 @@ std::pair<bool, QString> Controller::verifAchatCarte(std::pair<int, int> coord){
         return std::make_pair(false, "Vous ne pouvez pas acheter une carte avce la capacité Association Bonus tant que vous n'avez pas de carte au bonus défini");
     }
     // recup des points necessaires pour acheter la carte
-    int needBlanc =  carte->getPrix().getBlanc() ;
-    int needBleu =  carte->getPrix().getBleu();
-    int needVert =  carte->getPrix().getVert();
-    int needRouge =  carte->getPrix().getRouge();
-    int needNoir =  carte->getPrix().getNoir();
-    int needPerle = carte->getPrix().getPerle();
+    unsigned int needBlanc =  carte->getPrix().getBlanc() ;
+    unsigned int needBleu =  carte->getPrix().getBleu();
+    unsigned int needVert =  carte->getPrix().getVert();
+    unsigned int needRouge =  carte->getPrix().getRouge();
+    unsigned int needNoir =  carte->getPrix().getNoir();
+    unsigned int needPerle = carte->getPrix().getPerle();
 
     // recup des nb de jetons du joueur
 
@@ -1794,7 +1794,7 @@ std::pair<bool, QString> Controller::verifAchatCarte(std::pair<int, int> coord){
     unsigned int jetonsOrUtilises = 0;
 
     // Fonction pour ajouter des jetons or a une couleur donnee
-    auto ajouterJetonsOr = [&jetonsOrUtilises, &nbOr](unsigned int& nbCouleur, int& besoin) {
+    auto ajouterJetonsOr = [&jetonsOrUtilises, &nbOr](unsigned int& nbCouleur, unsigned int& besoin) {
         while (nbOr > 0 && besoin > nbCouleur) {
             // Utiliser un jeton or pour completer le besoin
             nbOr--;

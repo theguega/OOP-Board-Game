@@ -97,6 +97,12 @@ void pageJoueur::refreshJoueur(Joueur* joueurCourant){
             for(size_t i = 0; i < joueur->getNbCartesReservees(couleur); i++){
                 const Carte* temp = &joueur->getCarteReservee(couleur, i);
                 cartesReservees[k]->setCarte(temp);
+                if(joueurCourant == joueur){
+                    cartesReservees[k]->setComplete();
+                }
+                else{
+                    cartesReservees[k]->setIncomplete();
+                }
                 k++;
             }
         }
