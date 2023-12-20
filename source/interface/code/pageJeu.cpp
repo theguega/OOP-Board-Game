@@ -136,10 +136,11 @@ void pageJeu::validerSelectionCarte(position* pos){
 
 void pageJeu::validerResaCarte(position* pos){
     bool isValidOr;
+    QString messageOr = "oui";
 
     if(!vPlateau->selecteOr()){
         isValidOr = false;
-         const QString& messageOr = "Selectionner un jeton Or.";
+        messageOr = QString("Sélectionner un jeton Or.");
 
     }
     else {
@@ -166,7 +167,7 @@ void pageJeu::validerResaCarte(position* pos){
         delete validation;
     }
     else{
-        popUpInfo* infos = new popUpInfo(nullptr, message.toStdString());
+        popUpInfo* infos = new popUpInfo(nullptr, messageOr.toStdString());
         infos->show();
     }
 
