@@ -106,22 +106,54 @@ pageJeu::pageJeu(QString statut_partie, QString pseudo_j_1, type type_j_1, QStri
 
 void pageJeu::validerSelectionJeton()
 {
-    // Appeler la méthode verifJetons avec la sélection actuelle de la vue
-    std::pair<bool, QString> validationResult = control->verifJetons(vPlateau->getSelectionJetons());
-    bool isValid = validationResult.first;
-    const QString& message = validationResult.second;
+    if(capa_en_cours.first == false){
+        // Appeler la méthode verifJetons avec la sélection actuelle de la vue
+        std::pair<bool, QString> validationResult = control->verifJetons(vPlateau->getSelectionJetons());
+        bool isValid = validationResult.first;
+        const QString& message = validationResult.second;
 
-    // Traiter le résultat de la validation
-    if(isValid){
-        control->recupererJetons(vPlateau->getSelectionJetons());
-        control->changerJoueurCourant();
+        // Traiter le résultat de la validation
+        if(isValid){
+            control->recupererJetons(vPlateau->getSelectionJetons());
+            control->changerJoueurCourant();
 
-        refresh();
+            refresh();
+        }
+        else{
+            popUpInfo* infos = new popUpInfo(nullptr, message.toStdString());
+            infos->show();
+        }
+    } else {
+        std::vector<std::pair<int, int>> coord = vPlateau->getSelectionJetons();
+        if(coord.size() == 0)
+        {
+            popUpInfo* infos = new popUpInfo(nullptr, "Veuillez sélectionner un jeton");
+            infos->show();
+        } else if(coord.size() > 1)
+        {
+            popUpInfo* infos = new popUpInfo(nullptr, "Vous ne pouvez sélectionner qu'un seul jeton grâce à votre capacité");
+            infos->show();
+        } else
+        {
+            const Jeton* j_tmp = control->getPlateau().getJeton(coord[0].first, coord[0].second);
+            if(j_tmp->getCouleur() == capa_en_cours.second)
+            {
+                control->recupererJetons(vPlateau->getSelectionJetons());
+                vPyramide->setEnabled(true);
+                vPlateau->getBoutonValiderPriv()->setEnabled(true);
+                bSac->setEnabled(true);
+                capa_en_cours = make_pair(false, Couleur::INDT);
+                control->changerJoueurCourant();
+                control->setNouveauTour(false);
+                refresh();
+            }else
+            {
+                popUpInfo* infos = new popUpInfo(nullptr, "Vous devez sélectionner un jeton de la couleur de la carte");
+                infos->show();
+            }
+        }
     }
-    else{
-        popUpInfo* infos = new popUpInfo(nullptr, message.toStdString());
-        infos->show();
-    }
+
 }
 
 
@@ -316,23 +348,35 @@ void pageJeu::handleValidationCarte(position* p){
     }
     if(next){
         control->acheterCarteJoaillerie(coord);
-        control->changerJoueurCourant();
-        control->setNouveauTour(false);
+        if(capa_en_cours.first==false){
+            control->changerJoueurCourant();
+            control->setNouveauTour(false);
+        }
     }
 }
 
 
+<<<<<<< HEAD
+
+bool pageJeu::handleCapa(const Carte* c, Capacite capa1, Capacite capa2){
+    popUpInfo* info_nouveau_tour = new popUpInfo(nullptr, "La capacité de la carte vous permet de joueur un nouveau tour");
+    popUpInfo* info_take_jeton_from_bonus = new popUpInfo(nullptr, "La capacité de la carte vous permet de recuperer un jeton de la couleur du bonus de la carte. Veuillez sélectionner un jeton");
+    popUpChoixCouleur* choixCouleur = new popUpChoixCouleur(control);
+=======
 bool pageJeu::handleCapa(const Carte* c, Capacite capa1, Capacite capa2){
     popUpInfo* info_nouveau_tour = new popUpInfo(nullptr, "La capacité de la carte vous permet de joueur un nouveau tour");
     popUpInfo* info_take_jeton_from_bonus = new popUpInfo(nullptr, "La capacité de la carte vous permet de recuperer un jeton de la couleur du bonus de la carte");
     popUpChoixCouleur choixCouleur(control);
+>>>>>>> 6c25ab11d77e3a6305029b4e506f7b392ff3f3cf
     int valid;
 
     switch(capa1){
 
     case Capacite::AssociationBonus:
-        valid = choixCouleur.exec();
+        valid = choixCouleur->exec();
         if(valid==QDialog::Accepted){
+            QString selectedColor = choixCouleur->getSelectedColor();
+            qDebug() << "Couleur sélectionnée : " << selectedColor;
             return true;
         }
         break;
@@ -348,6 +392,7 @@ bool pageJeu::handleCapa(const Carte* c, Capacite capa1, Capacite capa2){
             capa_en_cours = std::make_pair(true, c->getBonus().getCouleur());
             vPyramide->setEnabled(false);
             vPlateau->getBoutonValiderPriv()->setEnabled(false);
+            bSac->setEnabled(false);
         }
         return true;
 
@@ -374,7 +419,7 @@ bool pageJeu::handleCapa(const Carte* c, Capacite capa1, Capacite capa2){
     }
     switch(capa2){
     case Capacite::AssociationBonus:
-        valid = choixCouleur.exec();
+        valid = choixCouleur->exec();
         if(valid==QDialog::Accepted){
             return true;
         }
