@@ -5,7 +5,6 @@
 #include <QRandomGenerator>
 #include <QPainterPath>
 #include <QHBoxLayout>
-#include <unistd.h>
 #include "vuePlateau.h"
 #include "vueJeton.h"
 
@@ -314,8 +313,7 @@ void boutonSac::paintEvent(QPaintEvent *event){
 
     painter.setBrush(QBrush(couleurSac));
     QPolygonF triangle;
-    triangle << QPointF(l * 0.5, h * 0.5) << QPointF(l * 0.65, 0)
-             << QPointF(l * 0.35, 0); // Points pour former un triangle
+    triangle << QPointF(l * 0.5, h * 0.5) << QPointF(l * 0.65, 0) << QPointF(l * 0.35, 0); // Points pour former un triangle
     painter.drawPolygon(triangle); // Triangle isocèle
 
     // Fond du sac : cercle avec un rectangle isocèle
@@ -333,9 +331,11 @@ position* vuePlateau::selecteOr(){
     for(int i = 0; i < 3; i++){
         if(jetonSelection[i] != nullptr){
             if(jetonSelection[i]->getJeton()->getCouleur() == Couleur::OR){
+                qDebug() << toStringCouleur(jetonSelection[i]->getJeton()->getCouleur());
                 nbOr += 1;
             }
             else{
+                qDebug() << toStringCouleur(jetonSelection[i]->getJeton()->getCouleur());
                 return nullptr;
             }
         }
