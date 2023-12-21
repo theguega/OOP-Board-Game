@@ -89,6 +89,8 @@ pageJeu::pageJeu(QString statut_partie, QString pseudo_j_1, type type_j_1, QStri
     connect(vPyramide, &vuePyramide::cardClicked, this, &pageJeu::validerSelectionCarte);
     connect(vPyramide, &vuePyramide::cardClickedResa, this, &pageJeu::validerResaCarte);
     connect(vPyramide, &vuePyramide::paquetClique, this, &pageJeu::validerResaCartePioche);
+    connect(joueur1, &pageJoueur::acheterCarteReservee, this, &pageJeu::validerAchatCarteReservee);
+    connect(joueur2, &pageJoueur::acheterCarteReservee, this, &pageJeu::validerAchatCarteReservee);
     connect(bSac, &QPushButton::clicked, this, &pageJeu::remplirPlateau);
 
 
@@ -459,4 +461,34 @@ void pageJeu::remplirPlateau() {
     }
     refresh();
     update();
+}
+
+void pageJeu::validerAchatCarteReservee(const Carte* carte){
+    if(control->getJoueurCourant() == joueur1->getJoueur()){
+        if(joueur1->positionDansMap(carte) != -1){
+            if(control->verifAchatCarte(carte)){
+                return;
+            }
+            else{
+                popUpInfo* infos = new popUpInfo(nullptr, "Vous ne pouvez pas acheter cette carte");
+            }
+        }
+        else{
+            popUpInfo* infos = new popUpInfo(nullptr, "Vous n'avez pas cette carte");
+        }
+    }
+    else if(control->getJoueurCourant() == joueur2->getJoueur()){
+        if(joueur1->positionDansMap(carte) != -1){
+            if(control->verifAchatCarte(carte)){
+                return;
+            }
+            else{
+                popUpInfo* infos = new popUpInfo(nullptr, "Vous ne pouvez pas acheter cette carte");
+            }
+        }
+        else{
+            popUpInfo* infos = new popUpInfo(nullptr, "Vous n'avez pas cette carte");
+        }
+    }
+    refresh();
 }
