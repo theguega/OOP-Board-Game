@@ -9,8 +9,6 @@ SOURCES += \
     interface/code/pageJeu.cpp \
     interface/code/pageJoueur.cpp \
     interface/code/pageMenuPrincipal.cpp \
-    interface/code/pagePrincipale.cpp \
-    interface/code/pageSauvegarde.cpp \
     interface/code/popUp.cpp \
     interface/code/toutesPages.cpp \
     interface/code/vueCarte.cpp \
@@ -31,8 +29,6 @@ HEADERS += \
     interface/code/pageJeu.h \
     interface/code/pageJoueur.h \
     interface/code/pageMenuPrincipal.h \
-    interface/code/pagePrincipale.h \
-    interface/code/pageSauvegarde.h \
     interface/code/popUp.h \
     interface/code/toutesPages.h \
     interface/code/vueCarte.h \

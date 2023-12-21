@@ -152,14 +152,6 @@ vuePlateau::vuePlateau(QWidget* parent, int hauteur, int largeur, Plateau& plat)
     l = largeur; //Def la largeur du plateau
 
     std::vector<Couleur> listeCouleur = { Couleur::BLANC, Couleur::BLEU, Couleur::VERT, Couleur::ROUGE, Couleur::NOIR, Couleur::PERLE, Couleur::OR};
-    std::vector<int> indices;
-    for (int i = 0; i < 25; ++i) {
-        indices.push_back(i % 7); // Utilisez l'operation modulo pour obtenir des indices entre 0 et n-1
-    }
-
-    // Melangez les indices pour les rendre aleatoires
-    std::mt19937 generateur(static_cast<unsigned int>(std::time(0)));
-    std::shuffle(indices.begin(), indices.end(), generateur);
 
     nbJetons = 25; //Nombre de jetons sur la plateau (sera recuperer depuis le back apres)
     rnbJetons = static_cast<int>(sqrt(nbJetons));

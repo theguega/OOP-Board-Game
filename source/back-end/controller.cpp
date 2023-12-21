@@ -143,12 +143,10 @@ Controller::Controller(QString statut_partie, QString pseudo_j_1, type type_j_1,
         if (query.next()) {
             int joueur_c = query.value(1).toInt();
             if (joueur_c == 0)
-                joueurCourant = partie->getJoueur1();
+                setJoueurCourant(0);
             else if (joueur_c == 1)
-                joueurCourant = partie->getJoueur2();
-            partie->setTour(query.value(2).toInt());
+                setJoueurCourant(1);
         }
-
         db.close();
     } else {
         throw SplendorException("Statut invalide");
