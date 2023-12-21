@@ -13,13 +13,9 @@ pageJeu::pageJeu(QString statut_partie, QString pseudo_j_1, type type_j_1, QStri
     setWindowTitle("SplendorDuel");
 
     control = new Controller(statut_partie, pseudo_j_1, type_j_1, pseudo_j_2, type_j_2);
-<<<<<<< HEAD
 
     if(statut_partie=="New")
         control->lancerPartie();
-=======
-    control->lancerPartie();
->>>>>>> b7a4e1ec47c6489baa1fce80b05573ff731f57e3
 
     ecran = QGuiApplication::primaryScreen();
     tailleEcran = ecran->availableGeometry().size();
