@@ -159,7 +159,7 @@ Capacite StringToCapacite(const std::string & capaciteStr) {
 }
 
 ostream & operator << (ostream & f,
-    const Prix & p) {
+                    const Prix & p) {
     f << toEmojiCouleur(Couleur::BLANC) << " : " << p.getBlanc() << "    " << toEmojiCouleur(Couleur::BLEU) << " : " << p.getBleu() << "\n";
     f << toEmojiCouleur(Couleur::VERT) << " : " << p.getVert() << "    " << toEmojiCouleur(Couleur::NOIR) << " : " << p.getNoir() << "\n";
     f << toEmojiCouleur(Couleur::ROUGE) << " : " << p.getRouge() << "    " << toEmojiCouleur(Couleur::PERLE) << " : " << p.getPerle() << "\n";
@@ -174,7 +174,7 @@ QDebug operator<<(QDebug f, const Prix &p) {
 }
 
 ostream & operator << (ostream & f,
-    const Bonus & b) {
+                    const Bonus & b) {
     f << b.getNbBonus() << " " << b.getCouleur();
     return f;
 }
@@ -202,7 +202,7 @@ Carte::Carte(TypeCarte t, Capacite c, unsigned int nbP, unsigned int id): type(t
 
 
 ostream & operator << (ostream & f,
-    const Carte & c) {
+                    const Carte & c) {
     f << "------------------------------\n";
     f << c.getType() << "   " << "Bonus : " << c.getBonus() << "\n";
     f << "------------------------------\n";

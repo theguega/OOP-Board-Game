@@ -14,17 +14,11 @@
 #include "interface/code/toutesPages.h"
 #include <iostream>
 
-
-
-//#########################################
-//###### Partie avec l'application Qt #####
-//#########################################
-
-
 int main(int argc, char * argv[]) {
     int choix;
-    std::cout<<"\033[1;33mMode Console (1) ou Graphique (2) ?\n";
-    std::cin>>choix;
+    std::cout<<"\033[1;33mMode Console (1) ou Graphique (2) ?\033[0m\n";
+    //std::cin>>choix;
+    choix=2;
     if (choix==1) {
         try {
             Controller control;

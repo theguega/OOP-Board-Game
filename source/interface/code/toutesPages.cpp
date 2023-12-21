@@ -12,6 +12,9 @@
 #include "pageCreation.h"
 
 toutesPages::toutesPages(QWidget* parent, QApplication* app) {
+    setWindowIcon(QIcon("gif/splendor.jpg"));
+    setWindowTitle("SplendorDuel");
+
     pageMenuPrincipal* menuPrincipal = new pageMenuPrincipal; //Ajoute la page menuPrincipal
     //pageJeu* jeu = new pageJeu; //Ajoute la page jeu (sert surement a rien car sera dans pageCreation)
     pageSauvegarde* scrollSauvegardes = new pageSauvegarde; //Ajoute la page scrollSauvegardes (a termes, changera por historique des joueurs)

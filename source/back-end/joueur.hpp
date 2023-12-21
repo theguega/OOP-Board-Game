@@ -102,6 +102,7 @@ public:
     bool estGagnant() const { return gagnant;}
 
     friend class Controller;
+    friend class LastPartieBuilder;
 };
 
 #endif

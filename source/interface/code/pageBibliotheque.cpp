@@ -19,7 +19,7 @@ pageBibliotheque::pageBibliotheque(QWidget *parent) : QScrollArea(parent){
 
     if (!db.open()) {
         qDebug() << "Erreur lors de l'ouverture de la base de donnees";
-            return;
+        return;
     }
 
     QSqlQueryModel *model = new QSqlQueryModel;
@@ -34,5 +34,3 @@ pageBibliotheque::~pageBibliotheque() {
     delete tableView;
     delete boutons;
 }
-
-

@@ -5,6 +5,7 @@
 #include <QRandomGenerator>
 #include <QPainterPath>
 #include <QHBoxLayout>
+#include <unistd.h>
 #include "vuePlateau.h"
 #include "vueJeton.h"
 

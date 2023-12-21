@@ -94,15 +94,12 @@ Controller::Controller() {
                 setJoueurCourant(0);
             else if (joueur_c == 1)
                 setJoueurCourant(1);
-            partie->setTour(query.value(2).toInt());
         }
-
         db.close();
     } else {
         throw SplendorException("Veuillez entrer un statut valide (New ou Old)");
     }
 }
-
 
 
 
@@ -897,6 +894,7 @@ bool Controller::acheterCarteJoaillerie (EspaceJeux& espaceJeux){
             qDebug()<<"Le bonus a bien ete ajoute\n";
 
             joueurCourant->cartes[coulBonus].push_back(&carte);
+            joueurCourant->supCarteReservee(carte);
             joueurCourant->ptsPrestige += carte.getNbPtsPrivilege();
             joueurCourant->nbCouronnes += carte.getNbCouronnes();
         } else{

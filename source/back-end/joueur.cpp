@@ -6,8 +6,8 @@
 
 std::string toStringType(type t) {
     switch (t) {
-        case type::IA: return "IA";
-        case type::HUMAIN: return "HUMAIN";
+    case type::IA: return "IA";
+    case type::HUMAIN: return "HUMAIN";
     }
     throw SplendorException("Type inconnu");
 }
