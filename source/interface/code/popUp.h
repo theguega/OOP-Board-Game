@@ -92,5 +92,29 @@ class popUpChoixCouleur : public QDialog {
         QLabel* label;
 };
 
+class popUpChoixJetonAdv : public QDialog {
+        Q_OBJECT
+    public:
+        popUpChoixJetonAdv(Controller* control, QWidget* parent = nullptr);
+    signals:
+        void colorSelected(const QString& color);
 
+    private slots:
+        void boutonClique(const QString& color) {
+            selectedColor = color;
+        }
+        void onAccepted() {
+            emit colorSelected(selectedColor);
+        }
+    public:
+        QString getSelectedColor() const {
+            return selectedColor;
+        }
+
+    private:
+        Controller* control;
+        QSignalMapper* signalMapper;
+        QString selectedColor;
+        QLabel* label;
+};
 #endif
