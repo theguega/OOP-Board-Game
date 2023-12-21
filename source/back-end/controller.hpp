@@ -63,6 +63,7 @@ public:
 	void lancerPartie();
     void changerJoueurCourant();
     void jouer();
+    void Tour_ia();
     void quitter();
 
     //Choix de l'action
