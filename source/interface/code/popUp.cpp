@@ -131,3 +131,47 @@ popUpChoixCouleur::popUpChoixCouleur(Controller* control, QWidget* parent) : QDi
     //connect(signalMapper, SIGNAL(mapped(QString)), this, SLOT(boutonClique(QString)));
     connect(this, SIGNAL(colorSelected(QString)), this, SLOT(boutonClique(QString)));
 }
+
+
+popUpChoixJetonAdv::popUpChoixJetonAdv(Controller* control, QWidget* parent) : QDialog(parent), control(control) {
+    QVBoxLayout* layout = new QVBoxLayout(this);
+    signalMapper = new QSignalMapper(this);
+    label = new QLabel("La capacité de la carte permet de recuperer un jeton à votre adversaire, veuillez selectionner une couleur de Jeton", this);
+    label->setWordWrap(true);
+    layout->addWidget(label);
+    // Example colors
+    QStringList colors = {"blanc", "bleu", "rouge", "vert", "noir", "perle"};
+
+    for (const QString& color : colors) {
+        int value = 0;
+        if (StringToCouleur(color.toStdString()) == Couleur::BLANC) {
+            value = control->getJoueurAdverse().getNbJetons(Couleur::BLANC);
+        } else if (StringToCouleur(color.toStdString()) == Couleur::BLEU) {
+            value = control->getJoueurAdverse().getNbJetons(Couleur::BLEU);
+        } else if (StringToCouleur(color.toStdString()) == Couleur::ROUGE) {
+            value = control->getJoueurAdverse().getNbJetons(Couleur::ROUGE);
+        } else if (StringToCouleur(color.toStdString()) == Couleur::VERT) {
+            value = control->getJoueurAdverse().getNbJetons(Couleur::VERT);
+        } else if (StringToCouleur(color.toStdString()) == Couleur::NOIR) {
+            value = control->getJoueurAdverse().getNbJetons(Couleur::NOIR);
+        } else if (StringToCouleur(color.toStdString()) == Couleur::PERLE) {
+            value = control->getJoueurAdverse().getNbJetons(Couleur::PERLE);
+        }
+        if (value != 0) {
+            QRadioButton* radioButton = new QRadioButton(color, this);
+            layout->addWidget(radioButton);
+            connect(radioButton, SIGNAL(clicked()), this, SLOT(boutonClique()));
+            connect(radioButton, SIGNAL(clicked()), this, SLOT(onAccepted()));
+            signalMapper->setMapping(radioButton, color);
+//            connect(radioButton, SIGNAL(clicked()), signalMapper, SLOT(map()));
+//            signalMapper->setMapping(radioButton, color);
+        }
+    }
+
+    QPushButton* okButton = new QPushButton("OK", this);
+    layout->addWidget(okButton);
+    connect(okButton, SIGNAL(clicked()), this, SLOT(accept()));
+
+    //connect(signalMapper, SIGNAL(mapped(QString)), this, SLOT(boutonClique(QString)));
+    connect(this, SIGNAL(colorSelected(QString)), this, SLOT(boutonClique(QString)));
+}
