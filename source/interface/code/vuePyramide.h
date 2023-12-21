@@ -34,6 +34,7 @@ public:
 signals:
     void cardClicked(position* pos);
     void cardClickedResa(position* pos);
+    void paquetClique(int nivPioche);
 };
 
 #endif // VUEPYRAMIDE_H

@@ -5,7 +5,6 @@
 #include <QRandomGenerator>
 #include <QPainterPath>
 #include <QHBoxLayout>
-#include <unistd.h>
 #include "vuePlateau.h"
 #include "vueJeton.h"
 
@@ -152,14 +151,6 @@ vuePlateau::vuePlateau(QWidget* parent, int hauteur, int largeur, Plateau& plat)
     l = largeur; //Def la largeur du plateau
 
     std::vector<Couleur> listeCouleur = { Couleur::BLANC, Couleur::BLEU, Couleur::VERT, Couleur::ROUGE, Couleur::NOIR, Couleur::PERLE, Couleur::OR};
-    std::vector<int> indices;
-    for (int i = 0; i < 25; ++i) {
-        indices.push_back(i % 7); // Utilisez l'operation modulo pour obtenir des indices entre 0 et n-1
-    }
-
-    // Melangez les indices pour les rendre aleatoires
-    std::mt19937 generateur(static_cast<unsigned int>(std::time(0)));
-    std::shuffle(indices.begin(), indices.end(), generateur);
 
     nbJetons = 25; //Nombre de jetons sur la plateau (sera recuperer depuis le back apres)
     rnbJetons = static_cast<int>(sqrt(nbJetons));
@@ -314,8 +305,7 @@ void boutonSac::paintEvent(QPaintEvent *event){
 
     painter.setBrush(QBrush(couleurSac));
     QPolygonF triangle;
-    triangle << QPointF(l * 0.5, h * 0.5) << QPointF(l * 0.65, 0)
-             << QPointF(l * 0.35, 0); // Points pour former un triangle
+    triangle << QPointF(l * 0.5, h * 0.5) << QPointF(l * 0.65, 0) << QPointF(l * 0.35, 0); // Points pour former un triangle
     painter.drawPolygon(triangle); // Triangle isocèle
 
     // Fond du sac : cercle avec un rectangle isocèle
@@ -333,9 +323,11 @@ position* vuePlateau::selecteOr(){
     for(int i = 0; i < 3; i++){
         if(jetonSelection[i] != nullptr){
             if(jetonSelection[i]->getJeton()->getCouleur() == Couleur::OR){
+                qDebug() << toStringCouleur(jetonSelection[i]->getJeton()->getCouleur());
                 nbOr += 1;
             }
             else{
+                qDebug() << toStringCouleur(jetonSelection[i]->getJeton()->getCouleur());
                 return nullptr;
             }
         }

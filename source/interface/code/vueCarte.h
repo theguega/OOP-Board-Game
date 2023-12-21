@@ -100,14 +100,21 @@ protected:
         if (event->button() == Qt::LeftButton) {
             qDebug() << "Clic gauche detecte sur le widget.";
         }
+        if(event->button() == Qt::RightButton){
+            //emit piocheClique(static_cast<int>(pioche->getTypeCarte()));
+            emit piocheClique(TypeCartetoInt(pioche->getTypeCarte()));
+        }
     }
     void paintEvent(QPaintEvent* event) override;
 public:
     vuePaquet(Pioche& p, int hauteur=0, int largeur=0, QWidget* parent = nullptr): QWidget(parent), h(hauteur), l(largeur), niveau(p.getTypeCarte()), pioche(&p){setFixedSize(l, h);}
     int getNbCartes(){return pioche->getNbCartes();}
+signals:
+    void piocheClique(int nivPioche);
 };
 
 class vueCarteJoueur : public QWidget{
+    Q_OBJECT
 private:
     int h;
     int l;
@@ -125,6 +132,14 @@ public:
     const Carte* getCarte(){return carte;}
 protected:
     void paintEvent(QPaintEvent *event);
+    void mousePressEvent(QMouseEvent *event) override {
+        if (event->button() == Qt::LeftButton && estRetournee){
+            qDebug() << "Clic gauche detecte sur le widget.";
+            emit carteAchetee(carte);
+        }
+    }
+signals:
+    void carteAchetee(const Carte* carte);
 };
 
 class vueCarteNoble : public QWidget{

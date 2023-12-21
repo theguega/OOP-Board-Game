@@ -143,12 +143,10 @@ Controller::Controller(QString statut_partie, QString pseudo_j_1, type type_j_1,
         if (query.next()) {
             int joueur_c = query.value(1).toInt();
             if (joueur_c == 0)
-                joueurCourant = partie->getJoueur1();
+                setJoueurCourant(0);
             else if (joueur_c == 1)
-                joueurCourant = partie->getJoueur2();
-            partie->setTour(query.value(2).toInt());
+                setJoueurCourant(1);
         }
-
         db.close();
     } else {
         throw SplendorException("Statut invalide");
@@ -170,8 +168,10 @@ void Controller::setJoueurCourant(int n) {
         break;
     }
 
-    if (joueurCourant->getTypeDeJoueur() == type::IA)
+    if (joueurCourant->getTypeDeJoueur() == type::IA){
+
         strategy_courante = &strategy_IA;
+    }
     else
         strategy_courante = &strategy_Humain;
 }
@@ -187,8 +187,10 @@ void Controller::changerJoueurCourant() {
         else
             joueurCourant = partie->getJoueur1();
 
-        if (joueurCourant->getTypeDeJoueur() == type::IA)
+        if (joueurCourant->getTypeDeJoueur() == type::IA) {
             strategy_courante = &strategy_IA;
+            Tour_ia();
+        }
         else
             strategy_courante = &strategy_Humain;
     }
@@ -1028,6 +1030,68 @@ void Controller::orReserverCarte (std::pair<int, int> coord){
     //joueurCourant->afficherJoueur();
 }
 
+
+void Controller::orReserverCartePioche (int nivPioche){
+    /*verifTroisCarteReserve();
+    verifOrSurPlateau();
+    qDebug()  << "Commencez par choisir un jeton Or : \n";
+    qDebug()  <<  getPlateau();
+
+
+    qDebug() << "Voici les jetons disponibles: \n";
+
+    std::vector<std::pair<int, int>> jetonsOrDispo = getEspaceJeux().getPlateau().getVectorOrDispo();
+
+    if(jetonsOrDispo.size() == 0){
+        //getEspaceJeux().getPlateau().remplirPlateau(getEspaceJeux().getSac());
+        throw SplendorException("Plus de Jetons Or disponibles");
+    }
+
+    for (int i =0; i<jetonsOrDispo.size(); i++) {
+        qDebug() << "(" << jetonsOrDispo[i].first << "," << jetonsOrDispo[i].second << ") (" << i + 1 << ")";
+    }
+
+    int ChoixOrDispo = strategy_courante->choix_min_max(1, jetonsOrDispo.size());
+
+    qDebug()  << "Voulez-vous reserver une carte de la pyramide (0) ou celle d'une pioche (1, 2, 3) ?\n";
+    unsigned int choix = strategy_courante->choix_min_max(0, 3);
+
+    if (choix == 0){
+        // Reservation de la carte
+        qDebug() << "Voici les cartes de la pyramide : \n";
+
+        getPyramide().afficherPyramide();
+
+        qDebug()  << "rentrez le niveau de la carte souhaitee : \n";
+        unsigned int niveau = strategy_courante->choix_min_max(1, 3)-1;
+        qDebug()  << "rentrez le numero de la carte souhaitee : \n";
+        unsigned int num_carte = strategy_courante->choix_min_max(1, getPyramide().getNbCartesNiv(niveau))-1;
+
+        const Carte& carte = pyramide.acheterCarte(niveau, num_carte);
+        joueurCourant->addCarteReservee(carte);
+    }
+    else if (choix == 1 || choix == 2 || choix == 3){
+        // Reservation de la carte
+        const Carte& carte = pyramide.ReserverCartePioche(choix);
+        joueurCourant->addCarteReservee(carte);
+    }*/
+
+    // Voir resa carte de la pioche
+    //const Carte& carte = partie->getEspaceJeux().getPyramide().ReserverCartePioche(choix);
+
+    const Carte& carte = partie->getEspaceJeux().getPyramide().ReserverCartePioche(nivPioche);
+    joueurCourant->addCarteReservee(carte);
+
+
+
+    // Voir achat jeton or
+    //const Jeton& jeton = plateau.recupererJeton( jetonsOrDispo[ChoixOrDispo-1].first,  jetonsOrDispo[ChoixOrDispo-1].second);
+    //joueurCourant->addJeton(jeton);
+
+    qDebug()  << "Etat du joueur apres l'action : \n";
+    //joueurCourant->afficherJoueur();
+}
+
 void Controller::acheterCarteJoaillerie(std::pair<int, int> coord){
 
     //on peut alors l'acheter, elle sera directement remplacer par une nouvelle
@@ -1524,15 +1588,17 @@ vector<int> Controller::verifActionsImpossibles(){
 
 
 
+
+
 //////////////////////////////////////////////////////////////
 ///////////// Verif de la partie graphique ///////////////////
 //////////////////////////////////////////////////////////////
 
 std::pair<bool, QString> Controller::verifJetonOr(std::pair<int, int> coord){
-    if(!coord.first && !coord.second){
+    /*if(!coord.first && !coord.second){
         auto output = std::make_pair(false, "Veuillez selectionner UN jeton or.");
         return output;
-    }
+    }*/
     auto output = std::make_pair(true, "");
     return output;
 }
@@ -1678,6 +1744,23 @@ std::pair<bool, QString> Controller::verifJetons(const std::vector<std::pair<int
 }
 
 std::pair<bool, QString> Controller::verifReservationCarte(std::pair<int, int> coord){
+    //const Carte* carte = getPyramide().getCarte(coord.first, coord.second);
+
+    //verifTroisCarteReserve();
+    //verifOrSurPlateau();
+
+    if(verifTroisCarteReserveBool() ){
+        return std::make_pair(false, "Vous ne pouvez resever la carte, vous avez deja 3 cartes dans votre reserve");
+    }
+    // A modifier pour vois si on a bien un jeton Or
+    if(verifTroisCarteReserveBool() ){
+        return std::make_pair(false, "Vous ne pouvez resever la carte avec vous avez deja 3 cartes dans votre reserve");
+    }
+
+    return std::make_pair(true, "Vous pouvez reserver cette carte !");
+}
+
+std::pair<bool, QString> Controller::verifReservationCartePioche(int nivPioche){
     //const Carte* carte = getPyramide().getCarte(coord.first, coord.second);
 
     //verifTroisCarteReserve();
@@ -1852,6 +1935,167 @@ vector<int> Controller::verifActionsOptImpossibles(){
     return res;
 }
 
+
+
+
+
+void  Controller::Tour_ia() {
+    bool a_deja_utilise_privilege = false;
+    bool a_deja_rempli_plateau = false;
+    unsigned int etat_tour = 0;
+
+    while (etat_tour != 10) {
+        bool tourEnPlus = false;
+        // actions optionelles
+        switch (etat_tour) {
+        case 0: {
+            unsigned int etat_action = 0;
+            while (etat_action != 10) {
+                switch (etat_action) {
+                case 0: {
+                    // affichage de l'etat en cours
+                    qDebug() << "C'est a " << getJoueurCourant().getPseudo() << " de jouer : \n";
+                    qDebug() << "Nous en sommes au tour : " << getPartie().getTour() + 1 << "\n";
+
+                    // appel du menu de choix des actions
+                    getJoueurCourant().afficherJoueur();
+                    etat_action = choixActionsOptionelles();
+                    qDebug() << etat_action;
+                    break;
+                }
+                case 1: {
+                    try {
+                        // utilisation d'un privilege
+                        if (a_deja_utilise_privilege) throw SplendorException("Vous avez deja utilise cette action");
+                        utiliserPrivilege(getPartie().getEspaceJeux().getPlateau());
+                        a_deja_utilise_privilege = true;
+                        etat_action = 0;
+                    } catch (SplendorException& e) { qCritical() << "\033[1;31m" << e.getInfo() << "\033[0m" << '\n' << '\n'; etat_action = 0; }
+                    break;
+                }
+                case 2: {
+                    try {
+                        // remplissage du plateau
+                        if (a_deja_rempli_plateau) throw SplendorException("Vous avez deja utilise cette action");
+                        remplirPlateau(getPartie().getEspaceJeux().getPlateau(), getPartie().getEspaceJeux().getSac());
+                        a_deja_rempli_plateau = true;
+                        etat_action = 0;
+                    } catch (SplendorException& e) { qCritical() << "\033[1;31m" << e.getInfo() << "\033[0m" << '\n' << '\n'; etat_action = 0; }
+                    break;
+                }
+                case 3: {
+                    etat_tour = 1;
+                    etat_action = 10;
+                    break;
+                }
+                case 9: {
+                    quitter();
+                    return;
+                }
+                default: {
+                    etat_action = 0;
+                    qDebug() << "Veuillez faire un choix correct !\n";
+                    break;
+                }
+                }
+            }
+            break;
+        }
+        // actions obligatoires :
+        case 1: {
+            unsigned int etat_action = 0;
+            while (etat_action != 10) {
+                switch (etat_action) {
+                case 0:
+                    // menu de choix des actions obligatoires
+                    etat_action = choixActionsObligatoires();
+                    qDebug() << etat_action;
+                    break;
+                case 1:
+                    try {
+                        // recuperation de jetons
+                        qDebug() << joueurCourant->getPseudo();
+                        recupererJetons(false);
+                        etat_action = 10;
+                        etat_tour = 2;
+                    } catch (SplendorException& e) { qCritical() << "\033[1;31m" << e.getInfo() << "\033[0m" << '\n' << '\n'; etat_tour = 0; etat_action = 10; }
+                    break;
+                case 2:
+                    try {
+                        // achat carte joaillerie
+                        tourEnPlus = acheterCarteJoaillerie(getPartie().getEspaceJeux());
+                        if (tourEnPlus) { etat_tour = 0; etat_action = 0; }
+                        else { etat_action = 10; etat_tour = 2; }
+                    } catch (SplendorException& e) { qCritical() << "\033[1;31m" << e.getInfo() << "\033[0m" << '\n' << '\n'; etat_tour = 0; etat_action = 10; }
+                    break;
+                case 3:
+                    try {
+                        // reservation carte
+                        orReserverCarte(getPartie().getEspaceJeux().getPyramide(), getPartie().getEspaceJeux().getPlateau());
+                        etat_action = 10;
+                        etat_tour = 2;
+                    } catch (SplendorException& e) { qCritical() << "\033[1;31m" << e.getInfo() << "\033[0m" << '\n' << '\n'; etat_tour = 0; etat_action = 10; }
+                    break;
+                case 9: {
+                    quitter();
+                    return;
+                }
+                default:
+                    etat_action = 0;
+                    qDebug() << "Veuillez faire un choix correct !\n";
+                    break;
+                }
+            }
+            break;
+        }
+        // verification fin de tour d'un joueur
+        case 2: {
+            // achat obligatoire d'une carte noble si le joueur a 3 pts et 0 cartes nobles ou 6 pts de prestige et 1 carte noble
+            while ((getJoueurCourant().getNbCouronnes() >= 3 && getJoueurCourant().getNbCartesNobles() == 0) ||
+                   (getJoueurCourant().getNbCouronnes() >= 6 && getJoueurCourant().getNbCartesNobles() == 1)) {
+                try { acheterCarteNoble(getPartie().getEspaceJeux().getPyramide()); } catch (SplendorException& e) { qCritical() << "\033[1;31m" << e.getInfo() << "\033[0m" << '\n'; };
+            }
+
+            verifJetonSupDix();
+
+            // Conditions victoires :
+            if (getJoueurCourant().getNbCouronnes() >= 10) getJoueurCourant().setGagnant();
+            if (getJoueurCourant().getptsPrestige() >= 20) getJoueurCourant().setGagnant();
+            if (getJoueurCourant().nbPtsPrestigeParCouleurSupDix()) getJoueurCourant().setGagnant();
+
+            //Sauvegarde automatique
+            if (getPartie().getTour()==30) {
+                sauvegardePartie();
+            }
+
+            // Fin de partie :
+            if (getJoueurCourant().estGagnant())
+                etat_tour = 3;
+            else{
+                // fin du tour du joueur, on passe au joueur suivant
+                changerJoueurCourant();
+                etat_tour = 10;
+            }
+            break;
+        }
+        case 3: {
+
+            //enregistrement des score
+            qDebug() << "Enregistrement des score...\n";
+            enregisterScore();
+            qDebug() << "DONE\n";
+
+            std::cout << "Fin de la partie !\n";
+            return;
+            break;
+        }
+        default: {
+            break;
+        }
+        }
+    }
+
+}
 
 
 

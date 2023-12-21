@@ -65,6 +65,7 @@ pageCreation::pageCreation(QWidget *parent) : QWidget(parent){
     pop -> hide();
 }
 
+
 void pageCreation::paintEvent(QPaintEvent *event){
     QWidget::paintEvent(event);
     QPainter painter(this);

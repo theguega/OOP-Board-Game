@@ -66,7 +66,7 @@ protected:
     }
     void paintEvent(QPaintEvent *event) override;
 public:
-    pageJeu(QString statut_partie, QString pseudo_j_1, type type_j_1, QString pseudo_j_2, type type_j_2, QWidget *parent = nullptr);
+    pageJeu(QString statut_partie, QString pseudo_j_1 = "", type type_j_1 = type::HUMAIN, QString pseudo_j_2 = "", type type_j_2 = type::HUMAIN, QWidget *parent = nullptr);
     ~pageJeu() = default;
     void mousePressEvent(QMouseEvent* event) override { //Permet de cacher tous les elements quand on cique sur la page de Jeu
         joueur1 -> hide();
@@ -80,6 +80,8 @@ public:
 public slots:
     void validerSelectionCarte(position* p);
     void validerResaCarte(position* p);
+    void validerResaCartePioche(int nivPioche);
+    void validerAchatCarteReservee(const Carte* carte);
 
     void afficherPrivileges();
     void remplirPlateau();
@@ -91,6 +93,7 @@ private slots:
 
     void handleValidationCarte(position* p);
     void handleReservationCarte(position* p, position* pJ);
+    void handleReservationCartePioche(int nivPioche, position* pJ);
 
     bool handleCapa(const Carte* c, Capacite capa1, Capacite capa2);
 };
