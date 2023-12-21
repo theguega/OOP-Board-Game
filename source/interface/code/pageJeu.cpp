@@ -14,6 +14,7 @@ pageJeu::pageJeu(QString statut_partie, QString pseudo_j_1, type type_j_1, QStri
 
     control = new Controller(statut_partie, pseudo_j_1, type_j_1, pseudo_j_2, type_j_2);
     control->lancerPartie();
+
     ecran = QGuiApplication::primaryScreen();
     tailleEcran = ecran->availableGeometry().size();
 
@@ -91,6 +92,9 @@ pageJeu::pageJeu(QString statut_partie, QString pseudo_j_1, type type_j_1, QStri
     connect(vPyramide, &vuePyramide::paquetClique, this, &pageJeu::validerResaCartePioche);
     connect(bSac, &QPushButton::clicked, this, &pageJeu::remplirPlateau);
 
+    if (control -> getJoueurCourant().getTypeDeJoueur() == type::IA){
+        control -> Tour_ia();
+    }
 
     refresh();
 

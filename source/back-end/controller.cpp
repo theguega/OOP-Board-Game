@@ -170,8 +170,10 @@ void Controller::setJoueurCourant(int n) {
         break;
     }
 
-    if (joueurCourant->getTypeDeJoueur() == type::IA)
+    if (joueurCourant->getTypeDeJoueur() == type::IA){
+
         strategy_courante = &strategy_IA;
+    }
     else
         strategy_courante = &strategy_Humain;
 }
@@ -187,8 +189,10 @@ void Controller::changerJoueurCourant() {
         else
             joueurCourant = partie->getJoueur1();
 
-        if (joueurCourant->getTypeDeJoueur() == type::IA)
+        if (joueurCourant->getTypeDeJoueur() == type::IA) {
             strategy_courante = &strategy_IA;
+            Tour_ia();
+        }
         else
             strategy_courante = &strategy_Humain;
     }
