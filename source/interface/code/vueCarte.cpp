@@ -339,16 +339,21 @@ void carteInfo::paintEvent(QPaintEvent *event){
 vueCarte::vueCarte(QWidget* parent, int hauteur, int largeur, const Carte* carte) :
     QStackedWidget(parent), h(hauteur), l(largeur), carte(carte){ //C'est un QStackedWidget afin de gerer plus facilement le changement entre les infos et le visu
     setFixedSize(l, h); //Fixe la taille
-    /*switch(carte->getCouleur())*/
-    std::string texteInfo = carte->getInfos();
+    if(carte != nullptr){
+        std::string texteInfo = carte->getInfos();
+        info = new carteInfo(nullptr, h, l, texteInfo); //Ajoute les infos de la carte
+    }
+    else{
+        info = new carteInfo(nullptr, h, l, "");
+    }
+
     visu = new carteVisuel(nullptr, h,l, carte); //Ajoute le visuel de la carte
-    info = new carteInfo(nullptr, h, l, texteInfo); //Ajoute les infos de la carte
+
 
     addWidget(visu); //visu devient l'index 0
     addWidget(info); //visu devient l'index 1
 
     setMouseTracking(true); //Autorise le tracking de la souris pour les enterEvent et leaveEvent
-    //setAttribute(Qt::WA_Hover, true);
 }
 
 bool vueCarte::event(QEvent *event){
