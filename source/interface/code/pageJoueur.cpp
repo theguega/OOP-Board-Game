@@ -26,6 +26,7 @@ pageJoueur::pageJoueur(QWidget* parent, Joueur* joueur, int hP, int lP, int hC, 
     for(int i = 0; i < 3; i++){
         cartesReservees.push_back(new vueCarteJoueur(nullptr, hC, lC, nullptr));
         cartesReserveesLayout->addWidget(cartesReservees[i]);
+        connect(cartesReservees[i], &vueCarteJoueur::carteAchetee, this, &pageJoueur::acheterCarteReservee);
     }
 
     for(const auto& couleur : Couleurs){
@@ -132,6 +133,20 @@ bool pageJoueur::estDansCartes(const Carte* c){
         }
     }
     return false;
+}
+
+int pageJoueur::positionDansMap(const Carte* carte){
+    Couleur c = carte->getBonus().getCouleur();
+    int nb = 0;
+    for(size_t i = 0; i < cartesReservees.size(); i++){
+        if(carte == cartesReservees[i]->getCarte()){
+            return nb;
+        }
+        else if(cartesReservees[i]->getCarte()->getBonus().getCouleur() == c){
+            nb += 1;
+        }
+    }
+    return -1;
 }
 
 void vuePrivilege::paintEvent(QPaintEvent *event){

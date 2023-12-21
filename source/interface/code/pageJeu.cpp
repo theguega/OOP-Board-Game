@@ -13,9 +13,13 @@ pageJeu::pageJeu(QString statut_partie, QString pseudo_j_1, type type_j_1, QStri
     setWindowTitle("SplendorDuel");
 
     control = new Controller(statut_partie, pseudo_j_1, type_j_1, pseudo_j_2, type_j_2);
+<<<<<<< HEAD
 
     if(statut_partie=="New")
         control->lancerPartie();
+=======
+    control->lancerPartie();
+>>>>>>> b7a4e1ec47c6489baa1fce80b05573ff731f57e3
 
     ecran = QGuiApplication::primaryScreen();
     tailleEcran = ecran->availableGeometry().size();
@@ -91,8 +95,14 @@ pageJeu::pageJeu(QString statut_partie, QString pseudo_j_1, type type_j_1, QStri
     connect(vPlateau, &vuePlateau::signalValiderPrivilegeAppuye, this, &pageJeu::validerSelectionJetonPrivi);
     connect(vPyramide, &vuePyramide::cardClicked, this, &pageJeu::validerSelectionCarte);
     connect(vPyramide, &vuePyramide::cardClickedResa, this, &pageJeu::validerResaCarte);
+    connect(vPyramide, &vuePyramide::paquetClique, this, &pageJeu::validerResaCartePioche);
+    connect(joueur1, &pageJoueur::acheterCarteReservee, this, &pageJeu::validerAchatCarteReservee);
+    connect(joueur2, &pageJoueur::acheterCarteReservee, this, &pageJeu::validerAchatCarteReservee);
     connect(bSac, &QPushButton::clicked, this, &pageJeu::remplirPlateau);
 
+    if (control -> getJoueurCourant().getTypeDeJoueur() == type::IA){
+        control -> Tour_ia();
+    }
 
     refresh();
 }
@@ -176,13 +186,75 @@ void pageJeu::validerSelectionCarte(position* pos){
     }
 }
 
-void pageJeu::validerResaCarte(position* pos){
+void pageJeu::validerResaCartePioche(int nivPioche){
     bool isValidOr;
     QString messageOr;
 
     if(!vPlateau->selecteOr()){
         isValidOr = false;
-        messageOr = QString("Sélectionnez un jeton Or.");
+        messageOr = QString("Sélectionnez un 2 jeton Or.");
+
+    }
+    else {
+        std::pair<bool, QString> validationResultJeton = control->verifJetonOr(std::make_pair(vPlateau->selecteOr()->getx(), vPlateau->selecteOr()->gety()));
+        isValidOr = validationResultJeton.first;
+        messageOr = validationResultJeton.second;
+    }
+
+
+
+    std::pair<bool, QString> validationResult = control->verifReservationCartePioche(nivPioche);
+    bool isValid = validationResult.first;
+    const QString& message = validationResult.second;
+
+
+    if(isValid && isValidOr){
+        modalPopup* validation = new modalPopup(this, message, "Voulez-vous valider ?");
+        int result =validation->exec();
+
+        // Check the result (optional).
+        if (result == QDialog::Accepted){
+            // Modification
+            pageJeu::handleReservationCartePioche(nivPioche, vPlateau->selecteOr());
+        }
+        delete validation;
+    }
+    else if (!isValid){
+        popUpInfo* infos = new popUpInfo(nullptr, message.toStdString());
+        infos->show();
+    }
+    else if (!isValidOr){
+        popUpInfo* infos = new popUpInfo(nullptr, messageOr.toStdString());
+        infos->show();
+    }
+
+    refresh();
+}
+
+void pageJeu::handleReservationCartePioche(int nivPioche, position* pJ){
+    std::pair<int, int> coordJeton  = std::make_pair(pJ->getx(), pJ->gety());
+    std::vector<std::pair<int, int>> tmp;
+    tmp.push_back(coordJeton);
+
+    //std::pair<int, int> coord = std::make_pair(p->getx(), p->gety());
+    //const Carte* carte_tmp = control->getPyramide().getCarte(coord.first, coord.second);
+    bool next = true;
+
+    if(next){
+        control->orReserverCartePioche(nivPioche);
+        control->recupererJetons(tmp);
+        control->changerJoueurCourant();
+        control->setNouveauTour(false);
+    }
+}
+
+void pageJeu::validerResaCarte(position* pos){
+    bool isValidOr;
+    QString messageOr;
+
+    if(vPlateau->selecteOr()== nullptr){
+        isValidOr = false;
+        messageOr = QString("Sélectionnez un 3 jeton Or.");
 
     }
     else {
@@ -398,4 +470,34 @@ void pageJeu::remplirPlateau() {
     }
     refresh();
     update();
+}
+
+void pageJeu::validerAchatCarteReservee(const Carte* carte){
+    if(&control->getJoueurCourant() == joueur1->getJoueur()){
+        if(joueur1->positionDansMap(carte) != -1){
+            if(control->verifAchatCarte(carte)){
+                return;
+            }
+            else{
+                popUpInfo* infos = new popUpInfo(nullptr, "Vous ne pouvez pas acheter cette carte");
+            }
+        }
+        else{
+            popUpInfo* infos = new popUpInfo(nullptr, "Vous n'avez pas cette carte");
+        }
+    }
+    else if(&control->getJoueurCourant() == joueur2->getJoueur()){
+        if(joueur1->positionDansMap(carte) != -1){
+            if(control->verifAchatCarte(carte)){
+                return;
+            }
+            else{
+                popUpInfo* infos = new popUpInfo(nullptr, "Vous ne pouvez pas acheter cette carte");
+            }
+        }
+        else{
+            popUpInfo* infos = new popUpInfo(nullptr, "Vous n'avez pas cette carte");
+        }
+    }
+    refresh();
 }
