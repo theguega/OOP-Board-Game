@@ -79,6 +79,7 @@ public:
 public slots:
     void validerSelectionCarte(position* p);
     void validerResaCarte(position* p);
+    void validerResaCartePioche(int nivPioche);
 
     void afficherPrivileges();
     void remplirPlateau();
@@ -90,6 +91,7 @@ private slots:
 
     void handleValidationCarte(position* p);
     void handleReservationCarte(position* p, position* pJ);
+    void handleReservationCartePioche(int nivPioche, position* pJ);
 
     bool handleCapa(Capacite capa1, Capacite capa2);
 };

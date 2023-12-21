@@ -37,6 +37,7 @@ using namespace std;
 
 enum class TypeCarte { Niv1, Niv2, Niv3, Noble };
 string TypeCartetoString(TypeCarte t);
+int TypeCartetoInt(TypeCarte t);
 ostream& operator<<(ostream& f, TypeCarte t);
 QDebug operator<<(QDebug f, TypeCarte t);
 extern std::initializer_list<TypeCarte> TypesCarte;

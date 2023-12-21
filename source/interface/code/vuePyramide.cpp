@@ -22,9 +22,17 @@ vuePyramide::vuePyramide(QWidget* parent, int hauteur, int largeur, Pyramide& py
     }
 
     // initialisation des paquets
-    layoutPaquets->addWidget(new vuePaquet(pyr.getPioche1(), h/(this->hauteur + 1), l/(this->hauteur + 4)));
-    layoutPaquets->addWidget(new vuePaquet(pyr.getPioche2(), h/(this->hauteur + 1), l/(this->hauteur + 4)));
-    layoutPaquets->addWidget(new vuePaquet(pyr.getPioche3(), h/(this->hauteur + 1), l/(this->hauteur + 4)));
+    vuePaquet* temp = new vuePaquet(pyr.getPioche1(), h/(this->hauteur + 1), l/(this->hauteur + 4));
+    layoutPaquets->addWidget(temp);
+    connect(temp, &vuePaquet::piocheClique, this, &vuePyramide::paquetClique);
+
+    temp = new vuePaquet(pyr.getPioche2(), h/(this->hauteur + 1), l/(this->hauteur + 4));
+    layoutPaquets->addWidget(temp);
+    connect(temp, &vuePaquet::piocheClique, this, &vuePyramide::paquetClique);
+
+    temp = new vuePaquet(pyr.getPioche3(), h/(this->hauteur + 1), l/(this->hauteur + 4));
+    layoutPaquets->addWidget(temp);
+    connect(temp, &vuePaquet::piocheClique, this, &vuePyramide::paquetClique);
 
 
     layoutAllCartes->addLayout(layoutPaquets);

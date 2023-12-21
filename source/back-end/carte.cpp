@@ -41,6 +41,21 @@ string TypeCartetoString(TypeCarte t) {
     }
 }
 
+int TypeCartetoInt(TypeCarte t) {
+    switch (t) {
+    case TypeCarte::Niv1:
+        return 1;
+    case TypeCarte::Niv2:
+        return 2;
+    case TypeCarte::Niv3:
+        return 3;
+    case TypeCarte::Noble:
+        return 4;
+    default:
+        throw SplendorException("Type inconnue");
+    }
+}
+
 ostream & operator << (ostream & f, TypeCarte t) {
     f << TypeCartetoString(t);
     return f;
