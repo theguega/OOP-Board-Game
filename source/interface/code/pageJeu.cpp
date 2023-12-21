@@ -384,6 +384,7 @@ bool pageJeu::handleCapa(const Carte* c, Capacite capa1, Capacite capa2){
     switch(capa1){
 
     case Capacite::AssociationBonus:
+        choixCouleur->show();
         /*valid = choixCouleur->exec();
         if(valid==QDialog::Accepted){
             QString selectedColor = choixCouleur->getSelectedColor();
