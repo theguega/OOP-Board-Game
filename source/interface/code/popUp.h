@@ -84,12 +84,13 @@ class popUpChoixCouleur : public QDialog {
         QString getSelectedColor() const {
             return selectedColor;
         }
-
+        void choixCouleur(Couleur c);
     private:
         Controller* control;
         QSignalMapper* signalMapper;
         QString selectedColor;
         QLabel* label;
+        bool aEteClique = false;
 };
 
 
