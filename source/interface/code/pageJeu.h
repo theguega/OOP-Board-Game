@@ -57,6 +57,7 @@ protected:
         }
     }
     void quitter(){ //Permet de quitter la page
+        control->sauvegardePartie();
         quitterPage = true;
         aSauvegarde -> close();
         this -> close();

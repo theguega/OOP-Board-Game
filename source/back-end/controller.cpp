@@ -189,7 +189,7 @@ void Controller::changerJoueurCourant() {
 
         if (joueurCourant->getTypeDeJoueur() == type::IA) {
             strategy_courante = &strategy_IA;
-            Tour_ia();
+            //Tour_ia();
         }
         else
             strategy_courante = &strategy_Humain;
