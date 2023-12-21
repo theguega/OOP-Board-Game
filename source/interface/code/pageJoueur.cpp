@@ -8,6 +8,8 @@ pageJoueur::pageJoueur(QWidget* parent, Joueur* joueur, int hP, int lP, int hC, 
     cartesPossedeesLayout->setAlignment(Qt::AlignTop);
     cartesPossedeesLayout->setSpacing(0);
     jetonsPossedesLayout = new QVBoxLayout;
+    cartesPossedeesNoblesLayout = new QVBoxLayout;
+    cartesPossedeesNoblesLayout->setAlignment(Qt::AlignTop);
     jetonsPossedesLayout->setAlignment(Qt::AlignTop);
     informations = new QHBoxLayout;
     layoutBas = new QHBoxLayout;
@@ -120,6 +122,21 @@ void pageJoueur::refreshJoueur(Joueur* joueurCourant){
     for(const auto& couleur : Couleurs){
         if(couleur != Couleur::INDT){
             jetonsPossedes[couleur]->setN(joueur->getNbJetons(couleur));
+        }
+    }
+
+    for(size_t i = 0; i < joueur->getNbCartesNobles(); i++){
+        bool estDans = false;
+        for(size_t j = 0; j < cartesPossedeesNobles.size(); j++){
+            if(cartesPossedeesNobles[i]->getCarte() == &joueur->getCarteNoble(i)){
+                estDans = true;
+            }
+        }
+        if(!estDans){
+            vueCarteNoble* temp = new vueCarteNoble(nullptr, hC, lC, &joueur->getCarteNoble(i));
+            cartesPossedeesNobles.push_back(temp);
+            cartesPossedeesNoblesLayout->addWidget(temp);
+            temp->setEstAchete(true);
         }
     }
 

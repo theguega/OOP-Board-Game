@@ -149,13 +149,16 @@ private:
     int l;
 
     const Carte* carte;
+    bool estAchete = false;
 public:
     vueCarteNoble(QWidget* parent, int hauteur, int largeur, const Carte* c) :
         QWidget(parent), h(hauteur), l(largeur), carte(c){setFixedSize(l, h);}
+    void setEstAchete(bool b){estAchete = b;}
+    const Carte* getCarte() {return carte;}
 protected:
     void paintEvent(QPaintEvent *event) override;
     void mousePressEvent(QMouseEvent *event) override {
-        if (event->button() == Qt::LeftButton) {
+        if (event->button() == Qt::LeftButton && !estAchete) {
             qDebug() << "Clic gauche detecte sur le widget.";
             emit nobleClique();
         }

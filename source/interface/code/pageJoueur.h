@@ -31,6 +31,7 @@ private:
     QVBoxLayout* cartesReserveesLayout; //Layout avec les cartes reservees
     QVBoxLayout* cartesPossedeesLayout; //Layout avec les cartes possedees
     QVBoxLayout* jetonsPossedesLayout; //Layout avec les jeton possedes
+    QVBoxLayout* cartesPossedeesNoblesLayout;
     QHBoxLayout* informations;
     QHBoxLayout* layoutBas;
     QVBoxLayout* layout; //Layout principal
@@ -46,6 +47,7 @@ private:
 
     std::vector<vueCarteJoueur*> cartesReservees; //Vecteur avec les cartes reservees
     std::vector<vueCarteJoueur*> cartesPossedees; //Vecteur avec les cartes possedees
+    std::vector<vueCarteNoble*> cartesPossedeesNobles;
     std::unordered_map<Couleur, vueJetonJoueur*> jetonsPossedes; //Vecteur avec les jeton possedes
 public:
     pageJoueur(QWidget* parent, Joueur* joueur, int hP, int lP, int hC, int lC, int tj);

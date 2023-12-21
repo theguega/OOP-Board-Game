@@ -68,53 +68,32 @@ private:
 
 class popUpChoixCouleur : public QDialog {
         Q_OBJECT
-    public:
-        popUpChoixCouleur(Controller* control, QWidget* parent = nullptr);
-    signals:
-        void colorSelected(const QString& color);
+private:
+    Controller* control;
+    QLabel* label;
 
-    private slots:
-        void boutonClique(const QString& color) {
-            selectedColor = color;
-        }
-        void onAccepted() {
-            emit colorSelected(selectedColor);
-        }
-    public:
-        QString getSelectedColor() const {
-            return selectedColor;
-        }
+    bool aEteClique = false;
 
-    private:
-        Controller* control;
-        QSignalMapper* signalMapper;
-        QString selectedColor;
-        QLabel* label;
+    QVBoxLayout* layout;
+    QHBoxLayout* layoutBoutons;
+public:
+    popUpChoixCouleur(Controller* control, QWidget* parent = nullptr);
+    void choixCouleur(Couleur c);
 };
 
 class popUpChoixJetonAdv : public QDialog {
-        Q_OBJECT
-    public:
-        popUpChoixJetonAdv(Controller* control, QWidget* parent = nullptr);
-    signals:
-        void colorSelected(const QString& color);
+    Q_OBJECT // Macro nécessaire pour utiliser les signaux et les slots de Qt
+private:
+    Controller* control;
+    QLabel* label;
 
-    private slots:
-        void boutonClique(const QString& color) {
-            selectedColor = color;
-        }
-        void onAccepted() {
-            emit colorSelected(selectedColor);
-        }
-    public:
-        QString getSelectedColor() const {
-            return selectedColor;
-        }
+    bool aEteClique = false;
 
-    private:
-        Controller* control;
-        QSignalMapper* signalMapper;
-        QString selectedColor;
-        QLabel* label;
+    QVBoxLayout* layout;
+    QHBoxLayout* layoutBoutons;
+
+public:
+    popUpChoixJetonAdv(Controller* control, QWidget* parent);
+    void choixCouleur(Couleur c);
 };
 #endif

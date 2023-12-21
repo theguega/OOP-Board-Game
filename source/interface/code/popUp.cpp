@@ -1,4 +1,5 @@
 #include "popUp.h"
+#include "vueJeton.h"
 
 popUpValider::popUpValider(QWidget* parent, std::string info, std::string info2, std::string gif) : QWidget(parent) {
     oui = new QPushButton("oui"); // Bouton Oui
@@ -90,90 +91,59 @@ void modalPopup::handleOuiButtonClicked()
 
 
 popUpChoixCouleur::popUpChoixCouleur(Controller* control, QWidget* parent) : QDialog(parent), control(control) {
-    QVBoxLayout* layout = new QVBoxLayout(this);
-    signalMapper = new QSignalMapper(this);
+    layout = new QVBoxLayout;
     label = new QLabel("La capacité de la carte permet d'associer son bonus à la couleur de votre choix. Veuillez choisir une couleur parmi celles disponibles :", this);
     label->setWordWrap(true);
     layout->addWidget(label);
-    // Example colors
-    QStringList colors = {"blanc", "bleu", "rouge", "vert", "noir", "perle"};
+    layoutBoutons = new QHBoxLayout;
 
-    for (const QString& color : colors) {
-        int value = 0;
-        if (StringToCouleur(color.toStdString()) == Couleur::BLANC) {
-            value = control->getJoueurCourant().getNbCartes(Couleur::BLANC);
-        } else if (StringToCouleur(color.toStdString()) == Couleur::BLEU) {
-            value = control->getJoueurCourant().getNbCartes(Couleur::BLEU);
-        } else if (StringToCouleur(color.toStdString()) == Couleur::ROUGE) {
-            value = control->getJoueurCourant().getNbCartes(Couleur::ROUGE);
-        } else if (StringToCouleur(color.toStdString()) == Couleur::VERT) {
-            value = control->getJoueurCourant().getNbCartes(Couleur::VERT);
-        } else if (StringToCouleur(color.toStdString()) == Couleur::NOIR) {
-            value = control->getJoueurCourant().getNbCartes(Couleur::NOIR);
-        } else if (StringToCouleur(color.toStdString()) == Couleur::PERLE) {
-            value = control->getJoueurCourant().getNbCartes(Couleur::PERLE);
-        }
+    for (const auto& color : Couleurs) {
+        int value = control->getJoueurCourant().getNbCartes(color);
         if (value != 0) {
-            QRadioButton* radioButton = new QRadioButton(color, this);
-            layout->addWidget(radioButton);
-            connect(radioButton, SIGNAL(clicked()), this, SLOT(boutonClique()));
-            connect(radioButton, SIGNAL(clicked()), this, SLOT(onAccepted()));
-            signalMapper->setMapping(radioButton, color);
-//            connect(radioButton, SIGNAL(clicked()), signalMapper, SLOT(map()));
-//            signalMapper->setMapping(radioButton, color);
+            vueJeton* jeton = new vueJeton(nullptr, 40, new Jeton(color), nullptr);
+            layoutBoutons->addWidget(jeton);
+            QObject::connect(jeton, &vueJeton::clicked, [this, color]() {
+                choixCouleur(color); //Permet d'appeler la fonction boutonClique(int i) lorsque le bouton i est clique
+            });
         }
     }
 
-    QPushButton* okButton = new QPushButton("OK", this);
-    layout->addWidget(okButton);
-    connect(okButton, SIGNAL(clicked()), this, SLOT(accept()));
-
-    //connect(signalMapper, SIGNAL(mapped(QString)), this, SLOT(boutonClique(QString)));
-    connect(this, SIGNAL(colorSelected(QString)), this, SLOT(boutonClique(QString)));
+    layout->addLayout(layoutBoutons);
+    setLayout(layout);
 }
 
+void popUpChoixCouleur::choixCouleur(Couleur c){
+    if(!aEteClique){
+        aEteClique = true;
+        qDebug()<<"marche bien et couleur: "<<toStringCouleur(c);
+    }
+}
 
-/*
 popUpChoixJetonAdv::popUpChoixJetonAdv(Controller* control, QWidget* parent) : QDialog(parent), control(control) {
-    QVBoxLayout* layout = new QVBoxLayout(this);
-    signalMapper = new QSignalMapper(this);
-    label = new QLabel("La capacité de la carte permet de recuperer un jeton à votre adversaire, veuillez selectionner une couleur de Jeton", this);
+    layout = new QVBoxLayout;
+    label = new QLabel("La capacité de la carte permet d'associer son bonus à la couleur de votre choix. Veuillez choisir une couleur parmi celles disponibles :", this);
     label->setWordWrap(true);
     layout->addWidget(label);
-    // Example colors
-    QStringList colors = {"blanc", "bleu", "rouge", "vert", "noir", "perle"};
+    layoutBoutons = new QHBoxLayout;
 
-    for (const QString& color : colors) {
-        int value = 0;
-        if (StringToCouleur(color.toStdString()) == Couleur::BLANC) {
-            value = control->getJoueurAdverse().getNbJetons(Couleur::BLANC);
-        } else if (StringToCouleur(color.toStdString()) == Couleur::BLEU) {
-            value = control->getJoueurAdverse().getNbJetons(Couleur::BLEU);
-        } else if (StringToCouleur(color.toStdString()) == Couleur::ROUGE) {
-            value = control->getJoueurAdverse().getNbJetons(Couleur::ROUGE);
-        } else if (StringToCouleur(color.toStdString()) == Couleur::VERT) {
-            value = control->getJoueurAdverse().getNbJetons(Couleur::VERT);
-        } else if (StringToCouleur(color.toStdString()) == Couleur::NOIR) {
-            value = control->getJoueurAdverse().getNbJetons(Couleur::NOIR);
-        } else if (StringToCouleur(color.toStdString()) == Couleur::PERLE) {
-            value = control->getJoueurAdverse().getNbJetons(Couleur::PERLE);
-        }
+    for (const auto& color : Couleurs) { //Penser à gérer le cas où l'adversaire n'a plus de cartes
+        int value = control->getJoueurAdverse().getNbCartes(color);
         if (value != 0) {
-            QRadioButton* radioButton = new QRadioButton(color, this);
-            layout->addWidget(radioButton);
-            connect(radioButton, SIGNAL(clicked()), this, SLOT(boutonClique()));
-            connect(radioButton, SIGNAL(clicked()), this, SLOT(onAccepted()));
-            signalMapper->setMapping(radioButton, color);
-//            connect(radioButton, SIGNAL(clicked()), signalMapper, SLOT(map()));
-//            signalMapper->setMapping(radioButton, color);
+            vueJeton* jeton = new vueJeton(nullptr, 40, new Jeton(color), nullptr);
+            layoutBoutons->addWidget(jeton);
+            QObject::connect(jeton, &vueJeton::clicked, [this, color]() {
+                choixCouleur(color); //Permet d'appeler la fonction boutonClique(int i) lorsque le bouton i est clique
+            });
         }
     }
 
-    QPushButton* okButton = new QPushButton("OK", this);
-    layout->addWidget(okButton);
-    connect(okButton, SIGNAL(clicked()), this, SLOT(accept()));
-
-    //connect(signalMapper, SIGNAL(mapped(QString)), this, SLOT(boutonClique(QString)));
-    connect(this, SIGNAL(colorSelected(QString)), this, SLOT(boutonClique(QString)));
+    layout->addLayout(layoutBoutons);
+    setLayout(layout);
 }
-*/
+
+void popUpChoixJetonAdv::choixCouleur(Couleur c){
+    if(!aEteClique){
+        aEteClique = true;
+        qDebug()<<"marche bien et couleur: "<<toStringCouleur(c);
+    }
+}

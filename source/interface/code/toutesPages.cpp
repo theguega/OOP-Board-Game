@@ -43,7 +43,9 @@ toutesPages::toutesPages(QWidget* parent, QApplication* app) {
     connect(menuPrincipal->getBoutonSauvegarde(), &QPushButton::clicked, this, [this]() {
         pop->show();
     });
-    QObject::connect(pop -> getBoutonOui(), &QPushButton::clicked, this, &toutesPages::boutonOuiPresse);
+    connect(pop -> getBoutonOui(), &QPushButton::clicked, this, &toutesPages::boutonOuiPresse);
+    connect(pop -> getBoutonOui(), &QPushButton::clicked, pop, &popUpValider::close);
+    connect(pop -> getBoutonNon(), &QPushButton::clicked, pop, &popUpValider::close);
 }
 
 void toutesPages::boutonOuiPresse() { //Connecte le bouton oui du PopUpValider

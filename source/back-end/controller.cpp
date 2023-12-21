@@ -189,6 +189,23 @@ void Controller::changerJoueurCourant() {
 
         if (joueurCourant->getTypeDeJoueur() == type::IA) {
             strategy_courante = &strategy_IA;
+            //Tour_ia();
+        }
+        else
+            strategy_courante = &strategy_Humain;
+    }
+}
+
+void Controller::changerJoueurCourantGraphique() {
+    //changement du joueur courant
+    if(!nouveau_tour){
+        if (joueurCourant == partie->getJoueur1())
+            joueurCourant = partie->getJoueur2();
+        else
+            joueurCourant = partie->getJoueur1();
+
+        if (joueurCourant->getTypeDeJoueur() == type::IA) {
+            strategy_courante = &strategy_IA;
             Tour_ia();
         }
         else
@@ -2071,9 +2088,8 @@ void  Controller::Tour_ia() {
             // Fin de partie :
             if (getJoueurCourant().estGagnant())
                 etat_tour = 3;
-            else{
-                // fin du tour du joueur, on passe au joueur suivant
-                changerJoueurCourant();
+            else{                //fin du tour du joueur, on passe au joueur suivant
+                changerJoueurCourantGraphique();
                 etat_tour = 10;
             }
             break;
@@ -2084,9 +2100,9 @@ void  Controller::Tour_ia() {
             qDebug() << "Enregistrement des score...\n";
             enregisterScore();
             qDebug() << "DONE\n";
+            etat_tour = 10;
 
-            std::cout << "Fin de la partie !\n";
-            return;
+            //std::cout << "Fin de la partie !\n";
             break;
         }
         default: {
