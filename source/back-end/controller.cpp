@@ -1109,7 +1109,7 @@ void Controller::orReserverCartePioche (int nivPioche){
     //joueurCourant->afficherJoueur();
 }
 
-void Controller::acheterCarteJoaillerie(std::pair<int, int> coord){
+void Controller::acheterCarteJoaillerie(std::pair<int, int> coord, Couleur c){
 
     //on peut alors l'acheter, elle sera directement remplacer par une nouvelle
     const Carte& carte = partie->getEspaceJeux().getPyramide().acheterCarte(coord.first, coord.second);
@@ -1150,8 +1150,16 @@ void Controller::acheterCarteJoaillerie(std::pair<int, int> coord){
         joueurCourant->nbCouronnes += carte.getNbCouronnes();
     } else{*/
     //on ajoute la carte au joueur
-    joueurCourant->addCarte(carte);
-    joueurCourant->addBonus(carte.getBonus().getCouleur(), carte.getBonus().getNbBonus());
+    if(c == Couleur::INDT){
+        joueurCourant->addCarte(carte);
+        joueurCourant->addBonus(carte.getBonus().getCouleur(), carte.getBonus().getNbBonus());
+    } else{
+        joueurCourant->addBonus(c, 1);
+        joueurCourant->cartes[c].push_back(&carte);
+        joueurCourant->ptsPrestige += carte.getNbPtsPrivilege();
+        joueurCourant->nbCouronnes += carte.getNbCouronnes();
+    }
+
     //return res;
     //}
     //return res;
