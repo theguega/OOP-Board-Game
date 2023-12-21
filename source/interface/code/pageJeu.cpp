@@ -356,120 +356,100 @@ void pageJeu::handleReservationCarte(position* p, position* pJ){
     }
 }
 
+
+
+
 void pageJeu::handleValidationCarte(position* p){
     std::pair<int, int> coord = std::make_pair(p->getx(), p->gety());
     const Carte* carte_tmp = control->getPyramide().getCarte(coord.first, coord.second);
-    bool next = true;
-    if(carte_tmp->getCapacite1()!=Capacite::None || carte_tmp->getCapacite2()!=Capacite::None){
-        next = handleCapa(carte_tmp, carte_tmp->getCapacite1(), carte_tmp->getCapacite2());
+
+    popUpInfo* info_nouveau_tour = new popUpInfo(nullptr, "La capacité de la carte vous permet de joueur un nouveau tour");
+    popUpInfo* info_take_jeton_from_bonus = new popUpInfo(nullptr, "La capacité de la carte vous permet de recuperer un jeton de la couleur du bonus de la carte. Veuillez sélectionner un jeton");
+    popUpChoixAssociationBonus* popUpAssos = new popUpChoixAssociationBonus(control);
+    popUpChoixJetonAdv* popUpAdv = new popUpChoixJetonAdv(control);
+
+    connect(this, &pageJeu::fermerPopUp, info_nouveau_tour, &popUpInfo::close);
+    connect(this, &pageJeu::fermerPopUp, info_take_jeton_from_bonus, &popUpInfo::close);
+    Couleur coulAsso;
+    Couleur coulAdv;
+
+    if(carte_tmp->getCapacite1()!=Capacite::None){
+
+        switch(carte_tmp->getCapacite1()){
+
+        case Capacite::AssociationBonus:
+            if (popUpAssos->exec() == QDialog::Accepted) {
+                coulAsso = popUpAssos->getSelectedOption();
+                if(coulAsso != Couleur::INDT){
+                    control->acheterCarteJoaillerie(coord, coulAsso);
+                    if(capa_en_cours.first==false){
+                        control->changerJoueurCourantGraphique();
+                    }
+                }
+            }
+            break;
+
+        case Capacite::NewTurn:
+            info_nouveau_tour->show();
+            connect(this, &pageJeu::fermerPopUp, info_nouveau_tour, &popUpInfo::close);
+            control->acheterCarteJoaillerie(coord);
+            control->setNouveauTour(true);
+            control->changerJoueurCourantGraphique();
+            control->setNouveauTour(false);
+            break;
+
+        case Capacite::TakeJetonFromBonus:
+            if(control->getPlateau().contientCouleur(carte_tmp->getBonus().getCouleur())){
+                info_take_jeton_from_bonus->show();
+                //connect(this, &pageJeu::fermerPopUp, info_take_jeton_from_bonus, &popUpInfo::close);
+                control->acheterCarteJoaillerie(coord);
+                //permet de forcer le joueur a recup un jeton
+                capa_en_cours = std::make_pair(true, carte_tmp->getBonus().getCouleur());
+                vPyramide->setEnabled(false);
+                vPlateau->getBoutonValiderPriv()->setEnabled(false);
+                bSac->setEnabled(false);
+            }
+            break;
+
+        case Capacite::TakeJetonToAdv:
+            if (popUpAdv->exec() == QDialog::Accepted) {
+                coulAdv = popUpAdv->getSelectedOption();
+                if(coulAdv != Couleur::INDT){
+                    control->acheterCarteJoaillerie(coord);
+                    const Jeton &jeton = control->getJoueurAdverse().RecupJetonCoul(coulAdv);
+                    control->getJoueurCourant().addJeton(jeton);
+                    if(capa_en_cours.first==false){
+                        control->changerJoueurCourantGraphique();
+                    }
+                }
+            }
+            break;
+
+        case Capacite::TakePrivilege:
+            if (control->getPlateau().getNbPrivileges()==0){
+                //si il n'y a plus de privileges sur le plateau
+                if(control->getJoueurCourant().getNbPrivileges()!=3) {
+                    control->getJoueurCourant().addPrivilege(control->getJoueurAdverse().supPrivilege());
+                }
+            } else {
+                //si il y a un jetons sur le plateau, le joueur le recupere
+                control->getJoueurCourant().addPrivilege(control->getPlateau().recupererPrivilege());
+            }
+            control->acheterCarteJoaillerie(coord);
+            control->changerJoueurCourantGraphique();
+            break;
+
+        default:
+            break;      
+        }
     }
-    if(next){
+    else{
         control->acheterCarteJoaillerie(coord);
         if(capa_en_cours.first==false){
             control->changerJoueurCourantGraphique();
             control->setNouveauTour(false);
         }
     }
-}
-
-bool pageJeu::handleCapa(const Carte* c, Capacite capa1, Capacite capa2){
-    popUpInfo* info_nouveau_tour = new popUpInfo(nullptr, "La capacité de la carte vous permet de joueur un nouveau tour");
-    popUpInfo* info_take_jeton_from_bonus = new popUpInfo(nullptr, "La capacité de la carte vous permet de recuperer un jeton de la couleur du bonus de la carte. Veuillez sélectionner un jeton");
-    connect(this, &pageJeu::fermerPopUp, info_nouveau_tour, &popUpInfo::close);
-    connect(this, &pageJeu::fermerPopUp, info_take_jeton_from_bonus, &popUpInfo::close);
-    popUpChoixCouleur* choixCouleur = new popUpChoixCouleur(control);
-    //popUpChoixJetonAdv* choixJetonAdv = new popUpChoixJetonAdv(control);
-    int valid;
-
-    switch(capa1){
-
-    case Capacite::AssociationBonus:
-        choixCouleur->show();
-        /*valid = choixCouleur->exec();
-        if(valid==QDialog::Accepted){
-            QString selectedColor = choixCouleur->getSelectedColor();
-            qDebug() << "Couleur sélectionnée : " << selectedColor;
-            return true;
-        }*/
-        break;
-
-    case Capacite::NewTurn:
-        info_nouveau_tour->show();
-        connect(this, &pageJeu::fermerPopUp, info_nouveau_tour, &popUpInfo::close);
-        control->setNouveauTour(true);
-        return true;
-
-    case Capacite::TakeJetonFromBonus:
-        if(control->getPlateau().contientCouleur(c->getBonus().getCouleur())){
-            info_take_jeton_from_bonus->show();
-            capa_en_cours = std::make_pair(true, c->getBonus().getCouleur());
-            vPyramide->setEnabled(false);
-            vPlateau->getBoutonValiderPriv()->setEnabled(false);
-            bSac->setEnabled(false);
-        }
-        return true;
-
-    case Capacite::TakeJetonToAdv:
-        //valid = choixJetonAdv->exec();
-        if(valid==QDialog::Accepted){
-            //QString selectedColor = choixJetonAdv->getSelectedColor();
-            //qDebug() << "Couleur sélectionnée : " << selectedColor;
-                return true;
-        }
-        return true;
-
-    case Capacite::TakePrivilege:
-        if (control->getPlateau().getNbPrivileges()==0){
-            //si il n'y a plus de privileges sur le plateau
-            if(control->getJoueurCourant().getNbPrivileges()!=3) {
-
-                control->getJoueurCourant().addPrivilege(control->getJoueurAdverse().supPrivilege());
-            }
-        } else {
-            //si il y a un jetons sur le plateau, le joueur le recupere
-
-            control->getJoueurCourant().addPrivilege(control->getPlateau().recupererPrivilege());
-        }
-        return true;
-    case Capacite::None:
-        return true;
-    default:
-        return true;
-    }
-    switch(capa2){
-    case Capacite::AssociationBonus:
-        valid = choixCouleur->exec();
-        if(valid==QDialog::Accepted){
-            return true;
-        }
-        break;
-    case Capacite::NewTurn:
-        info_nouveau_tour->show();
-        control->setNouveauTour(true);
-        return true;
-    case Capacite::TakeJetonFromBonus:
-        return true;
-    case Capacite::TakeJetonToAdv:
-        return true;
-    case Capacite::TakePrivilege:
-        if (control->getPlateau().getNbPrivileges()==0){
-            //si il n'y a plus de privileges sur le plateau
-            if(control->getJoueurCourant().getNbPrivileges()!=3) {
-
-                control->getJoueurCourant().addPrivilege(control->getJoueurAdverse().supPrivilege());
-            }
-        } else {
-            //si il y a un jetons sur le plateau, le joueur le recupere
-
-            control->getJoueurCourant().addPrivilege(control->getPlateau().recupererPrivilege());
-        }
-        return true;
-    case Capacite::None:
-        return true;
-    default:
-        return true;
-    }
-    return false;
 }
 
 

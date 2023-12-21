@@ -90,36 +90,63 @@ void modalPopup::handleOuiButtonClicked()
 }
 
 
-popUpChoixCouleur::popUpChoixCouleur(Controller* control, QWidget* parent) : QDialog(parent), control(control) {
+/*popUpChoixCouleur::popUpChoixCouleur(Controller* control, QWidget* parent) : QDialog(parent), control(control) {
     layout = new QVBoxLayout;
     label = new QLabel("La capacité de la carte permet d'associer son bonus à la couleur de votre choix. Veuillez choisir une couleur parmi celles disponibles :", this);
+    labelCoul = new QLabel("", this);
     label->setWordWrap(true);
+    labelCoul->setWordWrap(true);
     layout->addWidget(label);
     layoutBoutons = new QHBoxLayout;
 
     for (const auto& color : Couleurs) {
-        int value = control->getJoueurCourant().getNbCartes(color);
-        if (value != 0) {
-            vueJeton* jeton = new vueJeton(nullptr, 40, new Jeton(color), nullptr);
-            layoutBoutons->addWidget(jeton);
-            QObject::connect(jeton, &vueJeton::clicked, [this, color]() {
-                choixCouleur(color); //Permet d'appeler la fonction boutonClique(int i) lorsque le bouton i est clique
-            });
+        if(color!= Couleur::PERLE && color != Couleur::OR){
+            int value = control->getJoueurCourant().getNbCartes(color);
+            if (value != 0) {
+                vueJeton* jeton = new vueJeton(nullptr, 40, new Jeton(color), nullptr);
+                layoutBoutons->addWidget(jeton);
+                QObject::connect(jeton, &vueJeton::clicked, [this, color]() {
+                    choixCouleur(color); //Permet d'appeler la fonction boutonClique(int i) lorsque le bouton i est clique
+                });
+            }
         }
     }
-
     layout->addLayout(layoutBoutons);
+    layout->addWidget(labelCoul);
+    boutonValider = new QPushButton("Valider", this);
+    layoutBoutons->addWidget(boutonValider);
+
+    // Connecter le signal clicked du bouton "Valider" à la fonction validerCouleur()
+    connect(boutonValider, &QPushButton::clicked, this, &popUpChoixCouleur::validerCouleur);
     setLayout(layout);
+    setModal(true);
 }
+
+
+void popUpChoixCouleur::validerCouleur() {
+    if (coul_select != Couleur::INDT) {
+        // Émettre le signal signalCouleurValidee avec la couleur sélectionnée
+        emit signalCouleurValidee(coul_select);
+        close();
+    } else {
+        // Gérer le cas où aucune couleur n'est sélectionnée
+        qDebug() << "Aucune couleur sélectionnée.";
+        // Vous pouvez également afficher un message d'erreur ou effectuer d'autres actions ici
+    }
+}
+
 
 void popUpChoixCouleur::choixCouleur(Couleur c){
     if(!aEteClique){
         aEteClique = true;
+        coul_select = c;
+        setLabelCoul();
         qDebug()<<"marche bien et couleur: "<<toStringCouleur(c);
     }
-}
+    aEteClique = false;
+}*/
 
-popUpChoixJetonAdv::popUpChoixJetonAdv(Controller* control, QWidget* parent) : QDialog(parent), control(control) {
+/*popUpChoixJetonAdv::popUpChoixJetonAdv(Controller* control, QWidget* parent) : QDialog(parent), control(control) {
     layout = new QVBoxLayout;
     label = new QLabel("La capacité de la carte permet d'associer son bonus à la couleur de votre choix. Veuillez choisir une couleur parmi celles disponibles :", this);
     label->setWordWrap(true);
@@ -146,4 +173,4 @@ void popUpChoixJetonAdv::choixCouleur(Couleur c){
         aEteClique = true;
         qDebug()<<"marche bien et couleur: "<<toStringCouleur(c);
     }
-}
+}*/
