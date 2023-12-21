@@ -133,6 +133,7 @@ popUpChoixCouleur::popUpChoixCouleur(Controller* control, QWidget* parent) : QDi
 }
 
 
+/*
 popUpChoixJetonAdv::popUpChoixJetonAdv(Controller* control, QWidget* parent) : QDialog(parent), control(control) {
     QVBoxLayout* layout = new QVBoxLayout(this);
     signalMapper = new QSignalMapper(this);
@@ -175,3 +176,4 @@ popUpChoixJetonAdv::popUpChoixJetonAdv(Controller* control, QWidget* parent) : Q
     //connect(signalMapper, SIGNAL(mapped(QString)), this, SLOT(boutonClique(QString)));
     connect(this, SIGNAL(colorSelected(QString)), this, SLOT(boutonClique(QString)));
 }
+*/

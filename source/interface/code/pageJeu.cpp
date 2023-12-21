@@ -359,6 +359,7 @@ bool pageJeu::handleCapa(const Carte* c, Capacite capa1, Capacite capa2){
     popUpInfo* info_nouveau_tour = new popUpInfo(nullptr, "La capacité de la carte vous permet de joueur un nouveau tour");
     popUpInfo* info_take_jeton_from_bonus = new popUpInfo(nullptr, "La capacité de la carte vous permet de recuperer un jeton de la couleur du bonus de la carte. Veuillez sélectionner un jeton");
     popUpChoixCouleur* choixCouleur = new popUpChoixCouleur(control);
+    //popUpChoixJetonAdv* choixJetonAdv = new popUpChoixJetonAdv(control);
     int valid;
 
     switch(capa1){
@@ -388,10 +389,10 @@ bool pageJeu::handleCapa(const Carte* c, Capacite capa1, Capacite capa2){
         return true;
 
     case Capacite::TakeJetonToAdv:
-        valid = choixJetonAdv->exec();
+        //valid = choixJetonAdv->exec();
         if(valid==QDialog::Accepted){
-            QString selectedColor = choixJetonAdv->getSelectedColor();
-            qDebug() << "Couleur sélectionnée : " << selectedColor;
+            //QString selectedColor = choixJetonAdv->getSelectedColor();
+            //qDebug() << "Couleur sélectionnée : " << selectedColor;
                 return true;
         }
         return true;
