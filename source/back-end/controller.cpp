@@ -2100,9 +2100,9 @@ void  Controller::Tour_ia() {
             qDebug() << "Enregistrement des score...\n";
             enregisterScore();
             qDebug() << "DONE\n";
+            etat_tour = 10;
 
             //std::cout << "Fin de la partie !\n";
-            return;
             break;
         }
         default: {
