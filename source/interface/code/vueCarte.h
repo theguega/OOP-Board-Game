@@ -131,6 +131,14 @@ public:
     const Carte* getCarte(){return carte;}
 protected:
     void paintEvent(QPaintEvent *event);
+    void mousePressEvent(QMouseEvent *event) override {
+        if (event->button() == Qt::LeftButton && estRetournee){
+            qDebug() << "Clic gauche detecte sur le widget.";
+            emit carteAchetee(carte);
+        }
+    }
+signals:
+    void carteAchetee(const Carte* carte);
 };
 
 class vueCarteNoble : public QWidget{

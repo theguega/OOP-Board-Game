@@ -53,6 +53,10 @@ public:
     void setAfficherCouronnes(){afficheCouronnes->setText("Couronnes : " + QString::number(joueur->getNbCouronnes()));}
     void setAfficherPtPrestiges(){affichePtPrestiges->setText("Prestiges : " + QString::number(joueur->getptsPrestige()));}
     bool estDansCartes(const Carte* c);
+    int positionDansMap(const Carte* carte);
+    Joueur* getJoueur(){return joueur;}
+signals:
+    void acheterCarteReservee(const Carte* c);
 };
 
 #endif // PAGEJOUEUR_H

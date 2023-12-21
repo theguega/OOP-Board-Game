@@ -81,6 +81,7 @@ public slots:
     void validerSelectionCarte(position* p);
     void validerResaCarte(position* p);
     void validerResaCartePioche(int nivPioche);
+    void validerAchatCarteReservee(const Carte* carte);
 
     void afficherPrivileges();
     void remplirPlateau();
