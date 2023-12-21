@@ -4,24 +4,29 @@
 
 vueJeton::vueJeton(QWidget* parent, int rad, const Jeton* jeton, position* p) : QPushButton(parent), pos(p){
     this->jeton = jeton;
-    switch(jeton->getCouleur()){
-    case Couleur::BLANC:
-        Qcouleur = QColor("white");
-        QcouleurClair = QColor("white");
-        couleurContour = QColor("black");
-        break;
+    if(jeton != nullptr){
+        switch(jeton->getCouleur()){
+        case Couleur::BLANC:
+            Qcouleur = QColor("white");
+            QcouleurClair = QColor("white");
+            couleurContour = QColor("black");
+            break;
 
-    case Couleur::NOIR:
-        Qcouleur = QColor("black");
-        QcouleurClair = QColor("black");
-        couleurContour = QColor("white");
-        break;
+        case Couleur::NOIR:
+            Qcouleur = QColor("black");
+            QcouleurClair = QColor("black");
+            couleurContour = QColor("white");
+            break;
 
-    default:
-        Qcouleur = couleurEnQ(toStringCouleur(jeton->getCouleur())+"Fonce");
-        QcouleurClair = couleurEnQ(toStringCouleur(jeton->getCouleur()));
-        couleurContour = QColor("white");
-        break;
+        default:
+            Qcouleur = couleurEnQ(toStringCouleur(jeton->getCouleur())+"Fonce");
+            QcouleurClair = couleurEnQ(toStringCouleur(jeton->getCouleur()));
+            couleurContour = QColor("white");
+            break;
+        }
+    }
+    else{
+        hide();
     }
 
     this->rad = rad;
@@ -31,6 +36,36 @@ vueJeton::vueJeton(QWidget* parent, int rad, const Jeton* jeton, position* p) : 
     afficherCroix = false; //afficherCroix est un booleen pour savoir si on montre la croix de selection (false d'origine)
     setFlat(true);
     setStyleSheet("QPushButton:pressed { border: none; }"); // Annule le style du contour quand le bouton est presse
+}
+
+void vueJeton::setJeton(const Jeton* j){
+    jeton = j;
+    if(jeton != nullptr){
+        show();
+        switch(jeton->getCouleur()){
+        case Couleur::BLANC:
+            Qcouleur = QColor("white");
+            QcouleurClair = QColor("white");
+            couleurContour = QColor("black");
+            break;
+
+        case Couleur::NOIR:
+            Qcouleur = QColor("black");
+            QcouleurClair = QColor("black");
+            couleurContour = QColor("white");
+            break;
+
+        default:
+            Qcouleur = couleurEnQ(toStringCouleur(jeton->getCouleur())+"Fonce");
+            QcouleurClair = couleurEnQ(toStringCouleur(jeton->getCouleur()));
+            couleurContour = QColor("white");
+            break;
+        }
+    }
+    else{
+        hide();
+    }
+
 }
 
 void vueJeton::apparaitre(){ //Fait apparaitre le jeton (utile quand on voudra les remettre sur le plateau)

@@ -114,6 +114,7 @@ signals:
 };
 
 class vueCarteJoueur : public QWidget{
+    Q_OBJECT
 private:
     int h;
     int l;

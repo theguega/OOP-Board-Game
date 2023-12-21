@@ -136,7 +136,7 @@ bool pageJoueur::estDansCartes(const Carte* c){
 }
 
 int pageJoueur::positionDansMap(const Carte* carte){
-    Couleur& c = carte->getBonus().getCouleur();
+    Couleur c = carte->getBonus().getCouleur();
     int nb = 0;
     for(size_t i = 0; i < cartesReservees.size(); i++){
         if(carte == cartesReservees[i]->getCarte()){

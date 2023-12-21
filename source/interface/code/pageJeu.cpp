@@ -468,7 +468,7 @@ void pageJeu::remplirPlateau() {
 }
 
 void pageJeu::validerAchatCarteReservee(const Carte* carte){
-    if(control->getJoueurCourant() == joueur1->getJoueur()){
+    if(&control->getJoueurCourant() == joueur1->getJoueur()){
         if(joueur1->positionDansMap(carte) != -1){
             if(control->verifAchatCarte(carte)){
                 return;
@@ -481,7 +481,7 @@ void pageJeu::validerAchatCarteReservee(const Carte* carte){
             popUpInfo* infos = new popUpInfo(nullptr, "Vous n'avez pas cette carte");
         }
     }
-    else if(control->getJoueurCourant() == joueur2->getJoueur()){
+    else if(&control->getJoueurCourant() == joueur2->getJoueur()){
         if(joueur1->positionDansMap(carte) != -1){
             if(control->verifAchatCarte(carte)){
                 return;
