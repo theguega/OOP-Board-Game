@@ -74,10 +74,12 @@ class popUpChoixCouleur : public QDialog {
         void colorSelected(const QString& color);
 
     private slots:
-        void Selected(const QString& color) {
+        void boutonClique(const QString& color) {
             selectedColor = color;
         }
-
+        void onAccepted() {
+            emit colorSelected(selectedColor);
+        }
     public:
         QString getSelectedColor() const {
             return selectedColor;
@@ -89,5 +91,6 @@ class popUpChoixCouleur : public QDialog {
         QString selectedColor;
         QLabel* label;
 };
+
 
 #endif

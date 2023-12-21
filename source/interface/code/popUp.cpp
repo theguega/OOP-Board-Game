@@ -116,8 +116,11 @@ popUpChoixCouleur::popUpChoixCouleur(Controller* control, QWidget* parent) : QDi
         if (value != 0) {
             QRadioButton* radioButton = new QRadioButton(color, this);
             layout->addWidget(radioButton);
-            connect(radioButton, SIGNAL(clicked()), signalMapper, SLOT(map()));
+            connect(radioButton, SIGNAL(clicked()), this, SLOT(boutonClique()));
+            connect(radioButton, SIGNAL(clicked()), this, SLOT(onAccepted()));
             signalMapper->setMapping(radioButton, color);
+//            connect(radioButton, SIGNAL(clicked()), signalMapper, SLOT(map()));
+//            signalMapper->setMapping(radioButton, color);
         }
     }
 
@@ -125,5 +128,6 @@ popUpChoixCouleur::popUpChoixCouleur(Controller* control, QWidget* parent) : QDi
     layout->addWidget(okButton);
     connect(okButton, SIGNAL(clicked()), this, SLOT(accept()));
 
-    connect(signalMapper, SIGNAL(mapped(QString)), this, SLOT(colorSelected(QString)));
+    //connect(signalMapper, SIGNAL(mapped(QString)), this, SLOT(boutonClique(QString)));
+    connect(this, SIGNAL(colorSelected(QString)), this, SLOT(boutonClique(QString)));
 }
