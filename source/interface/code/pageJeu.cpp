@@ -122,7 +122,7 @@ void pageJeu::validerSelectionJeton()
         // Traiter le résultat de la validation
         if(isValid){
             control->recupererJetons(vPlateau->getSelectionJetons());
-            control->changerJoueurCourant();
+            control->changerJoueurCourantGraphique();
 
             refresh();
         }
@@ -153,7 +153,7 @@ void pageJeu::validerSelectionJeton()
                 vPlateau->getBoutonValiderPriv()->setEnabled(true);
                 bSac->setEnabled(true);
                 capa_en_cours = make_pair(false, Couleur::INDT);
-                control->changerJoueurCourant();
+                control->changerJoueurCourantGraphique();
                 control->setNouveauTour(false);
                 refresh();
             }else
@@ -286,7 +286,7 @@ void pageJeu::handleReservationCartePioche(int nivPioche, position* pJ){
     if(next){
         control->orReserverCartePioche(nivPioche);
         control->recupererJetons(tmp);
-        control->changerJoueurCourant();
+        control->changerJoueurCourantGraphique();
         control->setNouveauTour(false);
     }
 }
@@ -351,7 +351,7 @@ void pageJeu::handleReservationCarte(position* p, position* pJ){
     if(next){
         control->orReserverCarte(coord);
         control->recupererJetons(tmp);
-        control->changerJoueurCourant();
+        control->changerJoueurCourantGraphique();
         control->setNouveauTour(false);
     }
 }
@@ -366,7 +366,7 @@ void pageJeu::handleValidationCarte(position* p){
     if(next){
         control->acheterCarteJoaillerie(coord);
         if(capa_en_cours.first==false){
-            control->changerJoueurCourant();
+            control->changerJoueurCourantGraphique();
             control->setNouveauTour(false);
         }
     }
