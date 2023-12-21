@@ -1,4 +1,3 @@
-
 #include <QScreen>
 #include <QSize>
 #include <QApplication>
@@ -6,6 +5,8 @@
 #include "toutesPages.h"
 #include "pageJeu.h"
 #include <QPalette>
+
+
 
 
 pageJeu::pageJeu(QString statut_partie, QString pseudo_j_1, type type_j_1, QString pseudo_j_2, type type_j_2, QWidget *parent) : QWidget(parent) {
@@ -63,9 +64,6 @@ pageJeu::pageJeu(QString statut_partie, QString pseudo_j_1, type type_j_1, QStri
     layoutPrivileges->addWidget(bSac);
 
 
-
-
-
     labelJC = new QLabel;
 
     QPalette palette = labelJC->palette();
@@ -103,12 +101,13 @@ pageJeu::pageJeu(QString statut_partie, QString pseudo_j_1, type type_j_1, QStri
     connect(joueur2, &pageJoueur::acheterCarteReservee, this, &pageJeu::validerAchatCarteReservee);
     connect(bSac, &QPushButton::clicked, this, &pageJeu::remplirPlateau);
 
-    if (control -> getJoueurCourant().getTypeDeJoueur() == type::IA){
+    if (control -> getJoueurCourant().getTypeDeJoueur() == type::IA)
         control -> Tour_ia();
-    }
 
     refresh();
 }
+
+
 
 
 void pageJeu::validerSelectionJeton()
@@ -168,8 +167,9 @@ void pageJeu::validerSelectionJeton()
 }
 
 
-void pageJeu::validerSelectionJetonPrivi()
-{
+
+
+void pageJeu::validerSelectionJetonPrivi() {
     // Appeler la méthode verifJetons avec la sélection actuelle de la vue
     std::pair<bool, QString> validationResult = control->verifJetons(vPlateau->getSelectionJetons());
     bool isValid = validationResult.first;
@@ -204,6 +204,8 @@ void pageJeu::validerSelectionJetonPrivi()
 }
 
 
+
+
 void pageJeu::validerSelectionCarte(position* pos){
     std::pair<bool, QString> validationResult = control->verifAchatCarte(std::make_pair(pos->getx(), pos->gety()));
     bool isValid = validationResult.first;
@@ -226,6 +228,9 @@ void pageJeu::validerSelectionCarte(position* pos){
         infos->show();
     }
 }
+
+
+
 
 void pageJeu::validerResaCartePioche(int nivPioche){
     bool isValidOr;
@@ -274,6 +279,9 @@ void pageJeu::validerResaCartePioche(int nivPioche){
     refresh();
 }
 
+
+
+
 void pageJeu::handleReservationCartePioche(int nivPioche, position* pJ){
     std::pair<int, int> coordJeton  = std::make_pair(pJ->getx(), pJ->gety());
     std::vector<std::pair<int, int>> tmp;
@@ -291,6 +299,9 @@ void pageJeu::handleReservationCartePioche(int nivPioche, position* pJ){
     }
 }
 
+
+
+
 void pageJeu::validerResaCarte(position* pos){
     bool isValidOr;
     QString messageOr;
@@ -305,7 +316,6 @@ void pageJeu::validerResaCarte(position* pos){
         isValidOr = validationResultJeton.first;
         messageOr = validationResultJeton.second;
     }
-
 
 
     std::pair<bool, QString> validationResult = control->verifReservationCarte(std::make_pair(pos->getx(), pos->gety()));
@@ -336,6 +346,8 @@ void pageJeu::validerResaCarte(position* pos){
 
     refresh();
 }
+
+
 
 
 void pageJeu::handleReservationCarte(position* p, position* pJ){
@@ -468,6 +480,9 @@ void pageJeu::paintEvent(QPaintEvent *event){
     painter.drawRect(rect()); //On peind ce rectangle (permet de fair eun contour de la carte)
 }
 
+
+
+
 void pageJeu::afficherPrivileges(){
     for(unsigned int i = 0; i < control->getPlateau().getNbPrivileges(); i++){
         listePrivileges[i] -> show();
@@ -476,6 +491,8 @@ void pageJeu::afficherPrivileges(){
         listePrivileges[i] -> hide();
     }
 }
+
+
 
 
 void pageJeu::refresh(){
@@ -489,6 +506,8 @@ void pageJeu::refresh(){
     sauvegardeFait = false;
     update();
 }
+
+
 
 
 void pageJeu::remplirPlateau() {
@@ -514,6 +533,9 @@ void pageJeu::remplirPlateau() {
     refresh();
     update();
 }
+
+
+
 
 void pageJeu::validerAchatCarteReservee(const Carte* carte){
     if(&control->getJoueurCourant() == joueur1->getJoueur()){
