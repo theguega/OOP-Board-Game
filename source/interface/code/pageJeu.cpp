@@ -388,6 +388,12 @@ bool pageJeu::handleCapa(const Carte* c, Capacite capa1, Capacite capa2){
         return true;
 
     case Capacite::TakeJetonToAdv:
+        valid = choixJetonAdv->exec();
+        if(valid==QDialog::Accepted){
+            QString selectedColor = choixJetonAdv->getSelectedColor();
+            qDebug() << "Couleur sélectionnée : " << selectedColor;
+                return true;
+        }
         return true;
 
     case Capacite::TakePrivilege:
