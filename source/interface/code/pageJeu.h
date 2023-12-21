@@ -57,6 +57,9 @@ protected:
             aSauvegarde -> show();
             event -> ignore();
         }
+        else{
+            emit fermerPopUp();
+        }
     }
     void quitter(){ //Permet de quitter la page
         quitterPage = true;
