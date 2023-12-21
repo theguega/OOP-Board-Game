@@ -27,6 +27,7 @@ private:
 
     QPushButton* afficherJ1; //Bouton pour afficher la page du joueur1
     QPushButton* afficherJ2; //Bouton pour afficher la page du joueur2
+    QPushButton* boutonSauvegarder;
 
     std::vector<vuePrivilege*> listePrivileges;
     boutonSac* bSac;
@@ -48,16 +49,16 @@ private:
     popUpValider* aSauvegarde; //PopUp pour sauvegarder la partie
     bool quitterPage = false; //Utile pour la redefinission de closeEvent
     std::pair<bool, Couleur> capa_en_cours = std::make_pair(false, Couleur::INDT);
+    bool sauvegardeFait = false;
 protected:
     void closeEvent(QCloseEvent *event) override { //Redefinition de la methode closeEvent
         aSauvegarde -> hide();
-        if(!quitterPage){
+        if(!quitterPage && !sauvegardeFait){
             aSauvegarde -> show();
             event -> ignore();
         }
     }
     void quitter(){ //Permet de quitter la page
-        control->sauvegardePartie();
         quitterPage = true;
         aSauvegarde -> close();
         this -> close();
@@ -97,6 +98,8 @@ private slots:
     void handleReservationCartePioche(int nivPioche, position* pJ);
 
     bool handleCapa(const Carte* c, Capacite capa1, Capacite capa2);
+signals:
+    void fermerPopUp();
 };
 
 

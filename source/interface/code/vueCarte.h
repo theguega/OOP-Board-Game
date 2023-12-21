@@ -154,6 +154,7 @@ public:
     vueCarteNoble(QWidget* parent, int hauteur, int largeur, const Carte* c) :
         QWidget(parent), h(hauteur), l(largeur), carte(c){setFixedSize(l, h);}
     void setEstAchete(bool b){estAchete = b;}
+    const Carte* getCarte() {return carte;}
 protected:
     void paintEvent(QPaintEvent *event) override;
     void mousePressEvent(QMouseEvent *event) override {
