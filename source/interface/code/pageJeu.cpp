@@ -14,13 +14,11 @@ pageJeu::pageJeu(QString statut_partie, QString pseudo_j_1, type type_j_1, QStri
     setWindowTitle("SplendorDuel");
 
     control = new Controller(statut_partie, pseudo_j_1, type_j_1, pseudo_j_2, type_j_2);
-
     if(statut_partie=="New")
         control->lancerPartie();
 
     ecran = QGuiApplication::primaryScreen();
     tailleEcran = ecran->availableGeometry().size();
-
     tailleLargeur = tailleEcran.width();
     tailleHauteur = tailleEcran.height();
 
@@ -32,14 +30,7 @@ pageJeu::pageJeu(QString statut_partie, QString pseudo_j_1, type type_j_1, QStri
     std::string texteBoutonJ1 = "Afficher " + control->getPartie().getJoueur1()->getPseudo();
     std::string texteBoutonJ2 = "Afficher " + control->getPartie().getJoueur2()->getPseudo();
     afficherJ1 = new QPushButton(QString::fromStdString(texteBoutonJ1));
-    afficherJ2 = new QPushButton(QString::fromStdString(texteBoutonJ2));
-
-    boutonSauvegarder = new QPushButton("Sauvegarder");
-    connect(boutonSauvegarder, &QPushButton::clicked, this, [this](){
-        control->sauvegardePartie();
-        sauvegardeFait = true;
-    });
-
+    afficherJ2 = new QPushButton(QString::fromStdString(texteBoutonJ2));    
     connect(afficherJ1, &QPushButton::clicked, this, [this]() {
         this->joueur1->hide();
         this->joueur1->show();
@@ -48,6 +39,13 @@ pageJeu::pageJeu(QString statut_partie, QString pseudo_j_1, type type_j_1, QStri
         this->joueur1->hide();
         this->joueur2->show();
     });
+
+    boutonSauvegarder = new QPushButton("Sauvegarder");
+    connect(boutonSauvegarder, &QPushButton::clicked, this, [this](){
+        control->sauvegardePartie();
+        sauvegardeFait = true;
+    });
+
 
     partieHaute = new QHBoxLayout;
     partieMoyenne = new QHBoxLayout;
@@ -63,13 +61,11 @@ pageJeu::pageJeu(QString statut_partie, QString pseudo_j_1, type type_j_1, QStri
     bSac = new boutonSac(nullptr, (vPlateau->height() - 130)/4, 30);
     layoutPrivileges->addWidget(bSac);
 
-
     labelJC = new QLabel;
 
     QPalette palette = labelJC->palette();
     palette.setColor(QPalette::WindowText, Qt::white);
     labelJC->setPalette(palette);
-
 
     partieHaute -> addWidget(labelJC);
     partieHaute -> setAlignment(Qt::AlignCenter);
@@ -110,11 +106,9 @@ pageJeu::pageJeu(QString statut_partie, QString pseudo_j_1, type type_j_1, QStri
 
 
 
-void pageJeu::validerSelectionJeton()
-{
-    if(capa_en_cours.first == false){
-        // Appeler la méthode verifJetons avec la sélection actuelle de la vue
-        std::pair<bool, QString> validationResult = control->verifJetons(vPlateau->getSelectionJetons());
+void pageJeu::validerSelectionJeton() {
+    if(capa_en_cours.first == false && resa_en_cours == false){       // Action obligatoire recup jeton
+        std::pair<bool, QString> validationResult = control->verifJetons(vPlateau->getSelectionJetons());   // Verif de la validite de la selection de jetons
         bool isValid = validationResult.first;
         const QString& message = validationResult.second;
 
@@ -130,7 +124,7 @@ void pageJeu::validerSelectionJeton()
             connect(this, &pageJeu::fermerPopUp, infos, &popUpInfo::close);
             infos->show();
         }
-    } else {
+    } else if (capa_en_cours.first == true) {        // correspond à la récupération de jeton lors d'une capacité
         std::vector<std::pair<int, int>> coord = vPlateau->getSelectionJetons();
         if(coord.size() == 0)
         {
@@ -163,7 +157,39 @@ void pageJeu::validerSelectionJeton()
             }
         }
     }
-
+    else if(resa_en_cours == true){
+        std::vector<std::pair<int, int>> coord = vPlateau->getSelectionJetons();
+        if(coord.size() == 0)
+        {
+            popUpInfo* infos = new popUpInfo(nullptr, "Veuillez sélectionner un jeton Or");
+            //connect(this, &pageJeu::fermerPopUp, infos, &popUpInfo::close);
+            infos->show();
+        } else if(coord.size() > 1)
+        {
+            popUpInfo* infos = new popUpInfo(nullptr, "Vous ne pouvez sélectionner qu'un seul jeton Or");
+            connect(this, &pageJeu::fermerPopUp, infos, &popUpInfo::close);
+            infos->show();
+        } else
+        {
+            const Jeton* j_tmp = control->getPlateau().getJeton(coord[0].first, coord[0].second);
+            if(j_tmp->getCouleur() == Couleur::OR)
+            {
+                control->recupererJetons(vPlateau->getSelectionJetons());
+                vPyramide->setEnabled(true);
+                vPlateau->getBoutonValiderPriv()->setEnabled(true);
+                bSac->setEnabled(true);
+                resa_en_cours = false;
+                control->changerJoueurCourantGraphique();
+                control->setNouveauTour(false);
+                refresh();
+            }else
+            {
+                popUpInfo* infos = new popUpInfo(nullptr, "Vous devez sélectionner un jeton Or");
+                    connect(this, &pageJeu::fermerPopUp, infos, &popUpInfo::close);
+                infos->show();
+            }
+        }
+    }
 }
 
 
@@ -186,7 +212,6 @@ void pageJeu::validerSelectionJetonPrivi() {
             control->recupererJetons(vPlateau->getSelectionJetons());
 
             refresh();
-
         }
         else{
             const QString& message = " Pas assez de privileges ! ";
@@ -194,7 +219,6 @@ void pageJeu::validerSelectionJetonPrivi() {
             connect(this, &pageJeu::fermerPopUp, infos, &popUpInfo::close);
             infos->show();
         }
-
     }
     else{
         popUpInfo* infos = new popUpInfo(nullptr, message.toStdString());
@@ -211,160 +235,18 @@ void pageJeu::validerSelectionCarte(position* pos){
     bool isValid = validationResult.first;
     const QString& message = validationResult.second;
 
-    if(isValid){
+    if(isValid){    // Achat valide
         modalPopup* validation = new modalPopup(this, message, "Voulez-vous valider ?");
         int result =validation->exec();
-
-        // Check the result (optional).
         if (result == QDialog::Accepted){
             pageJeu::handleValidationCarte(pos);
         }
         delete validation;
-
         refresh();
     }
-    else{
+    else{           // Achat impossible
         popUpInfo* infos = new popUpInfo(nullptr, message.toStdString());
         infos->show();
-    }
-}
-
-
-
-
-void pageJeu::validerResaCartePioche(int nivPioche){
-    bool isValidOr;
-    QString messageOr;
-
-    if(!vPlateau->selecteOr()){
-        isValidOr = false;
-        messageOr = QString("Sélectionnez un 2 jeton Or.");
-
-    }
-    else {
-        std::pair<bool, QString> validationResultJeton = control->verifJetonOr(std::make_pair(vPlateau->selecteOr()->getx(), vPlateau->selecteOr()->gety()));
-        isValidOr = validationResultJeton.first;
-        messageOr = validationResultJeton.second;
-    }
-
-
-
-    std::pair<bool, QString> validationResult = control->verifReservationCartePioche(nivPioche);
-    bool isValid = validationResult.first;
-    const QString& message = validationResult.second;
-
-
-    if(isValid && isValidOr){
-        modalPopup* validation = new modalPopup(this, message, "Voulez-vous valider ?");
-        int result =validation->exec();
-
-        // Check the result (optional).
-        if (result == QDialog::Accepted){
-            // Modification
-            pageJeu::handleReservationCartePioche(nivPioche, vPlateau->selecteOr());
-        }
-        delete validation;
-    }
-    else if (!isValid){
-        popUpInfo* infos = new popUpInfo(nullptr, message.toStdString());
-        connect(this, &pageJeu::fermerPopUp, infos, &popUpInfo::close);
-        infos->show();
-    }
-    else if (!isValidOr){
-        popUpInfo* infos = new popUpInfo(nullptr, messageOr.toStdString());
-        connect(this, &pageJeu::fermerPopUp, infos, &popUpInfo::close);
-        infos->show();
-    }
-
-    refresh();
-}
-
-
-
-
-void pageJeu::handleReservationCartePioche(int nivPioche, position* pJ){
-    std::pair<int, int> coordJeton  = std::make_pair(pJ->getx(), pJ->gety());
-    std::vector<std::pair<int, int>> tmp;
-    tmp.push_back(coordJeton);
-
-    //std::pair<int, int> coord = std::make_pair(p->getx(), p->gety());
-    //const Carte* carte_tmp = control->getPyramide().getCarte(coord.first, coord.second);
-    bool next = true;
-
-    if(next){
-        control->orReserverCartePioche(nivPioche);
-        control->recupererJetons(tmp);
-        control->changerJoueurCourantGraphique();
-        control->setNouveauTour(false);
-    }
-}
-
-
-
-
-void pageJeu::validerResaCarte(position* pos){
-    bool isValidOr;
-    QString messageOr;
-
-    if(vPlateau->selecteOr()== nullptr){
-        isValidOr = false;
-        messageOr = QString("Sélectionnez un 3 jeton Or.");
-
-    }
-    else {
-        std::pair<bool, QString> validationResultJeton = control->verifJetonOr(std::make_pair(vPlateau->selecteOr()->getx(), vPlateau->selecteOr()->gety()));
-        isValidOr = validationResultJeton.first;
-        messageOr = validationResultJeton.second;
-    }
-
-
-    std::pair<bool, QString> validationResult = control->verifReservationCarte(std::make_pair(pos->getx(), pos->gety()));
-    bool isValid = validationResult.first;
-    const QString& message = validationResult.second;
-
-    if(isValid && isValidOr){
-        modalPopup* validation = new modalPopup(this, message, "Voulez-vous valider ?");
-        int result =validation->exec();
-
-        // Check the result (optional).
-        if (result == QDialog::Accepted){
-            // Modification
-            pageJeu::handleReservationCarte(pos, vPlateau->selecteOr());
-        }
-        delete validation;
-    }
-    else if (!isValid){
-        popUpInfo* infos = new popUpInfo(nullptr, message.toStdString());
-        connect(this, &pageJeu::fermerPopUp, infos, &popUpInfo::close);
-        infos->show();
-    }
-    else if (!isValidOr){
-        popUpInfo* infos = new popUpInfo(nullptr, messageOr.toStdString());
-        connect(this, &pageJeu::fermerPopUp, infos, &popUpInfo::close);
-        infos->show();
-    }
-
-    refresh();
-}
-
-
-
-
-void pageJeu::handleReservationCarte(position* p, position* pJ){
-    // Ajouter achat jeton
-    std::pair<int, int> coordJeton  = std::make_pair(pJ->getx(), pJ->gety());
-    std::vector<std::pair<int, int>> tmp;
-    tmp.push_back(coordJeton);
-
-    std::pair<int, int> coord = std::make_pair(p->getx(), p->gety());
-    //const Carte* carte_tmp = control->getPyramide().getCarte(coord.first, coord.second);
-    bool next = true;
-
-    if(next){
-        control->orReserverCarte(coord);
-        control->recupererJetons(tmp);
-        control->changerJoueurCourantGraphique();
-        control->setNouveauTour(false);
     }
 }
 
@@ -452,7 +334,7 @@ void pageJeu::handleValidationCarte(position* p){
             break;
 
         default:
-            break;      
+            break;
         }
     }
     else{
@@ -462,6 +344,194 @@ void pageJeu::handleValidationCarte(position* p){
             control->setNouveauTour(false);
         }
     }
+}
+
+
+
+
+void pageJeu::validerResaCartePioche(int nivPioche){
+    bool isValidOr;
+    QString messageOr;
+
+    if(!vPlateau->selecteOr()){
+        isValidOr = false;
+        messageOr = QString("Sélectionnez un 2 jeton Or.");
+
+    }
+    else {
+        std::pair<bool, QString> validationResultJeton = control->verifJetonOr(std::make_pair(vPlateau->selecteOr()->getx(), vPlateau->selecteOr()->gety()));
+        isValidOr = validationResultJeton.first;
+        messageOr = validationResultJeton.second;
+    }
+
+    std::pair<bool, QString> validationResult = control->verifReservationCartePioche(nivPioche);
+    bool isValid = validationResult.first;
+    const QString& message = validationResult.second;
+
+
+    if(isValid && isValidOr){
+        modalPopup* validation = new modalPopup(this, message, "Voulez-vous valider ?");
+        int result =validation->exec();
+
+        // Check the result (optional).
+        if (result == QDialog::Accepted){
+            // Modification
+            pageJeu::handleReservationCartePioche(nivPioche, vPlateau->selecteOr());
+        }
+        delete validation;
+    }
+    else if (!isValid){
+        popUpInfo* infos = new popUpInfo(nullptr, message.toStdString());
+        connect(this, &pageJeu::fermerPopUp, infos, &popUpInfo::close);
+        infos->show();
+    }
+    else if (!isValidOr){
+        popUpInfo* infos = new popUpInfo(nullptr, messageOr.toStdString());
+        connect(this, &pageJeu::fermerPopUp, infos, &popUpInfo::close);
+        infos->show();
+    }
+
+    refresh();
+
+    /*// alternative
+    std::pair<bool, QString> validationResult = control->verifReservationCarte();
+    bool isValid = validationResult.first;
+    const QString& message = validationResult.second;
+
+    if(isValid){    // Resa valide
+        modalPopup* validation = new modalPopup(this, message, "Voulez-vous valider ?");
+        int result =validation->exec();
+        if (result == QDialog::Accepted){
+            pageJeu::handleValidationCarte(pos);
+        }
+        delete validation;
+        refresh();
+    }
+    else{           // Resa impossible
+        popUpInfo* infos = new popUpInfo(nullptr, message.toStdString());
+        infos->show();
+    }*/
+
+}
+
+
+
+
+void pageJeu::handleReservationCartePioche(int nivPioche, position* pJ){
+    std::pair<int, int> coordJeton  = std::make_pair(pJ->getx(), pJ->gety());
+    std::vector<std::pair<int, int>> tmp;
+    tmp.push_back(coordJeton);
+
+    //std::pair<int, int> coord = std::make_pair(p->getx(), p->gety());
+    //const Carte* carte_tmp = control->getPyramide().getCarte(coord.first, coord.second);
+    bool next = true;
+
+    if(next){
+        control->orReserverCartePioche(nivPioche);
+        control->recupererJetons(tmp);
+        control->changerJoueurCourantGraphique();
+        control->setNouveauTour(false);
+    }
+}
+
+
+
+
+void pageJeu::validerResaCarte(position* pos){
+    /*bool isValidOr;
+    QString messageOr;
+
+    if(vPlateau->selecteOr()== nullptr){
+        isValidOr = false;
+        messageOr = QString("Sélectionnez un 3 jeton Or.");
+
+    }
+    else {
+        std::pair<bool, QString> validationResultJeton = control->verifJetonOr(std::make_pair(vPlateau->selecteOr()->getx(), vPlateau->selecteOr()->gety()));
+        isValidOr = validationResultJeton.first;
+        messageOr = validationResultJeton.second;
+    }
+
+
+    std::pair<bool, QString> validationResult = control->verifReservationCarte(std::make_pair(pos->getx(), pos->gety()));
+    bool isValid = validationResult.first;
+    const QString& message = validationResult.second;
+
+    if(isValid && isValidOr){
+        modalPopup* validation = new modalPopup(this, message, "Voulez-vous valider ?");
+        int result =validation->exec();
+
+        // Check the result (optional).
+        if (result == QDialog::Accepted){
+            // Modification
+            pageJeu::handleReservationCarte(pos, vPlateau->selecteOr());
+        }
+        delete validation;
+    }
+    else if (!isValid){
+        popUpInfo* infos = new popUpInfo(nullptr, message.toStdString());
+        connect(this, &pageJeu::fermerPopUp, infos, &popUpInfo::close);
+        infos->show();
+    }
+    else if (!isValidOr){
+        popUpInfo* infos = new popUpInfo(nullptr, messageOr.toStdString());
+        connect(this, &pageJeu::fermerPopUp, infos, &popUpInfo::close);
+        infos->show();
+    }
+
+    refresh();*/
+
+    // alternative
+    std::pair<bool, QString> validationResult = control->verifReservationCarte();
+    bool isValid = validationResult.first;
+    const QString& message = validationResult.second;
+
+    if(isValid){    // Resa valide
+        modalPopup* validation = new modalPopup(this, message, "Voulez-vous valider ?");
+        int result =validation->exec();
+        if (result == QDialog::Accepted){
+            pageJeu::handleReservationCarte(pos);
+        }
+        delete validation;
+        refresh();
+    }
+    else{           // Resa impossible
+        popUpInfo* infos = new popUpInfo(nullptr, message.toStdString());
+        infos->show();
+    }
+
+}
+
+
+
+
+void pageJeu::handleReservationCarte(position* p, position* pJ){
+    /*// Ajouter achat jeton
+    std::pair<int, int> coordJeton  = std::make_pair(pJ->getx(), pJ->gety());
+    std::vector<std::pair<int, int>> tmp;
+    tmp.push_back(coordJeton);
+
+    std::pair<int, int> coord = std::make_pair(p->getx(), p->gety());
+    //const Carte* carte_tmp = control->getPyramide().getCarte(coord.first, coord.second);
+    bool next = true;
+
+    if(next){
+        control->orReserverCarte(coord);
+        control->recupererJetons(tmp);
+        control->changerJoueurCourantGraphique();
+        control->setNouveauTour(false);
+    }*/
+
+    // alternative
+    std::pair<int, int> coord = std::make_pair(p->getx(), p->gety());
+    control->orReserverCarte(coord);
+    resa_en_cours = true;
+    vPyramide->setEnabled(false);
+    vPlateau->getBoutonValiderPriv()->setEnabled(false);
+    bSac->setEnabled(false);
+    popUpInfo* infoResa = new popUpInfo(nullptr, "Veuillez prendre un jeton Or");
+    infoResa->show();
+
 }
 
 

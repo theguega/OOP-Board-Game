@@ -52,6 +52,7 @@ private:
     popUpValider* aSauvegarde;       // PopUp pour sauvegarder la partie
     bool quitterPage = false;        // Utile pour la redefinission de closeEvent
     std::pair<bool, Couleur> capa_en_cours = std::make_pair(false, Couleur::INDT);
+    bool resa_en_cours = false;
     bool sauvegardeFait = false;
 protected:
     void closeEvent(QCloseEvent *event) override {  //Redefinition de la methode closeEvent
@@ -99,7 +100,7 @@ private slots:
     void validerSelectionJetonPrivi();
 
     void handleValidationCarte(position* p);
-    void handleReservationCarte(position* p, position* pJ);
+    void handleReservationCarte(position* p, position* pJ = nullptr);
     void handleReservationCartePioche(int nivPioche, position* pJ);
 signals:
     void fermerPopUp();
