@@ -16,57 +16,59 @@
 #include "interface/code/popUp.h"
 #include "back-end/joueur.hpp"
 
+
+
+
 class pageJeu : public QWidget {
     Q_OBJECT
 private:
     Controller* control;
-    vuePlateau* vPlateau; //Plateau de jetons
-    pageJoueur* joueur1; //Page du joueur1
-    pageJoueur* joueur2; //Page du joueur2
-    vuePyramide* vPyramide; //Pyramide de carte
+    vuePlateau* vPlateau;            // Plateau de jetons
+    pageJoueur* joueur1;             // Page du joueur1
+    pageJoueur* joueur2;             // Page du joueur2
+    vuePyramide* vPyramide;          // Pyramide de carte
 
-    QPushButton* afficherJ1; //Bouton pour afficher la page du joueur1
-    QPushButton* afficherJ2; //Bouton pour afficher la page du joueur2
+    QPushButton* afficherJ1;         // Bouton pour afficher la page du joueur1
+    QPushButton* afficherJ2;         // Bouton pour afficher la page du joueur2
     QPushButton* boutonSauvegarder;
 
     std::vector<vuePrivilege*> listePrivileges;
     boutonSac* bSac;
 
     QHBoxLayout* partieHaute;
-    QHBoxLayout* partieMoyenne;  //Partie Haute a ranger (pyramide et plateau)
-    QHBoxLayout* partieBasse; //Partie Basse a ranger (boutons)
-    QVBoxLayout* layout;//Layout principal
+    QHBoxLayout* partieMoyenne;      // Partie Haute a ranger (pyramide et plateau)
+    QHBoxLayout* partieBasse;        // Partie Basse a ranger (boutons)
+    QVBoxLayout* layout;             // Layout principal
     QVBoxLayout* layoutPrivileges;
 
     QLabel* labelJC;
 
-    QScreen* ecran; //Recupere l'ecran de l'utilisateur
-    QSize tailleEcran; //Recupere la taille de l'ecran
+    QScreen* ecran;                  // Recupere l'ecran de l'utilisateur
+    QSize tailleEcran;               // Recupere la taille de l'ecran
 
-    int tailleLargeur; //Utile pour definir les tailles de sous objets
-    int tailleHauteur; //Utile pour definir les tailles de sous objets
+    int tailleLargeur;               // Utile pour definir les tailles de sous objets
+    int tailleHauteur;               // Utile pour definir les tailles de sous objets
 
-    popUpValider* aSauvegarde; //PopUp pour sauvegarder la partie
-    bool quitterPage = false; //Utile pour la redefinission de closeEvent
+    popUpValider* aSauvegarde;       // PopUp pour sauvegarder la partie
+    bool quitterPage = false;        // Utile pour la redefinission de closeEvent
     std::pair<bool, Couleur> capa_en_cours = std::make_pair(false, Couleur::INDT);
     bool sauvegardeFait = false;
 protected:
-    void closeEvent(QCloseEvent *event) override { //Redefinition de la methode closeEvent
+    void closeEvent(QCloseEvent *event) override {  //Redefinition de la methode closeEvent
         aSauvegarde -> hide();
         if(!quitterPage && !sauvegardeFait){
             aSauvegarde -> show();
             event -> ignore();
         }
-        else{
+        else
             emit fermerPopUp();
-        }
     }
-    void quitter(){ //Permet de quitter la page
+    void quitter(){                 //Permet de quitter la page
         quitterPage = true;
         aSauvegarde -> close();
         this -> close();
     }
-    void rester(){ //Permet de restetr sur la page
+    void rester(){                  //Permet de restetr sur la page
         aSauvegarde -> close();
     }
     void paintEvent(QPaintEvent *event) override;
