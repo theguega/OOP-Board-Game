@@ -32,7 +32,7 @@ int main(int argc, char * argv[]) {
         return 0;
     } else {
         QApplication app(argc, argv);
-        int fontId = QFontDatabase::addApplicationFont("fonts/MedievalSharp-Regular.ttf");
+        int fontId = QFontDatabase::addApplicationFont(":/font/fonts/MedievalSharp-Regular.ttf");
         QStringList fontFamilies = QFontDatabase::applicationFontFamilies(fontId);
         QFont customFont(fontFamilies.at(0), 12);
         app.setFont(customFont);

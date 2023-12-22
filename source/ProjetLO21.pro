@@ -51,5 +51,6 @@ DISTFILES += \
     PROBLEMES.md
 
 RESOURCES += \
-    fonts.qrc
+    font.qrc
+
 

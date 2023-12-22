@@ -39,7 +39,7 @@ public:
 	~Controller() { delete partie; }
 
 	// getters
-    string getStatutPartie()const{return stat_partie;}
+    string getStatutPartie() const { return stat_partie; }
     Partie& getPartie() { return *partie; }
     Joueur& getJoueurCourant() { return *joueurCourant; }
     Strategy& getStrategyCourante() {return *strategy_courante;}
@@ -102,7 +102,6 @@ public:
     void verifSacvide();
     void verifOrSurPlateau();
     void verifTroisCarteReserve();
-    bool verifTroisCarteReserveBool();
     void verifJetonSupDix();
     bool verifAchatCarte(const Carte* carte);
     vector<pair<int, int>> GenereCartePyramideDispo();
