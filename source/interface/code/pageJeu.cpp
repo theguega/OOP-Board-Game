@@ -58,6 +58,17 @@ pageJeu::pageJeu(QString statut_partie, QString pseudo_j_1, type type_j_1, QStri
         layoutPrivileges->addWidget(listePrivileges[i]);
     }
 
+    widgetNoble = new QWidget;
+    layoutNoble = new QHBoxLayout;
+    widgetNoble->setLayout(layoutNoble);
+    for(size_t i = 0; i < control->getPyramide().getNbCartesNiv(3); i++){
+        vueCarteNoble* temp = new vueCarteNoble(nullptr, vPyramide->height()/(vPyramide->getHauteur() + 1), vPyramide->width()/(vPyramide->getHauteur() + 4), control->getPyramide().getCarte(3, i));
+        connect(temp, &vueCarteNoble::nobleClique, this, [this, i](){
+            handleCartesNoble(i);
+        });
+        layoutNoble->addWidget(temp);
+    }
+
     bSac = new boutonSac(nullptr, (vPlateau->height() - 130)/4, 30);
     layoutPrivileges->addWidget(bSac);
 
@@ -99,6 +110,8 @@ pageJeu::pageJeu(QString statut_partie, QString pseudo_j_1, type type_j_1, QStri
 
     if (control -> getJoueurCourant().getTypeDeJoueur() == type::IA)
         control -> Tour_ia();
+
+    widgetNoble->show(); //À enlever, c'était à teste
 
     refresh();
 }
@@ -661,4 +674,9 @@ void pageJeu::validerAchatCarteReservee(const Carte* carte){
         }
     }
     refresh();
+}
+
+void pageJeu::handleCartesNoble(size_t i){
+    qDebug()<<i;
+    //Fait ce que t'as à faire Sam :3
 }

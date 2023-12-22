@@ -909,7 +909,7 @@ void vueCarteJoueur::paintEvent(QPaintEvent* event){
     }
 }
 
-void vueCarteNoble::paintEvent(QPaintEvent *event){
+void nobleVisuel::paintEvent(QPaintEvent *event){
     QWidget::paintEvent(event);
     QPainter painter(this);
 
@@ -1000,4 +1000,20 @@ void vueCarteNoble::paintEvent(QPaintEvent *event){
     couronne << QPointF(x, y + hauteur/5);
 
     painter.drawPolygon(couronne);
+}
+
+bool vueCarteNoble::event(QEvent *event){
+    if (event->type() == QEvent::Enter) {
+        qDebug() << "C'est un evenement d'entree (Enter Event).";
+        setCurrentIndex(1);
+        return true; // evenement traite
+    }
+    else if (event->type() == QEvent::Leave){
+        qDebug() << "C'est un evenement de sorti (Leave Event).";
+        setCurrentIndex(0);
+        return true; // evenement traite
+    }
+
+    // Appel a la methode parent pour gerer d'autres types d'evenements
+    return QWidget::event(event);
 }

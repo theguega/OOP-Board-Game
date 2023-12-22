@@ -54,6 +54,10 @@ private:
     std::pair<bool, Couleur> capa_en_cours = std::make_pair(false, Couleur::INDT);
     bool resa_en_cours = false;
     bool sauvegardeFait = false;
+
+    std::vector<vueCarteNoble*> cartesNoble;
+    QHBoxLayout* layoutNoble;
+    QWidget* widgetNoble;
 protected:
     void closeEvent(QCloseEvent *event) override {  //Redefinition de la methode closeEvent
         aSauvegarde -> hide();
@@ -102,6 +106,7 @@ private slots:
     void handleValidationCarte(position* p);
     void handleReservationCarte(position* p, position* pJ = nullptr);
     void handleReservationCartePioche(int nivPioche, position* pJ);
+    void handleCartesNoble(size_t i);
     void verifJetons() ;
 signals:
     void fermerPopUp();

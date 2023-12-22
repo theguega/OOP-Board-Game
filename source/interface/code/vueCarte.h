@@ -142,7 +142,20 @@ signals:
     void carteAchetee(const Carte* carte);
 };
 
-class vueCarteNoble : public QWidget{
+class nobleVisuel : public QWidget{
+    Q_OBJECT
+private:
+    int h;
+    int l;
+
+    const Carte* carte;
+public:
+    nobleVisuel(int h, int l, const Carte* c) : h(h), l(l), carte(c){setFixedSize(l, h);}
+protected:
+    void paintEvent(QPaintEvent *event) override;
+};
+
+class vueCarteNoble : public QStackedWidget{
     Q_OBJECT
 private:
     int h;
@@ -150,19 +163,34 @@ private:
 
     const Carte* carte;
     bool estAchete = false;
+
+    nobleVisuel* visu;
+    carteInfo* info;
 public:
     vueCarteNoble(QWidget* parent, int hauteur, int largeur, const Carte* c) :
-        QWidget(parent), h(hauteur), l(largeur), carte(c){setFixedSize(l, h);}
+        QStackedWidget(parent), h(hauteur), l(largeur), carte(c){
+        setFixedSize(l, h);
+        visu = new nobleVisuel(h, l, carte);
+        if(carte != nullptr){
+            std::string texteInfo = carte->getInfos();
+            info = new carteInfo(nullptr, h, l, texteInfo); //Ajoute les infos de la carte
+        }
+        else{
+            info = new carteInfo(nullptr, h, l, "");
+        }
+        addWidget(visu);
+        addWidget(info);
+    }
     void setEstAchete(bool b){estAchete = b;}
     const Carte* getCarte() {return carte;}
 protected:
-    void paintEvent(QPaintEvent *event) override;
     void mousePressEvent(QMouseEvent *event) override {
         if (event->button() == Qt::LeftButton && !estAchete) {
             qDebug() << "Clic gauche detecte sur le widget.";
             emit nobleClique();
         }
     }
+    bool event(QEvent *event) override;
 signals:
     void nobleClique();
 };
