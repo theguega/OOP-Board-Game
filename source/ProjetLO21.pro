@@ -49,3 +49,4 @@ DISTFILES += \
     data/save.sqlite \
     data/score.sqlite \
     PROBLEMES.md
+

@@ -531,7 +531,7 @@ void pageJeu::handleReservationCarte(position* p, position* pJ){
     bSac->setEnabled(false);
     popUpInfo* infoResa = new popUpInfo(nullptr, "Veuillez prendre un jeton Or");
     infoResa->show();
-
+    update();
 }
 
 

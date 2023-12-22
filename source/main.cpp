@@ -4,6 +4,8 @@
 #include <QWidget>
 #include <QDebug>
 #include <QtSql>
+#include <QFont>
+#include <QFontDatabase>
 
 #include "back-end/exception.hpp"
 
@@ -29,6 +31,10 @@ int main(int argc, char * argv[]) {
         return 0;
     } else {
         QApplication app(argc, argv);
+        int fontId = QFontDatabase::addApplicationFont("fonts/MedievalSharp-Regular.ttf");
+        QStringList fontFamilies = QFontDatabase::applicationFontFamilies(fontId);
+        QFont customFont(fontFamilies.at(0), 12);
+        app.setFont(customFont);
         toutesPages* page = new toutesPages(nullptr, &app);
         page->show();
         return app.exec();
