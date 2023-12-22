@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/font">
+        <file>fonts/MedievalSharp-Regular.ttf</file>
+    </qresource>
+</RCC>

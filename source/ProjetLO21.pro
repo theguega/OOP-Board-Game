@@ -50,3 +50,6 @@ DISTFILES += \
     data/score.sqlite \
     PROBLEMES.md
 
+RESOURCES += \
+    fonts.qrc
+

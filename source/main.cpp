@@ -6,6 +6,7 @@
 #include <QtSql>
 #include <QFont>
 #include <QFontDatabase>
+#include <QTimer>
 
 #include "back-end/exception.hpp"
 
