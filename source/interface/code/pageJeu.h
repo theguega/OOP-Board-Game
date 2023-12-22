@@ -102,6 +102,7 @@ private slots:
     void handleValidationCarte(position* p);
     void handleReservationCarte(position* p, position* pJ = nullptr);
     void handleReservationCartePioche(int nivPioche, position* pJ);
+    void handleAchatCarteReservee(const Carte* carte);
 signals:
     void fermerPopUp();
 };

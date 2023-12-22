@@ -611,7 +611,7 @@ void pageJeu::validerAchatCarteReservee(const Carte* carte){
     if(&control->getJoueurCourant() == joueur1->getJoueur()){
         if(joueur1->positionDansMap(carte) != -1){
             if(control->verifAchatCarte(carte)){
-                return;
+                handleAchatCarteReservee(carte);
             }
             else{
                 popUpInfo* infos = new popUpInfo(nullptr, "Vous ne pouvez pas acheter cette carte");
@@ -626,7 +626,7 @@ void pageJeu::validerAchatCarteReservee(const Carte* carte){
     else if(&control->getJoueurCourant() == joueur2->getJoueur()){
         if(joueur1->positionDansMap(carte) != -1){
             if(control->verifAchatCarte(carte)){
-                return;
+                handleAchatCarteReservee(carte);
             }
             else{
                 popUpInfo* infos = new popUpInfo(nullptr, "Vous ne pouvez pas acheter cette carte");
@@ -639,4 +639,94 @@ void pageJeu::validerAchatCarteReservee(const Carte* carte){
         }
     }
     refresh();
+}
+
+void pageJeu::handleAchatCarteReservee(const Carte* carte) {
+        popUpInfo* info_nouveau_tour = new popUpInfo(nullptr, "La capacité de la carte vous permet de joueur un nouveau tour");
+        popUpInfo* info_take_jeton_from_bonus = new popUpInfo(nullptr, "La capacité de la carte vous permet de recuperer un jeton de la couleur du bonus de la carte. Veuillez sélectionner un jeton");
+        popUpChoixAssociationBonus* popUpAssos = new popUpChoixAssociationBonus(control);
+        popUpChoixJetonAdv* popUpAdv = new popUpChoixJetonAdv(control);
+
+        connect(this, &pageJeu::fermerPopUp, info_nouveau_tour, &popUpInfo::close);
+        connect(this, &pageJeu::fermerPopUp, info_take_jeton_from_bonus, &popUpInfo::close);
+        Couleur coulAsso;
+        Couleur coulAdv;
+
+        if(carte->getCapacite1()!=Capacite::None){
+
+            switch(carte->getCapacite1()){
+
+            case Capacite::AssociationBonus:
+                if (popUpAssos->exec() == QDialog::Accepted) {
+                    coulAsso = popUpAssos->getSelectedOption();
+                    if(coulAsso != Couleur::INDT){
+                        control->acheterCarteJoaillerie(carte, coulAsso);
+                        if(capa_en_cours.first==false){
+                            control->changerJoueurCourantGraphique();
+                        }
+                    }
+                }
+                break;
+
+            case Capacite::NewTurn:
+                info_nouveau_tour->show();
+                connect(this, &pageJeu::fermerPopUp, info_nouveau_tour, &popUpInfo::close);
+                control->acheterCarteJoaillerie(carte);
+                control->setNouveauTour(true);
+                control->changerJoueurCourantGraphique();
+                control->setNouveauTour(false);
+                break;
+
+            case Capacite::TakeJetonFromBonus:
+                if(control->getPlateau().contientCouleur(carte->getBonus().getCouleur())){
+                    info_take_jeton_from_bonus->show();
+                    //connect(this, &pageJeu::fermerPopUp, info_take_jeton_from_bonus, &popUpInfo::close);
+                    control->acheterCarteJoaillerie(carte);
+                    //permet de forcer le joueur a recup un jeton
+                    capa_en_cours = std::make_pair(true, carte->getBonus().getCouleur());
+                    vPyramide->setEnabled(false);
+                    vPlateau->getBoutonValiderPriv()->setEnabled(false);
+                    bSac->setEnabled(false);
+                }
+                break;
+
+            case Capacite::TakeJetonToAdv:
+                if (popUpAdv->exec() == QDialog::Accepted) {
+                    coulAdv = popUpAdv->getSelectedOption();
+                    if(coulAdv != Couleur::INDT){
+                        control->acheterCarteJoaillerie(carte);
+                        const Jeton &jeton = control->getJoueurAdverse().RecupJetonCoul(coulAdv);
+                        control->getJoueurCourant().addJeton(jeton);
+                        if(capa_en_cours.first==false){
+                            control->changerJoueurCourantGraphique();
+                        }
+                    }
+                }
+                break;
+
+            case Capacite::TakePrivilege:
+                if (control->getPlateau().getNbPrivileges()==0){
+                    //si il n'y a plus de privileges sur le plateau
+                    if(control->getJoueurCourant().getNbPrivileges()!=3) {
+                        control->getJoueurCourant().addPrivilege(control->getJoueurAdverse().supPrivilege());
+                    }
+                } else {
+                    //si il y a un jetons sur le plateau, le joueur le recupere
+                    control->getJoueurCourant().addPrivilege(control->getPlateau().recupererPrivilege());
+                }
+                control->acheterCarteJoaillerie(carte);
+                control->changerJoueurCourantGraphique();
+                break;
+
+            default:
+                break;
+            }
+        }
+        else{
+            control->acheterCarteJoaillerie(carte);
+            if(capa_en_cours.first==false){
+                control->changerJoueurCourantGraphique();
+                control->setNouveauTour(false);
+            }
+        }
 }
