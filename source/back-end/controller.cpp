@@ -963,9 +963,25 @@ void Controller::orReserverCartePioche (int nivPioche){
 void Controller::acheterCarteJoaillerie(std::pair<int, int> coord, std::array<int, 7> prix, Couleur c){
     const Carte& carte = partie->getEspaceJeux().getPyramide().acheterCarte(coord.first, coord.second);
 
-    paiementCarte(prix, getEspaceJeux());
+    paiementCarte(carte, getEspaceJeux());
 
-    if(c == Couleur::INDT){         // Si la carte a une couleur normale (pas de couleur speciale a associer)
+
+    if(c == Couleur::INDT){
+        joueurCourant->addCarte(carte);
+        joueurCourant->addBonus(carte.getBonus().getCouleur(), carte.getBonus().getNbBonus());
+    } else{
+        joueurCourant->addBonus(c, 1);
+        joueurCourant->cartes[c].push_back(&carte);
+        joueurCourant->ptsPrestige += carte.getNbPtsPrivilege();
+        joueurCourant->nbCouronnes += carte.getNbCouronnes();
+    }
+}
+
+void Controller::acheterCarteReservee(const Carte& carte, Couleur c) {
+    paiementCarte(carte, getEspaceJeux());
+
+
+    if(c == Couleur::INDT){
         joueurCourant->addCarte(carte);
         joueurCourant->addBonus(carte.getBonus().getCouleur(), carte.getBonus().getNbBonus());
     } else{                         // Il y a une couleur a laquelle associer la carte
