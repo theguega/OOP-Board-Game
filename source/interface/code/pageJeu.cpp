@@ -660,7 +660,7 @@ void pageJeu::handleAchatCarteReservee(const Carte* carte) {
                 if (popUpAssos->exec() == QDialog::Accepted) {
                     coulAsso = popUpAssos->getSelectedOption();
                     if(coulAsso != Couleur::INDT){
-                        control->acheterCarteJoaillerie(carte, coulAsso);
+                        control->acheterCarteReservee(*carte, coulAsso);
                         if(capa_en_cours.first==false){
                             control->changerJoueurCourantGraphique();
                         }
@@ -671,7 +671,7 @@ void pageJeu::handleAchatCarteReservee(const Carte* carte) {
             case Capacite::NewTurn:
                 info_nouveau_tour->show();
                 connect(this, &pageJeu::fermerPopUp, info_nouveau_tour, &popUpInfo::close);
-                control->acheterCarteJoaillerie(carte);
+                control->acheterCarteReservee(*carte);
                 control->setNouveauTour(true);
                 control->changerJoueurCourantGraphique();
                 control->setNouveauTour(false);
@@ -681,7 +681,7 @@ void pageJeu::handleAchatCarteReservee(const Carte* carte) {
                 if(control->getPlateau().contientCouleur(carte->getBonus().getCouleur())){
                     info_take_jeton_from_bonus->show();
                     //connect(this, &pageJeu::fermerPopUp, info_take_jeton_from_bonus, &popUpInfo::close);
-                    control->acheterCarteJoaillerie(carte);
+                    control->acheterCarteReservee(*carte);
                     //permet de forcer le joueur a recup un jeton
                     capa_en_cours = std::make_pair(true, carte->getBonus().getCouleur());
                     vPyramide->setEnabled(false);
@@ -694,7 +694,7 @@ void pageJeu::handleAchatCarteReservee(const Carte* carte) {
                 if (popUpAdv->exec() == QDialog::Accepted) {
                     coulAdv = popUpAdv->getSelectedOption();
                     if(coulAdv != Couleur::INDT){
-                        control->acheterCarteJoaillerie(carte);
+                        control->acheterCarteReservee(*carte);
                         const Jeton &jeton = control->getJoueurAdverse().RecupJetonCoul(coulAdv);
                         control->getJoueurCourant().addJeton(jeton);
                         if(capa_en_cours.first==false){
@@ -714,7 +714,7 @@ void pageJeu::handleAchatCarteReservee(const Carte* carte) {
                     //si il y a un jetons sur le plateau, le joueur le recupere
                     control->getJoueurCourant().addPrivilege(control->getPlateau().recupererPrivilege());
                 }
-                control->acheterCarteJoaillerie(carte);
+                control->acheterCarteReservee(*carte);
                 control->changerJoueurCourantGraphique();
                 break;
 
@@ -723,7 +723,7 @@ void pageJeu::handleAchatCarteReservee(const Carte* carte) {
             }
         }
         else{
-            control->acheterCarteJoaillerie(carte);
+            control->acheterCarteReservee(*carte);
             if(capa_en_cours.first==false){
                 control->changerJoueurCourantGraphique();
                 control->setNouveauTour(false);

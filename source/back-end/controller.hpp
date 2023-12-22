@@ -115,6 +115,8 @@ public:
     std::pair<bool, QString> verifAchatCarte(std::pair<int, int> coord);
     void acheterCarteJoaillerie(std::pair<int, int> coord, Couleur c = Couleur::INDT);
 
+    void acheterCarteReservee(const Carte& carte, Couleur c = Couleur::INDT);
+
     std::pair<bool, QString> verifReservationCarte();
     void orReserverCarte(std::pair<int, int> coord);
     std::pair<bool, QString> verifJetonOr(std::pair<int, int> coord);
