@@ -265,7 +265,7 @@ public:
         int nb_jetons = control-> getJoueurCourant().getNbJetons();
         string titre = "Vous avez plus de 10 jetons ! Nb de jetons:" + std::to_string(nb_jetons);
         setWindowTitle(QString::fromStdString(titre));
-
+        setMinimumSize(400, 0);
         QVBoxLayout *layout = new QVBoxLayout(this);
 
 

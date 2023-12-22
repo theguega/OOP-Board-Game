@@ -191,14 +191,15 @@ void pageJeu::validerSelectionJeton() {
         }
     }
 
-    popUpInfo* info_rendre_jeton = new popUpInfo(nullptr, "Il faut rendre les jetons en trop!");
-    popUpChoixJetonRendre* popUpRendu = new popUpChoixJetonRendre(control);
-    connect(this, &pageJeu::fermerPopUp, info_rendre_jeton, &popUpInfo::close);
+
 
 
 
     while (control->getJoueurCourant().getNbJetons()>10) {
         Couleur coulRendu;
+        popUpInfo* info_rendre_jeton = new popUpInfo(nullptr, "Il faut rendre les jetons en trop!");
+        popUpChoixJetonRendre* popUpRendu = new popUpChoixJetonRendre(control);
+        connect(this, &pageJeu::fermerPopUp, info_rendre_jeton, &popUpInfo::close);
         if (popUpRendu->exec() == QDialog::Accepted) {
             coulRendu = popUpRendu->getSelectedOption();
             if(coulRendu != Couleur::INDT){
