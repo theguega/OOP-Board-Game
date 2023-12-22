@@ -209,6 +209,7 @@ void pageJeu::validerSelectionJeton() {
                 }
             }
         }
+        refresh();
     }
 }
 
