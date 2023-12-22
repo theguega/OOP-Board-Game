@@ -1758,7 +1758,7 @@ std::tuple<bool, QString, std::array<int, 7>> Controller::verifAchatCarte(std::p
     // Verifier a nouveau si le joueur a maintenant assez de points pour acheter la carte
     if (needBlanc <= nbBlanc && needBleu <= nbBleu && needVert <= nbVert &&
         needRouge <= nbRouge && needNoir <= nbNoir && needPerle <= nbPerle)
-        return std::make_tuple(true, "Vous pouvez acheter la carte avec "+QString::number(jetonsOrUtilises)+" jetons Or", std::array<int, 7>{needBlanc, needBleu, needVert, needRouge, needNoir, needPerle, jetonsOrUtilises});  // Le joueur a suffisamment de jetons pour acheter la carte
+        return std::make_tuple(true, "Vous pouvez acheter la carte avec "+QString::number(jetonsOrUtilises)+" jetons Or", std::array<int, 7>{needBlanc, needBleu, needVert, needRouge, needNoir, needPerle, static_cast<int>(jetonsOrUtilises)});  // Le joueur a suffisamment de jetons pour acheter la carte
     else
         return std::make_tuple(false, "Vous n'avez pas assez de jetons pour acheter cette carte", std::array<int, 7>{});
     return std::make_tuple(false, "Vous n'avez pas assez de jetons pour acheter cette carte", std::array<int, 7>{});
