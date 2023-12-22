@@ -254,15 +254,16 @@ void pageJeu::validerSelectionJetonPrivi() {
 
 
 void pageJeu::validerSelectionCarte(position* pos){
-    std::pair<bool, QString> validationResult = control->verifAchatCarte(std::make_pair(pos->getx(), pos->gety()));
-    bool isValid = validationResult.first;
-    const QString& message = validationResult.second;
+    std::tuple<bool, QString, std::array<int, 7>> validationResult = control->verifAchatCarte(std::make_pair(pos->getx(), pos->gety()));
+    bool isValid = std::get<0>(validationResult);
+    const QString& message = std::get<1>(validationResult);
+    std::array<int, 7> prix = std::get<2>(validationResult);
 
     if(isValid){    // Achat valide
         modalPopup* validation = new modalPopup(this, message, "Voulez-vous valider ?");
         int result =validation->exec();
         if (result == QDialog::Accepted){
-            pageJeu::handleValidationCarte(pos);
+            pageJeu::handleValidationCarte(pos, prix);
         }
         delete validation;
         refresh();
@@ -273,7 +274,7 @@ void pageJeu::validerSelectionCarte(position* pos){
     }
 }
 
-void pageJeu::handleValidationCarte(position* p){
+void pageJeu::handleValidationCarte(position* p, std::array<int, 7> prix){
     std::pair<int, int> coord = std::make_pair(p->getx(), p->gety());
     const Carte* carte_tmp = control->getPyramide().getCarte(coord.first, coord.second);
     popUpInfo* info_nouveau_tour = new popUpInfo(nullptr, "La capacité de la carte vous permet de joueur un nouveau tour");
@@ -297,7 +298,7 @@ void pageJeu::handleValidationCarte(position* p){
             if (popUpAssos->exec() == QDialog::Accepted) {
                 coulAsso = popUpAssos->getSelectedOption();
                 if(coulAsso != Couleur::INDT){
-                    control->acheterCarteJoaillerie(coord, coulAsso);
+                    control->acheterCarteJoaillerie(coord, prix, coulAsso);
                     if(capa_en_cours.first==false){
                         control->changerJoueurCourantGraphique();
                     }
@@ -308,7 +309,7 @@ void pageJeu::handleValidationCarte(position* p){
         case Capacite::NewTurn:
             info_nouveau_tour->show();
             connect(this, &pageJeu::fermerPopUp, info_nouveau_tour, &popUpInfo::close);
-            control->acheterCarteJoaillerie(coord);
+            control->acheterCarteJoaillerie(coord, prix);
             control->setNouveauTour(true);
             control->changerJoueurCourantGraphique();
             control->setNouveauTour(false);
@@ -318,7 +319,7 @@ void pageJeu::handleValidationCarte(position* p){
             if(control->getPlateau().contientCouleur(carte_tmp->getBonus().getCouleur())){
                 info_take_jeton_from_bonus->show();
                 //connect(this, &pageJeu::fermerPopUp, info_take_jeton_from_bonus, &popUpInfo::close);
-                control->acheterCarteJoaillerie(coord);
+                control->acheterCarteJoaillerie(coord, prix);
                 //permet de forcer le joueur a recup un jeton
                 capa_en_cours = std::make_pair(true, carte_tmp->getBonus().getCouleur());
                 vPyramide->setEnabled(false);
@@ -331,7 +332,7 @@ void pageJeu::handleValidationCarte(position* p){
             if (popUpAdv->exec() == QDialog::Accepted) {
                 coulAdv = popUpAdv->getSelectedOption();
                 if(coulAdv != Couleur::INDT){
-                    control->acheterCarteJoaillerie(coord);
+                    control->acheterCarteJoaillerie(coord, prix);
                     const Jeton &jeton = control->getJoueurAdverse().RecupJetonCoul(coulAdv);
                     control->getJoueurCourant().addJeton(jeton);
                     if(capa_en_cours.first==false){
@@ -351,7 +352,7 @@ void pageJeu::handleValidationCarte(position* p){
                 //si il y a un jetons sur le plateau, le joueur le recupere
                 control->getJoueurCourant().addPrivilege(control->getPlateau().recupererPrivilege());
             }
-            control->acheterCarteJoaillerie(coord);
+            control->acheterCarteJoaillerie(coord, prix);
             control->changerJoueurCourantGraphique();
             break;
 
@@ -360,7 +361,7 @@ void pageJeu::handleValidationCarte(position* p){
         }
     }
     else{
-        control->acheterCarteJoaillerie(coord);
+        control->acheterCarteJoaillerie(coord, prix);
         if(capa_en_cours.first==false){
             control->changerJoueurCourantGraphique();
             control->setNouveauTour(false);

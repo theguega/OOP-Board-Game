@@ -7,6 +7,7 @@
 #include <QFont>
 #include <QFontDatabase>
 #include <QTimer>
+#include <QScreen>
 
 #include "back-end/exception.hpp"
 
@@ -36,6 +37,7 @@ int main(int argc, char * argv[]) {
         QStringList fontFamilies = QFontDatabase::applicationFontFamilies(fontId);
         QFont customFont(fontFamilies.at(0), 12);
         app.setFont(customFont);
+
         toutesPages* page = new toutesPages(nullptr, &app);
         page->show();
         return app.exec();

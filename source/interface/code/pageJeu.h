@@ -99,7 +99,7 @@ private slots:
 
     void validerSelectionJetonPrivi();
 
-    void handleValidationCarte(position* p);
+    void handleValidationCarte(position* p, std::array<int, 7> prix);
     void handleReservationCarte(position* p, position* pJ = nullptr);
     void handleReservationCartePioche(int nivPioche, position* pJ);
     void verifJetons() ;

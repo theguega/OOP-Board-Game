@@ -2,6 +2,7 @@
 #define PAGECREATION_H
 
 #include <QWidget>
+#include <QGuiApplication>
 #include <QComboBox>
 #include <QVBoxLayout>
 #include <QLineEdit>

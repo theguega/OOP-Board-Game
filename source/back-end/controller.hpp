@@ -14,6 +14,7 @@
 */
 
 #include <random>
+#include <tuple>
 #include "partie.hpp"
 #include <QDebug>
 #include <QString>
@@ -24,7 +25,7 @@
 
 class Controller {
 private:
-    string stat_partie;
+    string stat_partie;                         // Ancienne ou Nouvelle
 	Partie* partie;
 	Joueur* joueurCourant = nullptr;
     Strategy * strategy_courante  = nullptr;
@@ -50,7 +51,7 @@ public:
             }
         }
         throw SplendorException("pas de d'adverssaire trouvé..\n");
-    };
+    }
     Plateau& getPlateau() const {return partie->getEspaceJeux().getPlateau();}
     Pyramide& getPyramide() const {return partie->getEspaceJeux().getPyramide();}
     EspaceJeux& getEspaceJeux() const{return partie->getEspaceJeux();}
@@ -111,8 +112,9 @@ public:
     std::pair<bool, QString> verifJetons(const std::vector<std::pair<int, int>>& coord, bool capa = false, Couleur coulBonus = Couleur::INDT);
     void recupererJetons(const std::vector<std::pair<int, int>>& coord);
 
-    std::pair<bool, QString> verifAchatCarte(std::pair<int, int> coord);
-    void acheterCarteJoaillerie(std::pair<int, int> coord, Couleur c = Couleur::INDT);
+    std::tuple<bool, QString, std::array<int, 7>> verifAchatCarte(std::pair<int, int> coord);
+    void acheterCarteJoaillerie(std::pair<int, int> coord,  std::array<int, 7> prix, Couleur c = Couleur::INDT);
+    void paiementCarte(std::array<int, 7> prix, EspaceJeux& espaceJeux);
 
     std::pair<bool, QString> verifReservationCarte();
     void orReserverCarte(std::pair<int, int> coord);
@@ -121,9 +123,6 @@ public:
 
 
     void orReserverCartePioche (int nivPioche);
-
-
-
 };
 
 #endif
