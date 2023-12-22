@@ -103,6 +103,23 @@ pageJeu::pageJeu(QString statut_partie, QString pseudo_j_1, type type_j_1, QStri
     refresh();
 }
 
+void pageJeu::verifJetons() {
+    while (control->getJoueurCourant().getNbJetons()>10) {
+        Couleur coulRendu;
+        popUpInfo* info_rendre_jeton = new popUpInfo(nullptr, "Il faut rendre les jetons en trop!");
+        popUpChoixJetonRendre* popUpRendu = new popUpChoixJetonRendre(control);
+        connect(this, &pageJeu::fermerPopUp, info_rendre_jeton, &popUpInfo::close);
+        if (popUpRendu->exec() == QDialog::Accepted) {
+            coulRendu = popUpRendu->getSelectedOption();
+            if(coulRendu != Couleur::INDT){
+                control->getJoueurCourant().supJetonNb(1,coulRendu,control->getEspaceJeux());
+            }
+        }
+        refresh();
+    }
+}
+
+
 
 
 
@@ -115,6 +132,7 @@ void pageJeu::validerSelectionJeton() {
         // Traiter le résultat de la validation
         if(isValid){
             control->recupererJetons(vPlateau->getSelectionJetons());
+            verifJetons();
             control->changerJoueurCourantGraphique();
 
             refresh();
@@ -146,6 +164,7 @@ void pageJeu::validerSelectionJeton() {
                 vPlateau->getBoutonValiderPriv()->setEnabled(true);
                 bSac->setEnabled(true);
                 capa_en_cours = make_pair(false, Couleur::INDT);
+                verifJetons();
                 control->changerJoueurCourantGraphique();
                 control->setNouveauTour(false);
                 refresh();
@@ -179,6 +198,7 @@ void pageJeu::validerSelectionJeton() {
                 vPlateau->getBoutonValiderPriv()->setEnabled(true);
                 bSac->setEnabled(true);
                 resa_en_cours = false;
+                verifJetons();
                 control->changerJoueurCourantGraphique();
                 control->setNouveauTour(false);
                 refresh();
@@ -190,7 +210,6 @@ void pageJeu::validerSelectionJeton() {
             }
         }
     }
-
 
 
 
@@ -214,6 +233,7 @@ void pageJeu::validerSelectionJeton() {
     update();
 
 }
+
 
 
 
