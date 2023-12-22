@@ -190,6 +190,25 @@ void pageJeu::validerSelectionJeton() {
             }
         }
     }
+
+    popUpInfo* info_rendre_jeton = new popUpInfo(nullptr, "Il faut rendre les jetons en trop!");
+    popUpChoixJetonRendre* popUpRendu = new popUpChoixJetonRendre(control);
+    connect(this, &pageJeu::fermerPopUp, info_rendre_jeton, &popUpInfo::close);
+
+
+
+    while (control->getJoueurCourant().getNbJetons()>10) {
+        Couleur coulRendu;
+        if (popUpRendu->exec() == QDialog::Accepted) {
+            coulRendu = popUpRendu->getSelectedOption();
+            if(coulRendu != Couleur::INDT){
+                control->getJoueurCourant().supJetonNb(1,coulRendu,control->getEspaceJeux());
+                if(capa_en_cours.first==false){
+                    control->changerJoueurCourantGraphique();
+                }
+            }
+        }
+    }
 }
 
 
@@ -250,22 +269,21 @@ void pageJeu::validerSelectionCarte(position* pos){
     }
 }
 
-
-
-
 void pageJeu::handleValidationCarte(position* p){
     std::pair<int, int> coord = std::make_pair(p->getx(), p->gety());
     const Carte* carte_tmp = control->getPyramide().getCarte(coord.first, coord.second);
-
     popUpInfo* info_nouveau_tour = new popUpInfo(nullptr, "La capacité de la carte vous permet de joueur un nouveau tour");
     popUpInfo* info_take_jeton_from_bonus = new popUpInfo(nullptr, "La capacité de la carte vous permet de recuperer un jeton de la couleur du bonus de la carte. Veuillez sélectionner un jeton");
+
     popUpChoixAssociationBonus* popUpAssos = new popUpChoixAssociationBonus(control);
     popUpChoixJetonAdv* popUpAdv = new popUpChoixJetonAdv(control);
 
     connect(this, &pageJeu::fermerPopUp, info_nouveau_tour, &popUpInfo::close);
     connect(this, &pageJeu::fermerPopUp, info_take_jeton_from_bonus, &popUpInfo::close);
+
     Couleur coulAsso;
     Couleur coulAdv;
+
 
     if(carte_tmp->getCapacite1()!=Capacite::None){
 

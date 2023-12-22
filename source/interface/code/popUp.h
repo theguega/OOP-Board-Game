@@ -232,7 +232,79 @@ public:
         buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok, Qt::Horizontal, this);
         layout->addWidget(buttonBox);
 
-        connect(buttonBox, &QDialogButtonBox::accepted, this, &popUpChoixAssociationBonus::accept);
+        connect(buttonBox, &QDialogButtonBox::accepted, this, &popUpChoixJetonAdv::accept);
+    }
+
+    Couleur getSelectedOption() const {
+        if (blanc != nullptr && blanc->isChecked()) return Couleur::BLANC;
+        if (bleu != nullptr && bleu->isChecked()) return Couleur::BLEU;
+        if (vert != nullptr && vert->isChecked()) return Couleur::VERT;
+        if (rouge != nullptr && rouge->isChecked()) return Couleur::ROUGE;
+        if (noir != nullptr && noir->isChecked()) return Couleur::NOIR;
+        if (perle != nullptr && perle->isChecked()) return Couleur::PERLE;
+        return Couleur::INDT;
+    }
+
+private:
+    QRadioButton *blanc = nullptr;
+    QRadioButton *bleu = nullptr;
+    QRadioButton *vert = nullptr;
+    QRadioButton *rouge = nullptr;
+    QRadioButton *noir = nullptr;
+    QRadioButton *perle = nullptr;
+    QDialogButtonBox *buttonBox = nullptr;
+    Controller* control = nullptr;
+};
+
+
+class popUpChoixJetonRendre : public QDialog {
+    Q_OBJECT
+
+public:
+    explicit popUpChoixJetonRendre(Controller* control, QWidget *parent = nullptr) : QDialog(parent), control(control){
+        int nb_jetons = control-> getJoueurCourant().getNbJetons();
+        string titre = "Vous avez plus de 10 jetons ! Nb de jetons:" + std::to_string(nb_jetons);
+        setWindowTitle(QString::fromStdString(titre));
+
+        QVBoxLayout *layout = new QVBoxLayout(this);
+
+
+        int valBlanc = control->getJoueurCourant().getNbJetons(Couleur::BLANC);
+        int valBleu = control->getJoueurCourant().getNbJetons(Couleur::BLEU);
+        int valVert = control->getJoueurCourant().getNbJetons(Couleur::VERT);
+        int valRouge = control->getJoueurCourant().getNbJetons(Couleur::ROUGE);
+        int valNoir = control->getJoueurCourant().getNbJetons(Couleur::NOIR);
+        int valPerle = control->getJoueurCourant().getNbJetons(Couleur::PERLE);
+
+        if (valBlanc != 0) {
+            blanc = new QRadioButton("Blanc", this);
+            layout->addWidget(blanc);
+        }
+        if (valBleu != 0) {
+            bleu = new QRadioButton("Bleu", this);
+            layout->addWidget(bleu);
+        }
+        if (valVert != 0) {
+            vert = new QRadioButton("Vert", this);
+            layout->addWidget(vert);
+        }
+        if (valRouge != 0) {
+            rouge = new QRadioButton("Rouge", this);
+            layout->addWidget(rouge);
+        }
+        if (valNoir != 0) {
+            noir = new QRadioButton("Noir", this);
+            layout->addWidget(noir);
+        }
+        if (valPerle != 0) {
+            perle = new QRadioButton("Perle", this);
+            layout->addWidget(perle);
+        }
+
+        buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok, Qt::Horizontal, this);
+        layout->addWidget(buttonBox);
+
+        connect(buttonBox, &QDialogButtonBox::accepted, this, &popUpChoixJetonRendre::accept);
     }
 
     Couleur getSelectedOption() const {
