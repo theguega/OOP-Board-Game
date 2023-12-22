@@ -257,6 +257,8 @@ private:
 };
 
 
+
+
 class popUpChoixJetonRendre : public QDialog {
     Q_OBJECT
 

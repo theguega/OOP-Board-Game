@@ -210,6 +210,9 @@ void pageJeu::validerSelectionJeton() {
             }
         }
     }
+    refresh();
+    update();
+
 }
 
 
