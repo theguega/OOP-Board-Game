@@ -55,6 +55,11 @@ private:
     std::pair<bool, Couleur> capa_en_cours = std::make_pair(false, Couleur::INDT);
     bool resa_en_cours = false;
     bool sauvegardeFait = false;
+
+    std::vector<vueCarteNoble*> cartesNoble;
+    QHBoxLayout* layoutNoble;
+    QWidget* widgetNoble;
+    std::vector<vueCarteNoble*> listeWidgetsNoble;
 protected:
     void closeEvent(QCloseEvent *event) override {  //Redefinition de la methode closeEvent
         aSauvegarde -> hide();
@@ -87,6 +92,7 @@ public:
     }
     void setLabelJC(){labelJC->setText(QString::fromStdString("C'est au tour de " + control->getJoueurCourant().getPseudo()));}
     void refresh();
+    void verifNobles();
 public slots:
     void checkVictoire();
     void validerSelectionCarte(position* p);
@@ -105,6 +111,7 @@ private slots:
     void handleValidationCarte(position* p, std::array<int, 7> prix);
     void handleReservationCarte(position* p, position* pJ = nullptr);
     void handleReservationCartePioche(int nivPioche, position* pJ);
+    void handleCartesNoble(size_t i, int niv = 3);
     void handleAchatCarteReservee(const Carte* carte, std::array<int, 7> prix);
     void verifJetons() ;
 signals:
@@ -113,7 +120,18 @@ signals:
 
 
 
+class ModalWidget : public QWidget {
+public:
+    ModalWidget(QWidget *parent = nullptr) : QWidget(parent) {
+        setWindowModality(Qt::WindowModal);
+        setAttribute(Qt::WA_DeleteOnClose); // Delete the widget when closed
+    }
 
+    void showEvent(QShowEvent *event) override {
+        QWidget::showEvent(event);
+        QCoreApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
+    }
+};
 /*class vuePrivilege : public QWidget{
     Q_OBJECT
 private:

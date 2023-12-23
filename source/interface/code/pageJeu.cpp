@@ -58,6 +58,20 @@ pageJeu::pageJeu(QString statut_partie, QString pseudo_j_1, type type_j_1, QStri
         layoutPrivileges->addWidget(listePrivileges[i]);
     }
 
+    widgetNoble = new QWidget;
+    layoutNoble = new QHBoxLayout; // Utilisez un QVBoxLayout pour empiler les éléments verticalement
+    widgetNoble->setLayout(layoutNoble);
+
+
+    for(size_t i = 0; i < control->getPyramide().getNbCartesNiv(3); i++){
+        vueCarteNoble* temp = new vueCarteNoble(nullptr, vPyramide->height()/(vPyramide->getHauteur() + 1), vPyramide->width()/(vPyramide->getHauteur() + 4), control->getPyramide().getCarte(3, i));
+        connect(temp, &vueCarteNoble::nobleClique, this, [this, i](){
+            handleCartesNoble(i, 3);
+        });
+        layoutNoble->addWidget(temp);
+        listeWidgetsNoble.push_back(temp);
+    }
+
     bSac = new boutonSac(nullptr, (vPlateau->height() - 130)/4, 30);
     layoutPrivileges->addWidget(bSac);
 
@@ -97,6 +111,9 @@ pageJeu::pageJeu(QString statut_partie, QString pseudo_j_1, type type_j_1, QStri
     connect(joueur2, &pageJoueur::acheterCarteReservee, this, &pageJeu::validerAchatCarteReservee);
     connect(bSac, &QPushButton::clicked, this, &pageJeu::remplirPlateau);
 
+    if (control -> getJoueurCourant().getTypeDeJoueur() == type::IA)
+        control -> Tour_ia();
+    widgetNoble->hide(); //À enlever, c'était à teste
     QObject::connect(control, &Controller::signalTestIA, this, &pageJeu::checkVictoire);
 
     refresh();
@@ -174,8 +191,7 @@ void pageJeu::validerSelectionJeton() {
                 capa_en_cours = make_pair(false, Couleur::INDT);
                 verifJetons();
                 checkVictoire();
-                control->changerJoueurCourantGraphique();
-
+                verifNobles();
                 control->setNouveauTour(false);
                 refresh();
             }else
@@ -285,6 +301,8 @@ void pageJeu::validerSelectionCarte(position* pos){
     }
 }
 
+
+
 void pageJeu::handleValidationCarte(position* p, std::array<int, 7> prix){
     std::pair<int, int> coord = std::make_pair(p->getx(), p->gety());
     const Carte* carte_tmp = control->getPyramide().getCarte(coord.first, coord.second);
@@ -309,12 +327,11 @@ void pageJeu::handleValidationCarte(position* p, std::array<int, 7> prix){
             if (popUpAssos->exec() == QDialog::Accepted) {
                 coulAsso = popUpAssos->getSelectedOption();
                 if(coulAsso != Couleur::INDT){
-                    control->acheterCarteJoaillerie(coord, prix, coulAsso);
-                    if(capa_en_cours.first==false){
-                        checkVictoire();
-                        control->changerJoueurCourantGraphique();
 
-                    }
+                    control->acheterCarteJoaillerie(coord, prix, coulAsso);
+                    checkVictoire();
+                    verifNobles();       
+                    control->changerJoueurCourantGraphique();
                 }
             }
             break;
@@ -322,11 +339,11 @@ void pageJeu::handleValidationCarte(position* p, std::array<int, 7> prix){
         case Capacite::NewTurn:
             info_nouveau_tour->show();
             connect(this, &pageJeu::fermerPopUp, info_nouveau_tour, &popUpInfo::close);
+            
             control->acheterCarteJoaillerie(coord, prix);
             control->setNouveauTour(true);
             checkVictoire();
-            control->changerJoueurCourantGraphique();
-
+            verifNobles();
             control->setNouveauTour(false);
             break;
 
@@ -350,11 +367,8 @@ void pageJeu::handleValidationCarte(position* p, std::array<int, 7> prix){
                     control->acheterCarteJoaillerie(coord, prix);
                     const Jeton &jeton = control->getJoueurAdverse().RecupJetonCoul(coulAdv);
                     control->getJoueurCourant().addJeton(jeton);
-                    if(capa_en_cours.first==false){
-                        checkVictoire();
-                        control->changerJoueurCourantGraphique();
-
-                    }
+                    checkVictoire();
+                    verifNobles();
                 }
             }
             break;
@@ -371,7 +385,7 @@ void pageJeu::handleValidationCarte(position* p, std::array<int, 7> prix){
             }
             control->acheterCarteJoaillerie(coord, prix);
             checkVictoire();
-            control->changerJoueurCourantGraphique();
+            verifNobles();
 
             break;
 
@@ -381,11 +395,9 @@ void pageJeu::handleValidationCarte(position* p, std::array<int, 7> prix){
     }
     else{
         control->acheterCarteJoaillerie(coord, prix);
-        if(capa_en_cours.first==false){
-            checkVictoire();
-            control->changerJoueurCourantGraphique();
-
-            control->setNouveauTour(false);
+        checkVictoire();
+        verifNobles();
+        control->setNouveauTour(false);
         }
     }
 }
@@ -578,6 +590,18 @@ void pageJeu::handleReservationCarte(position* p, position* pJ){
     popUpInfo* infoResa = new popUpInfo(nullptr, "Veuillez prendre un jeton Or");
     infoResa->show();
     update();
+}
+
+
+
+
+void pageJeu::verifNobles(){
+    if((control->getJoueurCourant().getNbCouronnes() >= 1 && control->getJoueurCourant().getNbCartesNobles() == 0) ||
+           (control->getJoueurCourant().getNbCouronnes() >= 6 && control->getJoueurCourant().getNbCartesNobles() == 1)){
+        widgetNoble->show();
+    } else{
+        control->changerJoueurCourantGraphique();
+    }
 }
 
 
@@ -790,4 +814,22 @@ void pageJeu::checkVictoire() {
         connect(victoire -> getBoutonQuitter(), &QPushButton::clicked, this, &pageJeu::quitter);
         victoire->show();
     }
+}
+
+void pageJeu::handleCartesNoble(size_t i, int niv){
+    position* p = new position(niv, i);
+    modalPopup* validation = new modalPopup(this, "Vous allez acheter une carte Noble.", "Voulez-vous valider ?");
+    int result =validation->exec();
+    if (result == QDialog::Accepted){
+        handleValidationCarte(p);
+        for (size_t i = 0; i < listeWidgetsNoble.size(); i++) {
+            if (control->getPyramide().getCarte(3, i) == nullptr) {
+                listeWidgetsNoble[i]->hide();
+            }
+        }
+        widgetNoble->hide();
+        control->changerJoueurCourantGraphique();
+    }
+    delete validation;
+    refresh();
 }
