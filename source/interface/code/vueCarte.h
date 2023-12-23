@@ -39,7 +39,7 @@ private:
 protected:
     void paintEvent(QPaintEvent *event);
 public:
-    carteInfo(QWidget* parent, int hauteur, int largeur, std::string texte);
+    carteInfo(QWidget* parent, int hauteur, int largeur, std::string texte="");
     void setInfo(std::string texte){labelInfo->setText(QString::fromStdString(texte));}
 };
 
@@ -80,7 +80,14 @@ public:
     position* getPosition(){return pos;}
     void cacherInfo(){affichageInfo = false;}
     void afficherInfo(){affichageInfo = true;}
-    void setCarte(const Carte* c){carte = c; visu->setCarte(c); info->setInfo(c->getInfos()); update();}
+    void setCarte(const Carte* c){
+        carte = c; visu->setCarte(c);
+        if(carte != nullptr)
+            info->setInfo(c->getInfos());
+        else
+            info->setInfo("");
+        update();
+    }
     const Carte* getCarte(){return carte;}
 signals:
     void carteReservee(position* position);
