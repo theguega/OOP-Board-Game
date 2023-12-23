@@ -308,12 +308,11 @@ void pageJeu::handleValidationCarte(position* p, std::array<int, 7> prix){
     const Carte* carte_tmp = control->getPyramide().getCarte(coord.first, coord.second);
     popUpInfo* info_nouveau_tour = new popUpInfo(nullptr, "La capacité de la carte vous permet de joueur un nouveau tour");
     popUpInfo* info_take_jeton_from_bonus = new popUpInfo(nullptr, "La capacité de la carte vous permet de recuperer un jeton de la couleur du bonus de la carte. Veuillez sélectionner un jeton");
-
     popUpChoixAssociationBonus* popUpAssos = new popUpChoixAssociationBonus(control);
     popUpChoixJetonAdv* popUpAdv = new popUpChoixJetonAdv(control);
 
     connect(this, &pageJeu::fermerPopUp, info_nouveau_tour, &popUpInfo::close);
-    connect(this, &pageJeu::fermerPopUp, info_take_jeton_from_bonus, &popUpInfo::close);
+    //connect(this, &pageJeu::fermerPopUp, info_take_jeton_from_bonus, &popUpInfo::close);
 
     Couleur coulAsso;
     Couleur coulAdv;
@@ -353,6 +352,7 @@ void pageJeu::handleValidationCarte(position* p, std::array<int, 7> prix){
                 //connect(this, &pageJeu::fermerPopUp, info_take_jeton_from_bonus, &popUpInfo::close);
                 control->acheterCarteJoaillerie(coord, prix);
                 //permet de forcer le joueur a recup un jeton
+
                 capa_en_cours = std::make_pair(true, carte_tmp->getBonus().getCouleur());
                 vPyramide->setEnabled(false);
                 vPlateau->getBoutonValiderPriv()->setEnabled(false);
