@@ -207,7 +207,7 @@ ostream & operator << (ostream & f, const Carte & c) {
     f << "------------------------------\n";
     f << "Prix :\n" << c.getPrix();
     f << "------------------------------\n";
-    f << "Privileges : " << c.getNbPtsPrivilege() << "   " << "Couronnes : " << c.getNbCouronnes() << "\n";
+    f << "Prestiges : " << c.getNbPtsPrivilege() << "   " << "Couronnes : " << c.getNbCouronnes() << "\n";
     f << "------------------------------\n";
     return f;
 }
@@ -223,7 +223,7 @@ QDebug operator<<(QDebug f, const Carte & c) {
     f << "------------------------------\n";
     f << "Prix :\n" << c.getPrix();
     f << "------------------------------\n";
-    f << "Privileges : " << c.getNbPtsPrivilege() << "   " << "Couronnes : " << c.getNbCouronnes() << "\n";
+    f << "Prestiges : " << c.getNbPtsPrivilege() << "   " << "Couronnes : " << c.getNbCouronnes() << "\n";
     f << "------------------------------\n";
     return f;
 }

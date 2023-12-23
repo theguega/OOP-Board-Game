@@ -50,6 +50,7 @@ private:
     int tailleHauteur;               // Utile pour definir les tailles de sous objets
 
     popUpValider* aSauvegarde;       // PopUp pour sauvegarder la partie
+    popUpVictoire* victoire;
     bool quitterPage = false;        // Utile pour la redefinission de closeEvent
     std::pair<bool, Couleur> capa_en_cours = std::make_pair(false, Couleur::INDT);
     bool resa_en_cours = false;
@@ -67,6 +68,7 @@ protected:
     void quitter(){                 //Permet de quitter la page
         quitterPage = true;
         aSauvegarde -> close();
+        victoire->close();
         this -> close();
     }
     void rester(){                  //Permet de restetr sur la page
@@ -86,6 +88,7 @@ public:
     void setLabelJC(){labelJC->setText(QString::fromStdString("C'est au tour de " + control->getJoueurCourant().getPseudo()));}
     void refresh();
 public slots:
+    void checkVictoire();
     void validerSelectionCarte(position* p);
     void validerResaCarte(position* p);
     void validerResaCartePioche(int nivPioche);

@@ -97,26 +97,31 @@ pageJeu::pageJeu(QString statut_partie, QString pseudo_j_1, type type_j_1, QStri
     connect(joueur2, &pageJoueur::acheterCarteReservee, this, &pageJeu::validerAchatCarteReservee);
     connect(bSac, &QPushButton::clicked, this, &pageJeu::remplirPlateau);
 
-    if (control -> getJoueurCourant().getTypeDeJoueur() == type::IA)
-        control -> Tour_ia();
+    QObject::connect(control, &Controller::signalTestIA, this, &pageJeu::checkVictoire);
 
     refresh();
+
+    if (control -> getJoueurCourant().getTypeDeJoueur() == type::IA) {
+        control -> Tour_ia();
+    }
 }
 
 void pageJeu::verifJetons() {
     refresh();
-    while (control->getJoueurCourant().getNbJetons()>10) {
-        Couleur coulRendu;
-        popUpInfo* info_rendre_jeton = new popUpInfo(nullptr, "Il faut rendre les jetons en trop!");
-        popUpChoixJetonRendre* popUpRendu = new popUpChoixJetonRendre(control);
-        connect(this, &pageJeu::fermerPopUp, info_rendre_jeton, &popUpInfo::close);
-        if (popUpRendu->exec() == QDialog::Accepted) {
-            coulRendu = popUpRendu->getSelectedOption();
-            if(coulRendu != Couleur::INDT){
-                control->getJoueurCourant().supJetonNb(1,coulRendu,control->getEspaceJeux());
+    if (control->getJoueurCourant().getTypeDeJoueur()==type::HUMAIN) {
+        while (control->getJoueurCourant().getNbJetons()>10) {
+            Couleur coulRendu;
+            popUpInfo* info_rendre_jeton = new popUpInfo(nullptr, "Il faut rendre les jetons en trop!");
+            popUpChoixJetonRendre* popUpRendu = new popUpChoixJetonRendre(control);
+            connect(this, &pageJeu::fermerPopUp, info_rendre_jeton, &popUpInfo::close);
+            if (popUpRendu->exec() == QDialog::Accepted) {
+                coulRendu = popUpRendu->getSelectedOption();
+                if(coulRendu != Couleur::INDT){
+                    control->getJoueurCourant().supJetonNb(1,coulRendu,control->getEspaceJeux());
+                }
             }
+            refresh();
         }
-        refresh();
     }
 }
 
@@ -134,7 +139,9 @@ void pageJeu::validerSelectionJeton() {
         if(isValid){
             control->recupererJetons(vPlateau->getSelectionJetons());
             verifJetons();
+            checkVictoire();
             control->changerJoueurCourantGraphique();
+
 
             refresh();
         }
@@ -166,7 +173,9 @@ void pageJeu::validerSelectionJeton() {
                 bSac->setEnabled(true);
                 capa_en_cours = make_pair(false, Couleur::INDT);
                 verifJetons();
+                checkVictoire();
                 control->changerJoueurCourantGraphique();
+
                 control->setNouveauTour(false);
                 refresh();
             }else
@@ -200,7 +209,9 @@ void pageJeu::validerSelectionJeton() {
                 bSac->setEnabled(true);
                 resa_en_cours = false;
                 verifJetons();
+                checkVictoire();
                 control->changerJoueurCourantGraphique();
+
                 control->setNouveauTour(false);
                 refresh();
             }else
@@ -300,7 +311,9 @@ void pageJeu::handleValidationCarte(position* p, std::array<int, 7> prix){
                 if(coulAsso != Couleur::INDT){
                     control->acheterCarteJoaillerie(coord, prix, coulAsso);
                     if(capa_en_cours.first==false){
+                        checkVictoire();
                         control->changerJoueurCourantGraphique();
+
                     }
                 }
             }
@@ -311,7 +324,9 @@ void pageJeu::handleValidationCarte(position* p, std::array<int, 7> prix){
             connect(this, &pageJeu::fermerPopUp, info_nouveau_tour, &popUpInfo::close);
             control->acheterCarteJoaillerie(coord, prix);
             control->setNouveauTour(true);
+            checkVictoire();
             control->changerJoueurCourantGraphique();
+
             control->setNouveauTour(false);
             break;
 
@@ -336,7 +351,9 @@ void pageJeu::handleValidationCarte(position* p, std::array<int, 7> prix){
                     const Jeton &jeton = control->getJoueurAdverse().RecupJetonCoul(coulAdv);
                     control->getJoueurCourant().addJeton(jeton);
                     if(capa_en_cours.first==false){
+                        checkVictoire();
                         control->changerJoueurCourantGraphique();
+
                     }
                 }
             }
@@ -353,7 +370,9 @@ void pageJeu::handleValidationCarte(position* p, std::array<int, 7> prix){
                 control->getJoueurCourant().addPrivilege(control->getPlateau().recupererPrivilege());
             }
             control->acheterCarteJoaillerie(coord, prix);
+            checkVictoire();
             control->changerJoueurCourantGraphique();
+
             break;
 
         default:
@@ -363,7 +382,9 @@ void pageJeu::handleValidationCarte(position* p, std::array<int, 7> prix){
     else{
         control->acheterCarteJoaillerie(coord, prix);
         if(capa_en_cours.first==false){
+            checkVictoire();
             control->changerJoueurCourantGraphique();
+
             control->setNouveauTour(false);
         }
     }
@@ -452,7 +473,9 @@ void pageJeu::handleReservationCartePioche(int nivPioche, position* pJ){
     if(next){
         control->orReserverCartePioche(nivPioche);
         control->recupererJetons(tmp);
+        checkVictoire();
         control->changerJoueurCourantGraphique();
+
         control->setNouveauTour(false);
     }
 }
@@ -676,6 +699,7 @@ void pageJeu::handleAchatCarteReservee(const Carte* carte, std::array<int, 7> pr
                 if(coulAsso != Couleur::INDT){
                     control->acheterCarteJoaillerie(*carte, prix, coulAsso);
                     if(capa_en_cours.first==false){
+                        checkVictoire();
                         control->changerJoueurCourantGraphique();
                     }
                 }
@@ -687,7 +711,9 @@ void pageJeu::handleAchatCarteReservee(const Carte* carte, std::array<int, 7> pr
             connect(this, &pageJeu::fermerPopUp, info_nouveau_tour, &popUpInfo::close);
             control->acheterCarteJoaillerie(*carte, prix);
             control->setNouveauTour(true);
+            checkVictoire();
             control->changerJoueurCourantGraphique();
+
             control->setNouveauTour(false);
             break;
 
@@ -712,7 +738,9 @@ void pageJeu::handleAchatCarteReservee(const Carte* carte, std::array<int, 7> pr
                     const Jeton &jeton = control->getJoueurAdverse().RecupJetonCoul(coulAdv);
                     control->getJoueurCourant().addJeton(jeton);
                     if(capa_en_cours.first==false){
+                        checkVictoire();
                         control->changerJoueurCourantGraphique();
+
                     }
                 }
             }
@@ -729,7 +757,9 @@ void pageJeu::handleAchatCarteReservee(const Carte* carte, std::array<int, 7> pr
                 control->getJoueurCourant().addPrivilege(control->getPlateau().recupererPrivilege());
             }
             control->acheterCarteJoaillerie(*carte, prix);
+            checkVictoire();
             control->changerJoueurCourantGraphique();
+
             break;
 
         default:
@@ -739,9 +769,26 @@ void pageJeu::handleAchatCarteReservee(const Carte* carte, std::array<int, 7> pr
     else{
         control->acheterCarteJoaillerie(*carte, prix);
         if(capa_en_cours.first==false){
+            checkVictoire();
             control->changerJoueurCourantGraphique();
             control->setNouveauTour(false);
         }
+    }
+}
+
+void pageJeu::checkVictoire() {
+    refresh();
+    //verification des confitions de victoire
+    if (control->getJoueurCourant().getNbCouronnes() >= 10) control->getJoueurCourant().setGagnant();
+    if (control->getJoueurCourant().getptsPrestige() >= 20) control->getJoueurCourant().setGagnant();
+    if (control->getJoueurCourant().nbPtsPrestigeParCouleurSupDix()) control->getJoueurCourant().setGagnant();
+
+    //victoire :
+    if (control->getJoueurCourant().estGagnant()) {
+        control->enregisterScore();
+        victoire = new popUpVictoire(nullptr, control->getJoueurCourant().getPseudo());
+        connect(victoire -> getBoutonQuitter(), &QPushButton::clicked, this, &pageJeu::quitter);
+        victoire->show();
     }
 }
 

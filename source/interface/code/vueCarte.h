@@ -104,6 +104,8 @@ protected:
             //emit piocheClique(static_cast<int>(pioche->getTypeCarte()));
             emit piocheClique(TypeCartetoInt(pioche->getTypeCarte()));
         }
+
+        event->accept();
     }
     void paintEvent(QPaintEvent* event) override;
 public:

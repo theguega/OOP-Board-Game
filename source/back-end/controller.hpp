@@ -19,11 +19,17 @@
 #include <QDebug>
 #include <QString>
 #include <cstdlib>
+#include <QObject>
 
 
 
 
-class Controller {
+class Controller : public QObject {
+    Q_OBJECT
+signals:
+    void signalTestIA(); // Déclarez le signal
+public slots:
+    void changerJoueurCourantGraphique();
 private:
     string stat_partie;                         // Ancienne ou Nouvelle
 	Partie* partie;
@@ -63,7 +69,6 @@ public:
 	// actions partie
 	void lancerPartie();
     void changerJoueurCourant();
-    void changerJoueurCourantGraphique();
     void jouer();
     void Tour_ia();
     void quitter();

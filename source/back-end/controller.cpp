@@ -201,8 +201,10 @@ void Controller::changerJoueurCourantGraphique() {
             joueurCourant = partie->getJoueur1();
 
         if (joueurCourant->getTypeDeJoueur() == type::IA) {
+            emit signalTestIA();
             strategy_courante = &strategy_IA;
-            Tour_ia();
+            if (!joueurCourant->estGagnant())
+                Tour_ia();
         }
         else
             strategy_courante = &strategy_Humain;
@@ -2038,34 +2040,17 @@ void  Controller::Tour_ia() {
 
             verifJetonSupDix();
 
-            // Conditions victoires :
-            if (getJoueurCourant().getNbCouronnes() >= 10) getJoueurCourant().setGagnant();
-            if (getJoueurCourant().getptsPrestige() >= 20) getJoueurCourant().setGagnant();
-            if (getJoueurCourant().nbPtsPrestigeParCouleurSupDix()) getJoueurCourant().setGagnant();
-
             //Sauvegarde automatique
             if (getPartie().getTour()==30) {
                 sauvegardePartie();
             }
 
-            // Fin de partie :
-            if (getJoueurCourant().estGagnant())
-                etat_tour = 3;
-            else{                //fin du tour du joueur, on passe au joueur suivant
-                changerJoueurCourantGraphique();
-                etat_tour = 10;
-            }
-            break;
-        }
-        case 3: {
-
-            //enregistrement des score
-            qDebug() << "Enregistrement des score...\n";
-            enregisterScore();
-            qDebug() << "DONE\n";
             etat_tour = 10;
 
-            //std::cout << "Fin de la partie !\n";
+            //on test les conditions de victoire a part de singnalTestIA() qui est connectes a pageJeu checkVictoire()
+            emit signalTestIA();
+            changerJoueurCourantGraphique();
+
             break;
         }
         default: {
