@@ -715,6 +715,7 @@ void pageJeu::checkVictoire() {
     //victoire :
     if (control->getJoueurCourant().estGagnant()) {
         control->enregisterScore();
+        qDebug() << control->getJoueurCourant().getNbCartes()+control->getJoueurCourant().getNbCartesReservees()+control->getJoueurAdverse().getNbCartes()+control->getJoueurAdverse().getNbCartesReservees()+control->getPyramide().getNbCartesNiv(0)+control->getPyramide().getNbCartesNiv(1)+control->getPyramide().getNbCartesNiv(2)+control->getPyramide().getPioche1().getNbCartes()+control->getPyramide().getPioche2().getNbCartes()+control->getPyramide().getPioche3().getNbCartes();
         victoire = new popUpVictoire(nullptr, control->getJoueurCourant().getPseudo());
         partiefinie=true;
         victoire->show();

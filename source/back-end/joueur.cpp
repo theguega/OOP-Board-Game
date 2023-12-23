@@ -71,7 +71,7 @@ Joueur::~Joueur() {
 size_t Joueur::getNbCartes() const {
     size_t nbCartes = 0;
     for (const auto& couleur : Couleurs) {
-        if (couleur != Couleur::INDT && couleur != Couleur::OR) {
+        if (couleur != Couleur::PERLE && couleur != Couleur::OR) {
             nbCartes += cartes.at(couleur).size();
         }
     }

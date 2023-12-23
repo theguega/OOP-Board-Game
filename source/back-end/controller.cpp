@@ -728,22 +728,30 @@ bool Controller::acheterCarteJoaillerie (EspaceJeux& espaceJeux){
         const Carte& carte = joueurCourant->getCarteReservee(resa_dispo[choix].first, resa_dispo[choix].second);
         //on verifie que le joueur peut bien acheter la carte, sinon on la repose
 
-        paiementCarte(carte, espaceJeux);
+
 
         // Si la carte a une capacite on l'execute
         bool res = false;
         if(carte.getCapacite1() != Capacite::None && carte.getCapacite1() != Capacite::AssociationBonus){
             res = appliquerCapacite(carte.getCapacite1(), carte);
+            paiementCarte(carte, espaceJeux);
+            joueurCourant->addCarte(carte);
+            joueurCourant->addBonus(carte.getBonus().getCouleur(), carte.getBonus().getNbBonus());
             // On regarde si on ajoute un tour
+            joueurCourant->supCarteReservee(carte);
             return res;
         }
-        if(carte.getCapacite2() != Capacite::None && carte.getCapacite2() != Capacite::AssociationBonus){
+        else if(carte.getCapacite2() != Capacite::None && carte.getCapacite2() != Capacite::AssociationBonus){
             res = appliquerCapacite(carte.getCapacite2(), carte);
             // On regarde si on ajoute un tour
+            paiementCarte(carte, espaceJeux);
+            joueurCourant->addCarte(carte);
+            joueurCourant->addBonus(carte.getBonus().getCouleur(), carte.getBonus().getNbBonus());
+            joueurCourant->supCarteReservee(carte);
             return res;
         }
 
-        if(carte.getCapacite1() == Capacite::AssociationBonus || carte.getCapacite2() == Capacite::AssociationBonus){
+        else if(carte.getCapacite1() == Capacite::AssociationBonus || carte.getCapacite2() == Capacite::AssociationBonus){
             qDebug()<<"La carte a une capacite qui permet d'ajouter un bonus a la couleur de votre choix\n";
 
             std::string coulJetonStr;
@@ -758,13 +766,14 @@ bool Controller::acheterCarteJoaillerie (EspaceJeux& espaceJeux){
             // Ajout du bonus
             joueurCourant->addBonus(coulBonus, 1);
             qDebug()<<"Le bonus a bien ete ajoute\n";
-
+            paiementCarte(carte, espaceJeux);
             joueurCourant->cartes[coulBonus].push_back(&carte);
             joueurCourant->supCarteReservee(carte);
             joueurCourant->ptsPrestige += carte.getNbPtsPrivilege();
             joueurCourant->nbCouronnes += carte.getNbCouronnes();
         } else{
             //on ajoute la carte au joueur
+            paiementCarte(carte, espaceJeux);
             joueurCourant->addCarte(carte);
             joueurCourant->supCarteReservee(carte);
             joueurCourant->addBonus(carte.getBonus().getCouleur(), carte.getBonus().getNbBonus());
@@ -787,24 +796,32 @@ bool Controller::acheterCarteJoaillerie (EspaceJeux& espaceJeux){
         unsigned int choix = strategy_courante->choix_min_max(1, cartes_dispo.size())-1;
 
         //on peut alors l'acheter, elle sera directement remplacer par une nouvelle
-        const Carte& carte = partie->getEspaceJeux().getPyramide().acheterCarte(cartes_dispo[choix].first, cartes_dispo[choix].second);
+        const Carte& carte = *partie->getEspaceJeux().getPyramide().getCarte(cartes_dispo[choix].first, cartes_dispo[choix].second);
 
-        paiementCarte(carte, espaceJeux);
+
 
         // Si la carte a une capacite on l'execute
         bool res = false;
         if(carte.getCapacite1() != Capacite::None && carte.getCapacite1() != Capacite::AssociationBonus){
             res = appliquerCapacite(carte.getCapacite1(), carte);
+            const Carte& carte = partie->getEspaceJeux().getPyramide().acheterCarte(cartes_dispo[choix].first, cartes_dispo[choix].second);
+            paiementCarte(carte, espaceJeux);
+            joueurCourant->addCarte(carte);
+            joueurCourant->addBonus(carte.getBonus().getCouleur(), carte.getBonus().getNbBonus());
             // On regarde si on ajoute un tour
             return res;
         }
-        if(carte.getCapacite2() != Capacite::None && carte.getCapacite2() != Capacite::AssociationBonus){
+        else if(carte.getCapacite2() != Capacite::None && carte.getCapacite2() != Capacite::AssociationBonus){
             res = appliquerCapacite(carte.getCapacite2(), carte);
+            const Carte& carte = partie->getEspaceJeux().getPyramide().acheterCarte(cartes_dispo[choix].first, cartes_dispo[choix].second);
+            paiementCarte(carte, espaceJeux);
+            joueurCourant->addCarte(carte);
+            joueurCourant->addBonus(carte.getBonus().getCouleur(), carte.getBonus().getNbBonus());
             // On regarde si on ajoute un tour
             return res;
         }
 
-        if(carte.getCapacite1() == Capacite::AssociationBonus || carte.getCapacite2() == Capacite::AssociationBonus){
+        else if(carte.getCapacite1() == Capacite::AssociationBonus || carte.getCapacite2() == Capacite::AssociationBonus){
             qDebug()<<"La carte a une capacite qui permet d'ajouter un bonus a la couleur de votre choix\n";
 
             std::string coulJetonStr;
@@ -820,11 +837,15 @@ bool Controller::acheterCarteJoaillerie (EspaceJeux& espaceJeux){
             joueurCourant->addBonus(coulBonus, 1);
             qDebug()<<"Le bonus a bien ete ajoute\n";
 
+            const Carte& carte = partie->getEspaceJeux().getPyramide().acheterCarte(cartes_dispo[choix].first, cartes_dispo[choix].second);
+            paiementCarte(carte, espaceJeux);
             joueurCourant->cartes[coulBonus].push_back(&carte);
             joueurCourant->ptsPrestige += carte.getNbPtsPrivilege();
             joueurCourant->nbCouronnes += carte.getNbCouronnes();
         } else{
             //on ajoute la carte au joueur
+            const Carte& carte = partie->getEspaceJeux().getPyramide().acheterCarte(cartes_dispo[choix].first, cartes_dispo[choix].second);
+            paiementCarte(carte, espaceJeux);
             joueurCourant->addCarte(carte);
             joueurCourant->addBonus(carte.getBonus().getCouleur(), carte.getBonus().getNbBonus());
             return res;
@@ -1017,6 +1038,7 @@ void Controller::orReserverCarte (Pyramide& pyramide, Plateau& plateau){
 bool Controller::appliquerCapacite(Capacite capa,const Carte &carte){
     switch (capa) {
         case Capacite::NewTurn: { // Modifier achar carte et la boucle de jeu pour que ça soit effectif
+
             return true;
             break;
         }
@@ -1027,11 +1049,13 @@ bool Controller::appliquerCapacite(Capacite capa,const Carte &carte){
             } else                                                                 //si il y a un jetons sur le plateau, le joueur le recupere
                 joueurCourant->addPrivilege(partie->getEspaceJeux().getPlateau().recupererPrivilege());
             qDebug()<<"Ajout d'un privilège correspondant à la capacite\n";
+
             break;
         }
         case Capacite::TakeJetonFromBonus: {
             qDebug()<<"Recuperation d'un jeton correspondant à la capacite\n";
             recupererJetons(true, carte.getBonus().getCouleur());
+
             break;
         }
         case Capacite::TakeJetonToAdv: {
@@ -1055,6 +1079,7 @@ bool Controller::appliquerCapacite(Capacite capa,const Carte &carte){
             const Jeton &jeton = getJoueurAdverse().RecupJetonCoul(coulJeton);
             qDebug()<<"Ajout du jeton grace a la capacite\n";
             joueurCourant->addJeton(jeton);
+
             break;
         }
         case Capacite::AssociationBonus: {
@@ -1505,6 +1530,8 @@ void  Controller::Tour_ia() {
                 //on test les conditions de victoire a part de singnalTestIA() qui est connectes a pageJeu checkVictoire()
                 emit signalTestIA();
                 if(!joueurCourant->estGagnant()) {
+                    qDebug() << getJoueurCourant().getNbCartes()+getJoueurCourant().getNbCartesReservees()+getJoueurAdverse().getNbCartes()+getJoueurAdverse().getNbCartesReservees()+getPyramide().getNbCartesNiv(0)+getPyramide().getNbCartesNiv(1)+getPyramide().getNbCartesNiv(2)+getPyramide().getPioche1().getNbCartes()+getPyramide().getPioche2().getNbCartes()+getPyramide().getPioche3().getNbCartes();
+
                     changerJoueurCourantGraphique();
                 }
 
