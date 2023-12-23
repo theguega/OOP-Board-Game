@@ -1,8 +1,10 @@
 #include "pageBibliotheque.h"
 
-pageBibliotheque::pageBibliotheque(QWidget *parent) : QScrollArea(parent){
-    boutons = new QWidget(this);
-    layoutBibli = new QVBoxLayout(boutons);
+
+
+
+pageBibliotheque::pageBibliotheque(QWidget *parent) : QWidget(parent){
+    layoutBibli = new QVBoxLayout(this);
 
     retourMenu = new QPushButton("Retour Menu Principal", this);
     layoutBibli->addWidget(retourMenu);
@@ -10,9 +12,7 @@ pageBibliotheque::pageBibliotheque(QWidget *parent) : QScrollArea(parent){
     tableView = new QTableView(this);
     layoutBibli->addWidget(tableView);
 
-    tableView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    layoutBibli->setSizeConstraint(QLayout::SetFixedSize);
-    setWidget(boutons);
+    tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 
     QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
     db.setDatabaseName("data/score.sqlite");
@@ -25,6 +25,7 @@ pageBibliotheque::pageBibliotheque(QWidget *parent) : QScrollArea(parent){
     QSqlQueryModel *model = new QSqlQueryModel;
     model->setQuery("SELECT * FROM score");
     tableView->setModel( model );
+    tableView->verticalHeader()->setVisible(false);
     tableView->show();
 }
 
@@ -32,5 +33,4 @@ pageBibliotheque::~pageBibliotheque() {
     delete retourMenu;
     delete layoutBibli;
     delete tableView;
-    delete boutons;
 }

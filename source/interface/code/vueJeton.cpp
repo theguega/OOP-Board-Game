@@ -263,7 +263,7 @@ void vueJetonJoueur::paintEvent(QPaintEvent *event){
     painter.setPen(Qt::black);
     int fontId = QFontDatabase::addApplicationFont(":/font/fonts/MedievalSharp-Regular.ttf");
     QStringList fontFamilies = QFontDatabase::applicationFontFamilies(fontId);
-    QFont customFont(fontFamilies.at(0), 40);
+    QFont customFont(fontFamilies.at(0), 15);
     customFont.setWeight(QFont::Bold); // Mettre la police en gras
 
     painter.setFont(customFont);

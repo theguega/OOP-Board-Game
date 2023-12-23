@@ -235,7 +235,7 @@ std::string Carte::getInfos() const {
     std::ostringstream oss;
 
     if (getCapacite1() == Capacite::None && getCapacite2() == Capacite::None) {
-        oss << "Aucune capacite(s) ";
+        oss << "Aucune capacite ";
         return oss.str();
     }
 
