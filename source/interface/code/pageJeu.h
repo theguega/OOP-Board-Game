@@ -58,6 +58,7 @@ private:
     std::vector<vueCarteNoble*> cartesNoble;
     QHBoxLayout* layoutNoble;
     QWidget* widgetNoble;
+    std::vector<vueCarteNoble*> listeWidgetsNoble;
 protected:
     void closeEvent(QCloseEvent *event) override {  //Redefinition de la methode closeEvent
         aSauvegarde -> hide();
@@ -89,6 +90,7 @@ public:
     }
     void setLabelJC(){labelJC->setText(QString::fromStdString("C'est au tour de " + control->getJoueurCourant().getPseudo()));}
     void refresh();
+    void verifNobles();
 public slots:
     void validerSelectionCarte(position* p);
     void validerResaCarte(position* p);
@@ -106,7 +108,7 @@ private slots:
     void handleValidationCarte(position* p);
     void handleReservationCarte(position* p, position* pJ = nullptr);
     void handleReservationCartePioche(int nivPioche, position* pJ);
-    void handleCartesNoble(size_t i);
+    void handleCartesNoble(size_t i, int niv = 3);
     void verifJetons() ;
 signals:
     void fermerPopUp();
@@ -114,7 +116,18 @@ signals:
 
 
 
+class ModalWidget : public QWidget {
+public:
+    ModalWidget(QWidget *parent = nullptr) : QWidget(parent) {
+        setWindowModality(Qt::WindowModal);
+        setAttribute(Qt::WA_DeleteOnClose); // Delete the widget when closed
+    }
 
+    void showEvent(QShowEvent *event) override {
+        QWidget::showEvent(event);
+        QCoreApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
+    }
+};
 /*class vuePrivilege : public QWidget{
     Q_OBJECT
 private:
