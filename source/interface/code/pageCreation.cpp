@@ -6,6 +6,7 @@
 #include "pageCreation.h"
 
 pageCreation::pageCreation(QWidget *parent) : QWidget(parent){
+
     choixPossibles1 = new QComboBox;
     choixPossibles2 = new QComboBox;
 

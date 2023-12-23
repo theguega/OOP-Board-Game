@@ -35,6 +35,17 @@ public:
     QPushButton* getBoutonNon(){return non;}
 };
 
+class popUpVictoire : public QWidget{
+    Q_OBJECT
+private:
+    QPushButton* quitter;
+    QLabel* info;
+    QVBoxLayout* layout; //Layout principal
+public:
+    popUpVictoire(QWidget* parent, std::string pseudo);
+    QPushButton* getBoutonQuitter(){return quitter;}
+};
+
 
 
 class popUpInfo : public QWidget{

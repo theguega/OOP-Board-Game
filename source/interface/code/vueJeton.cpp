@@ -1,6 +1,7 @@
 #include <QWidget>
 #include <QPushButton>
 #include <interface/code/vueJeton.h>
+#include <QFontDatabase>
 
 vueJeton::vueJeton(QWidget* parent, int rad, const Jeton* jeton, position* p) : QPushButton(parent), pos(p){
     this->jeton = jeton;
@@ -260,13 +261,15 @@ void vueJetonJoueur::paintEvent(QPaintEvent *event){
     painter.drawPolygon(smallDiamondShape);
 
     painter.setPen(Qt::black);
-    QFont font("Arial", 12); // Définir la police et la taille de la police
-    font.setWeight(QFont::Bold); // Mettre la police en gras
+    int fontId = QFontDatabase::addApplicationFont(":/font/fonts/MedievalSharp-Regular.ttf");
+    QStringList fontFamilies = QFontDatabase::applicationFontFamilies(fontId);
+    QFont customFont(fontFamilies.at(0), 15);
+    customFont.setWeight(QFont::Bold); // Mettre la police en gras
 
-    painter.setFont(font);
+    painter.setFont(customFont);
 
-    QString texte = " : " + QString::number(n);
-    QFontMetrics metrics(font);
+    QString texte = QString::number(n);
+    QFontMetrics metrics(customFont);
     int textWidth = metrics.horizontalAdvance(texte);
     int textHeight = metrics.height();
 

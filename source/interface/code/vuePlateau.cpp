@@ -169,10 +169,12 @@ vuePlateau::vuePlateau(QWidget* parent, int hauteur, int largeur, Plateau& plat)
     boutonValiderPrivilege->setStyleSheet("color blue;");
 
     layout = new QVBoxLayout; //Layout pour mettre le Grid + les boutons en dessous
+    layout2 = new QHBoxLayout; //pour les 2 boutons
 
     layout -> addWidget(grille); //Ajoute layoutJetons au layout vertical
-    layout -> addWidget(boutonValider); //Ajoute layoutJetons au layout vertical (faire un QHBoxLayout pour ajouter aussi un bouton desselctionner) 
-    layout -> addWidget(boutonValiderPrivilege);
+    layout2 -> addWidget(boutonValider); //Ajoute layoutJetons au layout vertical (faire un QHBoxLayout pour ajouter aussi un bouton desselctionner)
+    layout2 -> addWidget(boutonValiderPrivilege);
+    layout -> addLayout(layout2);
     setLayout(layout); //Set le layout
 
     //connect(boutonValider, &QPushButton::clicked, this, &vuePlateau::validerJetons); //connect boutonValider avec valliderJetons

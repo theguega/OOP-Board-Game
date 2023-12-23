@@ -14,17 +14,24 @@
 */
 
 #include <random>
+#include <tuple>
 #include "partie.hpp"
 #include <QDebug>
 #include <QString>
 #include <cstdlib>
+#include <QObject>
 
 
 
 
-class Controller {
+class Controller : public QObject {
+    Q_OBJECT
+signals:
+    void signalTestIA(); // Déclarez le signal
+public slots:
+    void changerJoueurCourantGraphique();
 private:
-    string stat_partie;
+    string stat_partie;                         // Ancienne ou Nouvelle
 	Partie* partie;
 	Joueur* joueurCourant = nullptr;
     Strategy * strategy_courante  = nullptr;
@@ -50,7 +57,7 @@ public:
             }
         }
         throw SplendorException("pas de d'adverssaire trouvé..\n");
-    };
+    }
     Plateau& getPlateau() const {return partie->getEspaceJeux().getPlateau();}
     Pyramide& getPyramide() const {return partie->getEspaceJeux().getPyramide();}
     EspaceJeux& getEspaceJeux() const{return partie->getEspaceJeux();}
@@ -62,7 +69,6 @@ public:
 	// actions partie
 	void lancerPartie();
     void changerJoueurCourant();
-    void changerJoueurCourantGraphique();
     void jouer();
     void Tour_ia();
     void quitter();
@@ -111,8 +117,11 @@ public:
     std::pair<bool, QString> verifJetons(const std::vector<std::pair<int, int>>& coord, bool capa = false, Couleur coulBonus = Couleur::INDT);
     void recupererJetons(const std::vector<std::pair<int, int>>& coord);
 
-    std::pair<bool, QString> verifAchatCarte(std::pair<int, int> coord);
-    void acheterCarteJoaillerie(std::pair<int, int> coord, Couleur c = Couleur::INDT);
+    std::tuple<bool, QString, std::array<int, 7>> verifAchatCarte(std::pair<int, int> coord);
+    std::tuple<bool, QString, std::array<int, 7>> verifAchatCarteReservee(const Carte* carte);
+    void acheterCarteJoaillerie(std::pair<int, int> coord,  std::array<int, 7> prix, Couleur c = Couleur::INDT);
+    void acheterCarteJoaillerie(const Carte& carte, std::array<int, 7> prix, Couleur c = Couleur::INDT);
+    void paiementCarte(std::array<int, 7> prix, EspaceJeux& espaceJeux);
 
     std::pair<bool, QString> verifReservationCarte();
     void orReserverCarte(std::pair<int, int> coord);
@@ -121,9 +130,6 @@ public:
 
 
     void orReserverCartePioche (int nivPioche);
-
-
-
 };
 
 #endif

@@ -114,24 +114,31 @@ pageJeu::pageJeu(QString statut_partie, QString pseudo_j_1, type type_j_1, QStri
     if (control -> getJoueurCourant().getTypeDeJoueur() == type::IA)
         control -> Tour_ia();
     widgetNoble->hide(); //À enlever, c'était à teste
+    QObject::connect(control, &Controller::signalTestIA, this, &pageJeu::checkVictoire);
 
     refresh();
+
+    if (control -> getJoueurCourant().getTypeDeJoueur() == type::IA) {
+        control -> Tour_ia();
+    }
 }
 
 void pageJeu::verifJetons() {
     refresh();
-    while (control->getJoueurCourant().getNbJetons()>10) {
-        Couleur coulRendu;
-        popUpInfo* info_rendre_jeton = new popUpInfo(nullptr, "Il faut rendre les jetons en trop!");
-        popUpChoixJetonRendre* popUpRendu = new popUpChoixJetonRendre(control);
-        connect(this, &pageJeu::fermerPopUp, info_rendre_jeton, &popUpInfo::close);
-        if (popUpRendu->exec() == QDialog::Accepted) {
-            coulRendu = popUpRendu->getSelectedOption();
-            if(coulRendu != Couleur::INDT){
-                control->getJoueurCourant().supJetonNb(1,coulRendu,control->getEspaceJeux());
+    if (control->getJoueurCourant().getTypeDeJoueur()==type::HUMAIN) {
+        while (control->getJoueurCourant().getNbJetons()>10) {
+            Couleur coulRendu;
+            popUpInfo* info_rendre_jeton = new popUpInfo(nullptr, "Il faut rendre les jetons en trop!");
+            popUpChoixJetonRendre* popUpRendu = new popUpChoixJetonRendre(control);
+            connect(this, &pageJeu::fermerPopUp, info_rendre_jeton, &popUpInfo::close);
+            if (popUpRendu->exec() == QDialog::Accepted) {
+                coulRendu = popUpRendu->getSelectedOption();
+                if(coulRendu != Couleur::INDT){
+                    control->getJoueurCourant().supJetonNb(1,coulRendu,control->getEspaceJeux());
+                }
             }
+            refresh();
         }
-        refresh();
     }
 }
 
@@ -149,7 +156,9 @@ void pageJeu::validerSelectionJeton() {
         if(isValid){
             control->recupererJetons(vPlateau->getSelectionJetons());
             verifJetons();
+            checkVictoire();
             control->changerJoueurCourantGraphique();
+
 
             refresh();
         }
@@ -181,6 +190,7 @@ void pageJeu::validerSelectionJeton() {
                 bSac->setEnabled(true);
                 capa_en_cours = make_pair(false, Couleur::INDT);
                 verifJetons();
+                checkVictoire();
                 verifNobles();
                 control->setNouveauTour(false);
                 refresh();
@@ -215,7 +225,9 @@ void pageJeu::validerSelectionJeton() {
                 bSac->setEnabled(true);
                 resa_en_cours = false;
                 verifJetons();
+                checkVictoire();
                 control->changerJoueurCourantGraphique();
+
                 control->setNouveauTour(false);
                 refresh();
             }else
@@ -269,15 +281,16 @@ void pageJeu::validerSelectionJetonPrivi() {
 
 
 void pageJeu::validerSelectionCarte(position* pos){
-    std::pair<bool, QString> validationResult = control->verifAchatCarte(std::make_pair(pos->getx(), pos->gety()));
-    bool isValid = validationResult.first;
-    const QString& message = validationResult.second;
+    std::tuple<bool, QString, std::array<int, 7>> validationResult = control->verifAchatCarte(std::make_pair(pos->getx(), pos->gety()));
+    bool isValid = std::get<0>(validationResult);
+    const QString& message = std::get<1>(validationResult);
+    std::array<int, 7> prix = std::get<2>(validationResult);
 
     if(isValid){    // Achat valide
         modalPopup* validation = new modalPopup(this, message, "Voulez-vous valider ?");
         int result =validation->exec();
         if (result == QDialog::Accepted){
-            pageJeu::handleValidationCarte(pos);
+            pageJeu::handleValidationCarte(pos, prix);
         }
         delete validation;
         refresh();
@@ -290,8 +303,7 @@ void pageJeu::validerSelectionCarte(position* pos){
 
 
 
-
-void pageJeu::handleValidationCarte(position* p){
+void pageJeu::handleValidationCarte(position* p, std::array<int, 7> prix){
     std::pair<int, int> coord = std::make_pair(p->getx(), p->gety());
     const Carte* carte_tmp = control->getPyramide().getCarte(coord.first, coord.second);
     popUpInfo* info_nouveau_tour = new popUpInfo(nullptr, "La capacité de la carte vous permet de joueur un nouveau tour");
@@ -315,8 +327,11 @@ void pageJeu::handleValidationCarte(position* p){
             if (popUpAssos->exec() == QDialog::Accepted) {
                 coulAsso = popUpAssos->getSelectedOption();
                 if(coulAsso != Couleur::INDT){
-                    control->acheterCarteJoaillerie(coord, coulAsso);
-                    verifNobles();
+
+                    control->acheterCarteJoaillerie(coord, prix, coulAsso);
+                    checkVictoire();
+                    verifNobles();       
+                    control->changerJoueurCourantGraphique();
                 }
             }
             break;
@@ -324,9 +339,10 @@ void pageJeu::handleValidationCarte(position* p){
         case Capacite::NewTurn:
             info_nouveau_tour->show();
             connect(this, &pageJeu::fermerPopUp, info_nouveau_tour, &popUpInfo::close);
-            control->acheterCarteJoaillerie(coord);
-            verifNobles();
+            
+            control->acheterCarteJoaillerie(coord, prix);
             control->setNouveauTour(true);
+            checkVictoire();
             verifNobles();
             control->setNouveauTour(false);
             break;
@@ -335,7 +351,7 @@ void pageJeu::handleValidationCarte(position* p){
             if(control->getPlateau().contientCouleur(carte_tmp->getBonus().getCouleur())){
                 info_take_jeton_from_bonus->show();
                 //connect(this, &pageJeu::fermerPopUp, info_take_jeton_from_bonus, &popUpInfo::close);
-                control->acheterCarteJoaillerie(coord);
+                control->acheterCarteJoaillerie(coord, prix);
                 //permet de forcer le joueur a recup un jeton
                 capa_en_cours = std::make_pair(true, carte_tmp->getBonus().getCouleur());
                 vPyramide->setEnabled(false);
@@ -348,9 +364,10 @@ void pageJeu::handleValidationCarte(position* p){
             if (popUpAdv->exec() == QDialog::Accepted) {
                 coulAdv = popUpAdv->getSelectedOption();
                 if(coulAdv != Couleur::INDT){
-                    control->acheterCarteJoaillerie(coord);
+                    control->acheterCarteJoaillerie(coord, prix);
                     const Jeton &jeton = control->getJoueurAdverse().RecupJetonCoul(coulAdv);
                     control->getJoueurCourant().addJeton(jeton);
+                    checkVictoire();
                     verifNobles();
                 }
             }
@@ -366,8 +383,10 @@ void pageJeu::handleValidationCarte(position* p){
                 //si il y a un jetons sur le plateau, le joueur le recupere
                 control->getJoueurCourant().addPrivilege(control->getPlateau().recupererPrivilege());
             }
-            control->acheterCarteJoaillerie(coord);
+            control->acheterCarteJoaillerie(coord, prix);
+            checkVictoire();
             verifNobles();
+
             break;
 
         default:
@@ -375,9 +394,11 @@ void pageJeu::handleValidationCarte(position* p){
         }
     }
     else{
-        control->acheterCarteJoaillerie(coord);
+        control->acheterCarteJoaillerie(coord, prix);
+        checkVictoire();
         verifNobles();
         control->setNouveauTour(false);
+        }
     }
 }
 
@@ -464,7 +485,9 @@ void pageJeu::handleReservationCartePioche(int nivPioche, position* pJ){
     if(next){
         control->orReserverCartePioche(nivPioche);
         control->recupererJetons(tmp);
+        checkVictoire();
         control->changerJoueurCourantGraphique();
+
         control->setNouveauTour(false);
     }
 }
@@ -655,37 +678,142 @@ void pageJeu::remplirPlateau() {
 
 
 void pageJeu::validerAchatCarteReservee(const Carte* carte){
-    if(&control->getJoueurCourant() == joueur1->getJoueur()){
-        if(joueur1->positionDansMap(carte) != -1){
-            if(control->verifAchatCarte(carte)){
-                return;
-            }
-            else{
-                popUpInfo* infos = new popUpInfo(nullptr, "Vous ne pouvez pas acheter cette carte");
-                connect(this, &pageJeu::fermerPopUp, infos, &popUpInfo::close);
-            }
+    std::tuple<bool, QString, std::array<int, 7>> validationResult = control->verifAchatCarteReservee(carte);
+    bool isValid = std::get<0>(validationResult);
+    const QString& message = std::get<1>(validationResult);
+    std::array<int, 7> prix = std::get<2>(validationResult);
+
+    if(isValid){    // Achat valide
+        modalPopup* validation = new modalPopup(this, message, "Voulez-vous valider ?");
+        int result =validation->exec();
+        if (result == QDialog::Accepted){
+            pageJeu::handleAchatCarteReservee(carte, prix);
         }
-        else{
-            popUpInfo* infos = new popUpInfo(nullptr, "Vous n'avez pas cette carte");
-            connect(this, &pageJeu::fermerPopUp, infos, &popUpInfo::close);
-        }
+        delete validation;
+        refresh();
     }
-    else if(&control->getJoueurCourant() == joueur2->getJoueur()){
-        if(joueur1->positionDansMap(carte) != -1){
-            if(control->verifAchatCarte(carte)){
-                return;
-            }
-            else{
-                popUpInfo* infos = new popUpInfo(nullptr, "Vous ne pouvez pas acheter cette carte");
-                connect(this, &pageJeu::fermerPopUp, infos, &popUpInfo::close);
-            }
-        }
-        else{
-            popUpInfo* infos = new popUpInfo(nullptr, "Vous n'avez pas cette carte");
-            connect(this, &pageJeu::fermerPopUp, infos, &popUpInfo::close);
-        }
+    else{           // Achat impossible
+        popUpInfo* infos = new popUpInfo(nullptr, message.toStdString());
+        infos->show();
     }
     refresh();
+}
+
+void pageJeu::handleAchatCarteReservee(const Carte* carte, std::array<int, 7> prix){
+        popUpInfo* info_nouveau_tour = new popUpInfo(nullptr, "La capacité de la carte vous permet de joueur un nouveau tour");
+        popUpInfo* info_take_jeton_from_bonus = new popUpInfo(nullptr, "La capacité de la carte vous permet de recuperer un jeton de la couleur du bonus de la carte. Veuillez sélectionner un jeton");
+
+        popUpChoixAssociationBonus* popUpAssos = new popUpChoixAssociationBonus(control);
+        popUpChoixJetonAdv* popUpAdv = new popUpChoixJetonAdv(control);
+
+        connect(this, &pageJeu::fermerPopUp, info_nouveau_tour, &popUpInfo::close);
+        connect(this, &pageJeu::fermerPopUp, info_take_jeton_from_bonus, &popUpInfo::close);
+
+        Couleur coulAsso;
+        Couleur coulAdv;
+
+
+        if(carte->getCapacite1()!=Capacite::None){
+
+        switch(carte->getCapacite1()){
+
+        case Capacite::AssociationBonus:
+            if (popUpAssos->exec() == QDialog::Accepted) {
+                coulAsso = popUpAssos->getSelectedOption();
+                if(coulAsso != Couleur::INDT){
+                    control->acheterCarteJoaillerie(*carte, prix, coulAsso);
+                    if(capa_en_cours.first==false){
+                        checkVictoire();
+                        control->changerJoueurCourantGraphique();
+                    }
+                }
+            }
+            break;
+
+        case Capacite::NewTurn:
+            info_nouveau_tour->show();
+            connect(this, &pageJeu::fermerPopUp, info_nouveau_tour, &popUpInfo::close);
+            control->acheterCarteJoaillerie(*carte, prix);
+            control->setNouveauTour(true);
+            checkVictoire();
+            control->changerJoueurCourantGraphique();
+
+            control->setNouveauTour(false);
+            break;
+
+        case Capacite::TakeJetonFromBonus:
+            if(control->getPlateau().contientCouleur(carte->getBonus().getCouleur())){
+                info_take_jeton_from_bonus->show();
+                //connect(this, &pageJeu::fermerPopUp, info_take_jeton_from_bonus, &popUpInfo::close);
+                control->acheterCarteJoaillerie(*carte, prix);
+                //permet de forcer le joueur a recup un jeton
+                capa_en_cours = std::make_pair(true, carte->getBonus().getCouleur());
+                vPyramide->setEnabled(false);
+                vPlateau->getBoutonValiderPriv()->setEnabled(false);
+                bSac->setEnabled(false);
+            }
+            break;
+
+        case Capacite::TakeJetonToAdv:
+            if (popUpAdv->exec() == QDialog::Accepted) {
+                coulAdv = popUpAdv->getSelectedOption();
+                if(coulAdv != Couleur::INDT){
+                    control->acheterCarteJoaillerie(*carte, prix);
+                    const Jeton &jeton = control->getJoueurAdverse().RecupJetonCoul(coulAdv);
+                    control->getJoueurCourant().addJeton(jeton);
+                    if(capa_en_cours.first==false){
+                        checkVictoire();
+                        control->changerJoueurCourantGraphique();
+
+                    }
+                }
+            }
+            break;
+
+        case Capacite::TakePrivilege:
+            if (control->getPlateau().getNbPrivileges()==0){
+                //si il n'y a plus de privileges sur le plateau
+                if(control->getJoueurCourant().getNbPrivileges()!=3) {
+                    control->getJoueurCourant().addPrivilege(control->getJoueurAdverse().supPrivilege());
+                }
+            } else {
+                //si il y a un jetons sur le plateau, le joueur le recupere
+                control->getJoueurCourant().addPrivilege(control->getPlateau().recupererPrivilege());
+            }
+            control->acheterCarteJoaillerie(*carte, prix);
+            checkVictoire();
+            control->changerJoueurCourantGraphique();
+
+            break;
+
+        default:
+            break;
+        }
+    }
+    else{
+        control->acheterCarteJoaillerie(*carte, prix);
+        if(capa_en_cours.first==false){
+            checkVictoire();
+            control->changerJoueurCourantGraphique();
+            control->setNouveauTour(false);
+        }
+    }
+}
+
+void pageJeu::checkVictoire() {
+    refresh();
+    //verification des confitions de victoire
+    if (control->getJoueurCourant().getNbCouronnes() >= 10) control->getJoueurCourant().setGagnant();
+    if (control->getJoueurCourant().getptsPrestige() >= 20) control->getJoueurCourant().setGagnant();
+    if (control->getJoueurCourant().nbPtsPrestigeParCouleurSupDix()) control->getJoueurCourant().setGagnant();
+
+    //victoire :
+    if (control->getJoueurCourant().estGagnant()) {
+        control->enregisterScore();
+        victoire = new popUpVictoire(nullptr, control->getJoueurCourant().getPseudo());
+        connect(victoire -> getBoutonQuitter(), &QPushButton::clicked, this, &pageJeu::quitter);
+        victoire->show();
+    }
 }
 
 void pageJeu::handleCartesNoble(size_t i, int niv){

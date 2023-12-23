@@ -7,6 +7,7 @@
 #include <QFont>
 #include <QFontDatabase>
 #include <QTimer>
+#include <QScreen>
 
 #include "back-end/exception.hpp"
 
@@ -34,8 +35,9 @@ int main(int argc, char * argv[]) {
         QApplication app(argc, argv);
         int fontId = QFontDatabase::addApplicationFont(":/font/fonts/MedievalSharp-Regular.ttf");
         QStringList fontFamilies = QFontDatabase::applicationFontFamilies(fontId);
-        QFont customFont(fontFamilies.at(0), 12);
+        QFont customFont(fontFamilies.at(0), 13);
         app.setFont(customFont);
+
         toutesPages* page = new toutesPages(nullptr, &app);
         page->show();
         return app.exec();

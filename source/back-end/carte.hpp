@@ -51,7 +51,6 @@ string CapacitetoString(Capacite c);
 string CapacitetoShort(Capacite c);
 ostream& operator<<(ostream& f, Capacite c);
 QDebug operator<<(QDebug f, Capacite c);
-
 Capacite StringToCapacite(const string& capaciteStr);
 
 

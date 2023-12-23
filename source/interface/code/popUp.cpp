@@ -1,5 +1,6 @@
 #include "popUp.h"
 #include "vueJeton.h"
+#include <QFontDatabase>
 
 popUpValider::popUpValider(QWidget* parent, std::string info, std::string info2, std::string gif) : QWidget(parent) {
     oui = new QPushButton("oui"); // Bouton Oui
@@ -32,6 +33,43 @@ popUpValider::popUpValider(QWidget* parent, std::string info, std::string info2,
     layout->addWidget(this->info);
 
     layout->addLayout(boutonLayout);
+
+    layout->setAlignment(Qt::AlignCenter);
+
+    setLayout(layout);
+
+    movie->start(); // Démarre l'animation du GIF
+}
+
+popUpVictoire::popUpVictoire(QWidget* parent, std::string pseudo) : QWidget(parent) {
+    quitter = new QPushButton("quitter"); // Bouton Oui
+    std::string tempPhrase = "Le joueur " + pseudo + " a gagné SplendorDuel !";
+    this->info = new QLabel;
+    this->info->setText(QString::fromStdString(tempPhrase)); // Set text on QLabel
+    this->info->setAlignment(Qt::AlignCenter); // Center-align the text
+
+    int fontId = QFontDatabase::addApplicationFont(":/font/fonts/MedievalSharp-Regular.ttf");
+    QStringList fontFamilies = QFontDatabase::applicationFontFamilies(fontId);
+    QFont customFont(fontFamilies.at(0), 20);
+
+    // Appliquer la police personnalisée au QLabel
+    this->info->setFont(customFont);
+
+
+    layout = new QVBoxLayout;
+
+    // Ajout du QLabel pour afficher le GIF
+    QLabel *gifLabel = new QLabel(this);
+    gifLabel->setAlignment(Qt::AlignCenter); // Centre le label
+
+    // Charge et affiche le GIF en utilisant QMovie
+    QString gif_path = QString::fromStdString("gif/victoire.gif");
+    QMovie *movie = new QMovie(gif_path); // Remplacez par le chemin de votre GIF
+    gifLabel->setMovie(movie); // Définit le film (movie) sur le QLabel
+
+    layout->addWidget(gifLabel);
+    layout->addWidget(this->info);
+    layout->addWidget(quitter);
 
     layout->setAlignment(Qt::AlignCenter);
 

@@ -158,8 +158,7 @@ Capacite StringToCapacite(const std::string & capaciteStr) {
     }
 }
 
-ostream & operator << (ostream & f,
-                    const Prix & p) {
+ostream & operator << (ostream & f, const Prix & p) {
     f << toEmojiCouleur(Couleur::BLANC) << " : " << p.getBlanc() << "    " << toEmojiCouleur(Couleur::BLEU) << " : " << p.getBleu() << "\n";
     f << toEmojiCouleur(Couleur::VERT) << " : " << p.getVert() << "    " << toEmojiCouleur(Couleur::NOIR) << " : " << p.getNoir() << "\n";
     f << toEmojiCouleur(Couleur::ROUGE) << " : " << p.getRouge() << "    " << toEmojiCouleur(Couleur::PERLE) << " : " << p.getPerle() << "\n";
@@ -173,8 +172,7 @@ QDebug operator<<(QDebug f, const Prix &p) {
     return f;
 }
 
-ostream & operator << (ostream & f,
-                    const Bonus & b) {
+ostream & operator << (ostream & f, const Bonus & b) {
     f << b.getNbBonus() << " " << b.getCouleur();
     return f;
 }
@@ -201,8 +199,7 @@ Carte::Carte(TypeCarte t, Capacite c, unsigned int nbP, unsigned int id): type(t
 
 
 
-ostream & operator << (ostream & f,
-                    const Carte & c) {
+ostream & operator << (ostream & f, const Carte & c) {
     f << "------------------------------\n";
     f << c.getType() << "   " << "Bonus : " << c.getBonus() << "\n";
     f << "------------------------------\n";
@@ -210,7 +207,7 @@ ostream & operator << (ostream & f,
     f << "------------------------------\n";
     f << "Prix :\n" << c.getPrix();
     f << "------------------------------\n";
-    f << "Privileges : " << c.getNbPtsPrivilege() << "   " << "Couronnes : " << c.getNbCouronnes() << "\n";
+    f << "Prestiges : " << c.getNbPtsPrivilege() << "   " << "Couronnes : " << c.getNbCouronnes() << "\n";
     f << "------------------------------\n";
     return f;
 }
@@ -226,16 +223,19 @@ QDebug operator<<(QDebug f, const Carte & c) {
     f << "------------------------------\n";
     f << "Prix :\n" << c.getPrix();
     f << "------------------------------\n";
-    f << "Privileges : " << c.getNbPtsPrivilege() << "   " << "Couronnes : " << c.getNbCouronnes() << "\n";
+    f << "Prestiges : " << c.getNbPtsPrivilege() << "   " << "Couronnes : " << c.getNbCouronnes() << "\n";
     f << "------------------------------\n";
     return f;
 }
+
+
+
 
 std::string Carte::getInfos() const {
     std::ostringstream oss;
 
     if (getCapacite1() == Capacite::None && getCapacite2() == Capacite::None) {
-        oss << "Aucune capacite(s) ";
+        oss << "Aucune capacite ";
         return oss.str();
     }
 
@@ -260,7 +260,6 @@ std::string Carte::getInfos() const {
             throw SplendorException("Capacite inconnue");
         }
     }
-
     if (getCapacite2() != Capacite::None) {
         oss << " Et ";
         switch (getCapacite2()) {
@@ -283,7 +282,6 @@ std::string Carte::getInfos() const {
             throw SplendorException("Capacite inconnue");
         }
     }
-
     return oss.str();
 }
 

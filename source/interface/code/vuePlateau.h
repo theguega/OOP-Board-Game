@@ -55,6 +55,7 @@ private:
     popUpInfo* info;
 
     QVBoxLayout* layout;
+    QHBoxLayout* layout2;
 
     Plateau& plateau;
 protected:

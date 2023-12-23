@@ -7,12 +7,15 @@
 #include <QVBoxLayout>
 #include <QSqlDatabase>
 #include <QSqlQueryModel>
+#include <QHeaderView>
 #include <QTableView>
 
-class pageBibliotheque : public QScrollArea {
+
+
+
+class pageBibliotheque : public QWidget{
     Q_OBJECT
 private:
-    QWidget *boutons;
     QVBoxLayout *layoutBibli;
     QPushButton *retourMenu;
     QTableView *tableView;

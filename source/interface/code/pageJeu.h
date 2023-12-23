@@ -50,6 +50,7 @@ private:
     int tailleHauteur;               // Utile pour definir les tailles de sous objets
 
     popUpValider* aSauvegarde;       // PopUp pour sauvegarder la partie
+    popUpVictoire* victoire;
     bool quitterPage = false;        // Utile pour la redefinission de closeEvent
     std::pair<bool, Couleur> capa_en_cours = std::make_pair(false, Couleur::INDT);
     bool resa_en_cours = false;
@@ -72,6 +73,7 @@ protected:
     void quitter(){                 //Permet de quitter la page
         quitterPage = true;
         aSauvegarde -> close();
+        victoire->close();
         this -> close();
     }
     void rester(){                  //Permet de restetr sur la page
@@ -92,6 +94,7 @@ public:
     void refresh();
     void verifNobles();
 public slots:
+    void checkVictoire();
     void validerSelectionCarte(position* p);
     void validerResaCarte(position* p);
     void validerResaCartePioche(int nivPioche);
@@ -105,10 +108,11 @@ private slots:
 
     void validerSelectionJetonPrivi();
 
-    void handleValidationCarte(position* p);
+    void handleValidationCarte(position* p, std::array<int, 7> prix);
     void handleReservationCarte(position* p, position* pJ = nullptr);
     void handleReservationCartePioche(int nivPioche, position* pJ);
     void handleCartesNoble(size_t i, int niv = 3);
+    void handleAchatCarteReservee(const Carte* carte, std::array<int, 7> prix);
     void verifJetons() ;
 signals:
     void fermerPopUp();
