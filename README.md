@@ -10,7 +10,11 @@ Ce projet est réalisé par
 
 Voici une petite vidéo présentant le projet :
 
-https://youtu.be/C3SE0VFJZ7A
+
+
+[![Watch the video](https://imgur.com/Gu5B9eh)](https://youtu.be/C3SE0VFJZ7A)
+
+
 
 Conseils pour compiler le projet sur Qt :
 Cloner le répertoire sur votre machine, ouvrez le .pro avec Qt. Dans les paramètres d'exécution (rubrique 'Projets' sur le côté) pensez à décocher le 'shadow build' (dans 'Compiler') et à mettre comme répertoire d'exécution le dossier source, c'est à partir de ce fichier que les chemins relatifs fonctionnent.
