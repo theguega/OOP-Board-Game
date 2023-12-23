@@ -11,8 +11,7 @@ Ce projet est réalisé par
 Voici une petite vidéo présentant le projet :
 
 
-
-[![Watch the video](https://imgur.com/Gu5B9eh)](https://youtu.be/C3SE0VFJZ7A)
+[![SplendorDuel LO21]](https://youtu.be/C3SE0VFJZ7A)
 
 
 
