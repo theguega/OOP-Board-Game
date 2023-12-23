@@ -809,8 +809,8 @@ void pageJeu::checkVictoire() {
         control->enregisterScore();
         victoire = new popUpVictoire(nullptr, control->getJoueurCourant().getPseudo());
         partiefinie=true;
-        this->close();
         victoire->show();
+        this->close();
     }
 }
 
