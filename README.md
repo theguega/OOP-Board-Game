@@ -13,7 +13,7 @@ Voici une petite vidéo présentant le projet :
 lien youtube non répertorié
 
 Conseils pour compiler le projet sur Qt :
-Cloner le répertoire sur votre machine, ouvrez le .pro avec Qt, dans les paramètre d'exécution (rubrique 'Projets' sur le côté) pensez à décocher le 'shadow build' (dans 'Compiler') et à mettre comme répertoire de travail le fichier source, c'est à partir de se fichier que les chemins relatifs fonctionnent
+Cloner le répertoire sur votre machine, ouvrez le .pro avec Qt. Dans les paramètre d'exécution (rubrique 'Projets' sur le côté) pensez à décocher le 'shadow build' (dans 'Compiler') et à mettre comme répertoire d'exécution le dossier source, c'est à partir de se fichier que les chemins relatifs fonctionnent
 Vous n'avez ensuite plus qu'à compiler et exécuter.
 
 Nous conseillons vivement pour l'utilisation du mode IA vs IA de le lancer dans un autre terminal que celui de Qt car celui ci limite grandement la vitesse des output.
