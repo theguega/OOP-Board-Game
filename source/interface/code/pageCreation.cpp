@@ -79,3 +79,71 @@ void pageCreation::paintEvent(QPaintEvent *event){
 
 }
 
+void pageCreation::boutonOuiPresse() { //Connecte le bouton oui du PopUpValider
+
+    pop->hide();
+
+    type type_tmp1 = type::HUMAIN;
+    type type_tmp2 = type::HUMAIN;
+
+    //Joueur 1 :
+    if (index1==0) {
+        nom1 = nom1Edit->text();
+    } else {
+        QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
+        db.setDatabaseName("data/score.sqlite");
+        if (!db.open()) {
+            qDebug() << "Erreur lors de l'ouverture de la base de données:" << db.lastError().text();
+            throw std::runtime_error("Erreur lors de l'ouverture de la base de données: " + db.lastError().text().toStdString());
+        }
+
+        QSqlQuery query("SELECT * FROM score LIMIT 1 OFFSET " + QString::number(index1-1));
+        if (!query.exec()) {
+            qDebug() << "Erreur lors de l'exécution de la requête:" << query.lastError().text();
+            throw std::runtime_error("Erreur lors de l'ouverture de la base de données: " + db.lastError().text().toStdString());
+        }
+
+        while (query.next()) {
+            // Récupération du nom depuis la première colonne
+            nom1 = query.value(1).toString();
+        }
+        db.close();
+
+        if(nom1=="Alain Telligence" || nom1=="Al Gorythme")
+            type_tmp1 = type::IA;
+
+    }
+
+    //Joueur 2 :
+    if (index2==0) {
+        nom2 = nom2Edit->text();
+    } else {
+        QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
+        db.setDatabaseName("data/score.sqlite");
+        if (!db.open()) {
+            qDebug() << "Erreur lors de l'ouverture de la base de données:" << db.lastError().text();
+            throw std::runtime_error("Erreur lors de l'ouverture de la base de données: " + db.lastError().text().toStdString());
+        }
+
+        QSqlQuery query("SELECT * FROM score LIMIT 1 OFFSET " + QString::number(index2-1));
+        if (!query.exec()) {
+            qDebug() << "Erreur lors de l'exécution de la requête:" << query.lastError().text();
+            throw std::runtime_error("Erreur lors de l'ouverture de la base de données: " + db.lastError().text().toStdString());
+        }
+
+        while (query.next()) {
+            // Récupération du nom depuis la première colonne
+            nom2 = query.value(1).toString();
+        }
+        db.close();
+
+        if(nom2=="Alain Telligence" || nom2=="Al Gorythme")
+            type_tmp2 = type::IA;
+    }
+
+    qDebug() << "Texte saisi : " << nom1 << " " << nom2;
+    this -> hide();
+    jeu = new pageJeu("New", nom1, type_tmp1, nom2, type_tmp2);
+    jeu -> show();
+    emit fermerToutesPages();
+}

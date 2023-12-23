@@ -62,47 +62,7 @@ protected:
     void valider(){ //Fonction quand le bouton valider est appuye
         pop -> show();
     }
-    void boutonOuiPresse(){ //Connecte le bouton oui du PopUpValider
-        type type_tmp1 = type::IA;
-        type type_tmp2 = type::IA;
-
-        pop -> hide();
-        if(index1 == 0){
-            nom1 = nom1Edit->text();
-            type_tmp1 = type::HUMAIN;
-        }
-        else if(index1 == 1){
-            nom1 = "Alain Telligence";
-        }
-        else if(index1 == 1){
-            nom1 = "Al Gorythme";
-        }
-        else{//index1 > 0 donc joueur humain déjà enregister
-            //nom1 = ? ajouter le nom
-            type_tmp1 = type::HUMAIN;
-        }
-
-        if (index2 == 0){
-            nom2 = nom2Edit -> text();
-            type_tmp2 = type::HUMAIN;
-        }
-        else if(index2 == 1){
-            nom2 = "Alain Telligence";
-        }
-        else if(index2 == 2){
-            nom2 = "Al Gorythme";
-        }
-        else{//index1 > 0 donc joueur humain déjà enregister
-            //nom1 = ? ajouter le nom
-            type_tmp2 = type::HUMAIN;
-        }
-
-        qDebug() << "Texte saisi : " << nom1 << " " << nom2;
-        this -> hide();
-        jeu = new pageJeu("New", nom1, type_tmp1, nom2, type_tmp2);
-        jeu -> show();
-        emit fermerToutesPages();
-    }
+    void boutonOuiPresse();
     void boutonNonPresse(){ //Connecte le bouton non du PopUpValider
         pop -> hide();
     }

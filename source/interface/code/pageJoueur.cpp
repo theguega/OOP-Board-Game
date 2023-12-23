@@ -127,8 +127,9 @@ void pageJoueur::refreshJoueur(Joueur* joueurCourant){
 
     for(size_t i = 0; i < joueur->getNbCartesNobles(); i++){
         bool estDans = false;
+        qDebug()<<"il a " << cartesPossedeesNobles.size() << " cartes nobles\n";
         for(size_t j = 0; j < cartesPossedeesNobles.size(); j++){
-            if(cartesPossedeesNobles[i]->getCarte() == &joueur->getCarteNoble(i)){
+            if(cartesPossedeesNobles[j]->getCarte() == &joueur->getCarteNoble(i)){
                 estDans = true;
             }
         }

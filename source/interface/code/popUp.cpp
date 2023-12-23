@@ -42,7 +42,6 @@ popUpValider::popUpValider(QWidget* parent, std::string info, std::string info2,
 }
 
 popUpVictoire::popUpVictoire(QWidget* parent, std::string pseudo) : QWidget(parent) {
-    quitter = new QPushButton("quitter"); // Bouton Oui
     std::string tempPhrase = "Le joueur " + pseudo + " a gagné SplendorDuel !";
     this->info = new QLabel;
     this->info->setText(QString::fromStdString(tempPhrase)); // Set text on QLabel
@@ -69,7 +68,6 @@ popUpVictoire::popUpVictoire(QWidget* parent, std::string pseudo) : QWidget(pare
 
     layout->addWidget(gifLabel);
     layout->addWidget(this->info);
-    layout->addWidget(quitter);
 
     layout->setAlignment(Qt::AlignCenter);
 

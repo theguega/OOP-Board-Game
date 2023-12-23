@@ -133,7 +133,7 @@ public:
     void setCarte(const Carte* c){carte = c;}
     const Carte* getCarte(){return carte;}
 protected:
-    void paintEvent(QPaintEvent *event);
+    void paintEvent(QPaintEvent *event) override;
     void mousePressEvent(QMouseEvent *event) override {
         if (event->button() == Qt::LeftButton && estRetournee){
             qDebug() << "Clic gauche detecte sur le widget.";

@@ -55,6 +55,7 @@ private:
     std::pair<bool, Couleur> capa_en_cours = std::make_pair(false, Couleur::INDT);
     bool resa_en_cours = false;
     bool sauvegardeFait = false;
+    bool partiefinie = false;
 
     std::vector<vueCarteNoble*> cartesNoble;
     QHBoxLayout* layoutNoble;
@@ -63,11 +64,12 @@ private:
 protected:
     void closeEvent(QCloseEvent *event) override {  //Redefinition de la methode closeEvent
         aSauvegarde -> hide();
-        if(!quitterPage && !sauvegardeFait){
+        if(!quitterPage && !sauvegardeFait && !partiefinie){
+            qDebug()<<"ignorer";
             aSauvegarde -> show();
             event -> ignore();
         }
-        else
+        else if (!partiefinie)
             emit fermerPopUp();
     }
     void quitter(){                 //Permet de quitter la page

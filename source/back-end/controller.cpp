@@ -2054,7 +2054,9 @@ void  Controller::Tour_ia() {
 
             //on test les conditions de victoire a part de singnalTestIA() qui est connectes a pageJeu checkVictoire()
             emit signalTestIA();
-            changerJoueurCourantGraphique();
+            if(!joueurCourant->estGagnant()) {
+                changerJoueurCourantGraphique();
+            }
 
             break;
         }

@@ -113,11 +113,12 @@ pageJeu::pageJeu(QString statut_partie, QString pseudo_j_1, type type_j_1, QStri
 
     QObject::connect(control, &Controller::signalTestIA, this, &pageJeu::checkVictoire);
 
-    refresh();
-
     if (control -> getJoueurCourant().getTypeDeJoueur() == type::IA) {
         control -> Tour_ia();
     }
+
+    if (!partiefinie)
+        refresh();
 }
 
 void pageJeu::verifJetons() {
@@ -807,7 +808,8 @@ void pageJeu::checkVictoire() {
     if (control->getJoueurCourant().estGagnant()) {
         control->enregisterScore();
         victoire = new popUpVictoire(nullptr, control->getJoueurCourant().getPseudo());
-        connect(victoire -> getBoutonQuitter(), &QPushButton::clicked, this, &pageJeu::quitter);
+        partiefinie=true;
+        this->close();
         victoire->show();
     }
 }
