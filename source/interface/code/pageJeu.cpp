@@ -791,4 +791,3 @@ void pageJeu::checkVictoire() {
         victoire->show();
     }
 }
-
