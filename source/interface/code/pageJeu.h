@@ -62,88 +62,76 @@ private:
     QWidget* widgetNoble;
     std::vector<vueCarteNoble*> listeWidgetsNoble;
 protected:
-    void closeEvent(QCloseEvent *event) override {  //Redefinition de la methode closeEvent
+    void closeEvent(QCloseEvent *event) override {
         aSauvegarde -> hide();
         if(!quitterPage && !sauvegardeFait && !partiefinie){
-            qDebug()<<"ignorer";
             aSauvegarde -> show();
             event -> ignore();
         }
         else if (!partiefinie)
             emit fermerPopUp();
     }
-    void quitter(){                 //Permet de quitter la page
+
+    //quitter splendor
+    void quitter(){
         quitterPage = true;
         aSauvegarde -> close();
         victoire->close();
         this -> close();
     }
-    void rester(){                  //Permet de restetr sur la page
+
+    //rester sur splendor duel
+    void rester(){
         aSauvegarde -> close();
     }
+
+    //graphisme de l'espace de jeux
     void paintEvent(QPaintEvent *event) override;
 public:
+    //constructeur - destructeur
     pageJeu(QString statut_partie, QString pseudo_j_1 = "", type type_j_1 = type::HUMAIN, QString pseudo_j_2 = "", type type_j_2 = type::HUMAIN, QWidget *parent = nullptr);
     ~pageJeu() = default;
-    void mousePressEvent(QMouseEvent* event) override { //Permet de cacher tous les elements quand on cique sur la page de Jeu
+
+    void mousePressEvent(QMouseEvent* event) override {
         joueur1 -> hide();
         joueur2 -> hide();
         vPlateau -> cacherElements();
         aSauvegarde -> hide();
         QWidget::mousePressEvent(event);
     }
+
     void setLabelJC(){labelJC->setText(QString::fromStdString("C'est au tour de " + control->getJoueurCourant().getPseudo()));}
+
     void refresh();
     void verifNobles();
 public slots:
     void checkVictoire();
+    void verifJetons() ;
+
+    //achat de carte
     void validerSelectionCarte(position* p);
-    void validerResaCarte(position* p);
-    void validerResaCartePioche(int nivPioche);
+    void handleValidationCarte(position* p, std::array<int, 7> prix);
+    //achat carte reservee
     void validerAchatCarteReservee(const Carte* carte);
+    void handleAchatCarteReservee(const Carte* carte, std::array<int, 7> prix);
+    //reserver carte pyramide
+    void validerResaCarte(position* p);
+    void handleReservationCarte(position* p, position* pJ = nullptr);
+    //reserver carte pioche
+    void validerResaCartePioche(int nivPioche);
+    void handleReservationCartePioche(int nivPioche, position* pJ);
+    //remplir le plateau
+    void remplirPlateau();
+    //selection des jetons
+    void validerSelectionJeton();
+    void validerSelectionJetonPrivi();
+    //gestiond e l'achat des cartes nobles
+    void handleCartesNoble(size_t i, int niv = 3);
 
     void afficherPrivileges();
-    void remplirPlateau();
-
-private slots:
-    void validerSelectionJeton();
-
-    void validerSelectionJetonPrivi();
-
-    void handleValidationCarte(position* p, std::array<int, 7> prix);
-    void handleReservationCarte(position* p, position* pJ = nullptr);
-    void handleReservationCartePioche(int nivPioche, position* pJ);
-    void handleCartesNoble(size_t i, int niv = 3);
-    void handleAchatCarteReservee(const Carte* carte, std::array<int, 7> prix);
-    void verifJetons() ;
 signals:
     void fermerPopUp();
 };
-
-
-
-class ModalWidget : public QWidget {
-public:
-    ModalWidget(QWidget *parent = nullptr) : QWidget(parent) {
-        setWindowModality(Qt::WindowModal);
-        setAttribute(Qt::WA_DeleteOnClose); // Delete the widget when closed
-    }
-
-    void showEvent(QShowEvent *event) override {
-        QWidget::showEvent(event);
-        QCoreApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
-    }
-};
-/*class vuePrivilege : public QWidget{
-    Q_OBJECT
-private:
-    int h;
-    int l;
-protected:
-    void paintEvent(QPaintEvent *event);
-public:
-    vuePrivilege(int hauteur, int largeur) : h(hauteur), l(largeur){setFixedSize(l, h);}
-};*/
 
 #endif // PAGEJEU_H
 

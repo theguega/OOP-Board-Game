@@ -144,6 +144,17 @@ void pageJeu::verifJetons() {
 
 
 
+
+
+
+
+/////////////////////////////    Recuperer des jetons     ////////////////////////////
+
+
+
+
+
+
 void pageJeu::validerSelectionJeton() {
     if(capa_en_cours.first == false && resa_en_cours == false){       // Action obligatoire recup jeton
         std::pair<bool, QString> validationResult = control->verifJetons(vPlateau->getSelectionJetons());   // Verif de la validite de la selection de jetons
@@ -239,10 +250,6 @@ void pageJeu::validerSelectionJeton() {
 
 }
 
-
-
-
-
 void pageJeu::validerSelectionJetonPrivi() {
     // Appeler la méthode verifJetons avec la sélection actuelle de la vue
     std::pair<bool, QString> validationResult = control->verifJetons(vPlateau->getSelectionJetons());
@@ -274,6 +281,15 @@ void pageJeu::validerSelectionJetonPrivi() {
         infos->show();
     }
 }
+
+
+
+
+
+
+/////////////////////////////    Acaht d'une carte   ////////////////////////////
+
+
 
 
 
@@ -402,6 +418,12 @@ void pageJeu::handleValidationCarte(position* p, std::array<int, 7> prix){
 
 
 
+
+
+/////////////////////////////    Reserver une carte de la pioche  ////////////////////////////
+
+
+
 void pageJeu::validerResaCartePioche(int nivPioche){
     bool isValidOr;
     QString messageOr;
@@ -426,9 +448,7 @@ void pageJeu::validerResaCartePioche(int nivPioche){
         modalPopup* validation = new modalPopup(this, message, "Voulez-vous valider ?");
         int result =validation->exec();
 
-        // Check the result (optional).
         if (result == QDialog::Accepted){
-            // Modification
             pageJeu::handleReservationCartePioche(nivPioche, vPlateau->selecteOr());
         }
         delete validation;
@@ -445,26 +465,6 @@ void pageJeu::validerResaCartePioche(int nivPioche){
     }
 
     refresh();
-
-    /*// alternative
-    std::pair<bool, QString> validationResult = control->verifReservationCarte();
-    bool isValid = validationResult.first;
-    const QString& message = validationResult.second;
-
-    if(isValid){    // Resa valide
-        modalPopup* validation = new modalPopup(this, message, "Voulez-vous valider ?");
-        int result =validation->exec();
-        if (result == QDialog::Accepted){
-            pageJeu::handleValidationCarte(pos);
-        }
-        delete validation;
-        refresh();
-    }
-    else{           // Resa impossible
-        popUpInfo* infos = new popUpInfo(nullptr, message.toStdString());
-        infos->show();
-    }*/
-
 }
 
 
@@ -474,9 +474,6 @@ void pageJeu::handleReservationCartePioche(int nivPioche, position* pJ){
     std::pair<int, int> coordJeton  = std::make_pair(pJ->getx(), pJ->gety());
     std::vector<std::pair<int, int>> tmp;
     tmp.push_back(coordJeton);
-
-    //std::pair<int, int> coord = std::make_pair(p->getx(), p->gety());
-    //const Carte* carte_tmp = control->getPyramide().getCarte(coord.first, coord.second);
     bool next = true;
 
     if(next){
@@ -492,51 +489,13 @@ void pageJeu::handleReservationCartePioche(int nivPioche, position* pJ){
 
 
 
+/////////////////////////////    Reservation d'une carte de la pyramide   ////////////////////////////
+
+
+
+
+
 void pageJeu::validerResaCarte(position* pos){
-    /*bool isValidOr;
-    QString messageOr;
-
-    if(vPlateau->selecteOr()== nullptr){
-        isValidOr = false;
-        messageOr = QString("Sélectionnez un 3 jeton Or.");
-
-    }
-    else {
-        std::pair<bool, QString> validationResultJeton = control->verifJetonOr(std::make_pair(vPlateau->selecteOr()->getx(), vPlateau->selecteOr()->gety()));
-        isValidOr = validationResultJeton.first;
-        messageOr = validationResultJeton.second;
-    }
-
-
-    std::pair<bool, QString> validationResult = control->verifReservationCarte(std::make_pair(pos->getx(), pos->gety()));
-    bool isValid = validationResult.first;
-    const QString& message = validationResult.second;
-
-    if(isValid && isValidOr){
-        modalPopup* validation = new modalPopup(this, message, "Voulez-vous valider ?");
-        int result =validation->exec();
-
-        // Check the result (optional).
-        if (result == QDialog::Accepted){
-            // Modification
-            pageJeu::handleReservationCarte(pos, vPlateau->selecteOr());
-        }
-        delete validation;
-    }
-    else if (!isValid){
-        popUpInfo* infos = new popUpInfo(nullptr, message.toStdString());
-        connect(this, &pageJeu::fermerPopUp, infos, &popUpInfo::close);
-        infos->show();
-    }
-    else if (!isValidOr){
-        popUpInfo* infos = new popUpInfo(nullptr, messageOr.toStdString());
-        connect(this, &pageJeu::fermerPopUp, infos, &popUpInfo::close);
-        infos->show();
-    }
-
-    refresh();*/
-
-    // alternative
     std::pair<bool, QString> validationResult = control->verifReservationCarte();
     bool isValid = validationResult.first;
     const QString& message = validationResult.second;
@@ -561,23 +520,6 @@ void pageJeu::validerResaCarte(position* pos){
 
 
 void pageJeu::handleReservationCarte(position* p, position* pJ){
-    /*// Ajouter achat jeton
-    std::pair<int, int> coordJeton  = std::make_pair(pJ->getx(), pJ->gety());
-    std::vector<std::pair<int, int>> tmp;
-    tmp.push_back(coordJeton);
-
-    std::pair<int, int> coord = std::make_pair(p->getx(), p->gety());
-    //const Carte* carte_tmp = control->getPyramide().getCarte(coord.first, coord.second);
-    bool next = true;
-
-    if(next){
-        control->orReserverCarte(coord);
-        control->recupererJetons(tmp);
-        control->changerJoueurCourantGraphique();
-        control->setNouveauTour(false);
-    }*/
-
-    // alternative
     std::pair<int, int> coord = std::make_pair(p->getx(), p->gety());
     control->orReserverCarte(coord);
     resa_en_cours = true;
@@ -592,16 +534,10 @@ void pageJeu::handleReservationCarte(position* p, position* pJ){
 
 
 
-void pageJeu::verifNobles(){
-    if((control->getJoueurCourant().getNbCouronnes() >= 1 && control->getJoueurCourant().getNbCartesNobles() == 0) ||
-           (control->getJoueurCourant().getNbCouronnes() >= 6 && control->getJoueurCourant().getNbCartesNobles() == 1)){
-        widgetNoble->show();
-    } else{
-        control->changerJoueurCourantGraphique();
-    }
-}
 
 
+
+/////////////////////////////    Gestiond de l'achat des cartes nobles   ////////////////////////////
 
 
 void pageJeu::paintEvent(QPaintEvent *event){
@@ -618,7 +554,7 @@ void pageJeu::paintEvent(QPaintEvent *event){
 }
 
 
-
+/////////////////////////////    Vue des privileges   ////////////////////////////
 
 void pageJeu::afficherPrivileges(){
     for(unsigned int i = 0; i < control->getPlateau().getNbPrivileges(); i++){
@@ -630,6 +566,8 @@ void pageJeu::afficherPrivileges(){
 }
 
 
+
+/////////////////////////////    Actualisation de tout l'espace de jeux pour l'affichage       ////////////////////////////
 
 
 void pageJeu::refresh(){
@@ -645,6 +583,8 @@ void pageJeu::refresh(){
 }
 
 
+
+/////////////////////////////    Remplissage du plateau   ////////////////////////////
 
 
 void pageJeu::remplirPlateau() {
@@ -674,6 +614,15 @@ void pageJeu::remplirPlateau() {
 
 
 
+
+
+
+
+
+
+/////////////////////////////    Achat des cartes reservees ////////////////////////////
+
+
 void pageJeu::validerAchatCarteReservee(const Carte* carte){
     std::tuple<bool, QString, std::array<int, 7>> validationResult = control->verifAchatCarteReservee(carte);
     bool isValid = std::get<0>(validationResult);
@@ -695,6 +644,7 @@ void pageJeu::validerAchatCarteReservee(const Carte* carte){
     }
     refresh();
 }
+
 
 void pageJeu::handleAchatCarteReservee(const Carte* carte, std::array<int, 7> prix){
         popUpInfo* info_nouveau_tour = new popUpInfo(nullptr, "La capacité de la carte vous permet de joueur un nouveau tour");
@@ -797,6 +747,15 @@ void pageJeu::handleAchatCarteReservee(const Carte* carte, std::array<int, 7> pr
     }
 }
 
+
+
+
+
+
+
+
+/////////////////////////////    Test des conditions de victoire et pop up de victoire      ////////////////////////////
+
 void pageJeu::checkVictoire() {
     refresh();
     //verification des confitions de victoire
@@ -811,6 +770,24 @@ void pageJeu::checkVictoire() {
         partiefinie=true;
         victoire->show();
         this->close();
+    }
+}
+
+
+
+
+
+
+
+
+/////////////////////////////    Gestiond de l'achat des cartes nobles   ////////////////////////////
+
+void pageJeu::verifNobles(){
+    if((control->getJoueurCourant().getNbCouronnes() >= 1 && control->getJoueurCourant().getNbCartesNobles() == 0) ||
+        (control->getJoueurCourant().getNbCouronnes() >= 6 && control->getJoueurCourant().getNbCartesNobles() == 1)){
+        widgetNoble->show();
+    } else{
+        control->changerJoueurCourantGraphique();
     }
 }
 
