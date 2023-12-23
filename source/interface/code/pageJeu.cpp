@@ -733,7 +733,7 @@ void pageJeu::checkVictoire() {
 /////////////////////////////    Gestiond de l'achat des cartes nobles   ////////////////////////////
 
 void pageJeu::verifNobles(){
-    if((control->getJoueurCourant().getNbCouronnes() >= 1 && control->getJoueurCourant().getNbCartesNobles() == 0) ||
+    if((control->getJoueurCourant().getNbCouronnes() >= 3 && control->getJoueurCourant().getNbCartesNobles() == 0) ||
         (control->getJoueurCourant().getNbCouronnes() >= 6 && control->getJoueurCourant().getNbCartesNobles() == 1)){
         widgetNoble->show();
     } else{
