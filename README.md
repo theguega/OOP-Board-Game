@@ -13,18 +13,16 @@ Voici une petite vidéo présentant le projet :
 https://youtu.be/C3SE0VFJZ7A
 
 Conseils pour compiler le projet sur Qt :
-Cloner le répertoire sur votre machine, ouvrez le .pro avec Qt. Dans les paramètre d'exécution (rubrique 'Projets' sur le côté) pensez à décocher le 'shadow build' (dans 'Compiler') et à mettre comme répertoire d'exécution le dossier source, c'est à partir de se fichier que les chemins relatifs fonctionnent
+Cloner le répertoire sur votre machine, ouvrez le .pro avec Qt. Dans les paramètres d'exécution (rubrique 'Projets' sur le côté) pensez à décocher le 'shadow build' (dans 'Compiler') et à mettre comme répertoire d'exécution le dossier source, c'est à partir de ce fichier que les chemins relatifs fonctionnent.
 Vous n'avez ensuite plus qu'à compiler et exécuter.
 
-Nous conseillons vivement pour l'utilisation du mode IA vs IA de le lancer dans un autre terminal que celui de Qt car celui ci limite grandement la vitesse des output.
-Pour comparaison, sur un terminal externe mac le mode IA vs IA se termine instantanément tandis qu'il prends du temps sur Qt.
+Nous conseillons vivement pour l'utilisation du mode IA vs IA de le lancer dans un autre terminal que celui de Qt car celui-ci limite grandement la vitesse des outputs.
+Pour comparaison, sur un terminal externe Mac le mode IA vs IA se termine instantanément tandis qu'il prend du temps sur Qt.
 
 Application testée sur Mac et sur Windows, non testée sur Linux.
 
-Nous supposons qu'il reste certains bug notamment dans le mode graphique car les parties sont longues et il est difficile d'aller chercher tous les problemes.
+Nous supposons qu'il reste certains bugs notamment dans le mode graphique puisque les parties sont longues et il est difficile d'aller chercher tous les problèmes.
 
-Pour la partie console, nous avons lancer de nombreuses parties en mode IA vs IA et elles n'ont jamais crash depuis nos dernières modifications.
+Pour la partie console, nous avons lancé de nombreuses parties en mode IA vs IA et elles n'ont jamais crash depuis nos dernières modifications.
 
-Pour tout problème, vous pouvez nous contacter une de nos adresse : prenom.nom@etu.utc.fr
-
-
+Pour tout problème, vous pouvez nous contacter une de nos adresses : prenom.nom@etu.utc.fr
