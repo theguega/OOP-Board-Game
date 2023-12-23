@@ -36,6 +36,10 @@ private:
     QHBoxLayout* layoutBas;
     QVBoxLayout* layout; //Layout principal
 
+    QLabel* reservees;
+    QLabel* achetees;
+    QLabel* nobles;
+
     QLabel* afficheCouronnes;
     QLabel* affichePtPrestiges;
     QLabel* affichePseudo;

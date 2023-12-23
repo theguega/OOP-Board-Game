@@ -10,10 +10,22 @@ pageJoueur::pageJoueur(QWidget* parent, Joueur* joueur, int hP, int lP, int hC, 
     jetonsPossedesLayout = new QVBoxLayout;
     cartesPossedeesNoblesLayout = new QVBoxLayout;
     cartesPossedeesNoblesLayout->setAlignment(Qt::AlignTop);
+    cartesPossedeesNoblesLayout->setSpacing(0);
     jetonsPossedesLayout->setAlignment(Qt::AlignTop);
     informations = new QHBoxLayout;
     layoutBas = new QHBoxLayout;
     layout = new QVBoxLayout;
+
+    reservees = new QLabel("Cartes Réservées");
+    reservees->setWordWrap(true);
+    achetees = new QLabel("Cartes Achetees");
+    achetees->setWordWrap(true);
+    nobles = new QLabel("Cartes Nobles");
+    nobles->setWordWrap(true);
+
+    cartesPossedeesLayout->addWidget(achetees);
+    cartesReserveesLayout->addWidget(reservees);
+    cartesPossedeesNoblesLayout->addWidget(nobles);
 
     afficheCouronnes = new QLabel;
     affichePtPrestiges = new QLabel;
@@ -42,12 +54,13 @@ pageJoueur::pageJoueur(QWidget* parent, Joueur* joueur, int hP, int lP, int hC, 
     informations->addWidget(afficheCouronnes);
     informations->addWidget(affichePtPrestiges);
 
+    layoutBas->addLayout(cartesPossedeesNoblesLayout);
     layoutBas->addLayout(cartesReserveesLayout);
     layoutBas->addLayout(cartesPossedeesLayout);
     layoutBas->addLayout(jetonsPossedesLayout);
 
     informations->setAlignment(Qt::AlignCenter);
-    layoutBas->setAlignment(Qt::AlignCenter);
+    layoutBas->setAlignment(Qt::AlignTop);
 
     layout->addWidget(affichePseudo);
     layout->addLayout(informations);
