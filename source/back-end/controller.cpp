@@ -977,21 +977,22 @@ void Controller::acheterCarteJoaillerie(std::pair<int, int> coord, std::array<in
     }
 }
 
-void Controller::acheterCarteReservee(const Carte& carte, Couleur c) {
+void Controller::acheterCarteJoaillerie(const Carte& carte, std::array<int, 7> prix, Couleur c){
     paiementCarte(carte, getEspaceJeux());
+
+    joueurCourant->supCarteReservee(carte);
 
 
     if(c == Couleur::INDT){
         joueurCourant->addCarte(carte);
         joueurCourant->addBonus(carte.getBonus().getCouleur(), carte.getBonus().getNbBonus());
-    } else{                         // Il y a une couleur a laquelle associer la carte
+    } else{
         joueurCourant->addBonus(c, 1);
         joueurCourant->cartes[c].push_back(&carte);
         joueurCourant->ptsPrestige += carte.getNbPtsPrivilege();
         joueurCourant->nbCouronnes += carte.getNbCouronnes();
     }
 }
-
 
 
 
@@ -1634,6 +1635,137 @@ std::pair<bool, QString> Controller::verifReservationCartePioche(int nivPioche){
 std::tuple<bool, QString, std::array<int, 7>> Controller::verifAchatCarte(std::pair<int, int> coord){
 
     const Carte* carte = getPyramide().getCarte(coord.first, coord.second);
+
+    if((carte->getCapacite1() == Capacite::AssociationBonus || carte->getCapacite2() == Capacite::AssociationBonus) && joueurCourant->getNbCartes() == 0){
+        return std::make_tuple(false, "Vous ne pouvez pas acheter une carte avce la capacité Association Bonus tant que vous n'avez pas de carte au bonus défini", std::array<int, 7>{});
+    }
+    // recup des points necessaires pour acheter la carte
+    int needBlanc =  carte->getPrix().getBlanc() ;
+    int needBleu =  carte->getPrix().getBleu();
+    int needVert =  carte->getPrix().getVert();
+    int needRouge =  carte->getPrix().getRouge();
+    int needNoir =  carte->getPrix().getNoir();
+    int needPerle = carte->getPrix().getPerle();
+
+    // recup des nb de jetons du joueur
+
+    unsigned int nbBlanc = 0;
+    auto itBlanc = joueurCourant->jetons.find(Couleur::BLANC);
+    if (itBlanc != joueurCourant->jetons.end()) {
+        nbBlanc = itBlanc->second.size();
+
+        auto itBonusBlanc = joueurCourant->bonus.find(Couleur::BLANC);
+        if (itBonusBlanc != joueurCourant->bonus.end()) {
+            needBlanc -= itBonusBlanc->second;
+            if(needBlanc < 0)
+                needBlanc=0;
+        }
+    }
+
+    unsigned int nbBleu = 0;
+    auto itBleu = joueurCourant->jetons.find(Couleur::BLEU);
+    if (itBleu != joueurCourant->jetons.end()) {
+        nbBleu = itBleu->second.size();
+
+        auto itBonusBleu = joueurCourant->bonus.find(Couleur::BLEU);
+        if (itBonusBleu != joueurCourant->bonus.end()) {
+            needBleu -= itBonusBleu->second;
+            if(needBleu < 0)
+                needBleu=0;
+        }
+    }
+
+    unsigned int nbVert = 0;
+    auto itVert = joueurCourant->jetons.find(Couleur::VERT);
+    if (itVert != joueurCourant->jetons.end()) {
+        nbVert = itVert->second.size();
+
+        auto itBonusVert = joueurCourant->bonus.find(Couleur::VERT);
+        if (itBonusVert != joueurCourant->bonus.end()) {
+            needVert -= itBonusVert->second;
+            if(needVert < 0)
+                needVert=0;
+        }
+    }
+
+    unsigned int nbRouge = 0;
+    auto itRouge = joueurCourant->jetons.find(Couleur::ROUGE);
+    if (itRouge != joueurCourant->jetons.end()) {
+        nbRouge = itRouge->second.size();
+
+        auto itBonusRouge = joueurCourant->bonus.find(Couleur::ROUGE);
+        if (itBonusRouge != joueurCourant->bonus.end()) {
+            needRouge -= itBonusRouge->second;
+            if(needRouge < 0)
+                needRouge=0;
+        }
+    }
+
+    unsigned int nbNoir = 0;
+    auto itNoir = joueurCourant->jetons.find(Couleur::NOIR);
+    if (itNoir != joueurCourant->jetons.end()) {
+        nbNoir = itNoir->second.size();
+
+        auto itBonusNoir = joueurCourant->bonus.find(Couleur::NOIR);
+        if (itBonusNoir != joueurCourant->bonus.end()) {
+            needNoir -= itBonusNoir->second;
+            if(needNoir < 0)
+                needNoir=0;
+        }
+    }
+
+    unsigned int nbPerle = 0;
+    auto itPerle = joueurCourant->jetons.find(Couleur::PERLE);
+    if (itPerle != joueurCourant->jetons.end()) {
+        nbPerle = itPerle->second.size();
+
+    }
+
+    unsigned int nbOr = 0;
+    auto itOr = joueurCourant->jetons.find(Couleur::OR);
+    if (itOr != joueurCourant->jetons.end()) {
+        nbOr = itOr->second.size();
+
+    }
+
+    if (nbBlanc >= needBlanc && nbBleu >= needBleu && nbVert >= needVert &&
+        nbRouge >= needRouge && nbNoir >= needNoir && nbPerle >= needPerle) {
+        return std::make_tuple(true, "Vous pouvez acheter la carte", std::array<int, 7>{needBlanc, needBleu, needVert, needRouge, needNoir, needPerle, 0});  // Le joueur a suffisamment de jetons pour acheter la carte
+    }
+
+    // 5. Si pas assez, essayer avec les jetons or
+    unsigned int jetonsOrUtilises = 0;
+
+    // Fonction pour ajouter des jetons or a une couleur donnee
+    auto ajouterJetonsOr = [&jetonsOrUtilises, &nbOr](unsigned int& nbCouleur, int& besoin) {
+        while (nbOr > 0 && besoin > nbCouleur) {
+            // Utiliser un jeton or pour completer le besoin
+            nbOr--;
+            //nbCouleur++;
+            jetonsOrUtilises++;
+            besoin--;
+        }
+        if(besoin < 0)
+            besoin = 0;
+    };
+
+    ajouterJetonsOr(nbBlanc, needBlanc);
+    ajouterJetonsOr(nbBleu, needBleu);
+    ajouterJetonsOr(nbVert, needVert);
+    ajouterJetonsOr(nbRouge, needRouge);
+    ajouterJetonsOr(nbNoir, needNoir);
+    ajouterJetonsOr(nbPerle, needPerle);
+
+    // Verifier a nouveau si le joueur a maintenant assez de points pour acheter la carte
+    if (needBlanc <= nbBlanc && needBleu <= nbBleu && needVert <= nbVert &&
+        needRouge <= nbRouge && needNoir <= nbNoir && needPerle <= nbPerle)
+        return std::make_tuple(true, "Vous pouvez acheter la carte avec "+QString::number(jetonsOrUtilises)+" jetons Or", std::array<int, 7>{needBlanc, needBleu, needVert, needRouge, needNoir, needPerle, static_cast<int>(jetonsOrUtilises)});  // Le joueur a suffisamment de jetons pour acheter la carte
+    else
+        return std::make_tuple(false, "Vous n'avez pas assez de jetons pour acheter cette carte", std::array<int, 7>{});
+    return std::make_tuple(false, "Vous n'avez pas assez de jetons pour acheter cette carte", std::array<int, 7>{});
+}
+
+std::tuple<bool, QString, std::array<int, 7>> Controller::verifAchatCarteReservee(const Carte* carte){
 
     if((carte->getCapacite1() == Capacite::AssociationBonus || carte->getCapacite2() == Capacite::AssociationBonus) && joueurCourant->getNbCartes() == 0){
         return std::make_tuple(false, "Vous ne pouvez pas acheter une carte avce la capacité Association Bonus tant que vous n'avez pas de carte au bonus défini", std::array<int, 7>{});

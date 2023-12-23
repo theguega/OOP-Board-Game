@@ -102,7 +102,7 @@ private slots:
     void handleValidationCarte(position* p, std::array<int, 7> prix);
     void handleReservationCarte(position* p, position* pJ = nullptr);
     void handleReservationCartePioche(int nivPioche, position* pJ);
-    void handleAchatCarteReservee(const Carte* carte);
+    void handleAchatCarteReservee(const Carte* carte, std::array<int, 7> prix);
     void verifJetons() ;
 signals:
     void fermerPopUp();
