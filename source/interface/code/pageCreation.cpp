@@ -60,7 +60,7 @@ pageCreation::pageCreation(QWidget *parent) : QWidget(parent){
     QObject::connect(choixPossibles2, QOverload<int>::of(&QComboBox::activated), this, &pageCreation::comboBox2Active);
     QObject::connect(boutonValider, &QPushButton::clicked, this, &pageCreation::valider);
 
-    pop = new popUpValider(nullptr, "valider", "", "oui");
+    pop = new popUpValider(nullptr, "valider", "", "tuto");
     QObject::connect(pop -> getBoutonOui(), &QPushButton::clicked, this, &pageCreation::boutonOuiPresse);
     QObject::connect(pop -> getBoutonNon(), &QPushButton::clicked, this, &pageCreation::boutonNonPresse);
     pop -> hide();
