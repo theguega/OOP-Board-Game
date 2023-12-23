@@ -56,17 +56,14 @@ public:
     //////////////////////// Methode générales ////////////////////////
 
     // actions partie
-    void lancerPartie();
     void changerJoueurCourant();
+    void lancerPartie();
     void jouer();
     void quitter();
 
     //Choix de l'action
     unsigned int choixActionsOptionelles();
     unsigned int choixActionsObligatoires();
-
-    // Capacites
-    bool appliquerCapacite(Capacite capa,const Carte &carte);
 
     // Actions optionnelles
     void utiliserPrivilege(Plateau& plateau);
@@ -77,16 +74,11 @@ public:
     bool acheterCarteJoaillerie(EspaceJeux& espaceJeux);
     void paiementCarte(const Carte& carte, EspaceJeux& espaceJeux);
     void orReserverCarte(Pyramide& pyramide, Plateau& plateau);
+    bool appliquerCapacite(Capacite capa,const Carte &carte);
 
-    //donne un privilege au joueur adverse en suivant la logique de splendor duel
-    void donPrivilegeAdverse();
-
-    //s'effectue automatiquement lorsque le joueur a 3,6 pts prestige
-    void acheterCarteNoble (Pyramide& pyramide);
-
-    //gestion données
-    void sauvegardePartie();
-    void enregisterScore();
+    // Autres méthodes
+    void donPrivilegeAdverse();                     //donne un privilege au joueur adverse en suivant la logique de splendor duel
+    void acheterCarteNoble (Pyramide& pyramide);    //s'effectue automatiquement lorsque le joueur a 3,6 pts prestige
 
     // verifications
     vector<int> verifActionsImpossibles();
@@ -119,10 +111,15 @@ public:
 
     // Actions et verifs reservation Cartes
     std::pair<bool, QString> verifReservationCarte();
-    std::pair<bool, QString> verifJetonOr(std::pair<int, int> coord);
     std::pair<bool, QString> verifReservationCartePioche(int nivPioche);
     void orReserverCarte(std::pair<int, int> coord);
     void orReserverCartePioche (int nivPioche);
+
+
+    //////////////////////// Methode propres à la partie graphique ////////////////////
+
+    void sauvegardePartie();
+    void enregisterScore();
 
 signals:
     void signalTestIA();        // envoie un signal pour la partie graphique si une IA gagne

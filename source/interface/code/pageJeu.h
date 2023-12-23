@@ -119,7 +119,7 @@ public slots:
     void handleReservationCarte(position* p, position* pJ = nullptr);
     //reserver carte pioche
     void validerResaCartePioche(int nivPioche);
-    void handleReservationCartePioche(int nivPioche, position* pJ);
+    void handleReservationCartePioche(int nivPioche);
     //remplir le plateau
     void remplirPlateau();
     //selection des jetons

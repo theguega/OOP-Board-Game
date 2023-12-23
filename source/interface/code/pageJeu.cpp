@@ -417,65 +417,38 @@ void pageJeu::handleValidationCarte(position* p, std::array<int, 7> prix){
 
 
 void pageJeu::validerResaCartePioche(int nivPioche){
-    bool isValidOr;
-    QString messageOr;
-
-    if(!vPlateau->selecteOr()){
-        isValidOr = false;
-        messageOr = QString("Sélectionnez un 2 jeton Or.");
-
-    }
-    else {
-        std::pair<bool, QString> validationResultJeton = control->verifJetonOr(std::make_pair(vPlateau->selecteOr()->getx(), vPlateau->selecteOr()->gety()));
-        isValidOr = validationResultJeton.first;
-        messageOr = validationResultJeton.second;
-    }
-
     std::pair<bool, QString> validationResult = control->verifReservationCartePioche(nivPioche);
     bool isValid = validationResult.first;
     const QString& message = validationResult.second;
 
-
-    if(isValid && isValidOr){
+    if(isValid){    // Resa valide
         modalPopup* validation = new modalPopup(this, message, "Voulez-vous valider ?");
         int result =validation->exec();
-
         if (result == QDialog::Accepted){
-            pageJeu::handleReservationCartePioche(nivPioche, vPlateau->selecteOr());
+            pageJeu::handleReservationCartePioche(nivPioche);
         }
         delete validation;
+        refresh();
     }
-    else if (!isValid){
+    else{           // Resa impossible
         popUpInfo* infos = new popUpInfo(nullptr, message.toStdString());
-        connect(this, &pageJeu::fermerPopUp, infos, &popUpInfo::close);
         infos->show();
     }
-    else if (!isValidOr){
-        popUpInfo* infos = new popUpInfo(nullptr, messageOr.toStdString());
-        connect(this, &pageJeu::fermerPopUp, infos, &popUpInfo::close);
-        infos->show();
-    }
-
-    refresh();
 }
 
 
 
 
-void pageJeu::handleReservationCartePioche(int nivPioche, position* pJ){
-    std::pair<int, int> coordJeton  = std::make_pair(pJ->getx(), pJ->gety());
-    std::vector<std::pair<int, int>> tmp;
-    tmp.push_back(coordJeton);
-    bool next = true;
+void pageJeu::handleReservationCartePioche(int nivPioche){
+    control->orReserverCartePioche(nivPioche);
+    resa_en_cours = true;
+    vPyramide->setEnabled(false);
+    vPlateau->getBoutonValiderPriv()->setEnabled(false);
+    bSac->setEnabled(false);
+    popUpInfo* infoResa = new popUpInfo(nullptr, "Veuillez prendre un jeton Or");
+    infoResa->show();
+    update();
 
-    if(next){
-        control->orReserverCartePioche(nivPioche);
-        control->recupererJetons(tmp);
-        checkVictoire();
-        control->changerJoueurCourantGraphique();
-
-        control->setNouveauTour(false);
-    }
 }
 
 
@@ -519,7 +492,6 @@ void pageJeu::handleReservationCarte(position* p, position* pJ){
     infoResa->show();
     update();
 }
-
 
 
 
