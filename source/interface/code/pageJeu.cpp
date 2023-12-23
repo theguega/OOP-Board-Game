@@ -121,23 +121,20 @@ pageJeu::pageJeu(QString statut_partie, QString pseudo_j_1, type type_j_1, QStri
         refresh();
 }
 
-void pageJeu::verifJetons() {
-    refresh();
-    if (control->getJoueurCourant().getTypeDeJoueur()==type::HUMAIN) {
-        while (control->getJoueurCourant().getNbJetons()>10) {
-            Couleur coulRendu;
-            popUpInfo* info_rendre_jeton = new popUpInfo(nullptr, "Il faut rendre les jetons en trop!");
-            popUpChoixJetonRendre* popUpRendu = new popUpChoixJetonRendre(control);
-            connect(this, &pageJeu::fermerPopUp, info_rendre_jeton, &popUpInfo::close);
-            if (popUpRendu->exec() == QDialog::Accepted) {
-                coulRendu = popUpRendu->getSelectedOption();
-                if(coulRendu != Couleur::INDT){
-                    control->getJoueurCourant().supJetonNb(1,coulRendu,control->getEspaceJeux());
-                }
-            }
-            refresh();
-        }
-    }
+
+
+
+void pageJeu::paintEvent(QPaintEvent *event){
+    QWidget::paintEvent(event);
+    QPainter painter(this);
+
+    painter.setRenderHint(QPainter::Antialiasing);
+
+    painter.setBrush(QColor("#252525")); //On definie la couleur du pinceau en blanc
+    painter.drawPolygon(rect()); //On colorie le polygone
+
+    painter.setPen(QPen(Qt::black, 5)); //On def le pinceau comme etant de couleur noir et de taille 2 (pour faire un rebord)
+    painter.drawRect(rect()); //On peind ce rectangle (permet de fair eun contour de la carte)
 }
 
 
@@ -149,10 +146,6 @@ void pageJeu::verifJetons() {
 
 
 /////////////////////////////    Recuperer des jetons     ////////////////////////////
-
-
-
-
 
 
 void pageJeu::validerSelectionJeton() {
@@ -250,6 +243,9 @@ void pageJeu::validerSelectionJeton() {
 
 }
 
+
+
+
 void pageJeu::validerSelectionJetonPrivi() {
     // Appeler la méthode verifJetons avec la sélection actuelle de la vue
     std::pair<bool, QString> validationResult = control->verifJetons(vPlateau->getSelectionJetons());
@@ -290,10 +286,6 @@ void pageJeu::validerSelectionJetonPrivi() {
 /////////////////////////////    Acaht d'une carte   ////////////////////////////
 
 
-
-
-
-
 void pageJeu::validerSelectionCarte(position* pos){
     std::tuple<bool, QString, std::array<int, 7>> validationResult = control->verifAchatCarte(std::make_pair(pos->getx(), pos->gety()));
     bool isValid = std::get<0>(validationResult);
@@ -314,6 +306,7 @@ void pageJeu::validerSelectionCarte(position* pos){
         infos->show();
     }
 }
+
 
 
 
@@ -423,7 +416,6 @@ void pageJeu::handleValidationCarte(position* p, std::array<int, 7> prix){
 /////////////////////////////    Reserver une carte de la pioche  ////////////////////////////
 
 
-
 void pageJeu::validerResaCartePioche(int nivPioche){
     bool isValidOr;
     QString messageOr;
@@ -492,9 +484,6 @@ void pageJeu::handleReservationCartePioche(int nivPioche, position* pJ){
 /////////////////////////////    Reservation d'une carte de la pyramide   ////////////////////////////
 
 
-
-
-
 void pageJeu::validerResaCarte(position* pos){
     std::pair<bool, QString> validationResult = control->verifReservationCarte();
     bool isValid = validationResult.first;
@@ -536,24 +525,6 @@ void pageJeu::handleReservationCarte(position* p, position* pJ){
 
 
 
-
-/////////////////////////////    Gestiond de l'achat des cartes nobles   ////////////////////////////
-
-
-void pageJeu::paintEvent(QPaintEvent *event){
-    QWidget::paintEvent(event);
-    QPainter painter(this);
-
-    painter.setRenderHint(QPainter::Antialiasing);
-
-    painter.setBrush(QColor("#252525")); //On definie la couleur du pinceau en blanc
-    painter.drawPolygon(rect()); //On colorie le polygone
-
-    painter.setPen(QPen(Qt::black, 5)); //On def le pinceau comme etant de couleur noir et de taille 2 (pour faire un rebord)
-    painter.drawRect(rect()); //On peind ce rectangle (permet de fair eun contour de la carte)
-}
-
-
 /////////////////////////////    Vue des privileges   ////////////////////////////
 
 void pageJeu::afficherPrivileges(){
@@ -564,6 +535,8 @@ void pageJeu::afficherPrivileges(){
         listePrivileges[i] -> hide();
     }
 }
+
+
 
 
 
@@ -581,6 +554,9 @@ void pageJeu::refresh(){
     sauvegardeFait = false;
     update();
 }
+
+
+
 
 
 
@@ -756,6 +732,7 @@ void pageJeu::handleAchatCarteReservee(const Carte* carte, std::array<int, 7> pr
 
 /////////////////////////////    Test des conditions de victoire et pop up de victoire      ////////////////////////////
 
+
 void pageJeu::checkVictoire() {
     refresh();
     //verification des confitions de victoire
@@ -806,4 +783,31 @@ void pageJeu::handleCartesNoble(size_t i, int niv){
     }
     delete validation;
     refresh();
+}
+
+
+
+
+
+
+/////////////////////////////    Gestion du rendu des jetons quand le joueur en a plus de 10   ////////////////////////////
+
+
+void pageJeu::verifJetons() {
+    refresh();
+    if (control->getJoueurCourant().getTypeDeJoueur()==type::HUMAIN) {
+        while (control->getJoueurCourant().getNbJetons()>10) {
+            Couleur coulRendu;
+            popUpInfo* info_rendre_jeton = new popUpInfo(nullptr, "Il faut rendre les jetons en trop!");
+            popUpChoixJetonRendre* popUpRendu = new popUpChoixJetonRendre(control);
+            connect(this, &pageJeu::fermerPopUp, info_rendre_jeton, &popUpInfo::close);
+            if (popUpRendu->exec() == QDialog::Accepted) {
+                coulRendu = popUpRendu->getSelectedOption();
+                if(coulRendu != Couleur::INDT){
+                    control->getJoueurCourant().supJetonNb(1,coulRendu,control->getEspaceJeux());
+                }
+            }
+            refresh();
+        }
+    }
 }
