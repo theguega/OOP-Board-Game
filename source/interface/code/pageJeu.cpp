@@ -398,7 +398,6 @@ void pageJeu::handleValidationCarte(position* p, std::array<int, 7> prix){
         checkVictoire();
         verifNobles();
         control->setNouveauTour(false);
-        }
     }
 }
 
@@ -821,14 +820,13 @@ void pageJeu::handleCartesNoble(size_t i, int niv){
     modalPopup* validation = new modalPopup(this, "Vous allez acheter une carte Noble.", "Voulez-vous valider ?");
     int result =validation->exec();
     if (result == QDialog::Accepted){
-        handleValidationCarte(p);
+        handleValidationCarte(p, std::array<int, 7>{});
         for (size_t i = 0; i < listeWidgetsNoble.size(); i++) {
             if (control->getPyramide().getCarte(3, i) == nullptr) {
                 listeWidgetsNoble[i]->hide();
             }
         }
         widgetNoble->hide();
-        control->changerJoueurCourantGraphique();
     }
     delete validation;
     refresh();

@@ -969,8 +969,13 @@ void Controller::acheterCarteJoaillerie(std::pair<int, int> coord, std::array<in
 
 
     if(c == Couleur::INDT){
-        joueurCourant->addCarte(carte);
-        joueurCourant->addBonus(carte.getBonus().getCouleur(), carte.getBonus().getNbBonus());
+        if(carte.getType() == TypeCarte::Noble)
+            joueurCourant->addCarteNoble(carte);
+        else{
+            joueurCourant->addCarte(carte);
+            joueurCourant->addBonus(carte.getBonus().getCouleur(), carte.getBonus().getNbBonus());
+        }
+
     } else{
         joueurCourant->addBonus(c, 1);
         joueurCourant->cartes[c].push_back(&carte);
