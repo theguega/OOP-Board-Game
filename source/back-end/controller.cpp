@@ -155,6 +155,18 @@ Controller::Controller(QString statut_partie, QString pseudo_j_1, type type_j_1,
 
 
 
+Joueur& Controller::getJoueurAdverse() {
+    for (int i = 0; i < 2; i++) {
+        if (partie->getJoueur(i) != joueurCourant) {
+            return *partie->getJoueur(i);
+        }
+    }
+    throw SplendorException("pas de d'adversaire trouvé..\n");
+}
+
+
+
+
 void Controller::setJoueurCourant(int n) {
     switch (n) {
     case 0:

@@ -25,70 +25,60 @@
 
 
 class Controller : public QObject {
-    Q_OBJECT
-signals:
-    void signalTestIA(); // Déclarez le signal
-public slots:
-    void changerJoueurCourantGraphique();
+        Q_OBJECT
 private:
-    string stat_partie;                         // Ancienne ou Nouvelle
-	Partie* partie;
-	Joueur* joueurCourant = nullptr;
-    Strategy * strategy_courante  = nullptr;
-	
-	StrategyHumain strategy_Humain;
-	StrategyIA strategy_IA;
-
+    string stat_partie;         // Ancienne ou Nouvelle
+    Partie* partie;
+    Joueur* joueurCourant = nullptr;
     bool nouveau_tour = false;
-public:
-	Controller();
-    Controller(QString statut_partie, QString pseudo_j_1, type type_j_1, QString pseudo_j_2, type type_j_2);
-	~Controller() { delete partie; }
+    Strategy * strategy_courante  = nullptr;
+    StrategyHumain strategy_Humain;
+    StrategyIA strategy_IA;
 
-	// getters
+public:
+    Controller();
+    Controller(QString statut_partie, QString pseudo_j_1, type type_j_1, QString pseudo_j_2, type type_j_2);
+    ~Controller() { delete partie; }
+
+    // getters
     string getStatutPartie() const { return stat_partie; }
     Partie& getPartie() { return *partie; }
     Joueur& getJoueurCourant() { return *joueurCourant; }
     Strategy& getStrategyCourante() {return *strategy_courante;}
-    Joueur& getJoueurAdverse() {
-        for (int i = 0; i < 2; i++) {
-            if (partie->getJoueur(i) != joueurCourant) {
-                return *partie->getJoueur(i);
-            }
-        }
-        throw SplendorException("pas de d'adverssaire trouvé..\n");
-    }
+    Joueur& getJoueurAdverse();
     Plateau& getPlateau() const {return partie->getEspaceJeux().getPlateau();}
     Pyramide& getPyramide() const {return partie->getEspaceJeux().getPyramide();}
-    EspaceJeux& getEspaceJeux() const{return partie->getEspaceJeux();}
-	// setters
-	void setJoueurCourant(int n);
-    void setNouveauTour(bool val){
-        nouveau_tour = val;
-    }
-	// actions partie
-	void lancerPartie();
+    EspaceJeux& getEspaceJeux() const {return partie->getEspaceJeux();}
+
+    // setters
+    void setJoueurCourant(int n);
+    void setNouveauTour(bool val){ nouveau_tour = val; }
+
+
+    //////////////////////// Methode générales ////////////////////////
+
+    // actions partie
+    void lancerPartie();
     void changerJoueurCourant();
     void jouer();
-    void Tour_ia();
     void quitter();
 
     //Choix de l'action
     unsigned int choixActionsOptionelles();
     unsigned int choixActionsObligatoires();
 
-    // Capacite
+    // Capacites
     bool appliquerCapacite(Capacite capa,const Carte &carte);
 
-	// Actions optionnelles
-	void utiliserPrivilege(Plateau& plateau);
+    // Actions optionnelles
+    void utiliserPrivilege(Plateau& plateau);
     void remplirPlateau(Plateau& plateau, Sac& sac);
 
-	// Actions obligatoires
+    // Actions obligatoires
     void recupererJetons(bool capacite,Couleur coulBonus = Couleur::INDT);
     bool acheterCarteJoaillerie(EspaceJeux& espaceJeux);
     void paiementCarte(const Carte& carte, EspaceJeux& espaceJeux);
-	void orReserverCarte(Pyramide& pyramide, Plateau& plateau);
+    void orReserverCarte(Pyramide& pyramide, Plateau& plateau);
 
     //donne un privilege au joueur adverse en suivant la logique de splendor duel
     void donPrivilegeAdverse();
@@ -96,11 +86,11 @@ public:
     //s'effectue automatiquement lorsque le joueur a 3,6 pts prestige
     void acheterCarteNoble (Pyramide& pyramide);
 
-	//gestion données
-	void sauvegardePartie();
-	void enregisterScore();
+    //gestion données
+    void sauvegardePartie();
+    void enregisterScore();
 
-	// verifications
+    // verifications
     vector<int> verifActionsImpossibles();
     vector<int> verifActionsOptImpossibles();
     void verifPrivileges();
@@ -113,23 +103,34 @@ public:
     vector<pair<int, int>> GenereCartePyramideDispo();
     vector<pair<Couleur, int>> GenereCarteResaDispo();
 
-    // verifs de la partie graphique
+
+    //////////////////////// Methode propres à la partie graphique ////////////////////
+
+    void Tour_ia();
+
+    // Actions Jetons
     std::pair<bool, QString> verifJetons(const std::vector<std::pair<int, int>>& coord, bool capa = false, Couleur coulBonus = Couleur::INDT);
     void recupererJetons(const std::vector<std::pair<int, int>>& coord);
 
+    // Actions et verifs achat Cartes
     std::tuple<bool, QString, std::array<int, 7>> verifAchatCarte(std::pair<int, int> coord);
     std::tuple<bool, QString, std::array<int, 7>> verifAchatCarteReservee(const Carte* carte);
     void acheterCarteJoaillerie(std::pair<int, int> coord,  std::array<int, 7> prix, Couleur c = Couleur::INDT);
     void acheterCarteJoaillerie(const Carte& carte, std::array<int, 7> prix, Couleur c = Couleur::INDT);
     void paiementCarte(std::array<int, 7> prix, EspaceJeux& espaceJeux);
 
+    // Actions et verifs reservation Cartes
     std::pair<bool, QString> verifReservationCarte();
-    void orReserverCarte(std::pair<int, int> coord);
     std::pair<bool, QString> verifJetonOr(std::pair<int, int> coord);
     std::pair<bool, QString> verifReservationCartePioche(int nivPioche);
-
-
+    void orReserverCarte(std::pair<int, int> coord);
     void orReserverCartePioche (int nivPioche);
+
+signals:
+    void signalTestIA();        // envoie un signal pour la partie graphique si une IA gagne
+
+public slots:
+    void changerJoueurCourantGraphique();
 };
 
 #endif
