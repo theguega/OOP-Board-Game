@@ -1,31 +1,37 @@
-# Projet LO21 - UTC A23
-Projet de LO21 - UTC A23 - sur le jeu Splendor Duel (Marc André, Bruno Cathala)
+# **Splendor Duel**
 
-Ce projet est réalisé par 
-* Théo Guegan
-* Samuel Manchajm
-* Samuel Beziat
-* Robert Antaluca
-* Maxime Gautrot
+## **Description**
+This project is a digital implementation of the board game **Splendor Duel** (designed by Marc André and Bruno Cathala) developed using **C++** and **Qt** for the graphical interface. The project was created as part of the LO21 course at **UTC** (Université de Technologie de Compiègne).
 
-Voici une petite vidéo présentant le projet :
+**Team Members:**
+- Théo Guegan
+- Samuel Manchajm
+- Samuel Beziat
+- Robert Antaluca
+- Maxime Gautrot
 
+Here’s a short video showcasing the project:  
+[![Splendor Duel LO21](https://img.youtube.com/vi/C3SE0VFJZ7A/0.jpg)](https://youtu.be/C3SE0VFJZ7A)
 
-[[SplendorDuel LO21]](https://youtu.be/C3SE0VFJZ7A)
+### **Project Setup**
 
+#### **1. Clone the Repository**
+To compile the project, clone the repository to your local machine and open the `.pro` file with Qt.
 
+#### **2. Adjust Build Settings**
+- Go to the **'Projects'** section in Qt, then under **'Build & Run'**:
+  - Uncheck **'Shadow build'** in the **'Build'** tab.
+  - Set the working directory to the **source folder** (this ensures that relative paths work correctly).
 
-Conseils pour compiler le projet sur Qt :
-Cloner le répertoire sur votre machine, ouvrez le .pro avec Qt. Dans les paramètres d'exécution (rubrique 'Projets' sur le côté) pensez à décocher le 'shadow build' (dans 'Compiler') et à mettre comme répertoire d'exécution le dossier source, c'est à partir de ce fichier que les chemins relatifs fonctionnent.
-Vous n'avez ensuite plus qu'à compiler et exécuter.
+#### **3. Compile and Run**
+Once the settings are configured, you can proceed to compile and run the project within Qt.
 
-Nous conseillons vivement pour l'utilisation du mode IA vs IA de le lancer dans un autre terminal que celui de Qt car celui-ci limite grandement la vitesse des outputs.
-Pour comparaison, sur un terminal externe Mac le mode IA vs IA se termine instantanément tandis qu'il prend du temps sur Qt.
+#### **4. AI vs AI Mode**
+For optimal performance, we recommend running the **AI vs AI mode** in an external terminal instead of within Qt, as the Qt terminal limits the speed of the outputs. For example, on a Mac, the AI vs AI mode finishes instantly in an external terminal, while it takes longer within Qt.
 
-Application testée sur Mac et sur Windows, non testée sur Linux.
+### **Compatibility**
+The application has been tested on **Mac** and **Windows**, but it has **not been tested on Linux**. Some bugs may still exist, especially in the graphical mode, as it's difficult to track all issues during long games. However, in **console mode**, numerous AI vs AI games have been run without crashes since the last updates.
 
-Nous supposons qu'il reste certains bugs notamment dans le mode graphique puisque les parties sont longues et il est difficile d'aller chercher tous les problèmes.
+---
 
-Pour la partie console, nous avons lancé de nombreuses parties en mode IA vs IA et elles n'ont jamais crash depuis nos dernières modifications.
-
-Pour tout problème, vous pouvez nous contacter une de nos adresses : prenom.nom@etu.utc.fr
+Credits : Theo GUEGAN - Samuel MANCHAJM - Samuel BEZIAT - Robert ANTALUCA - Maxime GAUTROT
