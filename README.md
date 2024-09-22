@@ -3,15 +3,8 @@
 ## **Description**
 This project is a digital implementation of the board game **Splendor Duel** (designed by Marc André and Bruno Cathala) developed using **C++** and **Qt** for the graphical interface. The project was created as part of the LO21 course at **UTC** (Université de Technologie de Compiègne).
 
-**Team Members:**
-- Théo Guegan
-- Samuel Manchajm
-- Samuel Beziat
-- Robert Antaluca
-- Maxime Gautrot
-
 Here’s a short video showcasing the project:  
-[![Splendor Duel LO21](https://img.youtube.com/vi/C3SE0VFJZ7A/0.jpg)](https://youtu.be/C3SE0VFJZ7A)
+![Splendor Duel LO21](https://img.youtube.com/vi/C3SE0VFJZ7A/0.jpg)
 
 ### **Project Setup**
 
